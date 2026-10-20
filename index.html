@@ -134,7 +134,7 @@ svg{display:block}
 .cta{grid-area:cta;display:flex;justify-content:center;align-items:center;gap:.6rem}
 .cta #btnPick{flex:1 1 auto;width:auto;max-width:22rem;min-width:0}
 .cta .round{flex:none;width:3.4rem;height:3.4rem;min-width:3.4rem;min-height:3.4rem;padding:0;border-radius:50%}
-.cta .trophy{color:#7a4a00}
+.cta .trophy,.cta .wardrobe{color:#7a4a00}
 .cta .round svg{width:1.8rem;height:1.8rem}
 .cta #btnPick{font-size:clamp(1rem, calc((var(--W) - 9.5rem) * .075), 1.35rem);padding-left:.9em;padding-right:.9em}
 .app.land #home{grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);grid-template-rows:auto minmax(0,1fr) auto;
@@ -436,7 +436,7 @@ canvas.bigbang{position:absolute;inset:0;width:100%;height:100%;z-index:400;poin
       <div class="hero-art" id="heroArt"></div>
     </div>
     <div class="cta"><button class="btn big round trophy" id="btnCareer" aria-label="Modo carreira"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4h10v5a5 5 0 0 1-10 0z" fill="currentColor" fill-opacity=".25"/><path d="M17 5h3v2a4 4 0 0 1-3.6 4M7 5H4v2a4 4 0 0 0 3.6 4"/><path d="M12 14v3M8.5 20h7M9.5 17h5v3h-5z"/></svg></button><button class="btn big" id="btnPick">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"><rect x="3" y="5" width="11" height="15" rx="2" transform="rotate(-10 8 12)"/><rect x="9" y="3" width="11" height="15" rx="2" fill="#fff" fill-opacity=".6"/></svg>Pegar uma carta</button><button class="btn big blue round wardrobe" id="btnWardrobe" aria-label="Guarda-roupa"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 5.5a2 2 0 1 1 2.6 1.9c-.4.1-.6.5-.6.9V9"/><path d="M12 9L2.8 15.6A1.4 1.4 0 0 0 3.6 18h16.8a1.4 1.4 0 0 0 .8-2.4z" fill="currentColor" fill-opacity=".2"/></svg></button></div>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"><rect x="3" y="5" width="11" height="15" rx="2" transform="rotate(-10 8 12)"/><rect x="9" y="3" width="11" height="15" rx="2" fill="#fff" fill-opacity=".6"/></svg>Pegar uma carta</button><button class="btn big round wardrobe" id="btnWardrobe" aria-label="Guarda-roupa"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 5.5a2 2 0 1 1 2.6 1.9c-.4.1-.6.5-.6.9V9"/><path d="M12 9L2.8 15.6A1.4 1.4 0 0 0 3.6 18h16.8a1.4 1.4 0 0 0 .8-2.4z" fill="currentColor" fill-opacity=".2"/></svg></button></div>
   </section>
 
   <!-- ================= SORTEIO ================= -->
@@ -1074,20 +1074,25 @@ const Outfit = (() => {
   const SLOT_NAMES = { head: 'Cabeça', eyes: 'Olhos', neck: 'Pescoço', chest: 'Peito', back: 'Costas', hand: 'Mão' };
   const ITEMS = [
     // presentes do tutorial (um por fase)
-    { id: 'cardigan', name: 'Cardigan verde', slot: 'torso', box: '18 52 64 40',
+    { id: 'cardigan', name: 'Cardigan verde', slot: 'torso', box: '18 52 64 34',
       svg: () => {
-        let knit = ''; for (let y = 64; y <= 84; y += 4) knit += `<path d="M24 ${y} Q31 ${y + 1} 40 ${y}" stroke="#145c40" stroke-width=".7" opacity=".55" fill="none"/><path d="M60 ${y} Q69 ${y + 1} 76 ${y}" stroke="#145c40" stroke-width=".7" opacity=".55" fill="none"/>`;
-        return `<path d="M27 58 Q19 70 21 85 Q30 89 41 86 Q40 72 45 64 Q36 63 27 58 Z" fill="#1b5a38" stroke="#0e3520" stroke-width="1.2" stroke-linejoin="round"/>
-<path d="M73 58 Q81 70 79 85 Q70 89 59 86 Q60 72 55 64 Q64 63 73 58 Z" fill="#1b5a38" stroke="#0e3520" stroke-width="1.2" stroke-linejoin="round"/>${knit}
-<path d="M41 86 Q40 72 45 64 M59 86 Q60 72 55 64" stroke="#2f8a57" stroke-width="2.4" fill="none" stroke-linecap="round"/>
-<g fill="#f2e3c6" stroke="#9a8150" stroke-width=".5"><circle cx="42.6" cy="70" r="1.4"/><circle cx="41.8" cy="76" r="1.4"/><circle cx="41.4" cy="82" r="1.4"/></g>`;
+        let knit = ''; for (let y = 64; y <= 76; y += 4) knit += `<path d="M24 ${y} Q31 ${y + 1} 40 ${y}" stroke="#145c40" stroke-width=".7" opacity=".55" fill="none"/><path d="M60 ${y} Q69 ${y + 1} 76 ${y}" stroke="#145c40" stroke-width=".7" opacity=".55" fill="none"/>`;
+        return `<path d="M27 58 Q19 68 21 79.5 Q30 83.5 41 81 Q40 70 45 64 Q36 63 27 58 Z" fill="#1b5a38" stroke="#0e3520" stroke-width="1.2" stroke-linejoin="round"/>
+<path d="M73 58 Q81 68 79 79.5 Q70 83.5 59 81 Q60 70 55 64 Q64 63 73 58 Z" fill="#1b5a38" stroke="#0e3520" stroke-width="1.2" stroke-linejoin="round"/>${knit}
+<path d="M41 81 Q40 70 45 64 M59 81 Q60 70 55 64" stroke="#2f8a57" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+<g fill="#f2e3c6" stroke="#9a8150" stroke-width=".5"><circle cx="42.8" cy="68.5" r="1.4"/><circle cx="41.9" cy="73.5" r="1.4"/><circle cx="41.4" cy="78.5" r="1.4"/></g>`;
       } },
-    { id: 'loafer', name: 'Loafer tratorado', slot: 'feet', box: '18 74 64 22',
+    { id: 'loafer', name: 'Loafer tratorado', slot: 'feet', box: '14 72 72 26',
+      // de perfil, com os bicos para fora: gola baixa, tira com moeda (penny), costura no bico e solado tratorado grosso
       svg: () => {
-        const shoe = x => `<path d="M${x - 11} 87 Q${x - 11} 79 ${x} 79 Q${x + 11} 79 ${x + 11} 87 Z" fill="#141414"/><rect x="${x - 12}" y="85.5" width="24" height="6" rx="2.6" fill="#2c2c2c"/>
-<path d="M${x - 9} 91.5 v1.6 M${x - 5} 91.5 v1.6 M${x - 1} 91.5 v1.6 M${x + 3} 91.5 v1.6 M${x + 7} 91.5 v1.6" stroke="#2c2c2c" stroke-width="2.2"/>
-<rect x="${x - 6}" y="81.4" width="12" height="2.2" rx="1" fill="#3a3a3a"/><rect x="${x - 1.6}" y="81.6" width="3.2" height="1.8" rx=".6" fill="#7a7a7a"/><path d="M${x - 8} 83 Q${x - 6} 80.5 ${x - 2} 80.2" stroke="#fff" stroke-width="1" opacity=".35" fill="none" stroke-linecap="round"/>`;
-        return shoe(33) + shoe(67);
+        let lugs = ''; for (let i = 0; i < 8; i++) lugs += ` q1.9 2.6 3.8 0`;
+        const shoe = `<path d="M-3 7 H28 Q31.5 7 31.5 10 V12 H-3 Z" fill="#3a3a3a"/><path d="M-3 12${lugs}" fill="#3a3a3a" stroke="#2a2a2a" stroke-width=".4"/><path d="M-3 8.6 H31" stroke="#5a5a5a" stroke-width=".9"/>
+<path d="M-2 7.4 Q-3.2 -.4 2.5 -1.4 L11.5 -.6 Q18 -3.4 24.5 .8 Q30.5 3.6 30 7.4 Z" fill="#121212"/>
+<ellipse cx="6.6" cy="-.9" rx="5.6" ry="1.25" fill="#000"/>
+<path d="M11.8 .2 Q16.5 -2.6 21.4 1.6" stroke="#2c2c2c" stroke-width="3" fill="none" stroke-linecap="round"/><ellipse cx="16.6" cy="-.4" rx="1.7" ry=".75" fill="#d9a400" stroke="#8a6400" stroke-width=".35" transform="rotate(-12 16.6 -.4)"/>
+<path d="M20.5 1.4 Q27.4 2.2 28.2 6" stroke="#6b6b6b" stroke-width=".6" stroke-dasharray=".9 .8" fill="none"/>
+<path d="M1 1.2 Q4 -.2 9 .3" stroke="#fff" stroke-width=".8" opacity=".35" fill="none" stroke-linecap="round"/><path d="M22 2 Q26 3.4 27.6 5.6" stroke="#fff" stroke-width=".7" opacity=".3" fill="none" stroke-linecap="round"/>`;
+        return `<g transform="translate(45 83) scale(-.82 .82)">${shoe}</g><g transform="translate(55 83) scale(.82)">${shoe}</g>`;
       } },
     { id: 'celular', name: 'Celular no cordão', slot: 'strap', box: '20 52 66 38',
       svg: () => `<path d="M28 58 Q48 70 70 78" stroke="#ff8a3d" stroke-width="2.6" fill="none" stroke-linecap="round"/><path d="M28 58 Q48 70 70 78" stroke="#ffd0a8" stroke-width="1" stroke-dasharray="1.5 2" fill="none"/>
@@ -1148,7 +1153,7 @@ const Outfit = (() => {
   // grupos do guarda-roupa: cabeça (chapéus, óculos, antenas…), corpo e o que ele segura
   const GROUP = { head: 'cabeca', eyes: 'cabeca', torso: 'corpo', neck: 'corpo', chest: 'corpo', strap: 'corpo', feet: 'corpo', back: 'corpo', hand: 'mao' };
   // ordem de desenho na frente do corpo (de baixo para cima)
-  const FRONT = ['torso', 'back', 'neck', 'chest', 'strap', 'feet'];
+  const FRONT = ['feet', 'torso', 'back', 'neck', 'chest', 'strap'];
   const BY = Object.fromEntries(ITEMS.map(i => [i.id, i]));
   let worn = Store.get('outfit', {});
   if (!worn || typeof worn !== 'object') worn = {};
@@ -1589,9 +1594,19 @@ const Layout = (() => {
     if (navigator.standalone !== true || !window.screen) return;
     const sw = screen.width, sh = screen.height, landNow = window.innerWidth > window.innerHeight;
     const full = landNow ? Math.min(sw, sh) : Math.max(sw, sh);
-    if (full > window.innerHeight + 1) { app.style.bottom = 'auto'; app.style.height = full + 'px'; }
-    else { app.style.bottom = ''; app.style.height = ''; }
+    // Nesse modo o iPhone pode informar margem inferior 0 mesmo com a barrinha de início e os
+    // cantos arredondados embaixo; garantimos ao menos 30px para os botões não ficarem cortados.
+    if (full > window.innerHeight + 1) { app.style.bottom = 'auto'; app.style.height = full + 'px'; app.style.setProperty('--sab', 'max(env(safe-area-inset-bottom, 0px), 30px)'); }
+    else { app.style.bottom = ''; app.style.height = ''; app.style.setProperty('--sab', 'max(env(safe-area-inset-bottom, 0px), ' + (sh >= 812 ? 20 : 0) + 'px)'); }
   }
+  let taps = 0, tapT = 0;
+  $('home').querySelector('.title').addEventListener('click', () => {
+    const now = Date.now(); taps = now - tapT < 600 ? taps + 1 : 1; tapT = now;
+    if (taps < 5) return;
+    taps = 0;
+    const r = app.getBoundingClientRect(), vv = window.visualViewport, cs = getComputedStyle(app);
+    toast(`tela ${screen.width}×${screen.height} · janela ${innerWidth}×${innerHeight} · app ${Math.round(r.top)}–${Math.round(r.bottom)} · vv ${vv ? Math.round(vv.offsetTop) + '+' + Math.round(vv.height) : '-'} · topo ${cs.getPropertyValue('--sat')} base ${cs.getPropertyValue('--sab')} · ${navigator.standalone ? 'app' : 'navegador'}`);
+  });
   function update() {
     fullScreenIOS();
     const r = app.getBoundingClientRect();
@@ -1984,7 +1999,7 @@ ${ring ? '<ellipse rx="29" ry="7" fill="none" stroke="#ffe3b0" stroke-width="3" 
 
 /* ---------------------------------------------------------------------
    Career — modo carreira: trilha descendo por 5 pântanos
-   Tutorial (3) → Iniciante (16) → Médio (13) → Avançado (10) → Expert (8) = 50 fases → troféu.
+   Tutorial (3) → Iniciante (13) → Médio (12) → Avançado (12) → Expert (10) = 50 fases → troféu.
    Prêmios do guarda-roupa: fim do tutorial e meio/fim de cada pântano.
    As fases são fixas: saem dos mesmos conjuntos validados pelo
    solucionador, sem repetir desenhos simétricos, em ordem crescente de
@@ -1994,10 +2009,10 @@ ${ring ? '<ellipse rx="29" ry="7" fill="none" stroke="#ffe3b0" stroke-width="3" 
 const Career = (() => {
   const REGIONS = [
     { id: 'tutorial', name: 'Tutorial', sub: 'Primeiros pulos', color: '#12a6c4', count: 3, top: '#d4f6ff', bot: '#8fdfee', bank: null },
-    { id: 'iniciante', name: 'Iniciante', sub: 'Lagoa tranquila', color: LEVELS.iniciante.color, count: 16, top: '#8fdfee', bot: '#3fbfa6', bank: '#86cf62' },
-    { id: 'medio', name: 'Médio', sub: 'Pântano pantanoso', color: LEVELS.medio.color, count: 13, top: '#4aae86', bot: '#4c8650', bank: '#5f8f3a' },
-    { id: 'avancado', name: 'Avançado', sub: 'Brejo', color: LEVELS.avancado.color, count: 10, top: '#3b6c60', bot: '#21414c', bank: '#3c5a36' },
-    { id: 'expert', name: 'Expert', sub: 'Pântano jacaroso', color: LEVELS.expert.color, count: 8, top: '#21414c', bot: '#111d16', bank: '#2c3a24' },
+    { id: 'iniciante', name: 'Iniciante', sub: 'Lagoa tranquila', color: LEVELS.iniciante.color, count: 13, top: '#8fdfee', bot: '#3fbfa6', bank: '#86cf62' },
+    { id: 'medio', name: 'Médio', sub: 'Pântano pantanoso', color: LEVELS.medio.color, count: 12, top: '#4aae86', bot: '#4c8650', bank: '#5f8f3a' },
+    { id: 'avancado', name: 'Avançado', sub: 'Brejo', color: LEVELS.avancado.color, count: 12, top: '#3b6c60', bot: '#21414c', bank: '#3c5a36' },
+    { id: 'expert', name: 'Expert', sub: 'Pântano jacaroso', color: LEVELS.expert.color, count: 10, top: '#21414c', bot: '#111d16', bank: '#2c3a24' },
     // pântano secreto: só aparece depois de concluir as 50 fases e tocar no portal (Big Bang)
     { id: 'espaco', name: 'Bônus', sub: 'Pântano espacial', color: '#8a5cff', count: 10, bonus: true, bg: 'linear-gradient(180deg,#111d16 0,#1d1450 140px,#120a35 55%,#05030f)', bank: null }
   ];
@@ -2357,7 +2372,6 @@ ${portalPos ? `<path d="M${finalPos.x} ${finalPos.y} L${portalPos.x} ${portalPos
     if (i > done) {
       Sound.invalid();
       animate(b, [0, -6, 6, -4, 4, 0].map(x => ({ transform: `translateX(${x}px)` })), { duration: 320 });
-      toast('Conclua a fase anterior primeiro');
       return;
     }
     Sound.click();
@@ -2377,13 +2391,13 @@ const Wardrobe = (() => {
   function render() {
     const owned = Career.owned();
     Outfit.prune(owned);
-    $('wStage').innerHTML = `<svg viewBox="-12 -26 124 136" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+    $('wStage').innerHTML = `<svg viewBox="-12 -16 124 126" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
 <ellipse cx="50" cy="97" rx="50" ry="12" fill="#063f78" opacity=".25"/>
 <path d="M4 94 A46 11 0 1 0 96 94 A46 11 0 0 0 56 83 L50 94 L45 83 A46 11 0 0 0 4 94Z" fill="url(#lily)" stroke="#155f1a" stroke-width="1"/>
-${Art.frog('green', { outfit: Outfit.worn, attrs: 'x="0" y="-4" width="100" height="100"' })}</svg>`;
+${Art.frog('green', { outfit: Outfit.worn, attrs: 'x="0" y="5" width="100" height="100"' })}</svg>`;
     const mine = Outfit.ITEMS.filter(it => owned.includes(it.id));
     if (!mine.length) {
-      grid.innerHTML = `<div class="wempty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4h10v5a5 5 0 0 1-10 0z"/><path d="M17 5h3v2a4 4 0 0 1-3.6 4M7 5H4v2a4 4 0 0 0 3.6 4"/><path d="M12 14v3M8.5 20h7M9.5 17h5v3h-5z"/></svg><b>Seu guarda-roupa está vazio</b><span>Complete fases da carreira para ganhar apetrechos.</span></div>`;
+      grid.innerHTML = `<div class="wempty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4h10v5a5 5 0 0 1-10 0z"/><path d="M17 5h3v2a4 4 0 0 1-3.6 4M7 5H4v2a4 4 0 0 0 3.6 4"/><path d="M12 14v3M8.5 20h7M9.5 17h5v3h-5z"/></svg><b>Seu guarda-roupa está vazio</b></div>`;
       return;
     }
     grid.innerHTML = SECTIONS.map(([g, title]) => {
@@ -2505,7 +2519,7 @@ const Tests = {
     await Career.ensureBuilt();
     const CL = Career.list;
     const RC = Career.REGIONS.map(r => r.count);
-    t('carreira: 50 fases, mais fáceis que médias, mais médias que avançadas, mais avançadas que expert', Career.TOTAL === 50 && CL.length === 60 && RC[1] > RC[2] && RC[2] > RC[3] && RC[3] > RC[4], RC.slice(0, 5).join(' + ') + ' (+10 bônus)');
+    t('carreira: 50 fases; expert 10, avançado 12, iniciante ≥ médio ≥ avançado > expert', Career.TOTAL === 50 && CL.length === 60 && RC[4] === 10 && RC[3] === 12 && RC[1] >= RC[2] && RC[2] >= RC[3], RC.slice(0, 5).join(' + ') + ' (+10 bônus)');
     t('prêmios: 1 por fase do tutorial, depois 1 a cada 5 fases; 17 apetrechos sem repetir', [0, 1, 2].every(i => Career.PRIZE[i]) && [7, 12, 17, 22, 27, 32, 37, 42, 47, 49, 54, 59].every(i => Career.PRIZE[i]) && Object.keys(Career.PRIZE).length === 15 && new Set(Object.values(Career.PRIZE).flat()).size === 17 && Outfit.ITEMS.length === 17);
     t('tutorial com 1, 2 e 3 sapos verdes', [0, 1, 2].every(i => Rules.greens(CL[i].start) === i + 1));
     t('todas as fases da carreira têm solução', CL.filter(l => !Career.REGIONS[l.region].bonus).every(l => !!Solver.solve(l.start)));
