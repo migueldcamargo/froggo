@@ -17,7 +17,7 @@
 <meta name="apple-mobile-web-app-title" content="Froggo">
 <meta name="application-name" content="Froggo">
 <meta name="format-detection" content="telephone=no">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%230b7bd6'/%3E%3Cellipse cx='50' cy='62' rx='34' ry='24' fill='%233fbf34'/%3E%3Ccircle cx='32' cy='38' r='14' fill='%233fbf34'/%3E%3Ccircle cx='68' cy='38' r='14' fill='%233fbf34'/%3E%3Ccircle cx='32' cy='37' r='9' fill='%23fff'/%3E%3Ccircle cx='68' cy='37' r='9' fill='%23fff'/%3E%3Ccircle cx='34' cy='38' r='4.5' fill='%23102030'/%3E%3Ccircle cx='66' cy='38' r='4.5' fill='%23102030'/%3E%3Cpath d='M36 64 Q50 74 64 64' stroke='%23103d12' stroke-width='4' fill='none' stroke-linecap='round'/%3E%3C/svg%3E">
+<link id="favIcon" rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%230b7bd6'/%3E%3Cellipse cx='50' cy='62' rx='34' ry='24' fill='%233fbf34'/%3E%3Ccircle cx='32' cy='38' r='14' fill='%233fbf34'/%3E%3Ccircle cx='68' cy='38' r='14' fill='%233fbf34'/%3E%3Ccircle cx='32' cy='37' r='9' fill='%23fff'/%3E%3Ccircle cx='68' cy='37' r='9' fill='%23fff'/%3E%3Ccircle cx='34' cy='38' r='4.5' fill='%23102030'/%3E%3Ccircle cx='66' cy='38' r='4.5' fill='%23102030'/%3E%3Cpath d='M36 64 Q50 74 64 64' stroke='%23103d12' stroke-width='4' fill='none' stroke-linecap='round'/%3E%3C/svg%3E">
 <link id="touchIcon" rel="apple-touch-icon" href="">
 <title>Froggo</title>
 <style>
@@ -95,10 +95,11 @@ svg{display:block}
   grid-template-areas:"bar" "hero" "cta"}
 .home-bar{grid-area:bar;display:flex;align-items:center;justify-content:space-between;gap:.5rem}
 .home-bar{position:relative;z-index:30}
-.home-bar .levels{position:relative;display:flex;justify-content:center;min-width:0}
+.topbar .levels{position:relative;display:flex;justify-content:center;min-width:0}
 .lvl-btn{display:inline-flex;align-items:center;justify-content:space-between;gap:.5em;max-width:100%;min-height:2.6rem;padding:0 .85em 0 1.05em;border-radius:999px;
   font-weight:900;font-size:1rem;color:#5a3000;background:linear-gradient(180deg,#fff27a,#ffc21a);border:2px solid #fff;box-shadow:0 .22rem 0 #c97e00,0 .4rem .8rem rgba(0,30,70,.25)}
 .lvl-btn span{white-space:nowrap}
+.lvl-btn:disabled{opacity:.55;filter:grayscale(.4)}
 .lvl-btn svg{width:1.2rem;height:1.2rem;flex:none;transition:transform .2s}
 .lvl-btn[aria-expanded="true"] svg{transform:rotate(180deg)}
 .lvl-menu{position:absolute;top:calc(100% + .4rem);left:50%;transform:translateX(-50%);width:min(15rem,calc(var(--W) - 1.5rem));display:none;flex-direction:column;gap:.25rem;padding:.45rem;
@@ -132,8 +133,10 @@ svg{display:block}
 @keyframes miniBob{50%{transform:translateY(-4%) rotate(-3deg)}}
 .cta{grid-area:cta;display:flex;justify-content:center;align-items:center;gap:.6rem}
 .cta #btnPick{flex:1 1 auto;width:auto;max-width:22rem;min-width:0}
-.cta .trophy{flex:none;width:3.6rem;height:3.6rem;min-width:3.6rem;padding:0;border-radius:50%;color:#7a4a00}
-.cta .trophy svg{width:1.9rem;height:1.9rem}
+.cta .round{flex:none;width:3.4rem;height:3.4rem;min-width:3.4rem;min-height:3.4rem;padding:0;border-radius:50%}
+.cta .trophy{color:#7a4a00}
+.cta .round svg{width:1.8rem;height:1.8rem}
+.cta #btnPick{font-size:clamp(1rem, calc((var(--W) - 9.5rem) * .075), 1.35rem);padding-left:.9em;padding-right:.9em}
 .app.land #home{grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);grid-template-rows:auto minmax(0,1fr) auto;
   grid-template-areas:"hero bar" "hero ." "hero cta";column-gap:1.2rem}
 .app.land #btnInstall span{display:none}
@@ -214,11 +217,11 @@ svg{display:block}
 .board{position:relative;width:var(--bs,300px);height:var(--bs,300px);flex:none;touch-action:none;
   filter:drop-shadow(0 .8rem 1.2rem rgba(0,25,70,.35))}
 .board>svg.bsvg{position:absolute;inset:0;width:100%;height:100%}
-.pmark{position:absolute;width:15%;height:15%;margin:-7.5% 0 0 -7.5%;border-radius:50%;pointer-events:none;transition:box-shadow .15s, background .15s}
+.pmark{position:absolute;width:var(--psz,15%);height:var(--psz,15%);margin:calc(var(--psz,15%) / -2) 0 0 calc(var(--psz,15%) / -2);border-radius:50%;pointer-events:none;transition:box-shadow .15s, background .15s}
 .pmark.bad{box-shadow:0 0 0 .6vmin #ff3b30, 0 0 2vmin .6vmin rgba(255,59,48,.85);background:rgba(255,59,48,.3)}
 .pmark.origin{box-shadow:0 0 0 .5vmin #ffd23f, 0 0 1.8vmin .5vmin rgba(255,210,63,.9)}
 @keyframes pulse{50%{transform:scale(1.12)}}
-.frog{position:absolute;width:19%;height:19%;margin:-11% 0 0 -9.5%;pointer-events:none;will-change:transform;z-index:2}
+.frog{position:absolute;width:var(--fsz,19%);height:var(--fsz,19%);margin:calc(var(--fsz,19%) * -.58) 0 0 calc(var(--fsz,19%) / -2);pointer-events:none;will-change:transform;z-index:2}
 .frog .fi{position:absolute;inset:0}
 .frog svg{width:100%;height:100%;overflow:visible}
 .frog.sel .fi{filter:drop-shadow(0 0 .45rem #fff36b)}
@@ -229,7 +232,7 @@ svg{display:block}
 @keyframes breathe{50%{transform:scale(1.03,.975)}}
 .lids ellipse{transform:scaleY(0);transform-box:fill-box;transform-origin:50% 50%;animation:blink 4.5s infinite}
 @keyframes blink{0%,94%,100%{transform:scaleY(0)}96.5%{transform:scaleY(1)}}
-.splash{position:absolute;width:16%;height:16%;margin:-8% 0 0 -8%;border-radius:50%;border:.5vmin solid rgba(255,255,255,.95);pointer-events:none;z-index:3}
+.splash{position:absolute;width:calc(16% * var(--k,1));height:calc(16% * var(--k,1));margin:calc(-8% * var(--k,1)) 0 0 calc(-8% * var(--k,1));border-radius:50%;border:.5vmin solid rgba(255,255,255,.95);pointer-events:none;z-index:3}
 .drop{position:absolute;width:2.2%;height:2.2%;margin:-1.1% 0 0 -1.1%;border-radius:50%;background:#dff8ff;pointer-events:none;z-index:3}
 
 /* ---------- Overlays ---------- */
@@ -309,6 +312,30 @@ canvas.confetti{position:absolute;inset:0;width:100%;height:100%;pointer-events:
 
 .hidden{display:none!important}
 
+/* ---------- Guarda-roupa ---------- */
+#wardrobe{grid-template-rows:auto minmax(0,.85fr) minmax(0,1.15fr);grid-template-columns:minmax(0,1fr);gap:.5rem;grid-template-areas:"top" "stage" "grid"}
+.ctitle .hg{color:#fff}
+.wstage{grid-area:stage;position:relative;min-height:0}
+.wstage>svg{position:absolute;inset:0;width:100%;height:100%}
+.wgrid{grid-area:grid;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;touch-action:pan-y;overscroll-behavior:contain;
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(6.4rem,1fr));gap:.5rem;align-content:start;padding:.6rem;border-radius:1.2rem;background:rgba(4,40,90,.25);box-shadow:inset 0 0 0 2px rgba(255,255,255,.35)}
+.witem{position:relative;display:flex;flex-direction:column;align-items:center;gap:.25rem;padding:.5rem .4rem .55rem;border-radius:1rem;background:#fffdf4;color:var(--ink);box-shadow:0 .2rem 0 rgba(0,0,0,.15)}
+.witem .pv{width:100%;height:3.4rem;display:grid;place-items:center}
+.witem .pv svg{width:80%;height:3rem}
+.witem .pv{background:radial-gradient(circle at 50% 55%, #dff3ff 0 45%, transparent 46%)}
+.witem b{font-size:.8rem;font-weight:900;line-height:1.1;text-align:center}
+.witem.worn{box-shadow:0 0 0 3px #2fbf3a,0 .2rem 0 rgba(0,0,0,.15)}
+.witem.worn{background:#eaffdf}
+.wsec{grid-column:1/-1;font-size:.85rem;font-weight:900;letter-spacing:.06em;text-transform:uppercase;color:#fff;text-shadow:0 1px 0 rgba(0,40,90,.4);margin-top:.2rem}
+.wsec:first-child{margin-top:0}
+.wempty{grid-column:1/-1;display:flex;flex-direction:column;align-items:center;gap:.35rem;padding:1.4rem .8rem;text-align:center;font-weight:800;font-size:.9rem}
+.wempty svg{width:2.6rem;height:2.6rem;color:#ffd23f}
+.wempty b{font-size:1.05rem}
+.witem:active{transform:scale(.96)}
+.app.land #wardrobe{grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);grid-template-rows:auto minmax(0,1fr);grid-template-areas:"top top" "stage grid";column-gap:1rem}
+.prize-won{display:flex;align-items:center;gap:.5rem;padding:.4rem .8rem;border-radius:1rem;background:#fff4c2;box-shadow:inset 0 0 0 2px #ffd23f;font-weight:900;font-size:.92rem}
+.prize-won svg{width:2.4rem;height:2.4rem;flex:none}
+
 /* ---------- Carreira ---------- */
 #career{grid-template-rows:auto minmax(0,1fr);grid-template-columns:minmax(0,1fr);gap:.5rem;grid-template-areas:"top" "map";padding-bottom:0}
 .ctitle{display:inline-flex;align-items:center;gap:.4rem}
@@ -339,15 +366,31 @@ canvas.confetti{position:absolute;inset:0;width:100%;height:100%;pointer-events:
 .cnode .ok svg{width:14px;height:14px;filter:none}
 .cnode.cur::before{content:"";position:absolute;inset:-9px;border-radius:50%;border:4px solid #fff36b;box-shadow:0 0 14px #fff36b;animation:pulse 1.2s ease-in-out infinite}
 @keyframes pulse{50%{transform:scale(1.1)}}
+.cnode .prize{position:absolute;left:62%;top:-34%;width:58%;height:58%;border-radius:50%;background:#fffdf4;box-shadow:0 0 0 3px #ffd23f,0 4px 8px rgba(0,0,0,.3);display:grid;place-items:center;padding:12%;animation:prizeBob 1.8s ease-in-out infinite}
+.cnode .prize svg{width:100%;height:100%;filter:none}
+.cnode.locked .prize svg{filter:none}
+@keyframes prizeBob{50%{transform:translateY(-4px)}}
 .cnode.final svg{filter:drop-shadow(0 0 12px rgba(255,220,80,.8))}
 .dff{animation:ffly 2.4s ease-in-out infinite}
 @keyframes ffly{50%{opacity:.25}}
+.dtw{animation:ffly 2.2s ease-in-out infinite}
+.cnode.portal{filter:drop-shadow(0 0 16px rgba(201,182,255,.9));animation:portalPulse 1.6s ease-in-out infinite}
+.cnode.portal .num{background:linear-gradient(180deg,#c9b6ff,#7b3fe4);color:#fff;bottom:-14px}
+.pspin{animation:spin 3s linear infinite;transform-origin:0 0}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes portalPulse{50%{transform:scale(1.08)}}
+.creg.space .cbanner{background:linear-gradient(180deg,#5b3bc4,#2a1a7a);border-color:#1a0f4f;box-shadow:0 5px 0 #120a35,0 0 18px rgba(155,108,255,.6)}
+.creg.space .cbanner i{background:#1a0f4f}
+.cnode.star svg{filter:drop-shadow(0 0 14px rgba(255,220,80,.9))}
+canvas.bigbang{position:absolute;inset:0;width:100%;height:100%;z-index:400;pointer-events:auto}
+.app.space-mode{background:radial-gradient(90% 60% at 80% 0%, rgba(155,108,255,.35), transparent 60%),radial-gradient(80% 50% at 0% 100%, rgba(111,208,255,.2), transparent 60%),linear-gradient(180deg,#1d1450,#05030f)}
+.board.space{filter:drop-shadow(0 .8rem 1.4rem rgba(80,40,200,.45))}
 .cavatar{position:absolute;z-index:6;pointer-events:none}
 .cavatar svg{width:100%;height:100%;overflow:visible}
 .cavatar .fbody{animation:breathe 2.6s ease-in-out infinite;transform-box:fill-box;transform-origin:50% 100%}
 
 @media (prefers-reduced-motion: reduce){
-  .app::before,.bubble,.title,.cnode.cur::before,.dff,.cavatar .fbody,.hero-frog,.hero-mini,.frog .fbody,.lids ellipse,.loading .lfrog,.win .res-art svg.rfrog{animation:none!important}
+  .app::before,.bubble,.title,.dtw,.pspin,.cnode.portal,.cnode.cur::before,.cnode .prize,.dff,.cavatar .fbody,.hero-frog,.hero-mini,.frog .fbody,.lids ellipse,.loading .lfrog,.win .res-art svg.rfrog{animation:none!important}
   .win .star{animation:none!important;opacity:1}
   .overlay.show,.panel{animation:none}
 }
@@ -368,6 +411,11 @@ canvas.confetti{position:absolute;inset:0;width:100%;height:100%;pointer-events:
     <linearGradient id="bdTop" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3cc6ff"/><stop offset=".5" stop-color="#1497e6"/><stop offset="1" stop-color="#0a6fc9"/></linearGradient>
     <radialGradient id="bdShine" cx="30%" cy="15%" r="70%"><stop offset="0" stop-color="#fff" stop-opacity=".45"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
     <radialGradient id="vrLeaf" cx="40%" cy="35%" r="75%"><stop offset="0" stop-color="#4fb79a"/><stop offset=".55" stop-color="#1f8070"/><stop offset="1" stop-color="#0d5452"/></radialGradient>
+    <linearGradient id="ufoBody" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#eef3fb"/><stop offset=".5" stop-color="#a9b6cc"/><stop offset="1" stop-color="#5b6884"/></linearGradient>
+    <linearGradient id="ufoDim" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5a4f9a"/><stop offset="1" stop-color="#2e2766"/></linearGradient>
+    <radialGradient id="ufoDomeDim" cx="40%" cy="30%" r="80%"><stop offset="0" stop-color="#7f8fd0"/><stop offset="1" stop-color="#3b3f8a"/></radialGradient>
+    <radialGradient id="ufoDome" cx="40%" cy="30%" r="80%"><stop offset="0" stop-color="#e8ffff"/><stop offset=".5" stop-color="#7fe8ff"/><stop offset="1" stop-color="#2a8fbf"/></radialGradient>
+    <linearGradient id="spaceBd" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2b1a64"/><stop offset="1" stop-color="#0c0826"/></linearGradient>
     <radialGradient id="lily" cx="40%" cy="35%" r="75%"><stop offset="0" stop-color="#b8f56a"/><stop offset=".6" stop-color="#4cbf3a"/><stop offset="1" stop-color="#1e7a25"/></radialGradient>
   </defs>
 </svg>
@@ -381,10 +429,6 @@ canvas.confetti{position:absolute;inset:0;width:100%;height:100%;pointer-events:
       <button class="pill-btn" id="btnInstall" aria-label="Como instalar na tela de início">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2" width="12" height="20" rx="3"/><path d="M12 8v6M9 11h6"/></svg><span>Instalar</span>
       </button>
-      <div class="levels" id="levels">
-        <button class="lvl-btn" id="lvlBtn" aria-haspopup="true" aria-expanded="false" aria-controls="lvlMenu"><span>Dificuldade</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>
-        <div class="lvl-menu" id="lvlMenu" role="group" aria-label="Dificuldades"></div>
-      </div>
       <button class="icon-btn snd" aria-label="Som ligado/desligado"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9h4l5-4v14l-5-4H4z" fill="currentColor"/><g class="sound-waves"><path d="M16 9a4 4 0 0 1 0 6"/><path d="M18.5 6.5a7.5 7.5 0 0 1 0 11"/></g><g class="muted-x"><path d="M16.5 9.5l5 5M21.5 9.5l-5 5"/></g></svg></button>
     </div>
     <div class="hero">
@@ -392,14 +436,17 @@ canvas.confetti{position:absolute;inset:0;width:100%;height:100%;pointer-events:
       <div class="hero-art" id="heroArt"></div>
     </div>
     <div class="cta"><button class="btn big round trophy" id="btnCareer" aria-label="Modo carreira"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4h10v5a5 5 0 0 1-10 0z" fill="currentColor" fill-opacity=".25"/><path d="M17 5h3v2a4 4 0 0 1-3.6 4M7 5H4v2a4 4 0 0 0 3.6 4"/><path d="M12 14v3M8.5 20h7M9.5 17h5v3h-5z"/></svg></button><button class="btn big" id="btnPick">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"><rect x="3" y="5" width="11" height="15" rx="2" transform="rotate(-10 8 12)"/><rect x="9" y="3" width="11" height="15" rx="2" fill="#fff" fill-opacity=".6"/></svg>Pegar uma carta</button></div>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"><rect x="3" y="5" width="11" height="15" rx="2" transform="rotate(-10 8 12)"/><rect x="9" y="3" width="11" height="15" rx="2" fill="#fff" fill-opacity=".6"/></svg>Pegar uma carta</button><button class="btn big blue round wardrobe" id="btnWardrobe" aria-label="Guarda-roupa"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 5.5a2 2 0 1 1 2.6 1.9c-.4.1-.6.5-.6.9V9"/><path d="M12 9L2.8 15.6A1.4 1.4 0 0 0 3.6 18h16.8a1.4 1.4 0 0 0 .8-2.4z" fill="currentColor" fill-opacity=".2"/></svg></button></div>
   </section>
 
   <!-- ================= SORTEIO ================= -->
   <section class="screen" id="draw" aria-label="Sorteio de carta">
     <div class="topbar">
       <button class="pill-btn" id="btnDrawBack" aria-label="Voltar para o início"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h5v-6h4v6h5V10"/></svg>Início</button>
-      <h2 id="drawTitle"></h2>
+      <div class="levels" id="levels">
+        <button class="lvl-btn" id="lvlBtn" aria-haspopup="true" aria-expanded="false" aria-controls="lvlMenu"><span>Dificuldade</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>
+        <div class="lvl-menu" id="lvlMenu" role="group" aria-label="Dificuldades"></div>
+      </div>
       <button class="icon-btn snd" aria-label="Som ligado/desligado"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9h4l5-4v14l-5-4H4z" fill="currentColor"/><g class="sound-waves"><path d="M16 9a4 4 0 0 1 0 6"/><path d="M18.5 6.5a7.5 7.5 0 0 1 0 11"/></g><g class="muted-x"><path d="M16.5 9.5l5 5M21.5 9.5l-5 5"/></g></svg></button>
     </div>
     <div class="stage" id="stage">
@@ -412,7 +459,7 @@ canvas.confetti{position:absolute;inset:0;width:100%;height:100%;pointer-events:
     <div class="draw-status" id="drawStatus" aria-live="polite">Embaralhando…</div>
     <div class="draw-actions">
       <button class="btn blue" id="btnSwap" disabled>
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h13l-3-3M20 17H7l3 3"/></svg>Embaralhar novamente</button>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h13l-3-3M20 17H7l3 3"/></svg><span id="swapLabel">Embaralhar</span></button>
       <button class="btn green big" id="btnStart" disabled>
         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>Começar</button>
     </div>
@@ -446,6 +493,17 @@ canvas.confetti{position:absolute;inset:0;width:100%;height:100%;pointer-events:
     <div class="cmap" id="cmap"><div class="cmap-inner" id="cmapInner"></div></div>
   </section>
 
+  <!-- ================= GUARDA-ROUPA ================= -->
+  <section class="screen" id="wardrobe" aria-label="Guarda-roupa">
+    <div class="topbar">
+      <button class="icon-btn" id="btnWardHome" aria-label="Voltar para o início"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h5v-6h4v6h5V10"/></svg></button>
+      <h2 class="ctitle"><svg class="hg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 5.5a2 2 0 1 1 2.6 1.9c-.4.1-.6.5-.6.9V9"/><path d="M12 9L2.8 15.6A1.4 1.4 0 0 0 3.6 18h16.8a1.4 1.4 0 0 0 .8-2.4z" fill="currentColor" fill-opacity=".2"/></svg>Guarda-roupa</h2>
+      <button class="icon-btn snd" aria-label="Som ligado/desligado"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9h4l5-4v14l-5-4H4z" fill="currentColor"/><g class="sound-waves"><path d="M16 9a4 4 0 0 1 0 6"/><path d="M18.5 6.5a7.5 7.5 0 0 1 0 11"/></g><g class="muted-x"><path d="M16.5 9.5l5 5M21.5 9.5l-5 5"/></g></svg></button>
+    </div>
+    <div class="wstage" id="wStage"></div>
+    <div class="wgrid" id="wGrid"></div>
+  </section>
+
   <canvas class="confetti hidden" id="confetti"></canvas>
 
   <!-- Vitória -->
@@ -454,6 +512,7 @@ canvas.confetti{position:absolute;inset:0;width:100%;height:100%;pointer-events:
       <div class="res-art" id="winArt"></div>
       <div class="res-text">
         <h3 id="winTitle">Você venceu!</h3>
+        <div class="prize-won hidden" id="winPrize"></div>
         <div class="row win-row">
           <button class="btn round home" id="btnWinHome" aria-label="Página inicial"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h5v-6h4v6h5V10"/></svg></button>
           <button class="btn green grow" id="btnNewWin">Próxima carta</button>
@@ -585,7 +644,34 @@ const Geo = (() => {
   // posição em % dentro do tabuleiro (mesma conta no SVG e nos sapos HTML)
   const pct = v => 11 + v * 19.5;
   const PX = CELLS.map(c => pct(c[0])), PY = CELLS.map(c => pct(c[1]));
-  return { CELLS, N, LINES, JUMPS, FROM, PX, PY, idOf };
+  return { n: 3, L: 4, CELLS, N, LINES, JUMPS, FROM, PX, PY, idOf };
+})();
+
+/* Tabuleiros maiores das fases bônus: n×n casas principais (coordenadas pares
+   numa grade de lado 2(n−1)) e uma intermediária no centro de cada quadrado.
+   Mesma regra de linhas do 3×3: linhas e colunas das principais e todas as
+   diagonais da grade. 4×4 → 25 casas e 84 saltos; 5×5 → 41 casas e 160 saltos.
+   BigGeo(3) devolve o Geo original (mesma ordem de casas e saltos). */
+const BigGeo = (() => {
+  const cache = { 3: Geo };
+  function make(n) {
+    const L = 2 * (n - 1), CELLS = [];
+    for (let y = 0; y <= L; y++) for (let x = 0; x <= L; x++) if ((x % 2 === 0 && y % 2 === 0) || (x % 2 === 1 && y % 2 === 1)) CELLS.push([x, y]);
+    const idx = new Map(CELLS.map((c, i) => [c[0] + ',' + c[1], i]));
+    const idOf = (x, y) => idx.has(x + ',' + y) ? idx.get(x + ',' + y) : -1;
+    const LINES = [];
+    for (let y = 0; y <= L; y += 2) { const l = []; for (let x = 0; x <= L; x += 2) l.push(idOf(x, y)); LINES.push(l); }
+    for (let x = 0; x <= L; x += 2) { const l = []; for (let y = 0; y <= L; y += 2) l.push(idOf(x, y)); LINES.push(l); }
+    for (let d = -L; d <= L; d++) { const l = []; for (let x = 0; x <= L; x++) { const i = idOf(x, x - d); if (i >= 0) l.push(i); } if (l.length >= 3) LINES.push(l); }
+    for (let t = 0; t <= 2 * L; t++) { const l = []; for (let x = 0; x <= L; x++) { const i = idOf(x, t - x); if (i >= 0) l.push(i); } if (l.length >= 3) LINES.push(l); }
+    const JUMPS = [];
+    for (const l of LINES) for (let i = 0; i + 2 < l.length; i++) { JUMPS.push({ from: l[i], over: l[i + 1], to: l[i + 2] }); JUMPS.push({ from: l[i + 2], over: l[i + 1], to: l[i] }); }
+    const FROM = Array.from({ length: CELLS.length }, () => []);
+    JUMPS.forEach(j => FROM[j.from].push(j));
+    const pct = v => 11 + v * 78 / L;
+    return { n, L, CELLS, N: CELLS.length, LINES, JUMPS, FROM, PX: CELLS.map(c => pct(c[0])), PY: CELLS.map(c => pct(c[1])), idOf };
+  }
+  return n => cache[n] || (cache[n] = make(n));
 })();
 
 /* ---------------------------------------------------------------------
@@ -596,25 +682,28 @@ const Geo = (() => {
    destino vazio. O verde saltado sai. O vermelho nunca é removido.
    Vitória: nenhum verde restante (só o vermelho no tabuleiro).
    --------------------------------------------------------------------- */
+// Bits por aritmética (não por >>): o 5×5 tem 41 casas, além dos 32 bits dos operadores binários.
+const P2 = Array.from({ length: 53 }, (_, i) => 2 ** i);
+const geoOf = s => s.n ? BigGeo(s.n) : Geo;      // estados do 3×3 não levam n
 const Rules = {
-  isGreen: (s, i) => ((s.g >> i) & 1) === 1,
+  isGreen: (s, i) => Math.floor(s.g / P2[i]) % 2 === 1,
   isRed: (s, i) => s.r === i,
   occupied(s, i) { return this.isGreen(s, i) || s.r === i; },
   legal(s, j) { return this.occupied(s, j.from) && this.isGreen(s, j.over) && !this.occupied(s, j.to); },
-  movesFrom(s, i) { return Geo.FROM[i].filter(j => this.legal(s, j)); },
-  legalMoves(s) { return Geo.JUMPS.filter(j => this.legal(s, j)); },
-  findMove(s, from, to) { return Geo.FROM[from].find(j => j.to === to && this.legal(s, j)) || null; },
+  movesFrom(s, i) { return geoOf(s).FROM[i].filter(j => this.legal(s, j)); },
+  legalMoves(s) { return geoOf(s).JUMPS.filter(j => this.legal(s, j)); },
+  findMove(s, from, to) { return (geoOf(s).FROM[from] || []).find(j => j.to === to && this.legal(s, j)) || null; },
   apply(s, j) {
-    let g = s.g & ~(1 << j.over), r = s.r;
-    if (j.from === r) r = j.to; else g = (g & ~(1 << j.from)) | (1 << j.to);
-    return { g, r };
+    let g = s.g - P2[j.over], r = s.r;
+    if (j.from === r) r = j.to; else g = g - P2[j.from] + P2[j.to];
+    return s.n ? { g, r, n: s.n } : { g, r };
   },
-  greens(s) { let c = 0, g = s.g; while (g) { c += g & 1; g >>= 1; } return c; },
+  greens(s) { let c = 0; const N = geoOf(s).N; for (let i = 0; i < N; i++) if (this.isGreen(s, i)) c++; return c; },
   isWin(s) { return s.g === 0; },
   key: s => s.r * 8192 + s.g,
   fromKey: k => ({ r: Math.floor(k / 8192), g: k % 8192 }),
-  toStr(s) { let t = ''; for (let i = 0; i < Geo.N; i++) t += s.r === i ? 'R' : this.isGreen(s, i) ? 'G' : '.'; return t; },
-  fromStr(t) { let g = 0, r = -1; for (let i = 0; i < Geo.N; i++) { if (t[i] === 'G') g |= 1 << i; if (t[i] === 'R') r = i; } return { g, r }; }
+  toStr(s) { let t = ''; const N = geoOf(s).N; for (let i = 0; i < N; i++) t += s.r === i ? 'R' : this.isGreen(s, i) ? 'G' : '.'; return t; },
+  fromStr(t, n) { const G = n ? BigGeo(n) : Geo; let g = 0, r = -1; for (let i = 0; i < G.N; i++) { if (t[i] === 'G') g += P2[i]; if (t[i] === 'R') r = i; } return n && n !== 3 ? { g, r, n } : { g, r }; }
 };
 
 /* ---------------------------------------------------------------------
@@ -807,19 +896,22 @@ const Art = {
     const B = red ? 'rB' : 'gB', D = red ? 'rD' : 'gD', Y = red ? 'rY' : 'gY';
     const line = red ? '#5c0808' : '#0f3d12';
     const d = opts.delay || 0;
-    const crown = red ? `<g><path d="M40 13 L42 3 L46.5 9 L50 1 L53.5 9 L58 3 L60 13 Z" fill="url(#crown)" stroke="#a86a00" stroke-width="1.2" stroke-linejoin="round"/><circle cx="50" cy="8.5" r="1.6" fill="#ff3b6b"/></g>` : '';
-    return `<svg viewBox="0 0 100 100" aria-hidden="true"${opts.cls ? ` class="${opts.cls}"` : ''}${opts.attrs ? ' ' + opts.attrs : ''}>
+    // apetrechos do guarda-roupa (o sapo do jogador é o verde)
+    const L = opts.outfit ? Outfit.layers(opts.outfit, red) : { back: '', head: '', front: '', eyes: '', hand: '', top: '' };
+    // pintinhas: marca o vermelho também para quem não distingue as cores
+    const spots = red ? '<g fill="#7a0a0a" opacity=".42"><circle cx="50" cy="31" r="2.6"/><circle cx="43.5" cy="35.5" r="1.7"/><circle cx="56.5" cy="35.5" r="1.7"/></g>' : '';
+    return `<svg viewBox="0 0 100 100" overflow="visible" aria-hidden="true"${opts.cls ? ` class="${opts.cls}"` : ''}${opts.attrs ? ' ' + opts.attrs : ''}>
 <ellipse cx="50" cy="92" rx="31" ry="6" fill="rgba(0,20,50,.3)"/>
-<g class="fbody" style="animation-delay:${d}s">
+<g class="fbody" style="animation-delay:${d}s">${L.back}
 <ellipse cx="20" cy="77" rx="15" ry="11" fill="url(#${D})"/><ellipse cx="80" cy="77" rx="15" ry="11" fill="url(#${D})"/>
 <ellipse cx="50" cy="66" rx="31" ry="24" fill="url(#${B})"/>
 <ellipse cx="50" cy="73" rx="19" ry="14" fill="url(#${Y})"/>
 <ellipse cx="50" cy="45" rx="35" ry="24" fill="url(#${B})"/>
-<circle cx="31" cy="27" r="15" fill="url(#${B})"/><circle cx="69" cy="27" r="15" fill="url(#${B})"/>
+<circle cx="31" cy="27" r="15" fill="url(#${B})"/><circle cx="69" cy="27" r="15" fill="url(#${B})"/>${spots}${L.head}
 <circle cx="31" cy="26" r="11" fill="url(#eyeW)"/><circle cx="69" cy="26" r="11" fill="url(#eyeW)"/>
 <circle cx="33" cy="27.5" r="6" fill="#0d1b26"/><circle cx="67" cy="27.5" r="6" fill="#0d1b26"/>
 <circle cx="35.2" cy="24.6" r="2.3" fill="#fff"/><circle cx="69.2" cy="24.6" r="2.3" fill="#fff"/>
-<g class="lids" style="--d:${d}s"><ellipse cx="31" cy="26" rx="12" ry="12" fill="url(#${B})" style="animation-delay:${d * 1.7}s"/><ellipse cx="69" cy="26" rx="12" ry="12" fill="url(#${B})" style="animation-delay:${d * 1.7}s"/></g>
+${opts.still ? '' : `<g class="lids"><ellipse cx="31" cy="26" rx="12" ry="12" fill="url(#${B})" style="animation-delay:${d * 1.7}s"/><ellipse cx="69" cy="26" rx="12" ry="12" fill="url(#${B})" style="animation-delay:${d * 1.7}s"/></g>`}
 <ellipse cx="22.5" cy="50" rx="6" ry="3.6" fill="#ff7aa8" opacity=".55"/><ellipse cx="77.5" cy="50" rx="6" ry="3.6" fill="#ff7aa8" opacity=".55"/>
 <path d="M33 49 Q50 62 67 49" stroke="${line}" stroke-width="2.8" fill="none" stroke-linecap="round"/>
 <circle cx="45" cy="40" r="1.3" fill="${line}" opacity=".6"/><circle cx="55" cy="40" r="1.3" fill="${line}" opacity=".6"/>
@@ -828,7 +920,7 @@ const Art = {
 <g fill="url(#${D})"><ellipse cx="33" cy="86" rx="9.5" ry="5.2"/><ellipse cx="67" cy="86" rx="9.5" ry="5.2"/>
 <circle cx="25.5" cy="88.5" r="2.6"/><circle cx="31" cy="90.5" r="2.6"/><circle cx="37" cy="90.5" r="2.6"/>
 <circle cx="63" cy="90.5" r="2.6"/><circle cx="69" cy="90.5" r="2.6"/><circle cx="74.5" cy="88.5" r="2.6"/></g>
-${crown}</g></svg>`;
+${L.front}${L.eyes}${L.hand}${L.top}</g></svg>`;
   },
   // Sapinho simplificado para o mini-tabuleiro e a legenda (coordenadas absolutas)
   miniFrog(x, y, red, s = 1) {
@@ -838,7 +930,7 @@ ${crown}</g></svg>`;
 <circle cx="-3" cy="-4.3" r="2.6" fill="#fff"/><circle cx="3" cy="-4.3" r="2.6" fill="#fff"/>
 <circle cx="-2.6" cy="-4" r="1.3" fill="#0d1b26"/><circle cx="2.6" cy="-4" r="1.3" fill="#0d1b26"/>
 <path d="M-3 1.2 Q0 3.6 3 1.2" stroke="${red ? '#5c0808' : '#0f3d12'}" stroke-width=".9" fill="none" stroke-linecap="round"/>
-${red ? '<path d="M-3.2 -8.6 L-2.4 -11.8 L-.9 -9.8 L0 -12.4 L.9 -9.8 L2.4 -11.8 L3.2 -8.6Z" fill="url(#crown)" stroke="#a86a00" stroke-width=".4"/>' : ''}</g>`;
+</g>`;
   },
   // Vitória-régia: folha redonda com o recorte em "V" típico, nervuras saindo do centro.
   // Tom verde-azulado escuro para contrastar com o verde-limão dos sapos.
@@ -858,25 +950,45 @@ ${detail ? `<g stroke="#0b4a44" stroke-opacity=".35" stroke-width=".3" stroke-li
 <path d="M${(-r * .62).toFixed(2)} ${(r * .1).toFixed(2)} A${(r * .64).toFixed(2)} ${(r * .64).toFixed(2)} 0 0 1 ${(-r * .2).toFixed(2)} ${(-r * .6).toFixed(2)}" stroke="#fff" stroke-opacity=".3" stroke-width=".55" fill="none" stroke-linecap="round"/>` : ''}
 </g>`;
   },
-  boardLines(stroke, w, hl) {
+  boardLines(stroke, w, hl, G = Geo) {
     let s = '';
-    for (const l of Geo.LINES) {
+    for (const l of G.LINES) {
       const a = l[0], b = l[l.length - 1];
-      s += `<line x1="${Geo.PX[a]}" y1="${Geo.PY[a]}" x2="${Geo.PX[b]}" y2="${Geo.PY[b]}" stroke="${stroke}" stroke-width="${w}" stroke-linecap="round"/>`;
+      s += `<line x1="${G.PX[a]}" y1="${G.PY[a]}" x2="${G.PX[b]}" y2="${G.PY[b]}" stroke="${stroke}" stroke-width="${w}" stroke-linecap="round"/>`;
     }
     return s;
   },
-  boardSVG() {
+  // Disco voador (casas do pântano espacial)
+  // dim: versão discreta (casas do tabuleiro espacial), para os sapos se destacarem
+  saucer(x, y, r, dim) {
+    let lights = '';
+    for (let k = 0; k < 5; k++) lights += `<circle cx="${(x - r * .75 + k * r * .375).toFixed(2)}" cy="${(y + r * .18).toFixed(2)}" r="${(r * .09).toFixed(2)}" fill="${k % 2 ? '#ff6ad5' : '#ffe76b'}" opacity="${dim ? .45 : 1}"/>`;
+    return `<g${dim ? ' opacity=".8"' : ''}><ellipse cx="${x}" cy="${y + r * .75}" rx="${r * .7}" ry="${r * .18}" fill="#6fe8ff" opacity="${dim ? .1 : .25}"/>
+<path d="M${x - r * .5} ${y - r * .1} A${r * .5} ${r * .55} 0 0 1 ${x + r * .5} ${y - r * .1} Z" fill="url(#${dim ? 'ufoDomeDim' : 'ufoDome'})" stroke="${dim ? '#8a8fd8' : '#bff6ff'}" stroke-width="${r * .05}"/>
+<ellipse cx="${x}" cy="${y + r * .1}" rx="${r}" ry="${r * .36}" fill="url(#${dim ? 'ufoDim' : 'ufoBody'})" stroke="${dim ? '#241e52' : '#4b5874'}" stroke-width="${r * .05}"/>${lights}
+${dim ? '' : `<path d="M${x - r * .32} ${y - r * .42} q${r * .12} -${r * .14} ${r * .28} -${r * .12}" stroke="#fff" stroke-width="${r * .07}" fill="none" stroke-linecap="round" opacity=".7"/>`}</g>`;
+  },
+  boardSVG(G = Geo, theme = '') {
     let pads = '';
-    for (let i = 0; i < Geo.N; i++) {
-      const x = Geo.PX[i], y = Geo.PY[i];
-      pads += Art.lily(x, y, 6.4, [20, 140, 250, 75, 300, 190, 40, 330, 110, 220, 160, 280, 10][i]);
+    const k = 4 / G.L;                                    // escala das casas conforme o tamanho do tabuleiro
+    for (let i = 0; i < G.N; i++) {
+      const x = G.PX[i], y = G.PY[i];
+      pads += theme === 'space' ? Art.saucer(x, y, 6.2 * k, true) : Art.lily(x, y, 6.4 * k, (i * 113 + 20) % 360);
+    }
+    if (theme === 'space') {
+      let stars = '';
+      for (let i = 0; i < 70; i++) { const a = Math.sin(i * 12.9898) * 43758.5453, b = Math.sin(i * 78.233) * 12543.21; stars += `<circle cx="${(4 + (a - Math.floor(a)) * 92).toFixed(1)}" cy="${(4 + (b - Math.floor(b)) * 90).toFixed(1)}" r="${(.15 + (i % 4) * .12).toFixed(2)}" fill="#fff" opacity="${(.35 + (i % 3) * .2).toFixed(2)}"/>`; }
+      return `<svg class="bsvg" viewBox="0 0 100 100" aria-hidden="true">
+<rect x=".8" y="2.6" width="98.4" height="96.8" rx="11" fill="#120a2e"/>
+<rect x=".8" y=".8" width="98.4" height="96" rx="11" fill="url(#spaceBd)" stroke="#9f8cff" stroke-opacity=".7" stroke-width=".6"/>
+<ellipse cx="78" cy="20" rx="26" ry="14" fill="#ff6ad5" opacity=".08"/><ellipse cx="22" cy="78" rx="28" ry="12" fill="#6fd0ff" opacity=".08"/>${stars}
+<g stroke-dasharray="1.2 1.4">${Art.boardLines('rgba(170,220,255,.25)', .5, false, G)}</g>${pads}</svg>`;
     }
     return `<svg class="bsvg" viewBox="0 0 100 100" aria-hidden="true">
 <rect x=".8" y="2.6" width="98.4" height="96.8" rx="11" fill="#053d78"/>
 <rect x=".8" y=".8" width="98.4" height="96" rx="11" fill="url(#bdTop)" stroke="#a8ecff" stroke-opacity=".7" stroke-width=".6"/>
 <rect x=".8" y=".8" width="98.4" height="96" rx="11" fill="url(#bdShine)"/>
-<g stroke-dasharray="1.4 1.4">${Art.boardLines('rgba(225,248,255,.22)', .6, false)}</g>${pads}</svg>`;
+<g stroke-dasharray="1.4 1.4">${Art.boardLines('rgba(225,248,255,.22)', .6, false, G)}</g>${pads}</svg>`;
   },
   miniBoard(s) {
     let pads = '', frogs = '';
@@ -896,7 +1008,7 @@ ${detail ? `<g stroke="#0b4a44" stroke-opacity=".35" stroke-width=".3" stroke-li
 <path d="M100 106 L70 98 M100 106 L130 98 M100 106 L60 108 M100 106 L140 108" stroke="#2e8f2a" stroke-width="1" opacity=".6"/>
 <ellipse cx="170" cy="104" rx="20" ry="6" fill="url(#lily)" stroke="#155f1a" stroke-width="1"/>
 <ellipse cx="26" cy="110" rx="16" ry="5" fill="url(#lily)" stroke="#155f1a" stroke-width="1"/>
-<g class="hero-frog">${Art.frog('green', { attrs: 'x="52" y="13" width="96" height="104"' })}</g>
+<g class="hero-frog">${Art.frog('green', { outfit: Outfit.worn, attrs: 'x="52" y="13" width="96" height="104"' })}</g>
 <g class="hero-mini">${Art.frog('red', { delay: .7, attrs: 'x="150" y="66" width="40" height="42"' })}</g>
 <g fill="#fff" opacity=".85"><path d="M20 30l2 5 5 2-5 2-2 5-2-5-5-2 5-2z"/><path d="M178 26l1.5 4 4 1.5-4 1.5-1.5 4-1.5-4-4-1.5 4-1.5z"/><path d="M160 52l1 2.6 2.6 1-2.6 1-1 2.6-1-2.6-2.6-1 2.6-1z"/></g>
 </svg>`;
@@ -904,7 +1016,32 @@ ${detail ? `<g stroke="#0b4a44" stroke-opacity=".35" stroke-width=".3" stroke-li
   star(fill = '#ffd23f') {
     return `<svg viewBox="0 0 24 24"><path d="M12 1.8l3.1 6.4 7 1-5.1 4.9 1.2 7L12 17.8l-6.2 3.3 1.2-7L1.9 9.2l7-1z" fill="${fill}" stroke="#c98a00" stroke-width="1.2" stroke-linejoin="round"/><path d="M9 7.5l1.5-3" stroke="#fff" stroke-width="1.4" stroke-linecap="round" opacity=".8"/></svg>`;
   },
-  // Ícone PNG gerado em canvas para a tela de início (apple-touch-icon)
+  // Ícone do app: o sapinho inteiro sentado numa vitória-régia, sobre a água azul.
+  // SVG autocontido (copia os gradientes) → desenhado num canvas → PNG para a tela de início do iPhone.
+  appIconSVG() {
+    const defs = document.querySelector('svg defs').outerHTML;
+    return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">${defs}
+<defs><linearGradient id="icBg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4fd8ff"/><stop offset="1" stop-color="#0a6cc6"/></linearGradient></defs>
+<rect width="100" height="100" fill="url(#icBg)"/>
+<ellipse cx="50" cy="16" rx="60" ry="22" fill="#fff" opacity=".18"/>
+<ellipse cx="50" cy="84" rx="40" ry="10" fill="#063f78" opacity=".35"/>
+<path d="M12 81 A38 10 0 1 0 88 81 A38 10 0 0 0 55 71 L50 81 L46 71 A38 10 0 0 0 12 81Z" fill="url(#lily)" stroke="#155f1a" stroke-width="1"/>
+${Art.frog('green', { still: true, attrs: 'x="13" y="6" width="74" height="78"' })}</svg>`;
+  },
+  appIconPNG(size = 180) {
+    return new Promise(resolve => {
+      try {
+        const img = new Image();
+        img.onload = () => {
+          try { const c = document.createElement('canvas'); c.width = c.height = size; c.getContext('2d').drawImage(img, 0, 0, size, size); resolve(c.toDataURL('image/png')); }
+          catch (e) { resolve(''); }
+        };
+        img.onerror = () => resolve('');
+        img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(Art.appIconSVG());
+      } catch (e) { resolve(''); }
+    });
+  },
+  // reserva: ícone desenhado direto no canvas (se o navegador não desenhar o SVG)
   appIcon(size = 180) {
     try {
       const c = document.createElement('canvas'); c.width = c.height = size;
@@ -926,6 +1063,118 @@ ${detail ? `<g stroke="#0b4a44" stroke-opacity=".35" stroke-width=".3" stroke-li
     } catch (e) { return ''; }
   }
 };
+
+/* ---------------------------------------------------------------------
+   Outfit — apetrechos do guarda-roupa, ganhos na trilha da carreira.
+   Cada item ocupa um lugar no sapo (cabeça, olhos, pescoço, peito,
+   costas, mão); só um por lugar. Desenhados no mesmo espaço 0–100 do sapo.
+   A ordem da lista é a ordem dos prêmios (do mais simples ao mais nobre).
+   --------------------------------------------------------------------- */
+const Outfit = (() => {
+  const SLOT_NAMES = { head: 'Cabeça', eyes: 'Olhos', neck: 'Pescoço', chest: 'Peito', back: 'Costas', hand: 'Mão' };
+  const ITEMS = [
+    // presentes do tutorial (um por fase)
+    { id: 'cardigan', name: 'Cardigan verde', slot: 'torso', box: '18 52 64 40',
+      svg: () => {
+        let knit = ''; for (let y = 64; y <= 84; y += 4) knit += `<path d="M24 ${y} Q31 ${y + 1} 40 ${y}" stroke="#145c40" stroke-width=".7" opacity=".55" fill="none"/><path d="M60 ${y} Q69 ${y + 1} 76 ${y}" stroke="#145c40" stroke-width=".7" opacity=".55" fill="none"/>`;
+        return `<path d="M27 58 Q19 70 21 85 Q30 89 41 86 Q40 72 45 64 Q36 63 27 58 Z" fill="#1b5a38" stroke="#0e3520" stroke-width="1.2" stroke-linejoin="round"/>
+<path d="M73 58 Q81 70 79 85 Q70 89 59 86 Q60 72 55 64 Q64 63 73 58 Z" fill="#1b5a38" stroke="#0e3520" stroke-width="1.2" stroke-linejoin="round"/>${knit}
+<path d="M41 86 Q40 72 45 64 M59 86 Q60 72 55 64" stroke="#2f8a57" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+<g fill="#f2e3c6" stroke="#9a8150" stroke-width=".5"><circle cx="42.6" cy="70" r="1.4"/><circle cx="41.8" cy="76" r="1.4"/><circle cx="41.4" cy="82" r="1.4"/></g>`;
+      } },
+    { id: 'loafer', name: 'Loafer tratorado', slot: 'feet', box: '18 74 64 22',
+      svg: () => {
+        const shoe = x => `<path d="M${x - 11} 87 Q${x - 11} 79 ${x} 79 Q${x + 11} 79 ${x + 11} 87 Z" fill="#141414"/><rect x="${x - 12}" y="85.5" width="24" height="6" rx="2.6" fill="#2c2c2c"/>
+<path d="M${x - 9} 91.5 v1.6 M${x - 5} 91.5 v1.6 M${x - 1} 91.5 v1.6 M${x + 3} 91.5 v1.6 M${x + 7} 91.5 v1.6" stroke="#2c2c2c" stroke-width="2.2"/>
+<rect x="${x - 6}" y="81.4" width="12" height="2.2" rx="1" fill="#3a3a3a"/><rect x="${x - 1.6}" y="81.6" width="3.2" height="1.8" rx=".6" fill="#7a7a7a"/><path d="M${x - 8} 83 Q${x - 6} 80.5 ${x - 2} 80.2" stroke="#fff" stroke-width="1" opacity=".35" fill="none" stroke-linecap="round"/>`;
+        return shoe(33) + shoe(67);
+      } },
+    { id: 'celular', name: 'Celular no cordão', slot: 'strap', box: '20 52 66 38',
+      svg: () => `<path d="M28 58 Q48 70 70 78" stroke="#ff8a3d" stroke-width="2.6" fill="none" stroke-linecap="round"/><path d="M28 58 Q48 70 70 78" stroke="#ffd0a8" stroke-width="1" stroke-dasharray="1.5 2" fill="none"/>
+<g transform="rotate(-12 73 80)"><rect x="66" y="72" width="13" height="20" rx="2.6" fill="#1e2430" stroke="#0c0f15" stroke-width="1"/><rect x="67.6" y="74.4" width="9.8" height="14.6" rx="1.4" fill="#6fd0ff"/><path d="M69 76 L72 80" stroke="#fff" stroke-width="1" opacity=".6"/><circle cx="72.5" cy="90.4" r=".8" fill="#55607a"/></g>` },
+    { id: 'cachecol', name: 'Cachecol listrado', slot: 'neck', box: '24 56 54 40',
+      svg: () => `<path d="M27 61 Q50 74 73 61 L74 67 Q50 81 26 67 Z" fill="#e53935"/><path d="M33 64.5 L35 70.6 M41 67.5 L42.5 73.4 M50 68.6 V74.8 M59 67.5 L57.5 73.4 M67 64.5 L65 70.6" stroke="#fff" stroke-width="2.6"/>
+<path d="M60 71 L66 92 L74 90 L66 69 Z" fill="#e53935"/><path d="M62 77 L69.5 75 M64 84 L71.5 82" stroke="#fff" stroke-width="2.6"/><path d="M66 92 l-1 3 M68.5 91.4 l0 3 M71 90.8 l1 3" stroke="#e53935" stroke-width="1.2"/>` },
+    { id: 'bone', name: 'Boné', slot: 'head', box: '30 -2 58 30',
+      svg: () => `<path d="M35 22 Q35 5 50 5 Q65 5 65 22 Z" fill="#2b7de9" stroke="#1a4fa0" stroke-width="1.2"/><path d="M50 5 V22" stroke="#1a4fa0" stroke-width="1" opacity=".5"/>
+<path d="M60 20 Q76 17 85 23 Q74 27.5 60 24 Z" fill="#1f63c4" stroke="#164a96" stroke-width="1"/><circle cx="50" cy="5.5" r="2" fill="#ff4b3a"/><path d="M39 13 Q42 9 46 8" stroke="#fff" stroke-width="1.6" opacity=".5" fill="none" stroke-linecap="round"/>` },
+    { id: 'cartola', name: 'Cartola', slot: 'head', box: '28 -12 44 38',
+      svg: () => `<ellipse cx="50" cy="21" rx="19" ry="4.2" fill="#151515"/><rect x="39" y="-7" width="22" height="28" rx="2.5" fill="#262626"/><rect x="39" y="12" width="22" height="5" fill="#d9262c"/>
+<ellipse cx="50" cy="-7" rx="11" ry="2.6" fill="#3a3a3a"/><path d="M42.5 -3 V10" stroke="#fff" stroke-width="1.6" opacity=".25" stroke-linecap="round"/>` },
+    { id: 'oculos', name: 'Óculos escuros', slot: 'eyes', box: '8 12 84 28',
+      svg: () => `<path d="M17 24 L9 27 M83 24 L91 27" stroke="#111" stroke-width="2.2" stroke-linecap="round"/><rect x="17" y="17" width="27" height="17" rx="7.5" fill="#15181d" stroke="#000" stroke-width="1.6"/>
+<rect x="56" y="17" width="27" height="17" rx="7.5" fill="#15181d" stroke="#000" stroke-width="1.6"/><path d="M44 23 Q50 19.5 56 23" stroke="#000" stroke-width="2.2" fill="none"/>
+<path d="M21 21 L27 31 M60 21 L66 31" stroke="#7fd6ff" stroke-width="2.2" opacity=".55" stroke-linecap="round"/>` },
+    { id: 'gravata', name: 'Gravata-borboleta', slot: 'neck', box: '34 52 32 22',
+      svg: () => `<path d="M50 63 L37 55.5 Q35 63 37 70.5 Z" fill="#e53b6b" stroke="#a8173f" stroke-width="1"/><path d="M50 63 L63 55.5 Q65 63 63 70.5 Z" fill="#e53b6b" stroke="#a8173f" stroke-width="1"/>
+<rect x="46.5" y="59.5" width="7" height="7" rx="2.2" fill="#c21f4f"/><g fill="#fff" opacity=".85"><circle cx="40.5" cy="60" r="1.2"/><circle cx="41" cy="66.5" r="1.2"/><circle cx="59.5" cy="60" r="1.2"/><circle cx="59" cy="66.5" r="1.2"/></g>` },
+    { id: 'pirata', name: 'Chapéu de pirata', slot: 'head', box: '20 -4 60 30',
+      svg: () => `<path d="M23 22 Q28 5 50 3 Q72 5 77 22 Q50 13.5 23 22 Z" fill="#1d1d1d" stroke="#ffd23f" stroke-width="1.8" stroke-linejoin="round"/>
+<path d="M44 18 L56 8 M56 18 L44 8" stroke="#fff" stroke-width="1.6" stroke-linecap="round"/><circle cx="50" cy="11" r="3.8" fill="#fff"/><rect x="47.8" y="13.4" width="4.4" height="2.4" rx=".9" fill="#fff"/>
+<circle cx="48.6" cy="10.8" r=".9" fill="#1d1d1d"/><circle cx="51.4" cy="10.8" r=".9" fill="#1d1d1d"/>` },
+    { id: 'capa', name: 'Capa de herói', slot: 'back', box: '2 40 96 54',
+      svg: () => `<path d="M26 44 Q50 52 74 44 L96 84 Q86 90 76 86 Q64 92 50 88 Q36 92 24 86 Q14 90 4 84 Z" fill="#2f6bff" stroke="#1d47b8" stroke-width="1.5" stroke-linejoin="round"/><path d="M26 44 L9 82 M74 44 L91 82" stroke="#6f98ff" stroke-width="1.6" opacity=".7"/>`,
+      front: () => `<circle cx="32" cy="54" r="2.8" fill="#ffd23f" stroke="#b07a00" stroke-width=".8"/><circle cx="68" cy="54" r="2.8" fill="#ffd23f" stroke="#b07a00" stroke-width=".8"/>` },
+    { id: 'medalha', name: 'Medalha de ouro', slot: 'chest', box: '38 62 24 28',
+      // a fita nasce no pescoço (o queixo do sapo fica em y≈69) e a medalha pende sobre a barriga
+      svg: () => `<path d="M42.5 66.5 L50 77 L57.5 66.5" fill="none" stroke="#2b7de9" stroke-width="4.2" stroke-linejoin="round"/><path d="M44.5 67.5 L50 75" stroke="#ff4b3a" stroke-width="1.4"/>
+<circle cx="50" cy="81" r="6.6" fill="url(#crown)" stroke="#a86a00" stroke-width="1.2"/><path d="M50 76.8 l1.3 2.7 3 .45 -2.2 2.1 .5 3 -2.6 -1.4 -2.6 1.4 .5 -3 -2.2 -2.1 3 -.45z" fill="#fff8c0"/>` },
+    { id: 'manto', name: 'Manto real', slot: 'back', box: '0 44 100 62',
+      svg: () => {
+        let tufts = ''; for (let i = 0; i < 9; i++) tufts += `<path d="M${10 + i * 10} ${97 + Math.sin(i) * .6} l1.2 3 l1.2 -3" fill="#111"/>`;
+        return `<path d="M24 45 Q50 54 76 45 L97 97 Q50 106 3 97 Z" fill="#c4122f" stroke="#7a0a1c" stroke-width="1.5" stroke-linejoin="round"/><path d="M3 97 Q50 106 97 97 L96 91 Q50 100 4 91 Z" fill="#fff" stroke="#d8d8d8" stroke-width=".8"/>${tufts}`;
+      },
+      front: () => `<path d="M23 58 Q20 75 25 90 L33 90 Q29 75 31 60 Z" fill="#c4122f" stroke="#fff" stroke-width="1.6"/><path d="M77 58 Q80 75 75 90 L67 90 Q71 75 69 60 Z" fill="#c4122f" stroke="#fff" stroke-width="1.6"/>
+<path d="M25 57 Q50 70 75 57 L73 65 Q50 78 27 65 Z" fill="#fff" stroke="#d8d8d8" stroke-width=".8"/><g fill="#111"><path d="M35 64 l1 3 l1 -3"/><path d="M45 68 l1 3 l1 -3"/><path d="M55 68 l1 3 l1 -3"/><path d="M64 64 l1 3 l1 -3"/></g>` },
+    { id: 'coroa', name: 'Coroa', slot: 'head', box: '26 -6 48 32',
+      svg: () => `<path d="M33 22 L30.5 3.5 L41 12 L50 -1 L59 12 L69.5 3.5 L67 22 Z" fill="url(#crown)" stroke="#a86a00" stroke-width="1.4" stroke-linejoin="round"/><rect x="32.5" y="18" width="35" height="5.5" rx="1.6" fill="#ffcf1f" stroke="#a86a00" stroke-width="1"/>
+<circle cx="50" cy="12.5" r="2.6" fill="#e0245e"/><circle cx="40.5" cy="16" r="1.7" fill="#2b7de9"/><circle cx="59.5" cy="16" r="1.7" fill="#2fbf3a"/><circle cx="30.5" cy="3.5" r="1.9" fill="#fff59a"/><circle cx="50" cy="-1" r="1.9" fill="#fff59a"/><circle cx="69.5" cy="3.5" r="1.9" fill="#fff59a"/>` },
+    { id: 'trofeu', name: 'Troféu', slot: 'hand', box: '70 42 26 36',
+      svg: red => `<g transform="translate(85 58)"><path d="M-8.5 -11 H8.5 V-3.5 A8.5 8.5 0 0 1 -8.5 -3.5 Z" fill="url(#crown)" stroke="#a86a00" stroke-width="1.1"/>
+<path d="M8.5 -9 H12 V-6 A5 5 0 0 1 7 -1 M-8.5 -9 H-12 V-6 A5 5 0 0 0 -7 -1" fill="none" stroke="#e0a800" stroke-width="1.8"/><rect x="-1.6" y="4.5" width="3.2" height="5" fill="#e0a800"/>
+<rect x="-6.5" y="9.5" width="13" height="4.5" rx="1.2" fill="#c98a00" stroke="#8a5a00" stroke-width=".8"/><path d="M0 -9.5 l1.3 2.6 2.9 .4 -2.1 2 .5 2.9 -2.6 -1.4 -2.6 1.4 .5 -2.9 -2.1 -2 2.9 -.4z" fill="#fff8c0"/>
+<ellipse cx="-8" cy="6" rx="5.5" ry="4.3" fill="url(#${red ? 'rD' : 'gD'})"/></g>` },
+    // prêmios do pântano espacial
+    { id: 'antenas', name: 'Antenas de ET', slot: 'head', space: true, box: '22 -14 56 38',
+      svg: () => `<path d="M33 21 Q50 9 67 21" stroke="#7b3fe4" stroke-width="3.4" fill="none" stroke-linecap="round"/><path d="M40 15 Q35 3 29 -5" stroke="#4f9a2a" stroke-width="2.2" fill="none" stroke-linecap="round"/><path d="M60 15 Q65 3 71 -5" stroke="#4f9a2a" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+<circle cx="29" cy="-6" r="4.4" fill="#9dff6a" stroke="#4f9a2a" stroke-width="1"/><circle cx="71" cy="-6" r="4.4" fill="#9dff6a" stroke="#4f9a2a" stroke-width="1"/><circle cx="27.6" cy="-7.4" r="1.3" fill="#fff"/><circle cx="69.6" cy="-7.4" r="1.3" fill="#fff"/>` },
+    { id: 'capacete', name: 'Capacete de astronauta', slot: 'head', layer: 'top', space: true, box: '6 -10 88 88',
+      svg: () => `<path d="M17 62 Q50 80 83 62 L81 70 Q50 88 19 70 Z" fill="#d7dde8" stroke="#8a95ab" stroke-width="1"/><circle cx="50" cy="32" r="40" fill="#bfefff" fill-opacity=".2" stroke="#eefbff" stroke-width="2.6"/>
+<path d="M20 16 A36 36 0 0 1 42 -3" stroke="#fff" stroke-width="3.4" opacity=".75" fill="none" stroke-linecap="round"/><path d="M78 46 A30 30 0 0 1 70 58" stroke="#fff" stroke-width="2" opacity=".5" fill="none" stroke-linecap="round"/>` },
+    { id: 'jetpack', name: 'Mochila a jato', slot: 'back', space: true, box: '4 34 92 64',
+      svg: () => `<rect x="9" y="38" width="15" height="36" rx="7" fill="url(#ufoBody)" stroke="#5b6884" stroke-width="1.2"/><rect x="76" y="38" width="15" height="36" rx="7" fill="url(#ufoBody)" stroke="#5b6884" stroke-width="1.2"/>
+<rect x="9" y="46" width="15" height="4" fill="#ff4b3a"/><rect x="76" y="46" width="15" height="4" fill="#ff4b3a"/><path d="M11 74 Q16.5 94 22 74 Z" fill="#ffb800"/><path d="M13.5 74 Q16.5 86 19.5 74 Z" fill="#fff27a"/><path d="M78 74 Q83.5 94 89 74 Z" fill="#ffb800"/><path d="M80.5 74 Q83.5 86 86.5 74 Z" fill="#fff27a"/>` }
+  ];
+  // grupos do guarda-roupa: cabeça (chapéus, óculos, antenas…), corpo e o que ele segura
+  const GROUP = { head: 'cabeca', eyes: 'cabeca', torso: 'corpo', neck: 'corpo', chest: 'corpo', strap: 'corpo', feet: 'corpo', back: 'corpo', hand: 'mao' };
+  // ordem de desenho na frente do corpo (de baixo para cima)
+  const FRONT = ['torso', 'back', 'neck', 'chest', 'strap', 'feet'];
+  const BY = Object.fromEntries(ITEMS.map(i => [i.id, i]));
+  let worn = Store.get('outfit', {});
+  if (!worn || typeof worn !== 'object') worn = {};
+  function layers(o, red) {
+    const L = { back: '', head: '', front: '', eyes: '', hand: '', top: '' };
+    const get = slot => BY[o[slot]];
+    for (const slot of ['back', 'head', 'eyes', 'hand']) {
+      const it = get(slot); if (!it) continue;
+      if (it.layer === 'top') L.top += it.svg(red); else L[slot] += it.svg(red);
+    }
+    for (const slot of FRONT) {
+      const it = get(slot); if (!it) continue;
+      if (slot === 'back') { if (it.front) L.front += it.front(); } else L.front += it.svg(red);
+    }
+    return L;
+  }
+  function preview(id) { const it = BY[id]; return `<svg viewBox="${it.box}" overflow="visible" aria-hidden="true">${it.svg(false)}${it.front ? it.front() : ''}</svg>`; }
+  return {
+    ITEMS, BY, SLOT_NAMES, GROUP, layers, preview,
+    get worn() { return { ...worn }; },
+    wear(id) { const it = BY[id]; if (!it) return; if (worn[it.slot] === id) delete worn[it.slot]; else worn[it.slot] = id; Store.set('outfit', worn); },
+    isWorn: id => BY[id] && worn[BY[id].slot] === id,
+    // removes items the player has not earned (e.g. progress reset)
+    prune(owned) { let ch = false; for (const k in worn) if (!owned.includes(worn[k])) { delete worn[k]; ch = true; } if (ch) Store.set('outfit', worn); }
+  };
+})();
 
 /* ---------------------------------------------------------------------
    Sound — áudio 100% sintetizado (Web Audio API). Só é criado após um
@@ -993,6 +1242,14 @@ const Sound = (() => {
     reveal() { if (!ok()) return; const t = ctx.currentTime; tone(f(84), t, .5, { type: 'triangle', vol: .14 }); tone(f(88), t + .08, .5, { type: 'triangle', vol: .12 }); tone(f(91), t + .16, .7, { type: 'triangle', vol: .12 }); },
     win() { if (!ok()) return; const t = ctx.currentTime; [72, 76, 79, 84, 88, 91].forEach((m, i) => tone(f(m), t + i * .1, .45, { type: 'triangle', vol: .18 })); tone(f(96), t + .65, .9, { type: 'sine', vol: .12 }); croak(t + 1.0, 230, .2); },
     lose() { if (!ok()) return; const t = ctx.currentTime; [67, 64, 60].forEach((m, i) => tone(f(m), t + i * .18, .3, { type: 'triangle', vol: .14 })); },
+    bigBang() {
+      if (!ok()) return;
+      const t = ctx.currentTime;
+      tone(70, t, 1.6, { type: 'sine', to: 24, vol: .5, attack: .02 });
+      tone(140, t, .9, { type: 'triangle', to: 40, vol: .2, attack: .01 });
+      noise(t, 1.2, { freq: 400, q: .5, vol: .35 });
+      [72, 79, 84, 88, 91, 96].forEach((m, i) => tone(f(m), t + .5 + i * .09, .7, { type: 'sine', vol: .1 }));
+    },
     start() { if (!ok()) return; const t = ctx.currentTime; [60, 67, 72].forEach((m, i) => tone(f(m), t + i * .07, .25, { type: 'triangle', vol: .13 })); }
   };
   // Música: loop leve (marimba sintética + baixo) com agendamento antecipado
@@ -1076,12 +1333,21 @@ const Game = {
    --------------------------------------------------------------------- */
 const Board = (() => {
   const el = $('board');
-  el.innerHTML = Art.boardSVG();
-  const marks = [];
-  for (let i = 0; i < Geo.N; i++) {
-    const m = document.createElement('div'); m.className = 'pmark';
-    m.style.left = Geo.PX[i] + '%'; m.style.top = Geo.PY[i] + '%';
-    el.appendChild(m); marks.push(m);
+  let G = null, theme = null, marks = [], K = 1;      // geometria atual (3×3, 4×4 ou 5×5) e escala das peças
+  function configure(n = 3, th = '') {
+    const g2 = BigGeo(n);
+    if (g2 === G && th === theme) return;
+    G = g2; theme = th; K = 4 / G.L;
+    el.innerHTML = Art.boardSVG(G, theme);
+    el.classList.toggle('space', theme === 'space');
+    el.style.setProperty('--fsz', (19 * K).toFixed(2) + '%'); el.style.setProperty('--psz', (15 * K).toFixed(2) + '%');
+    marks = [];
+    for (let i = 0; i < G.N; i++) {
+      const m = document.createElement('div'); m.className = 'pmark';
+      m.style.left = G.PX[i] + '%'; m.style.top = G.PY[i] + '%';
+      el.appendChild(m); marks.push(m);
+    }
+    frogs = {};
   }
   let frogs = {};            // célula -> elemento
   let selected = -1, drag = null;
@@ -1093,7 +1359,7 @@ const Board = (() => {
     f.innerHTML = `<div class="fi">${Art.frog(color, { delay: +(Math.random() * 2).toFixed(2) })}</div>`;
     place(f, cell); el.appendChild(f); return f;
   }
-  function place(f, cell) { f.style.left = Geo.PX[cell] + '%'; f.style.top = Geo.PY[cell] + '%'; f.dataset.cell = cell; }
+  function place(f, cell) { f.style.left = G.PX[cell] + '%'; f.style.top = G.PY[cell] + '%'; f.dataset.cell = cell; }
   // Sincroniza DOM ← estado. Mantém elementos que já batem com o estado.
   function sync(pop) {
     const s = Game.state;
@@ -1102,7 +1368,7 @@ const Board = (() => {
       if (want !== frogs[c].dataset.color) { frogs[c].remove(); delete frogs[c]; }
     }
     let k = 0;
-    for (let i = 0; i < Geo.N; i++) {
+    for (let i = 0; i < G.N; i++) {
       const want = colorAt(s, i);
       if (want && !frogs[i]) {
         const f = makeFrog(want, i); frogs[i] = f;
@@ -1120,15 +1386,16 @@ const Board = (() => {
     if (Game.active) UI.hud();
   }
   function cellAt(cx, cy, radius = 13) {
+    radius *= K;
     const r = el.getBoundingClientRect();
     if (!r.width) return -1;
     const x = (cx - r.left) / r.width * 100, y = (cy - r.top) / r.height * 100;
     let best = -1, bd = radius;
-    for (let i = 0; i < Geo.N; i++) { const d = Math.hypot(Geo.PX[i] - x, Geo.PY[i] - y); if (d < bd) { bd = d; best = i; } }
+    for (let i = 0; i < G.N; i++) { const d = Math.hypot(G.PX[i] - x, G.PY[i] - y); if (d < bd) { bd = d; best = i; } }
     return best;
   }
   const size = () => el.getBoundingClientRect().width || 1;
-  function cellVec(a, b) { const s = size() / 100; return [(Geo.PX[a] - Geo.PX[b]) * s, (Geo.PY[a] - Geo.PY[b]) * s]; }
+  function cellVec(a, b) { const s = size() / 100; return [(G.PX[a] - G.PX[b]) * s, (G.PY[a] - G.PY[b]) * s]; }
 
   // ---- Movimento válido: salto em arco + captura ----
   async function commit(from, to, offset) {
@@ -1143,7 +1410,7 @@ const Board = (() => {
     const sx = vx + (offset ? offset[0] : 0), sy = vy + (offset ? offset[1] : 0);
     place(f, to); f.style.transform = ''; f.classList.add('flying');
     Sound.jump();
-    const rm = reduceMotion(), D = rm ? 160 : 460, lift = size() * 0.14;
+    const rm = reduceMotion(), D = rm ? 160 : 460, lift = size() * 0.14 * Math.max(K, .6);
     const jumpA = animate(f, rm
       ? [{ transform: `translate(${sx}px,${sy}px)` }, { transform: 'translate(0,0)' }]
       : [{ transform: `translate(${sx}px,${sy}px) scale(${offset ? 1.15 : 1})` },
@@ -1164,12 +1431,12 @@ const Board = (() => {
   function splash(cell) {
     if (reduceMotion()) return;
     const s = document.createElement('div'); s.className = 'splash';
-    s.style.left = Geo.PX[cell] + '%'; s.style.top = Geo.PY[cell] + '%'; el.appendChild(s);
+    s.style.left = G.PX[cell] + '%'; s.style.top = G.PY[cell] + '%'; s.style.setProperty('--k', K); el.appendChild(s);
     animate(s, [{ transform: 'scale(.3)', opacity: 1 }, { transform: 'scale(1.7)', opacity: 0 }], { duration: 480, easing: 'ease-out' }).then(() => s.remove());
     for (let k = 0; k < 7; k++) {
       const d = document.createElement('div'); d.className = 'drop';
-      d.style.left = Geo.PX[cell] + '%'; d.style.top = Geo.PY[cell] + '%'; el.appendChild(d);
-      const a = k / 7 * Math.PI * 2, R = size() * (0.07 + Math.random() * 0.04);
+      d.style.left = G.PX[cell] + '%'; d.style.top = G.PY[cell] + '%'; el.appendChild(d);
+      const a = k / 7 * Math.PI * 2, R = size() * K * (0.07 + Math.random() * 0.04);
       animate(d, [{ transform: 'translate(0,0) scale(1)', opacity: 1 }, { transform: `translate(${Math.cos(a) * R}px,${Math.sin(a) * R - R * .4}px) scale(.4)`, opacity: 0 }], { duration: 420, easing: 'ease-out' }).then(() => d.remove());
     }
   }
@@ -1250,7 +1517,8 @@ const Board = (() => {
   el.addEventListener('pointercancel', cancelDrag);
   el.addEventListener('lostpointercapture', e => { if (drag && e.pointerId === drag.id) cancelDrag(); });
   el.addEventListener('contextmenu', e => e.preventDefault());
-  return { reset, sync, undoAnim, cancelDrag, clearSel, commit, el, get frogs() { return frogs; }, get selected() { return selected; } };
+  configure();
+  return { configure, reset, sync, undoAnim, cancelDrag, clearSel, commit, el, get frogs() { return frogs; }, get selected() { return selected; } };
 })();
 
 /* ---------------------------------------------------------------------
@@ -1315,7 +1583,17 @@ ${card.note ? `<div class="sub">${card.note}</div>` : ''}
    Layout — tamanhos calculados a partir de largura E altura reais
    --------------------------------------------------------------------- */
 const Layout = (() => {
+  // No app da tela de início do iPhone (barra de status translúcida), a área do site fica mais
+  // curta que a tela e sobrava uma faixa embaixo. Lá, o app passa a ter a altura da tela inteira.
+  function fullScreenIOS() {
+    if (navigator.standalone !== true || !window.screen) return;
+    const sw = screen.width, sh = screen.height, landNow = window.innerWidth > window.innerHeight;
+    const full = landNow ? Math.min(sw, sh) : Math.max(sw, sh);
+    if (full > window.innerHeight + 1) { app.style.bottom = 'auto'; app.style.height = full + 'px'; }
+    else { app.style.bottom = ''; app.style.height = ''; }
+  }
   function update() {
+    fullScreenIOS();
     const r = app.getBoundingClientRect();
     const W = Math.round(r.width) || window.innerWidth, H = Math.round(r.height) || window.innerHeight;
     app.style.setProperty('--W', W + 'px'); app.style.setProperty('--H', H + 'px');
@@ -1368,8 +1646,9 @@ const UI = (() => {
 
   // ---- telas ----
   function show(id) {
+    if (id === 'home') $('heroArt').innerHTML = Art.heroScene();          // mostra a roupa atual do sapo
     document.querySelectorAll('.screen').forEach(s => s.classList.toggle('active', s.id === id));
-    if (id !== 'game') { Game.active = false; Board.cancelDrag(); }
+    if (id !== 'game') { Game.active = false; Board.cancelDrag(); app.classList.remove('space-mode'); }
     Layout.update();
   }
   // ---- seletor de dificuldade: lista suspensa, pode marcar várias (sorteia entre elas) ----
@@ -1397,12 +1676,25 @@ const UI = (() => {
   paintLevels();
 
   // ---- sorteio ----
+  // Tela do baralho: escolhe a dificuldade e toca em "Embaralhar"
+  function setDrawButtons(revealed) {
+    $('btnStart').classList.toggle('hidden', !revealed);
+    $('btnSwap').classList.toggle('green', !revealed); $('btnSwap').classList.toggle('big', !revealed); $('btnSwap').classList.toggle('blue', revealed);
+    $('swapLabel').textContent = revealed ? 'Embaralhar novamente' : 'Embaralhar';
+  }
+  function enterDraw() {
+    drawToken++; drawing = false;
+    show('draw');
+    Deck.showDeck(); setDrawButtons(false);
+    $('btnSwap').disabled = false; $('lvlBtn').disabled = false;
+    $('drawStatus').textContent = 'Escolha a dificuldade e embaralhe';
+  }
   async function draw() {
     if (drawing) return;
     drawing = true;
     const token = ++drawToken;
     show('draw');
-    $('btnSwap').disabled = true; $('btnStart').disabled = true;
+    $('btnSwap').disabled = true; $('btnStart').disabled = true; $('lvlBtn').disabled = true;
     $('drawStatus').textContent = 'Embaralhando…';
     Deck.showDeck();
     Sound.shuffle(1.9);
@@ -1417,19 +1709,21 @@ const UI = (() => {
     } while (!done && cycles < 40);
     await gen;
     if (token !== drawToken) return;
-    if (!result) { drawing = false; $('drawStatus').textContent = 'Não foi possível gerar. Tente de novo.'; $('btnSwap').disabled = false; console.error(error); return; }
+    if (!result) { drawing = false; $('drawStatus').textContent = 'Não foi possível gerar. Tente de novo.'; $('btnSwap').disabled = false; $('lvlBtn').disabled = false; console.error(error); return; }
     card = result; lastKey = Rules.key(card.start);
     $('drawStatus').textContent = '';
     await Deck.reveal(card);
     if (token !== drawToken) return;
     drawing = false;
-    $('btnSwap').disabled = false; $('btnStart').disabled = false;
+    setDrawButtons(true);
+    $('btnSwap').disabled = false; $('btnStart').disabled = false; $('lvlBtn').disabled = false;
   }
   function backToCard() {
     // volta à carta atual já revelada
     drawToken++; drawing = false;
     show('draw');
-    if (card) { Deck.renderFace(card); $('deck').classList.add('hidden'); $('flip').classList.remove('hidden'); $('drawStatus').textContent = ''; $('btnSwap').disabled = false; $('btnStart').disabled = false; }
+    if (card) { Deck.renderFace(card); $('deck').classList.add('hidden'); $('flip').classList.remove('hidden'); $('drawStatus').textContent = ''; setDrawButtons(true); $('btnSwap').disabled = false; $('btnStart').disabled = false; $('lvlBtn').disabled = false; }
+    else enterDraw();
   }
   // ---- carregamento Greenfrog University (≈1 s, só com desafio pronto) ----
   function loadingScreen() {
@@ -1461,7 +1755,8 @@ const UI = (() => {
     $('gtip').textContent = card.tip || ''; $('game').classList.toggle('has-tip', !!card.tip);
     $('btnGameBack').setAttribute('aria-label', card.career != null ? 'Voltar para a trilha' : 'Voltar para as cartas');
     Layout.update();
-    Board.reset(); hud(); Sound.start();
+    app.classList.toggle('space-mode', card.theme === 'space');
+    Board.configure(card.start.n || 3, card.theme || ''); Board.reset(); hud(); Sound.start();
     Game.active = true;
     starting = false;
   }
@@ -1483,13 +1778,17 @@ const UI = (() => {
       [[0, 4, '#ffd23f', .1], [76, 2, '#ffd23f', .3], [40, -14, '#fff27a', .5], [6, 60, '#b9f55a', .7], [74, 58, '#ff9cbc', .9]]
         .map(([x, y, c, d]) => `<div class="star" style="left:${x}%;top:${y}%;animation-delay:${d}s,${d + .6}s">${Art.star(c)}</div>`).join('');
     const c = Game.card;
-    let title = 'Você venceu!', next = 'Próxima carta';
+    let title = 'Você venceu!', next = 'Próxima carta', prize = null;
     if (c.career != null) {
       const res = Career.complete(c.career);
       next = 'Próxima fase';
       if (res.finished) { title = 'Carreira concluída!'; next = 'Ver troféu'; }
+      if (res.bonusFinished) { title = 'Bônus concluído!'; next = 'Ver estrela'; }
+      prize = res.prize;
     }
     $('winTitle').textContent = title; $('btnNewWin').textContent = next;
+    $('winPrize').classList.toggle('hidden', !prize);
+    if (prize) $('winPrize').innerHTML = prize.map(id => Outfit.preview(id)).join('') + `<span>Você ganhou: ${prize.map(id => Outfit.BY[id].name).join(' e ')}!</span>`;
     $('ovWin').classList.add('show');
     Sound.win(); confetti();
   }
@@ -1546,10 +1845,10 @@ const UI = (() => {
     if (!force && Game.inProgress) confirm('Reiniciar a carta?', 'Seus movimentos desta partida serão perdidos.', 'Reiniciar', doIt); else doIt();
   }
   function newCard() { hideOverlays(); Game.active = false; draw(); }
-  $('btnPick').addEventListener('click', () => { Sound.click(); draw(); });
-  $('btnSwap').addEventListener('click', () => { if (!drawing && !starting) { Sound.click(); draw(); } });
+  $('btnPick').addEventListener('click', () => { Sound.click(); enterDraw(); });
+  $('btnSwap').addEventListener('click', () => { if (!drawing && !starting) { Sound.click(); setMenu(false); draw(); } });
   $('btnStart').addEventListener('click', () => { Sound.click(); startGame(); });
-  $('btnDrawBack').addEventListener('click', () => { drawToken++; drawing = false; Sound.click(); show('home'); });
+  $('btnDrawBack').addEventListener('click', () => { drawToken++; drawing = false; Sound.click(); setMenu(false); show('home'); });
   $('btnUndo').addEventListener('click', undo);
   $('btnRestart').addEventListener('click', () => restart(false));
   $('btnGameBack').addEventListener('click', () => {
@@ -1564,6 +1863,7 @@ const UI = (() => {
     else newCard();
   });
   $('btnCareer').addEventListener('click', () => { Sound.click(); setMenu(false); Career.open(); });
+  $('btnWardrobe').addEventListener('click', () => { Sound.click(); setMenu(false); Wardrobe.open(); });
   $('btnWinHome').addEventListener('click', () => { hideOverlays(); Sound.click(); show('home'); });
   $('btnStuckRestart').addEventListener('click', () => restart(true));
   $('btnStuckHome').addEventListener('click', () => { hideOverlays(); Sound.click(); show('home'); });
@@ -1647,6 +1947,31 @@ ${moss ? '<path d="M18 -48 v12 M22 -52 v9 M-16 -61 v13 M-19 -64 v8" stroke="#6f8
     for (let i = 0; i < n * 2; i++) { const x = (i + .5) * W / (n * 2); tufts += `<path d="M${x - 4} 16 l2 -9 l2 9 l2 -7 l2 7" fill="${color}" stroke="${color}" stroke-width="1"/>`; }
     return `<path d="${d} Z" fill="${color}"/><path d="${d.replace(/^M0 0 H[\d.]+ V10/, 'M' + W + ' 10')}" fill="none" stroke="#000" stroke-opacity=".15" stroke-width="2"/>${tufts}`;
   },
+  star: (x, y, k, d) => `<circle class="dtw" style="animation-delay:${d}s" cx="${x}" cy="${y}" r="${1.4 * k}" fill="#fff"/>`,
+  nebula: (x, y, k, c) => `<ellipse cx="${x}" cy="${y}" rx="${80 * k}" ry="${30 * k}" fill="${c}" opacity=".1"/><ellipse cx="${x + 20 * k}" cy="${y - 8 * k}" rx="${46 * k}" ry="${18 * k}" fill="${c}" opacity=".1"/>`,
+  planet(x, y, k, c, ring) {
+    return `<g transform="translate(${x} ${y}) scale(${k})"><circle r="17" fill="${c}"/><path d="M-17 0 A17 17 0 0 0 17 0 A17 12 0 0 1 -17 0Z" fill="#000" opacity=".18"/><circle cx="-6" cy="-6" r="5" fill="#fff" opacity=".2"/>
+${ring ? '<ellipse rx="29" ry="7" fill="none" stroke="#ffe3b0" stroke-width="3" opacity=".85" transform="rotate(-18)"/><path d="M-27 -2 A29 7 0 0 1 27 -2" fill="none" stroke="' + c + '" stroke-width="3.5" transform="rotate(-18)"/>' : '<circle cx="5" cy="6" r="3" fill="#000" opacity=".15"/><circle cx="-4" cy="9" r="2" fill="#000" opacity=".15"/>'}</g>`;
+  },
+  et(x, y, k, ship) {
+    const alien = `<ellipse cx="0" cy="-3" rx="6" ry="6.5" fill="#7ddf5a" stroke="#3f8f2a" stroke-width=".8"/><ellipse cx="-2.4" cy="-3" rx="1.8" ry="2.6" fill="#111" transform="rotate(-20 -2.4 -3)"/><ellipse cx="2.4" cy="-3" rx="1.8" ry="2.6" fill="#111" transform="rotate(20 2.4 -3)"/>
+<path d="M-2 -9 L-4 -14 M2 -9 L4 -14" stroke="#3f8f2a" stroke-width="1"/><circle cx="-4" cy="-14.5" r="1.4" fill="#ffe76b"/><circle cx="4" cy="-14.5" r="1.4" fill="#ffe76b"/><path d="M-1.6 .6 Q0 1.8 1.6 .6" stroke="#2a5f1c" stroke-width=".7" fill="none"/>`;
+    return ship ? `<g transform="translate(${x} ${y}) scale(${k})"><ellipse cx="0" cy="13" rx="9" ry="2.4" fill="#6fe8ff" opacity=".3"/>${alien}<path d="M-9 3 A9 10 0 0 1 9 3 Z" fill="#bff6ff" opacity=".35" stroke="#e6fdff" stroke-width=".6"/><ellipse cx="0" cy="5" rx="17" ry="5" fill="url(#ufoBody)" stroke="#4b5874" stroke-width=".8"/><circle cx="-9" cy="5.5" r="1.1" fill="#ff6ad5"/><circle cx="0" cy="6.5" r="1.1" fill="#ffe76b"/><circle cx="9" cy="5.5" r="1.1" fill="#ff6ad5"/></g>`
+      : `<g transform="translate(${x} ${y}) scale(${k})"><path d="M-5 4 Q-11 -2 -12 -7 M5 4 Q11 -2 12 -7" stroke="#7ddf5a" stroke-width="2" stroke-linecap="round" fill="none"/><ellipse cx="0" cy="8" rx="5" ry="7" fill="#7ddf5a" stroke="#3f8f2a" stroke-width=".8"/>${alien}</g>`;
+  },
+  rocket(x, y, k, rot) {
+    return `<g transform="translate(${x} ${y}) rotate(${rot}) scale(${k})"><path d="M-3 12 Q0 24 3 12 Z" fill="#ffb800"/><path d="M-1.6 12 Q0 19 1.6 12 Z" fill="#fff27a"/><path d="M-6 6 L-10 13 L-5 11 Z M6 6 L10 13 L5 11 Z" fill="#ff4b3a"/>
+<path d="M0 -16 Q8 -6 6 12 H-6 Q-8 -6 0 -16 Z" fill="#eef3fb" stroke="#8a95ab" stroke-width="1"/><circle cy="-2" r="3" fill="#6fd0ff" stroke="#4b5874" stroke-width="1"/><path d="M0 -16 Q4 -11 5 -8 H-5 Q-4 -11 0 -16Z" fill="#ff4b3a"/></g>`;
+  },
+  comet: (x, y, k) => `<g transform="translate(${x} ${y}) scale(${k}) rotate(-25)"><path d="M0 0 L-46 -4 L-46 4 Z" fill="#bff6ff" opacity=".35"/><path d="M0 0 L-30 -2 L-30 2 Z" fill="#fff" opacity=".5"/><circle r="4" fill="#fff"/><circle r="7" fill="#bff6ff" opacity=".3"/></g>`,
+  portal() {
+    return `<svg viewBox="-30 -30 60 60" aria-hidden="true"><defs><radialGradient id="ptl" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#fff"/><stop offset=".35" stop-color="#c9b6ff"/><stop offset=".7" stop-color="#7b3fe4"/><stop offset="1" stop-color="#2a0f6b" stop-opacity="0"/></radialGradient></defs>
+<circle r="28" fill="url(#ptl)"/><g class="pspin" fill="none" stroke-linecap="round"><path d="M0 -20 A20 20 0 0 1 20 0" stroke="#ff6ad5" stroke-width="3"/><path d="M0 20 A20 20 0 0 1 -20 0" stroke="#6fd0ff" stroke-width="3"/><path d="M14 -6 A15 15 0 0 1 -6 14" stroke="#fff27a" stroke-width="2"/></g>
+<text y="7" text-anchor="middle" font-size="20" font-weight="900" fill="#2a0f6b" font-family="system-ui,sans-serif">?</text></svg>`;
+  },
+  bigStar() {
+    return `<svg viewBox="-30 -30 60 60" aria-hidden="true"><circle r="26" fill="#ffd23f" opacity=".18"/><path d="M0 -24 l7 14.5 16 2.3 -11.6 11.3 2.7 16 -14.1 -7.5 -14.1 7.5 2.7 -16 -11.6 -11.3 16 -2.3z" fill="url(#crown)" stroke="#b07a00" stroke-width="1.6" stroke-linejoin="round"/><path d="M-4 -12 l3 -6" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg>`;
+  },
   trophy() {
     return `<svg viewBox="-30 -36 60 66" aria-hidden="true"><ellipse cx="0" cy="24" rx="26" ry="6" fill="#000" opacity=".25"/>
 <path d="M-14 -26 H14 V-8 A14 14 0 0 1 -14 -8 Z" fill="#ffd23f" stroke="#b07a00" stroke-width="2"/>
@@ -1659,7 +1984,8 @@ ${moss ? '<path d="M18 -48 v12 M22 -52 v9 M-16 -61 v13 M-19 -64 v8" stroke="#6f8
 
 /* ---------------------------------------------------------------------
    Career — modo carreira: trilha descendo por 5 pântanos
-   Tutorial (3 fases) → Iniciante → Médio → Avançado → Expert (10 cada) → troféu.
+   Tutorial (3) → Iniciante (16) → Médio (13) → Avançado (10) → Expert (8) = 50 fases → troféu.
+   Prêmios do guarda-roupa: fim do tutorial e meio/fim de cada pântano.
    As fases são fixas: saem dos mesmos conjuntos validados pelo
    solucionador, sem repetir desenhos simétricos, em ordem crescente de
    dificuldade (mais verdes e menos chance de vencer ao acaso). Só se
@@ -1668,19 +1994,61 @@ ${moss ? '<path d="M18 -48 v12 M22 -52 v9 M-16 -61 v13 M-19 -64 v8" stroke="#6f8
 const Career = (() => {
   const REGIONS = [
     { id: 'tutorial', name: 'Tutorial', sub: 'Primeiros pulos', color: '#12a6c4', count: 3, top: '#d4f6ff', bot: '#8fdfee', bank: null },
-    { id: 'iniciante', name: 'Iniciante', sub: 'Lagoa tranquila', color: LEVELS.iniciante.color, count: 10, top: '#8fdfee', bot: '#3fbfa6', bank: '#86cf62' },
-    { id: 'medio', name: 'Médio', sub: 'Pântano', color: LEVELS.medio.color, count: 10, top: '#4aae86', bot: '#4c8650', bank: '#5f8f3a' },
-    { id: 'avancado', name: 'Avançado', sub: 'Brejo sombrio', color: LEVELS.avancado.color, count: 10, top: '#3b6c60', bot: '#21414c', bank: '#3c5a36' },
-    { id: 'expert', name: 'Expert', sub: 'Covil dos jacarés', color: LEVELS.expert.color, count: 10, top: '#21414c', bot: '#111d16', bank: '#2c3a24' }
+    { id: 'iniciante', name: 'Iniciante', sub: 'Lagoa tranquila', color: LEVELS.iniciante.color, count: 16, top: '#8fdfee', bot: '#3fbfa6', bank: '#86cf62' },
+    { id: 'medio', name: 'Médio', sub: 'Pântano pantanoso', color: LEVELS.medio.color, count: 13, top: '#4aae86', bot: '#4c8650', bank: '#5f8f3a' },
+    { id: 'avancado', name: 'Avançado', sub: 'Brejo', color: LEVELS.avancado.color, count: 10, top: '#3b6c60', bot: '#21414c', bank: '#3c5a36' },
+    { id: 'expert', name: 'Expert', sub: 'Pântano jacaroso', color: LEVELS.expert.color, count: 8, top: '#21414c', bot: '#111d16', bank: '#2c3a24' },
+    // pântano secreto: só aparece depois de concluir as 50 fases e tocar no portal (Big Bang)
+    { id: 'espaco', name: 'Bônus', sub: 'Pântano espacial', color: '#8a5cff', count: 10, bonus: true, bg: 'linear-gradient(180deg,#111d16 0,#1d1450 140px,#120a35 55%,#05030f)', bank: null }
+  ];
+  /* Fases bônus em tabuleiros maiores (4×4 nas 5 primeiras, 5×5 nas 5 últimas).
+     Geradas por construção reversa: parte-se do sapo vermelho sozinho e
+     "desfazem-se" saltos válidos; a sequência inversa é uma solução, que fica
+     guardada e é conferida (replay jogada a jogada) ao montar a trilha e nos
+     testes. Entre vários candidatos, ficaram os que mais derrotam o jogo
+     ao acaso (nenhuma vitória em 160 partidas aleatórias). */
+  const BONUS = [
+    { n: 4, s: 'G...G.....GGGG...GR..G...', sol: [0,8,8,16,17,15,10,16,16,14,21,7,7,15,18,12] },
+    { n: 4, s: '.GG...RG...GG.......G.GGG', sol: [24,16,7,15,23,9,22,8,2,0,12,4,0,8,6,12,12,4] },
+    { n: 4, s: '..R.GG.G..GGGG.G..G...G..', sol: [15,9,2,8,10,16,9,23,8,0,0,14,23,21,21,15,15,7,14,0] },
+    { n: 4, s: '.........G.RGGGG.GGGGG.G.', sol: [14,16,23,15,13,5,15,9,5,13,16,10,10,24,21,15,11,19,24,16,19,13] },
+    { n: 4, s: '..GGGG...G.GGGG.....GRG.G', sol: [21,7,9,15,7,1,1,9,24,16,22,8,3,1,1,15,11,19,9,17,19,13,17,9] },
+    { n: 5, s: '.G....G..G....GGG.R.......GGGG.G..G..G...', sol: [9,19,28,10,18,36,1,11,36,38,16,6,10,20,38,30,31,21,30,28,21,19,28,10,10,2] },
+    { n: 5, s: 'G....G..GR..G.G..G.GG.G..GG.....GG.G...G.', sol: [0,10,39,31,8,16,31,21,14,24,9,11,22,12,20,28,12,30,11,21,30,20,33,23,21,19,19,27,27,37] },
+    { n: 5, s: '.G.....G..G.G...GG..G.GG.G...GRG.GGG.G.G.', sol: [1,19,34,24,31,13,37,29,13,21,29,11,21,29,30,40,12,20,23,15,40,38,24,34,38,30,15,25,7,15,30,20,20,10] },
+    { n: 5, s: 'GG.G...GG.GG...G.GG...GG..G..G.GGGRG....G', sol: [18,28,22,12,31,21,32,24,33,25,10,20,24,16,40,30,30,20,0,2,2,4,11,29,34,24,12,20,4,12,21,3,24,16,3,11,16,6] },
+    { n: 5, s: '.G.G..GGG.G.GRG.G.G.G..GG..G..GGGG..GG.G.', sol: [39,21,37,29,20,38,1,19,3,11,36,28,27,29,18,28,28,10,12,20,24,16,16,26,38,20,6,16,14,6,13,3,31,21,21,11,20,2,3,1,1,11] }
   ];
   const TUTORIAL = [
     { s: 'RG...........', tip: 'Arraste o sapo vermelho por cima do verde até a vitória-régia vazia.' },
     { s: 'RG.....G.....', tip: 'Cada salto tira um sapo verde. Pule os dois e deixe só o vermelho!' },
     { s: '..R..GG....G.', tip: 'Sapos verdes também podem pular por cima de outros verdes.' }
   ];
-  const TOTAL = REGIONS.reduce((a, r) => a + r.count, 0);
-  let done = Math.max(0, Math.min(TOTAL, +Store.get('career', 0) || 0));
-  let list = null, built = null, nodes = [], finalPos = null, lastW = 0, avatar = null;
+  const MAIN = REGIONS.filter(r => !r.bonus);
+  const TOTAL = MAIN.reduce((a, r) => a + r.count, 0);            // 50 fases da carreira
+  const ALL = TOTAL + REGIONS.find(r => r.bonus).count;           // + 10 do bônus
+  let bonusOpen = !!Store.get('bonus', false);
+  // apetrechos ganhos ao concluir certas fases, do mais simples ao mais nobre
+  // Prêmios: um em cada fase do tutorial; depois, um a cada 5 fases; a última fase dá coroa e troféu;
+  // no pântano espacial, um a cada 5 fases. Do mais simples ao mais nobre.
+  const PRIZE = {};               // índice da fase → itens
+  {
+    const tut = REGIONS[0].count;
+    ['cardigan', 'loafer', 'celular'].forEach((id, i) => { PRIZE[i] = [id]; });
+    const every5 = ['bone', 'cartola', 'oculos', 'cachecol', 'gravata', 'pirata', 'capa', 'medalha', 'manto'];
+    for (let k = 0, i = tut + 4; i < TOTAL - 1 && k < every5.length; i += 5, k++) PRIZE[i] = [every5[k]];
+    PRIZE[TOTAL - 1] = ['coroa', 'trofeu'];
+    PRIZE[TOTAL + 4] = ['antenas']; PRIZE[ALL - 1] = ['capacete', 'jetpack'];
+  }
+  const owned = () => Object.keys(PRIZE).filter(i => +i < done).flatMap(i => PRIZE[i]);
+  function prizeWhere(id) {
+    const i = +Object.keys(PRIZE).find(k => PRIZE[k].includes(id));
+    let base = 0;
+    for (const R of REGIONS) { if (i < base + R.count) return `${R.name} · fase ${i - base + 1}`; base += R.count; }
+    return '';
+  }
+  let done = Math.max(0, Math.min(bonusOpen ? ALL : TOTAL, +Store.get('career', 0) || 0));
+  let list = null, built = null, nodes = [], finalPos = null, portalPos = null, starPos = null, lastW = 0, avatar = null;
   const map = $('cmap'), inner = $('cmapInner');
 
   // simetrias do tabuleiro (rotações e espelhos) para não repetir o mesmo desenho girado
@@ -1694,7 +2062,7 @@ const Career = (() => {
     const out = [];
     TUTORIAL.forEach((t, i) => out.push({ region: 0, n: i + 1, start: Rules.fromStr(t.s), tip: t.tip }));
     const pools = Gen.ensurePools();
-    REGIONS.slice(1).forEach((R, ri) => {
+    MAIN.slice(1).forEach((R, ri) => {
       const seen = new Set(), classes = [];
       for (const k of pools[R.id]) { const s = Rules.fromKey(k), c = canon(s); if (seen.has(c)) continue; seen.add(c); classes.push({ s: Rules.fromKey(c), n: Rules.greens(s), p: Solver.stats(s).p, c }); }
       classes.sort((a, b) => a.n - b.n || b.p - a.p || a.c - b.c);
@@ -1704,6 +2072,13 @@ const Career = (() => {
         out.push({ region: ri + 1, n: n + 1, start: xform(pick.s, MAPS[Math.floor(rnd() * 8)]) });
       }
     });
+    const bi = REGIONS.findIndex(r => r.bonus);
+    BONUS.forEach((b, i) => {
+      const start = Rules.fromStr(b.s, b.n), solution = [];
+      let st = start;
+      for (let k = 0; k < b.sol.length; k += 2) { const j = Rules.findMove(st, b.sol[k], b.sol[k + 1]); if (!j) break; solution.push(j); st = Rules.apply(st, j); }
+      out.push({ region: bi, n: i + 1, start, solution, valid: Rules.isWin(st) && solution.length === b.sol.length / 2 });
+    });
     return out;
   }
   function ensureBuilt() {
@@ -1712,11 +2087,13 @@ const Career = (() => {
   }
   function cardFor(i) {
     const L = list[i], R = REGIONS[L.region];
-    const level = R.id === 'tutorial' ? { name: 'Tutorial', color: R.color } : LEVELS[R.id];
-    const start = { g: L.start.g, r: L.start.r }, greens = Rules.greens(start);
-    return { career: i, level, levelId: R.id, label: `${R.name} ${L.n}/${R.count}`, start, greens, jumps: greens, solution: Solver.solve(start), tip: L.tip || '', code: 'C-' + (i + 1) };
+    const level = R.id === 'tutorial' || R.bonus ? { name: R.name, color: R.color } : LEVELS[R.id];
+    const start = { ...L.start }, greens = Rules.greens(start);
+    return { career: i, level, levelId: R.id, label: `${R.name} ${L.n}/${R.count}`, start, greens, jumps: greens,
+      solution: R.bonus ? L.solution : Solver.solve(start), tip: L.tip || '', theme: R.bonus ? 'space' : '', code: 'C-' + (i + 1) };
   }
-  const posOf = i => i >= TOTAL ? finalPos : nodes[i];
+  const limit = () => bonusOpen ? ALL : TOTAL;
+  const posOf = i => i < TOTAL ? nodes[i] : !bonusOpen ? (i === TOTAL ? finalPos : null) : i < ALL ? nodes[i] : starPos;
 
   // ---- desenho do mapa ----
   function render() {
@@ -1727,19 +2104,26 @@ const Career = (() => {
     let y = 0, k = 0, html = '';
     nodes = [];
     const rects = [];
-    REGIONS.forEach((R, r) => {
+    const shown = REGIONS.filter(R => !R.bonus || bonusOpen);
+    portalPos = starPos = null;
+    shown.forEach((R, r) => {
       const top = y;
       y += HEAD + ns / 2;
       for (let n = 0; n < R.count; n++, k++) { nodes.push({ x: cx + amp * Math.sin(k * 1.05 + .5), y, r }); y += GAP; }
       y += -GAP + ns / 2 + PAD;
-      if (r === REGIONS.length - 1) { finalPos = { x: cx, y: y + 40 }; y += 150; }
+      if (R.id === 'expert') {
+        finalPos = { x: cx, y: y + 40 }; y += 150;
+        if (!bonusOpen && done >= TOTAL) { portalPos = { x: cx, y: y + 30 }; y += 160; }     // fase extra secreta
+      }
+      if (R.bonus) { starPos = { x: cx, y: y + 40 }; y += 160; }
       rects.push({ top, h: y - top });
     });
     const totalH = y;
     inner.style.height = totalH + 'px';
-    rects.forEach((rc, r) => { html += regionHTML(REGIONS[r], r, rc, W, ns); });
+    rects.forEach((rc, r) => { html += regionHTML(shown[r], r, rc, W, ns); });
     // trilha
-    const pts = [...nodes, finalPos];
+    const pts = [...nodes.slice(0, TOTAL), finalPos, ...(bonusOpen ? [...nodes.slice(TOTAL), starPos] : [])];
+    const doneUpto = done < TOTAL ? done + 1 : bonusOpen ? done + 2 : TOTAL + 1;
     const path = list => {
       if (list.length < 2) return '';
       let d = `M${list[0].x.toFixed(1)} ${list[0].y.toFixed(1)}`;
@@ -1752,29 +2136,32 @@ const Career = (() => {
     html += `<svg class="ctrail" width="${W}" height="${totalH}" viewBox="0 0 ${W} ${totalH}" aria-hidden="true">
 <path d="${path(pts)}" fill="none" stroke="#062a3a" stroke-opacity=".25" stroke-width="9" stroke-linecap="round" stroke-dasharray="1 15"/>
 <path d="${path(pts)}" fill="none" stroke="#fff" stroke-opacity=".7" stroke-width="6" stroke-linecap="round" stroke-dasharray="1 15"/>
-<path id="ctrailDone" d="${path(pts.slice(0, done + 1))}" fill="none" stroke="#ffd23f" stroke-width="7" stroke-linecap="round" stroke-dasharray="1 15"/></svg>`;
+${portalPos ? `<path d="M${finalPos.x} ${finalPos.y} L${portalPos.x} ${portalPos.y}" stroke="#c9b6ff" stroke-opacity=".7" stroke-width="5" stroke-linecap="round" stroke-dasharray="1 12" fill="none"/>` : ''}
+<path id="ctrailDone" d="${path(pts.slice(0, doneUpto))}" fill="none" stroke="#ffd23f" stroke-width="7" stroke-linecap="round" stroke-dasharray="1 15"/></svg>`;
     // fases
     const lock = '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"><rect x="5" y="11" width="14" height="10" rx="2" fill="#fff"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>';
     const ok = '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"/></svg>';
     nodes.forEach((p, i) => {
       const st = i < done ? 'done' : i === done ? 'cur' : 'locked', L = list[i];
       html += `<button class="cnode ${st}" data-i="${i}" style="left:${p.x - ns / 2}px;top:${p.y - ns / 2}px;width:${ns}px;height:${ns}px" aria-label="${REGIONS[L.region].name} fase ${L.n}${st === 'locked' ? ' (bloqueada)' : ''}">
-<svg viewBox="-12 -12 24 24">${Art.lily(0, 0, 10.5, (i * 47) % 360, true)}</svg><span class="num">${L.n}</span>${st === 'locked' ? `<span class="lock">${lock}</span>` : st === 'done' ? `<span class="ok">${ok}</span>` : ''}</button>`;
+<svg viewBox="-12 -12 24 24">${REGIONS[L.region].bonus ? Art.saucer(0, 0, 10.5) : Art.lily(0, 0, 10.5, (i * 47) % 360, true)}</svg><span class="num">${L.n}</span>${st === 'locked' ? `<span class="lock">${lock}</span>` : st === 'done' ? `<span class="ok">${ok}</span>` : ''}${PRIZE[i] && i >= done ? `<span class="prize" title="Prêmio">${Outfit.preview(PRIZE[i][0])}</span>` : ''}</button>`;
     });
     const fs = ns * 1.3;
-    html += `<button class="cnode final${done >= TOTAL ? ' cur' : ''}" data-i="${TOTAL}" style="left:${finalPos.x - fs / 2}px;top:${finalPos.y - fs / 2}px;width:${fs}px;height:${fs}px" aria-label="Troféu final">${Deco.trophy()}</button>`;
-    html += `<div class="cavatar" id="cavatar" style="width:${ns * .95}px;height:${ns * .95}px">${Art.frog('red')}</div>`;
+    html += `<button class="cnode final${done === TOTAL && !bonusOpen ? ' cur' : ''}" data-i="T" style="left:${finalPos.x - fs / 2}px;top:${finalPos.y - fs / 2}px;width:${fs}px;height:${fs}px" aria-label="Troféu final">${Deco.trophy()}</button>`;
+    if (portalPos) html += `<button class="cnode portal" data-i="P" style="left:${portalPos.x - fs / 2}px;top:${portalPos.y - fs / 2}px;width:${fs}px;height:${fs}px" aria-label="Fase extra secreta">${Deco.portal()}<span class="num">Bônus</span></button>`;
+    if (starPos) html += `<button class="cnode final star${done >= ALL ? ' cur' : ''}" data-i="S" style="left:${starPos.x - fs / 2}px;top:${starPos.y - fs / 2}px;width:${fs}px;height:${fs}px" aria-label="Estrela final">${Deco.bigStar()}</button>`;
+    html += `<div class="cavatar" id="cavatar" style="width:${ns * .95}px;height:${ns * .95}px">${Art.frog('green', { outfit: Outfit.worn })}</div>`;
     inner.innerHTML = html;
     avatar = $('cavatar');
-    $('careerProg').textContent = `${Math.min(done, TOTAL)}/${TOTAL}`;
-    placeAvatar(Math.min(done, TOTAL));
+    $('careerProg').textContent = `${done}/${limit()}`;
+    placeAvatar(done);
   }
   function regionHTML(R, r, rc, W, ns) {
     const H = rc.h, rnd = seeded(1000 + r * 77 + Math.round(W));
     const k = Math.max(.85, Math.min(1.35, W / 390));
     const items = [];
     const avoid = (x, y, rad) => nodes.some(p => p.r === r && Math.hypot(p.x - x, p.y - (rc.top + y)) < ns * .75 + rad) ||
-      (finalPos && Math.hypot(finalPos.x - x, finalPos.y - (rc.top + y)) < ns * 1.4 + rad) ||
+      [finalPos, portalPos, starPos].some(f => f && Math.hypot(f.x - x, f.y - (rc.top + y)) < ns * 1.4 + rad) ||
       (Math.abs(x - W / 2) < 120 && y < 105) || x < rad * .4 || x > W - rad * .4 || y < 40 || y > H - 12;
     const place = (n, rad, fn) => {
       for (let i = 0, t = 0; i < n && t < n * 30; t++) {
@@ -1807,6 +2194,13 @@ const Career = (() => {
       place(4, 16, (x, y) => Deco.mushroom(x, y, k));
       place(Math.round(area * .3), 18, (x, y) => Deco.cattails(x, y, k * .9));
       place(Math.round(area * .7), 6, (x, y, q) => Deco.firefly(x, y, k, (q() * 3).toFixed(2)));
+    } else if (R.bonus) {
+      place(Math.round(area * 2.2), 3, (x, y, q) => Deco.star(x, y, k * (.5 + q()), (q() * 3).toFixed(2)));
+      place(5, 70, (x, y, q) => Deco.nebula(x, y, k, ['#ff6ad5', '#6fd0ff', '#9b6cff'][Math.floor(q() * 3)]));
+      place(3, 34, (x, y, q) => Deco.planet(x, y, k * (.8 + q() * .6), ['#ff8a5c', '#6fd0ff', '#ffd23f'][Math.floor(q() * 3)], q() < .6));
+      place(6, 24, (x, y, q) => Deco.et(x, y, k, q() < .5));
+      place(2, 26, (x, y, q) => Deco.rocket(x, y, k, q() * 60 - 30));
+      place(2, 30, (x, y) => Deco.comet(x, y, k));
     } else {
       place(Math.round(area * .3), 60, (x, y) => Deco.fog(x, y, k));
       place(3, 30, (x, y, q) => Deco.tree(x, y, k, q() < .5, false));
@@ -1815,10 +2209,9 @@ const Career = (() => {
       place(Math.round(area * .4), 6, (x, y) => Deco.bubble(x, y, k));
     }
     items.sort((a, b) => a.y - b.y);
-    const prog = r === 0 ? Math.min(done, R.count) : Math.max(0, Math.min(R.count, done - REGIONS.slice(0, r).reduce((a, q) => a + q.count, 0)));
-    return `<div class="creg" style="top:${rc.top}px;height:${H}px;background:linear-gradient(180deg,${R.top},${R.bot})">
+    return `<div class="creg${R.bonus ? ' space' : ''}" style="top:${rc.top}px;height:${H}px;background:${R.bg || `linear-gradient(180deg,${R.top},${R.bot})`}">
 <svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" aria-hidden="true">${R.bank ? Deco.bank(W, R.bank) : ''}${items.map(i => i.s).join('')}</svg>
-<div class="cbanner"><i style="left:22%"></i><i style="right:22%"></i><b>${R.name}</b><small>${R.sub} · ${prog}/${R.count}</small></div></div>`;
+<div class="cbanner"><i style="left:22%"></i><i style="right:22%"></i><b>${R.name}</b><small>${R.sub}</small></div></div>`;
   }
   function placeAvatar(i) {
     const p = posOf(i); if (!p || !avatar) return;
@@ -1844,8 +2237,9 @@ const Career = (() => {
     Sound.land();
     const node = inner.querySelector(`.cnode[data-i="${b}"]`);
     if (node && !reduceMotion()) animate(node, [{ transform: 'scale(1)' }, { transform: 'scale(1.25)' }, { transform: 'scale(1)' }], { duration: 380, easing: 'ease-out' });
-    if (b >= TOTAL) { toast('Você chegou ao troféu!'); Sound.win(); }
-    else if (list[b].n === 1) toast(`Novo pântano: ${REGIONS[list[b].region].name}!`);
+    if (b === TOTAL && !bonusOpen) { toast('Você chegou ao troféu!'); Sound.win(); }
+    else if (b >= ALL) { toast('Você conquistou o espaço!'); Sound.win(); }
+    else if (list[b].n === 1) toast(REGIONS[list[b].region].bonus ? 'Pântano espacial desbloqueado!' : `Novo pântano: ${REGIONS[list[b].region].name}!`);
   }
   async function open(opts = {}) {
     UI.hideOverlays();
@@ -1857,20 +2251,109 @@ const Career = (() => {
       placeAvatar(from); scrollToIdx(from, false);
       await wait(380);
       await hop(from, done);
-    } else scrollToIdx(Math.min(done, TOTAL), false);
+    } else scrollToIdx(done, false);
   }
   function complete(i) {
-    if (i === done && done < TOTAL) { done++; Store.set('career', done); return { advanced: true, finished: done >= TOTAL }; }
-    return { advanced: false, finished: false };
+    if (i === done && done < limit()) { done++; Store.set('career', done); return { advanced: true, finished: done === TOTAL, bonusFinished: done === ALL, prize: PRIZE[i] || null }; }
+    return { advanced: false, finished: false, bonusFinished: false, prize: null };
   }
   function relayout() {
     if (!list || Math.abs(map.clientWidth - lastW) < 2) return;
-    render(); scrollToIdx(Math.min(done, TOTAL), false);
+    render(); scrollToIdx(done, false);
+  }
+  // ---- Big Bang: a explosão que abre o pântano espacial (tela inteira) ----
+  function bigBang() {
+    return new Promise(resolve => {
+      const cv = document.createElement('canvas'); cv.className = 'bigbang';
+      app.appendChild(cv);
+      const dpr = Math.min(2, window.devicePixelRatio || 1), W = app.clientWidth, H = app.clientHeight;
+      cv.width = W * dpr; cv.height = H * dpr;
+      const c = cv.getContext('2d'); c.setTransform(dpr, 0, 0, dpr, 0, 0);
+      const cx = W / 2, cy = H / 2, R = Math.hypot(W, H) / 2, rm = reduceMotion();
+      const cols = ['#ffffff', '#fff27a', '#ff6ad5', '#6fd0ff', '#9b6cff', '#ffb800'];
+      const P = Array.from({ length: rm ? 0 : 420 }, () => { const a = Math.random() * Math.PI * 2, v = .25 + Math.random() * 1.1; return { a, v, s: 1 + Math.random() * 2.6, c: cols[Math.floor(Math.random() * cols.length)] }; });
+      const S = Array.from({ length: 160 }, () => ({ x: Math.random() * W, y: Math.random() * H, r: Math.random() * 1.6 + .3, t: Math.random() }));
+      Sound.bigBang();
+      try { if (navigator.vibrate) navigator.vibrate([40, 60, 220]); } catch (e) {}
+      const DUR = rm ? 900 : 3000, t0 = performance.now();
+      const frame = now => {
+        const t = (now - t0) / DUR;
+        c.globalAlpha = 1;
+        // fundo: escurece, vira o branco da explosão e depois o espaço profundo
+        c.fillStyle = '#05030f'; c.fillRect(0, 0, W, H);
+        if (t > .2) {
+          const g = c.createRadialGradient(cx, cy, 0, cx, cy, R * Math.min(1.4, (t - .2) * 2.2));
+          g.addColorStop(0, 'rgba(155,108,255,.55)'); g.addColorStop(.5, 'rgba(255,106,213,.18)'); g.addColorStop(1, 'rgba(5,3,15,0)');
+          c.fillStyle = g; c.fillRect(0, 0, W, H);
+          for (const st of S) { c.globalAlpha = Math.min(1, (t - .25) * 3) * (.5 + .5 * Math.sin((now / 300) + st.t * 6)); c.fillStyle = '#fff'; c.beginPath(); c.arc(st.x, st.y, st.r, 0, 7); c.fill(); }
+          c.globalAlpha = 1;
+        }
+        // núcleo crescendo
+        if (t < .25) {
+          const r = 2 + Math.pow(t / .25, 3) * 60;
+          const g = c.createRadialGradient(cx, cy, 0, cx, cy, r * 3);
+          g.addColorStop(0, '#fff'); g.addColorStop(.3, 'rgba(255,240,180,.9)'); g.addColorStop(1, 'rgba(155,108,255,0)');
+          c.fillStyle = g; c.beginPath(); c.arc(cx, cy, r * 3, 0, 7); c.fill();
+        }
+        // partículas e ondas de choque
+        if (t > .2) {
+          const e = (t - .2) / .8;
+          for (const p of P) {
+            const d = Math.pow(e, .6) * R * 1.25 * p.v, x = cx + Math.cos(p.a) * d, y = cy + Math.sin(p.a) * d;
+            c.globalAlpha = Math.max(0, 1 - e * .9);
+            c.strokeStyle = p.c; c.lineWidth = p.s; c.beginPath(); c.moveTo(x, y); c.lineTo(cx + Math.cos(p.a) * d * .86, cy + Math.sin(p.a) * d * .86); c.stroke();
+          }
+          for (let k = 0; k < 3; k++) {
+            const e2 = e - k * .12; if (e2 <= 0) continue;
+            c.globalAlpha = Math.max(0, .8 - e2); c.strokeStyle = ['#fff', '#6fd0ff', '#ff6ad5'][k]; c.lineWidth = 10 * (1 - e2) + 1;
+            c.beginPath(); c.arc(cx, cy, Math.pow(e2, .7) * R * 1.3, 0, 7); c.stroke();
+          }
+        }
+        // clarão branco
+        const flash = t < .2 ? 0 : t < .3 ? (t - .2) / .1 : Math.max(0, 1 - (t - .3) / .25);
+        if (flash > 0) { c.globalAlpha = flash; c.fillStyle = '#fff'; c.fillRect(0, 0, W, H); }
+        // saída
+        cv.style.opacity = t > .85 ? String(Math.max(0, 1 - (t - .85) / .15)) : '1';
+        if (t < 1) requestAnimationFrame(frame); else { cv.remove(); resolve(); }
+      };
+      requestAnimationFrame(frame);
+    });
+  }
+  let opening = false;
+  async function openBonus() {
+    if (opening || bonusOpen || done < TOTAL) return;
+    opening = true;
+    await bigBang();
+    bonusOpen = true; Store.set('bonus', true);
+    render();
+    const first = posOf(TOTAL);
+    // o sapo sai do troféu e pousa no primeiro disco voador
+    const fp = finalPos;
+    placeAvatarAt(fp); scrollToY(fp.y, false);
+    await wait(400);
+    scrollToY(first.y, true); await wait(250);
+    placeAvatar(TOTAL);
+    const dx = fp.x - first.x, dy = fp.y - first.y;
+    Sound.jump();
+    await animate(avatar, reduceMotion() ? [{ opacity: .4 }, { opacity: 1 }] : [
+      { transform: `translate(${dx}px,${dy}px)` }, { transform: `translate(${dx * .5}px,${dy * .5 - 90}px) scale(1.3) rotate(-14deg)`, offset: .5 }, { transform: 'translate(0,0)' }],
+      { duration: 900, easing: 'cubic-bezier(.35,.1,.4,1)' });
+    Sound.land();
+    toast('Pântano espacial desbloqueado!');
+    opening = false;
+  }
+  function placeAvatarAt(p) { const s = avatar.getBoundingClientRect().width || 56; avatar.style.left = (p.x - s / 2) + 'px'; avatar.style.top = (p.y - s * .82) + 'px'; }
+  function scrollToY(y, smooth) {
+    const top = Math.max(0, y - map.clientHeight * .5);
+    try { map.scrollTo({ top, behavior: smooth && !reduceMotion() ? 'smooth' : 'auto' }); } catch (e) { map.scrollTop = top; }
   }
   inner.addEventListener('click', e => {
     const b = e.target.closest('.cnode'); if (!b) return;
-    const i = +b.dataset.i;
-    if (i >= TOTAL) { toast(done >= TOTAL ? 'Carreira concluída! Parabéns!' : 'Chegue até aqui completando todas as fases'); return; }
+    const tag = b.dataset.i;
+    if (tag === 'P') { openBonus(); return; }
+    if (tag === 'T') { toast(done >= TOTAL ? 'Carreira concluída! Parabéns!' : 'Chegue até aqui completando todas as fases'); return; }
+    if (tag === 'S') { toast(done >= ALL ? 'Você conquistou o espaço!' : 'Complete o pântano espacial'); return; }
+    const i = +tag;
     if (i > done) {
       Sound.invalid();
       animate(b, [0, -6, 6, -4, 4, 0].map(x => ({ transform: `translateX(${x}px)` })), { duration: 320 });
@@ -1881,7 +2364,44 @@ const Career = (() => {
     UI.startGame(cardFor(i));
   });
   $('btnCareerHome').addEventListener('click', () => { Sound.click(); UI.show('home'); });
-  return { open, complete, relayout, ensureBuilt, cardFor, REGIONS, TOTAL, get list() { return list; }, get done() { return done; }, set done(v) { done = v; } };
+  return { open, complete, relayout, ensureBuilt, cardFor, owned, prizeWhere, openBonus, bigBang, REGIONS, TOTAL, ALL, PRIZE, BONUS, get bonusOpen() { return bonusOpen; }, set bonusOpen(v) { bonusOpen = v; }, get list() { return list; }, get done() { return done; }, set done(v) { done = v; } };
+})();
+
+/* ---------------------------------------------------------------------
+   Wardrobe — guarda-roupa: vestir os apetrechos ganhos na carreira
+   --------------------------------------------------------------------- */
+const Wardrobe = (() => {
+  const grid = $('wGrid');
+  const SECTIONS = [['cabeca', 'Cabeça'], ['corpo', 'Corpo'], ['mao', 'Para segurar']];
+  // Só aparece o que já foi ganho na trilha; nada de prévia do que ainda falta.
+  function render() {
+    const owned = Career.owned();
+    Outfit.prune(owned);
+    $('wStage').innerHTML = `<svg viewBox="-12 -26 124 136" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+<ellipse cx="50" cy="97" rx="50" ry="12" fill="#063f78" opacity=".25"/>
+<path d="M4 94 A46 11 0 1 0 96 94 A46 11 0 0 0 56 83 L50 94 L45 83 A46 11 0 0 0 4 94Z" fill="url(#lily)" stroke="#155f1a" stroke-width="1"/>
+${Art.frog('green', { outfit: Outfit.worn, attrs: 'x="0" y="-4" width="100" height="100"' })}</svg>`;
+    const mine = Outfit.ITEMS.filter(it => owned.includes(it.id));
+    if (!mine.length) {
+      grid.innerHTML = `<div class="wempty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4h10v5a5 5 0 0 1-10 0z"/><path d="M17 5h3v2a4 4 0 0 1-3.6 4M7 5H4v2a4 4 0 0 0 3.6 4"/><path d="M12 14v3M8.5 20h7M9.5 17h5v3h-5z"/></svg><b>Seu guarda-roupa está vazio</b><span>Complete fases da carreira para ganhar apetrechos.</span></div>`;
+      return;
+    }
+    grid.innerHTML = SECTIONS.map(([g, title]) => {
+      const items = mine.filter(it => Outfit.GROUP[it.slot] === g);
+      if (!items.length) return '';
+      return `<h4 class="wsec">${title}</h4>` + items.map(it => {
+        const on = Outfit.isWorn(it.id);
+        return `<button type="button" class="witem${on ? ' worn' : ''}" data-id="${it.id}" aria-pressed="${on}"><span class="pv">${Outfit.preview(it.id)}</span><b>${it.name}</b></button>`;
+      }).join('');
+    }).join('');
+  }
+  grid.addEventListener('click', e => {
+    const b = e.target.closest('.witem'); if (!b) return;
+    Outfit.wear(b.dataset.id); Sound.pick(); render();
+  });
+  $('btnWardHome').addEventListener('click', () => { Sound.click(); UI.show('home'); });
+  function open() { UI.hideOverlays(); UI.show('wardrobe'); render(); }
+  return { open, render };
 })();
 
 /* ---------------------------------------------------------------------
@@ -1984,11 +2504,17 @@ const Tests = {
     // carreira
     await Career.ensureBuilt();
     const CL = Career.list;
-    t('carreira: 43 fases (3 de tutorial + 4 pântanos de 10)', CL.length === 43 && Career.TOTAL === 43);
+    const RC = Career.REGIONS.map(r => r.count);
+    t('carreira: 50 fases, mais fáceis que médias, mais médias que avançadas, mais avançadas que expert', Career.TOTAL === 50 && CL.length === 60 && RC[1] > RC[2] && RC[2] > RC[3] && RC[3] > RC[4], RC.slice(0, 5).join(' + ') + ' (+10 bônus)');
+    t('prêmios: 1 por fase do tutorial, depois 1 a cada 5 fases; 17 apetrechos sem repetir', [0, 1, 2].every(i => Career.PRIZE[i]) && [7, 12, 17, 22, 27, 32, 37, 42, 47, 49, 54, 59].every(i => Career.PRIZE[i]) && Object.keys(Career.PRIZE).length === 15 && new Set(Object.values(Career.PRIZE).flat()).size === 17 && Outfit.ITEMS.length === 17);
     t('tutorial com 1, 2 e 3 sapos verdes', [0, 1, 2].every(i => Rules.greens(CL[i].start) === i + 1));
-    t('todas as fases da carreira têm solução', CL.every(l => !!Solver.solve(l.start)));
+    t('todas as fases da carreira têm solução', CL.filter(l => !Career.REGIONS[l.region].bonus).every(l => !!Solver.solve(l.start)));
+    const BL = CL.filter(l => Career.REGIONS[l.region].bonus);
+    t('tabuleiros bônus: 4×4 com 25 casas/84 saltos e 5×5 com 41 casas/160 saltos', BigGeo(4).N === 25 && BigGeo(4).JUMPS.length === 84 && BigGeo(5).N === 41 && BigGeo(5).JUMPS.length === 160 && BigGeo(3) === Geo);
+    t('10 fases bônus (5 em 4×4, 5 em 5×5), cada solução conferida jogada a jogada até sobrar só o vermelho',
+      BL.length === 10 && BL.every((l, i) => l.valid && l.start.n === (i < 5 ? 4 : 5) && l.solution.length === Rules.greens(l.start)));
     t('fases de cada pântano na faixa da dificuldade e sem repetir',
-      Career.REGIONS.slice(1).every((R, ri) => { const f = CL.filter(l => l.region === ri + 1); const g = f.map(l => Rules.greens(l.start)); return g.every((n, i) => n >= LEVELS[R.id].min && n <= LEVELS[R.id].max && (i === 0 || n >= g[i - 1])) && new Set(f.map(l => Rules.key(l.start))).size === f.length; }));
+      Career.REGIONS.slice(1).filter(R => !R.bonus).every((R, ri) => { const f = CL.filter(l => l.region === ri + 1); const g = f.map(l => Rules.greens(l.start)); return g.every((n, i) => n >= LEVELS[R.id].min && n <= LEVELS[R.id].max && (i === 0 || n >= g[i - 1])) && new Set(f.map(l => Rules.key(l.start))).size === f.length; }));
     // 11. áudio
     t('áudio não é criado antes de um gesto', window.__frogGesture ? true : Sound.ctx === null, window.__frogGesture ? 'houve gesto antes do teste' : 'sem gesto: sem AudioContext');
     return { out, fails };
@@ -2012,6 +2538,8 @@ const Tests = {
   // ícone PNG para "Adicionar à tela de início"
   const icon = Art.appIcon(180);
   if (icon) { $('touchIcon').href = icon; $('insIcon').src = icon; } else $('insIcon').classList.add('hidden');
+  try { $('favIcon').href = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(Art.appIconSVG()); } catch (e) {}
+  Art.appIconPNG(180).then(png => { if (png) { $('touchIcon').href = png; $('insIcon').src = png; $('insIcon').classList.remove('hidden'); } });
   $('heroArt').innerHTML = Art.heroScene();
   app.classList.toggle('is-muted', Sound.muted);
   // bolhas decorativas
@@ -2029,7 +2557,7 @@ const Tests = {
   document.addEventListener('pointerdown', gesture, true);
   document.addEventListener('keydown', gesture, true);
   // bloqueia gestos de página (rolagem/zoom por arraste) dentro do jogo
-  document.addEventListener('touchmove', e => { if (!e.target.closest('.testpanel, .install .panel, .lvl-menu, .cmap')) e.preventDefault(); }, { passive: false });
+  document.addEventListener('touchmove', e => { if (!e.target.closest('.testpanel, .install .panel, .lvl-menu, .cmap, .wgrid')) e.preventDefault(); }, { passive: false });
   window.addEventListener('scroll', () => { if (window.scrollX || window.scrollY) window.scrollTo(0, 0); });
   document.addEventListener('gesturestart', e => e.preventDefault());
   document.addEventListener('dblclick', e => e.preventDefault());
@@ -2038,7 +2566,7 @@ const Tests = {
   Gen.validateCatalog();
   Solver.precompute().then(() => { if (/[?&#]test/.test(location.href)) Tests.show(); });
   Install.boot();
-  window.__frog = { Geo, Rules, Solver, Gen, Game, Board, UI, Tests, Sound, Career };
+  window.__frog = { Geo, Rules, Solver, Gen, Game, Board, UI, Tests, Sound, Career, Outfit, Wardrobe };
 })();
 </script>
 </body>
