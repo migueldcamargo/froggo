@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#0b7bd6">
+<meta name="theme-color" content="#3fd0ff">
 <meta name="description" content="sapo embaralha, sapo pula">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Froggo">
@@ -13,7 +13,7 @@
 <meta name="twitter:description" content="sapo embaralha, sapo pula">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="Froggo">
 <meta name="application-name" content="Froggo">
 <meta name="format-detection" content="telephone=no">
@@ -40,11 +40,6 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;touch-
 button:disabled{cursor:default}
 svg{display:block}
 
-html.ios-gap,html.ios-gap body{height:var(--fullH);min-height:var(--fullH)}
-html.ios-gap body{position:absolute;top:0;left:0;right:0;bottom:auto}
-/* reserva: se ainda sobrar faixa, ela mostra a continuação do fundo e não uma cor chapada */
-html.ios-gap{background:radial-gradient(90% 60% at 10% 110%, rgba(155,227,60,.35), transparent 60%),linear-gradient(180deg,#3fd0ff 0%,#19a2ec 45%,#0b7bd6 100%) no-repeat;background-size:100% var(--fullH);background-color:#0b7bd6}
-html.ios-gap .app{position:absolute;top:0;left:0;right:0;bottom:auto;height:var(--fullH)}
 .app{position:fixed;inset:0;overflow:hidden;touch-action:manipulation;
   background:
     radial-gradient(120% 70% at 50% -10%, rgba(255,255,255,.35), transparent 60%),
@@ -1596,23 +1591,9 @@ ${card.note ? `<div class="sub">${card.note}</div>` : ''}
 const Layout = (() => {
   // No app da tela de início do iPhone (barra de status translúcida), a área do site fica mais
   // curta que a tela e sobrava uma faixa embaixo. Lá, o app passa a ter a altura da tela inteira.
-  function fullScreenIOS() {
-    if (navigator.standalone !== true || !window.screen) return;
-    const sw = screen.width, sh = screen.height, landNow = window.innerWidth > window.innerHeight;
-    const full = landNow ? Math.min(sw, sh) : Math.max(sw, sh);
-    // Nesse modo o iPhone recorta tudo que é "position: fixed" na altura da janela (mais curta que a
-    // tela pela altura da barra de status) e embaixo sobrava uma faixa só com a cor de fundo.
-    // Solução: o jogo deixa de ser fixo e vira conteúdo normal da página com a altura da tela inteira.
-    // O iPhone também pode informar margem inferior 0 nesse caso; garantimos 30px acima da barrinha de início.
-    const root = document.documentElement;
-    if (full > window.innerHeight + 1) {
-      root.classList.add('ios-gap'); root.style.setProperty('--fullH', full + 'px');
-      app.style.setProperty('--sab', 'max(env(safe-area-inset-bottom, 0px), 30px)');
-    } else {
-      root.classList.remove('ios-gap'); root.style.removeProperty('--fullH');
-      app.style.setProperty('--sab', 'max(env(safe-area-inset-bottom, 0px), ' + (sh >= 812 ? 20 : 0) + 'px)');
-    }
-  }
+  // App na tela de início do iPhone: a barra de status é sólida (não translúcida), então a janela
+  // começa abaixo dela e vai até o fim da tela; não há mais o que corrigir aqui.
+  function fullScreenIOS() {}
   let taps = 0, tapT = 0;
   $('home').querySelector('.title').addEventListener('click', () => {
     const now = Date.now(); taps = now - tapT < 600 ? taps + 1 : 1; tapT = now;
