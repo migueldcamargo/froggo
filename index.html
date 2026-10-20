@@ -1311,6 +1311,17 @@ function animate(el, frames, opts) {
   try { const a = el.animate(frames, opts); return a.finished.catch(() => {}); }
   catch (e) { return Promise.resolve(); }
 }
+// Cor de fundo da página. No app da tela de início do iPhone sobra, embaixo, uma faixa da altura da
+// barra de status onde o sistema só pinta essa cor (nenhum elemento do jogo é desenhado ali).
+// Ela acompanha a borda de baixo da tela atual — e escurece junto quando abre uma janela por cima.
+const Base = (() => {
+  let color = '#0b7bd6', dim = 0;
+  const hex = c => [1, 3, 5].map(i => parseInt(c.slice(i, i + 2), 16));
+  const toHex = a => '#' + a.map(v => Math.round(Math.max(0, Math.min(255, v))).toString(16).padStart(2, '0')).join('');
+  const mix = (a, b, t) => { const x = hex(a), y = hex(b); return toHex(x.map((v, i) => v + (y[i] - v) * t)); };
+  function paint() { const c = dim ? mix(color, '#041e46', .55) : color; document.documentElement.style.backgroundColor = c; document.body.style.backgroundColor = c; }
+  return { set(c) { if (c !== color) { color = c; paint(); } }, dim(on) { if (+on !== dim) { dim = +on; paint(); } }, mix, paint };
+})();
 function toast(msg) { const t = $('toast'); t.textContent = msg; t.classList.add('show'); clearTimeout(toast._t); toast._t = setTimeout(() => t.classList.remove('show'), 1800); }
 
 /* ---------------------------------------------------------------------
@@ -1660,6 +1671,7 @@ const UI = (() => {
     document.querySelectorAll('.screen').forEach(s => s.classList.toggle('active', s.id === id));
     if (id !== 'game') { Game.active = false; Board.cancelDrag(); app.classList.remove('space-mode'); }
     Layout.update();
+    if (id === 'career') Career.syncBase(); else Base.set(app.classList.contains('space-mode') ? '#06051a' : '#0b7bd6');
   }
   // ---- seletor de dificuldade: lista suspensa, pode marcar várias (sorteia entre elas) ----
   const menu = $('lvlMenu'), lvlBtn = $('lvlBtn');
@@ -1740,7 +1752,7 @@ const UI = (() => {
     return new Promise(resolve => {
       const L = document.createElement('div'); L.className = 'loading'; L.setAttribute('role', 'status');
       L.innerHTML = `<div class="lfrog">${Art.frog('green')}</div><div class="lt">Greenfrog University</div><div class="bar"><div class="fill"></div></div><div class="ls">Loading...</div>`;
-      app.appendChild(L);
+      app.appendChild(L); Base.set('#0b6a3a');
       const fill = L.querySelector('.fill'), t0 = performance.now(), DUR = 1000;
       const tick = now => {
         const p = Math.min(1, (now - t0) / DUR), e = p < .5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2;
@@ -1766,6 +1778,7 @@ const UI = (() => {
     $('btnGameBack').setAttribute('aria-label', card.career != null ? 'Voltar para a trilha' : 'Voltar para as cartas');
     Layout.update();
     app.classList.toggle('space-mode', card.theme === 'space');
+    Base.set(card.theme === 'space' ? '#06051a' : '#0b7bd6');
     Board.configure(card.start.n || 3, card.theme || ''); Board.reset(); hud(); Sound.start();
     Game.active = true;
     starting = false;
@@ -1781,7 +1794,7 @@ const UI = (() => {
     else if (st === 'stuck') { Game.over = true; setTimeout(showStuck, 450); }
   }
   // ---- overlays ----
-  function hideOverlays() { ['ovWin', 'ovStuck', 'ovConfirm'].forEach(id => $(id).classList.remove('show')); stopConfetti(); }
+  function hideOverlays() { ['ovWin', 'ovStuck', 'ovConfirm'].forEach(id => $(id).classList.remove('show')); stopConfetti(); Base.dim(false); }
   function showWin() {
     if (!Game.over || !Rules.isWin(Game.state)) return;
     $('winArt').innerHTML = Art.frog('red', { cls: 'rfrog' }) +
@@ -1799,22 +1812,22 @@ const UI = (() => {
     $('winTitle').textContent = title; $('btnNewWin').textContent = next;
     $('winPrize').classList.toggle('hidden', !prize);
     if (prize) $('winPrize').innerHTML = prize.map(id => Outfit.preview(id)).join('') + `<span>Você ganhou: ${prize.map(id => Outfit.BY[id].name).join(' e ')}!</span>`;
-    $('ovWin').classList.add('show');
+    $('ovWin').classList.add('show'); Base.dim(true);
     Sound.win(); confetti();
   }
   function showStuck() {
     if (!Game.over || Rules.isWin(Game.state)) return;
     $('stuckArt').innerHTML = Art.frog('green', { cls: 'rfrog' });
-    $('ovStuck').classList.add('show');
+    $('ovStuck').classList.add('show'); Base.dim(true);
     Sound.lose();
   }
   let confirmCb = null;
   function confirm(title, text, yesLabel, cb) {
     $('cfTitle').textContent = title; $('cfText').textContent = text; $('cfYes').textContent = yesLabel;
-    confirmCb = cb; $('ovConfirm').classList.add('show');
+    confirmCb = cb; $('ovConfirm').classList.add('show'); Base.dim(true);
   }
-  $('cfNo').addEventListener('click', () => { $('ovConfirm').classList.remove('show'); confirmCb = null; });
-  $('cfYes').addEventListener('click', () => { $('ovConfirm').classList.remove('show'); const cb = confirmCb; confirmCb = null; if (cb) cb(); });
+  $('cfNo').addEventListener('click', () => { $('ovConfirm').classList.remove('show'); confirmCb = null; Base.dim(false); });
+  $('cfYes').addEventListener('click', () => { $('ovConfirm').classList.remove('show'); Base.dim(false); const cb = confirmCb; confirmCb = null; if (cb) cb(); });
 
   // ---- confetes (canvas, leve) ----
   function confetti() {
@@ -2060,6 +2073,17 @@ const Career = (() => {
   let done = Math.max(0, Math.min(bonusOpen ? ALL : TOTAL, +Store.get('career', 0) || 0));
   let list = null, built = null, nodes = [], finalPos = null, portalPos = null, starPos = null, lastW = 0, avatar = null;
   const map = $('cmap'), inner = $('cmapInner');
+  let baseRects = [];
+  function syncBase() {
+    const y = map.scrollTop + map.clientHeight - 1;
+    const rc = baseRects.find(r => y >= r.top && y < r.top + r.h) || baseRects[baseRects.length - 1];
+    if (!rc) { Base.set('#0b7bd6'); return; }
+    const t = (y - rc.top) / rc.h, st = rc.stops;
+    let k = 0; while (k < st.length - 2 && t > st[k + 1][0]) k++;
+    const [t0, c0] = st[k], [t1, c1] = st[k + 1];
+    Base.set(Base.mix(c0, c1, Math.max(0, Math.min(1, (t - t0) / (t1 - t0 || 1)))));
+  }
+  map.addEventListener('scroll', () => { if ($('career').classList.contains('active')) syncBase(); }, { passive: true });
 
   // simetrias do tabuleiro (rotações e espelhos) para não repetir o mesmo desenho girado
   const XF = [(x, y) => [x, y], (x, y) => [4 - y, x], (x, y) => [4 - x, 4 - y], (x, y) => [y, 4 - x], (x, y) => [4 - x, y], (x, y) => [x, 4 - y], (x, y) => [y, x], (x, y) => [4 - y, 4 - x]];
@@ -2126,9 +2150,10 @@ const Career = (() => {
         if (!bonusOpen && done >= TOTAL) { portalPos = { x: cx, y: y + 30 }; y += 160; }     // fase extra secreta
       }
       if (R.bonus) { starPos = { x: cx, y: y + 40 }; y += 160; }
-      rects.push({ top, h: y - top });
+      rects.push({ top, h: y - top, stops: R.bonus ? [[0, '#111d16'], [140 / (y - top), '#1d1450'], [.55, '#120a35'], [1, '#05030f']] : [[0, R.top], [1, R.bot]] });
     });
     const totalH = y;
+    baseRects = rects;
     inner.style.height = totalH + 'px';
     rects.forEach((rc, r) => { html += regionHTML(shown[r], r, rc, W, ns); });
     // trilha
@@ -2165,6 +2190,7 @@ ${portalPos ? `<path d="M${finalPos.x} ${finalPos.y} L${portalPos.x} ${portalPos
     avatar = $('cavatar');
     $('careerProg').textContent = `${done}/${limit()}`;
     placeAvatar(done);
+    syncBase();
   }
   function regionHTML(R, r, rc, W, ns) {
     const H = rc.h, rnd = seeded(1000 + r * 77 + Math.round(W));
@@ -2373,7 +2399,7 @@ ${portalPos ? `<path d="M${finalPos.x} ${finalPos.y} L${portalPos.x} ${portalPos
     UI.startGame(cardFor(i));
   });
   $('btnCareerHome').addEventListener('click', () => { Sound.click(); UI.show('home'); });
-  return { open, complete, relayout, ensureBuilt, cardFor, owned, prizeWhere, openBonus, bigBang, REGIONS, TOTAL, ALL, PRIZE, BONUS, get bonusOpen() { return bonusOpen; }, set bonusOpen(v) { bonusOpen = v; }, get list() { return list; }, get done() { return done; }, set done(v) { done = v; } };
+  return { open, complete, relayout, ensureBuilt, syncBase, cardFor, owned, prizeWhere, openBonus, bigBang, REGIONS, TOTAL, ALL, PRIZE, BONUS, get bonusOpen() { return bonusOpen; }, set bonusOpen(v) { bonusOpen = v; }, get list() { return list; }, get done() { return done; }, set done(v) { done = v; } };
 })();
 
 /* ---------------------------------------------------------------------
@@ -2428,8 +2454,8 @@ const Install = (() => {
   }
   $('tabIos').addEventListener('click', () => tab(true));
   $('tabAnd').addEventListener('click', () => tab(false));
-  function open() { tab(!/android/i.test(ua)); $('ovInstall').classList.add('show'); }
-  function close() { $('ovInstall').classList.remove('show'); }
+  function open() { tab(!/android/i.test(ua)); $('ovInstall').classList.add('show'); Base.dim(true); }
+  function close() { $('ovInstall').classList.remove('show'); Base.dim(false); }
   $('btnInstallOk').addEventListener('click', () => { Sound.click(); close(); });
   $('btnInstallNow').addEventListener('click', async () => {
     if (!deferred) return;
