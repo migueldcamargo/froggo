@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#3fd0ff">
+<meta name="theme-color" content="#4fd2ff">
 <meta name="description" content="sapo embaralha, sapo pula">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Froggo">
@@ -33,7 +33,9 @@
   --W:100vw; --H:100vh;
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-html,body{height:100%;overflow:hidden;overscroll-behavior:none;background:var(--sky2)}
+/* A cor de fundo da página é a da barra de status no app da tela de início do iPhone (o sistema lê uma vez,
+   ao abrir). Ela é igual ao topo de todas as telas, que por isso começa sempre nessa mesma cor, uniforme. */
+html,body{height:100%;overflow:hidden;overscroll-behavior:none;background:#4fd2ff}
 body{position:fixed;inset:0;font-family:ui-rounded,"SF Pro Rounded","Arial Rounded MT Bold","Nunito","Varela Round",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:#fff;
   -webkit-user-select:none;user-select:none;-webkit-touch-callout:none;-webkit-text-size-adjust:100%;text-size-adjust:100%}
 button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;touch-action:manipulation}
@@ -42,9 +44,8 @@ svg{display:block}
 
 .app{position:fixed;inset:0;overflow:hidden;touch-action:manipulation;
   background:
-    radial-gradient(120% 70% at 50% -10%, rgba(255,255,255,.35), transparent 60%),
     radial-gradient(90% 60% at 10% 110%, rgba(155,227,60,.35), transparent 60%),
-    linear-gradient(180deg,var(--sky1) 0%, #19a2ec 45%, var(--sky2) 100%);}
+    linear-gradient(180deg,#4fd2ff 0%, #19a2ec 45%, var(--sky2) 100%);}
 .app::before{content:"";position:absolute;inset:-20%;pointer-events:none;opacity:.18;
   background:repeating-radial-gradient(circle at 30% 40%, transparent 0 18px, rgba(255,255,255,.55) 19px 20px, transparent 21px 46px);
   animation:drift 40s linear infinite}
@@ -238,7 +239,7 @@ svg{display:block}
 /* ---------- Overlays ---------- */
 .overlay{position:absolute;inset:0;z-index:50;display:none;align-items:center;justify-content:center;
   padding:calc(var(--sat) + .8rem) calc(var(--sar) + .8rem) calc(var(--sab) + .8rem) calc(var(--sal) + .8rem);
-  background:rgba(4,30,70,.55);backdrop-filter:blur(3px)}
+  background:linear-gradient(180deg,rgba(4,30,70,0) 0,rgba(4,30,70,.55) calc(var(--sat) + 5rem));backdrop-filter:blur(3px)}
 .overlay.show{display:flex;animation:fadeIn .2s ease-out}
 @keyframes fadeIn{from{opacity:0}}
 .panel{position:relative;width:min(100%,25rem);max-height:100%;overflow:hidden;border-radius:1.6rem;padding:1rem 1.1rem 1.1rem;color:var(--ink);
@@ -292,14 +293,14 @@ canvas.confetti{position:absolute;inset:0;width:100%;height:100%;pointer-events:
 /* Carregamento Greenfrog University */
 .loading{position:absolute;inset:0;z-index:80;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1rem;
   padding:calc(var(--sat) + 1rem) calc(var(--sar) + 1.2rem) calc(var(--sab) + 1rem) calc(var(--sal) + 1.2rem);
-  background:radial-gradient(80% 60% at 50% 40%, #4fdc5a 0%, #1fa53a 45%, #0b6a3a 100%);transition:opacity .15s}
+  background:linear-gradient(180deg,#4fd2ff 0,rgba(79,210,255,0) calc(var(--sat) + 5rem)),radial-gradient(80% 60% at 50% 40%, #4fdc5a 0%, #1fa53a 45%, #0b6a3a 100%);transition:opacity .15s}
 .loading.out{opacity:0}
 .loading .lfrog{width:calc(min(var(--W),var(--H)) * .26);height:calc(min(var(--W),var(--H)) * .26);animation:lhop .5s ease-in-out infinite alternate}
 @keyframes lhop{to{transform:translateY(-12%) scale(1.03,.97)}}
 .loading .lt{font-size:clamp(1.6rem, calc(min(var(--W), var(--H) * 1.3) * .085), 3rem);font-weight:900;text-align:center;line-height:1.1;
   color:#fff;text-shadow:0 .08em 0 #0b4a1e,0 .2em .4em rgba(0,0,0,.3)}
-.loading .bar{width:min(80%,22rem);height:1.1rem;border-radius:999px;background:rgba(0,0,0,.25);border:3px solid #fff;overflow:hidden;box-shadow:0 .3rem 0 rgba(0,0,0,.15)}
-.loading .fill{height:100%;width:0;border-radius:999px;background:linear-gradient(90deg,#ffd23f,#fff27a 50%,#ffd23f);background-size:200% 100%}
+.loading .bar{width:min(80%,22rem);height:1.3rem;padding:3px;border-radius:999px;background:rgba(0,0,0,.28);border:3px solid #fff;overflow:hidden;box-shadow:0 .3rem 0 rgba(0,0,0,.15)}
+.loading .fill{height:100%;width:0;min-width:.55rem;border-radius:999px;background:linear-gradient(90deg,#ffd23f,#fff27a 50%,#ffd23f);background-size:200% 100%}
 .loading .ls{font-size:1rem;font-weight:900;letter-spacing:.08em;opacity:.95}
 
 .toast{position:absolute;left:50%;bottom:calc(var(--sab) + 1rem);transform:translateX(-50%);z-index:90;background:rgba(4,30,70,.85);padding:.5rem 1rem;border-radius:999px;font-weight:800;font-size:.85rem;display:none}
@@ -384,7 +385,7 @@ canvas.confetti{position:absolute;inset:0;width:100%;height:100%;pointer-events:
 .creg.space .cbanner i{background:#1a0f4f}
 .cnode.star svg{filter:drop-shadow(0 0 14px rgba(255,220,80,.9))}
 canvas.bigbang{position:absolute;inset:0;width:100%;height:100%;z-index:400;pointer-events:auto}
-.app.space-mode{background:radial-gradient(90% 60% at 80% 0%, rgba(155,108,255,.35), transparent 60%),radial-gradient(80% 50% at 0% 100%, rgba(111,208,255,.2), transparent 60%),linear-gradient(180deg,#1d1450,#05030f)}
+.app.space-mode{background:radial-gradient(90% 50% at 80% 25%, rgba(155,108,255,.3), transparent 60%),radial-gradient(80% 50% at 0% 100%, rgba(111,208,255,.2), transparent 60%),linear-gradient(180deg,#4fd2ff 0,#3a5bc0 calc(var(--sat) + 2.5rem),#1d1450 calc(var(--sat) + 10rem),#05030f)}
 .board.space{filter:drop-shadow(0 .8rem 1.4rem rgba(80,40,200,.45))}
 .cavatar{position:absolute;z-index:6;pointer-events:none}
 .cavatar svg{width:100%;height:100%;overflow:visible}
@@ -541,7 +542,7 @@ canvas.bigbang{position:absolute;inset:0;width:100%;height:100%;z-index:400;poin
   <div class="overlay" id="ovConfirm" role="alertdialog" aria-modal="true" aria-labelledby="cfTitle">
     <div class="panel">
       <h3 id="cfTitle">Tem certeza?</h3>
-      <p id="cfText"></p>
+      <p id="cfText" hidden></p>
       <div class="row">
         <button class="btn blue" id="cfNo">Cancelar</button>
         <button class="btn red" id="cfYes">Sim</button>
@@ -1021,13 +1022,25 @@ ${dim ? '' : `<path d="M${x - r * .32} ${y - r * .42} q${r * .12} -${r * .14} ${
   // SVG autocontido (copia os gradientes) → desenhado num canvas → PNG para a tela de início do iPhone.
   appIconSVG() {
     const defs = document.querySelector('svg defs').outerHTML;
+    let toes = '';
+    for (const [x, y] of [[13, 95], [22, 98], [31, 98], [69, 98], [78, 98], [87, 95]]) toes += `<circle cx="${x}" cy="${y}" r="5.2" fill="url(#gD)"/><ellipse cx="${x - 1.4}" cy="${y - 2}" rx="2" ry="1.2" fill="#fff" opacity=".35"/>`;
     return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">${defs}
-<defs><linearGradient id="icBg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4fd8ff"/><stop offset="1" stop-color="#0a6cc6"/></linearGradient></defs>
+<defs><linearGradient id="icBg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#62f3e4"/><stop offset="1" stop-color="#0fb2c6"/></linearGradient></defs>
 <rect width="100" height="100" fill="url(#icBg)"/>
-<ellipse cx="50" cy="16" rx="60" ry="22" fill="#fff" opacity=".18"/>
-<ellipse cx="50" cy="84" rx="40" ry="10" fill="#063f78" opacity=".35"/>
-<path d="M12 81 A38 10 0 1 0 88 81 A38 10 0 0 0 55 71 L50 81 L46 71 A38 10 0 0 0 12 81Z" fill="url(#lily)" stroke="#155f1a" stroke-width="1"/>
-${Art.frog('green', { still: true, attrs: 'x="13" y="6" width="74" height="78"' })}</svg>`;
+<path d="M0 0 H100 V30 Q50 14 0 34 Z" fill="#fff" opacity=".14"/>
+<ellipse cx="50" cy="106" rx="50" ry="26" fill="url(#gB)"/>
+<ellipse cx="50" cy="98" rx="22" ry="13" fill="url(#gY)"/>
+<ellipse cx="50" cy="60" rx="48" ry="33" fill="url(#gB)"/>
+<circle cx="28.5" cy="33" r="22.5" fill="url(#gB)"/><circle cx="71.5" cy="33" r="22.5" fill="url(#gB)"/>
+<circle cx="28.5" cy="33" r="16.5" fill="url(#eyeW)"/><circle cx="71.5" cy="33" r="16.5" fill="url(#eyeW)"/>
+<circle cx="32" cy="36" r="8.8" fill="#0d1b26"/><circle cx="68" cy="36" r="8.8" fill="#0d1b26"/>
+<circle cx="35" cy="32" r="3.4" fill="#fff"/><circle cx="71" cy="32" r="3.4" fill="#fff"/>
+<ellipse cx="22" cy="15" rx="6" ry="3" fill="#fff" opacity=".4" transform="rotate(-25 22 15)"/><ellipse cx="65" cy="15" rx="6" ry="3" fill="#fff" opacity=".4" transform="rotate(-25 65 15)"/>
+<ellipse cx="45" cy="53" rx="1.5" ry="2" fill="#0f3d12" opacity=".7"/><ellipse cx="55" cy="53" rx="1.5" ry="2" fill="#0f3d12" opacity=".7"/>
+<ellipse cx="13" cy="66" rx="8" ry="5" fill="#ff8aa0" opacity=".6"/><ellipse cx="87" cy="66" rx="8" ry="5" fill="#ff8aa0" opacity=".6"/>
+<path d="M28 63 Q50 81 72 63" stroke="#0f3d12" stroke-width="3.6" fill="none" stroke-linecap="round"/>
+<ellipse cx="40" cy="45" rx="13" ry="4.5" fill="#fff" opacity=".22" transform="rotate(-10 40 45)"/>
+<ellipse cx="17" cy="93" rx="13" ry="9" fill="url(#gD)"/><ellipse cx="83" cy="93" rx="13" ry="9" fill="url(#gD)"/>${toes}</svg>`;
   },
   appIconPNG(size = 180) {
     return new Promise(resolve => {
@@ -1311,16 +1324,13 @@ function animate(el, frames, opts) {
   try { const a = el.animate(frames, opts); return a.finished.catch(() => {}); }
   catch (e) { return Promise.resolve(); }
 }
-// Cor de fundo da página. No app da tela de início do iPhone sobra, embaixo, uma faixa da altura da
-// barra de status onde o sistema só pinta essa cor (nenhum elemento do jogo é desenhado ali).
-// Ela acompanha a borda de baixo da tela atual — e escurece junto quando abre uma janela por cima.
+// Cor de fundo da página: fixa (ver o CSS do html). O iPhone só a lê ao abrir o app, para pintar a
+// barra de status; trocá-la depois não tem efeito, então as chamadas abaixo só servem de mistura de cores.
 const Base = (() => {
-  let color = '#0b7bd6', dim = 0;
   const hex = c => [1, 3, 5].map(i => parseInt(c.slice(i, i + 2), 16));
   const toHex = a => '#' + a.map(v => Math.round(Math.max(0, Math.min(255, v))).toString(16).padStart(2, '0')).join('');
   const mix = (a, b, t) => { const x = hex(a), y = hex(b); return toHex(x.map((v, i) => v + (y[i] - v) * t)); };
-  function paint() { const c = dim ? mix(color, '#041e46', .55) : color; document.documentElement.style.backgroundColor = c; document.body.style.backgroundColor = c; }
-  return { set(c) { if (c !== color) { color = c; paint(); } }, dim(on) { if (+on !== dim) { dim = +on; paint(); } }, mix, paint };
+  return { set() {}, dim() {}, mix };
 })();
 function toast(msg) { const t = $('toast'); t.textContent = msg; t.classList.add('show'); clearTimeout(toast._t); toast._t = setTimeout(() => t.classList.remove('show'), 1800); }
 
@@ -1823,7 +1833,7 @@ const UI = (() => {
   }
   let confirmCb = null;
   function confirm(title, text, yesLabel, cb) {
-    $('cfTitle').textContent = title; $('cfText').textContent = text; $('cfYes').textContent = yesLabel;
+    $('cfTitle').textContent = title; $('cfText').textContent = text; $('cfText').hidden = !text; $('cfYes').textContent = yesLabel;
     confirmCb = cb; $('ovConfirm').classList.add('show'); Base.dim(true);
   }
   $('cfNo').addEventListener('click', () => { $('ovConfirm').classList.remove('show'); confirmCb = null; Base.dim(false); });
@@ -1865,7 +1875,7 @@ const UI = (() => {
   function restart(force) {
     if (Game.busy || !Game.active) return;
     const doIt = () => { hideOverlays(); Game.restart(); Board.reset(); hud(); Sound.start(); };
-    if (!force && Game.inProgress) confirm('Reiniciar a carta?', 'Seus movimentos desta partida serão perdidos.', 'Reiniciar', doIt); else doIt();
+    if (!force && Game.inProgress) confirm('Reiniciar a carta?', '', 'Reiniciar', doIt); else doIt();
   }
   function newCard() { hideOverlays(); Game.active = false; draw(); }
   $('btnPick').addEventListener('click', () => { Sound.click(); enterDraw(); });
@@ -1878,7 +1888,7 @@ const UI = (() => {
     if (Game.busy) return;
     const inCareer = Game.card && Game.card.career != null;
     const go = () => { hideOverlays(); if (inCareer) Career.open(); else backToCard(); };
-    if (Game.inProgress) confirm(inCareer ? 'Voltar para a trilha?' : 'Voltar para as cartas?', 'A partida em andamento será perdida.', 'Voltar', go); else go();
+    if (Game.inProgress) confirm(inCareer ? 'Voltar para a trilha?' : 'Voltar para as cartas?', '', 'Voltar', go); else go();
   });
   $('btnAgain').addEventListener('click', () => { hideOverlays(); startGame(); });
   $('btnNewWin').addEventListener('click', () => {
