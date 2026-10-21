@@ -374,6 +374,9 @@ canvas.confetti{position:absolute;inset:0;width:100%;height:100%;pointer-events:
 .app.land #wardrobe{grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);grid-template-rows:auto minmax(0,1fr);grid-template-areas:"top top" "stage grid";column-gap:1rem}
 .prize-won{display:flex;align-items:center;gap:.5rem;padding:.4rem .8rem;border-radius:1rem;background:#fff4c2;box-shadow:inset 0 0 0 2px #ffd23f;font-weight:900;font-size:.92rem}
 .prize-won svg{width:2.4rem;height:2.4rem;flex:none}
+.prize-won{flex-wrap:wrap;justify-content:center}
+.use-now{flex:none;padding:.3rem .8rem;border-radius:999px;background:#2fbf3a;color:#fff;font-weight:900;font-size:.85rem;box-shadow:0 .15rem 0 #13701a}
+.use-now:disabled{background:#8fd99a;box-shadow:none}
 
 /* ---------- Mapa do dia ---------- */
 .home-right{display:flex;align-items:center;gap:.5rem;margin-left:auto}   /* fica à direita mesmo sem o botão Instalar (app instalado) */
@@ -420,12 +423,16 @@ canvas.confetti{position:absolute;inset:0;width:100%;height:100%;pointer-events:
 .cbanner{position:absolute;left:50%;top:22px;transform:translateX(-50%) rotate(-1.5deg);z-index:2;padding:8px 20px 9px;border-radius:12px;text-align:center;white-space:nowrap;
   background:linear-gradient(180deg,#c8884a,#9a5d2b);border:3px solid #6e3d17;box-shadow:0 5px 0 #5a3010,0 8px 14px rgba(0,0,0,.3);color:#fff8e6}
 .cbanner b{display:block;font-size:20px;font-weight:900;text-shadow:0 2px 0 rgba(0,0,0,.3)}
-.wstars{font-size:2rem;letter-spacing:.12em;line-height:1;text-shadow:0 2px 0 rgba(0,0,0,.12)}
+.wstars{display:flex;justify-content:center;gap:.35rem;margin:.1rem 0 .15rem}
+.wstars .ws{position:relative;width:2.3rem;height:2.3rem}
+.wstars .ws span{position:absolute;inset:0}
+.wstars .ws svg{width:100%;height:100%;overflow:visible}
+.wstars .ws .f{opacity:0}
 .wmin{font-size:.8rem!important;font-weight:700!important;opacity:.6!important;margin-top:.1rem}
 .cleft{display:flex;align-items:center;gap:.4rem}
 .cstars{display:inline-flex;align-items:center;gap:.2rem;height:2.2rem;padding:0 .7rem;border-radius:999px;background:rgba(255,255,255,.9);color:var(--ink);font-weight:900;font-size:.95rem;box-shadow:0 .15rem .4rem rgba(0,30,60,.2)}
 .cstars::before{content:"★";color:#f2b400;font-size:1.05rem}
-.cnode .cst{position:absolute;left:50%;bottom:-.55rem;transform:translateX(-50%);font-size:.72rem;letter-spacing:.02em;line-height:1;white-space:nowrap;text-shadow:0 1px 0 rgba(0,0,0,.35);pointer-events:none}
+.cnode .cst{position:absolute;left:50%;bottom:-24px;transform:translateX(-50%);font-size:.8rem;letter-spacing:.02em;line-height:1;white-space:nowrap;text-shadow:0 1px 0 rgba(0,0,0,.35);pointer-events:none}
 .cnode .cst .st-off{color:rgba(255,255,255,.45)}
 .cbanner em{display:block;font-style:normal;font-size:.72rem;font-weight:800;margin-top:.15rem;opacity:.95}
 .cbanner em.gate{background:rgba(0,0,0,.35);border-radius:999px;padding:.1rem .55rem;display:inline-block}
@@ -1458,6 +1465,9 @@ const Sound = (() => {
     shuffle(dur = 1.8) { if (!ok()) return; const t = ctx.currentTime; for (let i = 0; i < dur / 0.07; i++) noise(t + i * 0.07 + Math.random() * .02, .035, { freq: 2600 + Math.random() * 1600, q: .8, vol: .1 }); },
     reveal() { if (!ok()) return; const t = ctx.currentTime; tone(f(84), t, .5, { type: 'triangle', vol: .14 }); tone(f(88), t + .08, .5, { type: 'triangle', vol: .12 }); tone(f(91), t + .16, .7, { type: 'triangle', vol: .12 }); },
     win() { if (!ok()) return; const t = ctx.currentTime; [72, 76, 79, 84, 88, 91].forEach((m, i) => tone(f(m), t + i * .1, .45, { type: 'triangle', vol: .18 })); tone(f(96), t + .65, .9, { type: 'sine', vol: .12 }); croak(t + 1.0, 230, .2); },
+    // estrela caindo na casa: "tum" grave + plim, um pouco mais agudo a cada estrela
+    star(k = 0) { if (!ok()) return; const t = ctx.currentTime; tone(160, t, .14, { to: 70, vol: .32 }); tone(f(84 + k * 4), t + .02, .4, { type: 'triangle', vol: .17 }); tone(f(96 + k * 4), t + .04, .25, { type: 'sine', vol: .07 }); },
+    sparkle() { if (!ok()) return; const t = ctx.currentTime; [96, 100, 103, 108, 112].forEach((m, i) => tone(f(m), t + i * .055, .35, { type: 'sine', vol: .09 })); },
     lose() { if (!ok()) return; const t = ctx.currentTime; [67, 64, 60].forEach((m, i) => tone(f(m), t + i * .18, .3, { type: 'triangle', vol: .14 })); },
     // coro angelical: acorde maior com vogal "a" (filtros de formante), vibrato suave e brilho agudo
     angel() {
@@ -2139,12 +2149,13 @@ const UI = (() => {
       [[0, 4, '#ffd23f', .1], [76, 2, '#ffd23f', .3], [40, -14, '#fff27a', .5], [6, 60, '#b9f55a', .7], [74, 58, '#ff9cbc', .9]]
         .map(([x, y, c, d]) => `<div class="star" style="left:${x}%;top:${y}%;animation-delay:${d}s,${d + .6}s">${Art.star(c)}</div>`).join('');
     const c = Game.card;
-    let title = 'Você venceu!', next = 'Próxima carta', prize = null, stars = '';
+    let title = 'Você venceu!', next = 'Próxima carta', prize = null, stars = '', got = 0;
     if (c.career != null) {
       if (c.career === LESSONS.length - 1) Daily.practiced();     // terminou o tutorial da trilha: o mapa do dia não repete o treino
-      const min = Rules.greens(c.start), st = starsFor(Game.count, min);
+      const min = Rules.greens(c.start), st = c.levelId === 'tutorial' ? 3 : starsFor(Game.count, min);
       const res = Career.complete(c.career, st);
-      stars = `<div class="wstars" aria-label="${st} de 3 estrelas">${starHTML(st)}</div>${st < 3 ? `<p class="wmin"><span class="st-on">★★★</span> ${min} movimentos</p>` : ''}`;
+      got = st;
+      stars = `<div class="wstars" aria-label="${st} de 3 estrelas">${[0, 1, 2].map(() => `<span class="ws"><span class="e">${Art.star('#cfd8e3')}</span><span class="f">${Art.star('#ffd23f')}</span></span>`).join('')}</div>${st < 3 ? `<p class="wmin"><span class="st-on">★★★</span> ${min} movimentos</p>` : ''}`;
       if (res.unlocked) setTimeout(() => toast(`Novo pântano liberado: ${res.unlocked}!`), 900);
       next = 'Próxima fase';
       if (res.finished) { title = 'Carreira concluída!'; next = 'Ver troféu'; }
@@ -2153,9 +2164,26 @@ const UI = (() => {
     }
     $('winTitle').textContent = title; $('btnNewWin').textContent = next; $('winStars').innerHTML = stars;
     $('winPrize').classList.toggle('hidden', !prize);
-    if (prize) $('winPrize').innerHTML = prize.map(id => Outfit.preview(id)).join('') + `<span>Você ganhou: ${prize.map(id => Outfit.BY[id].name).join(' e ')}!</span>`;
+    if (prize) $('winPrize').innerHTML = prize.map(id => Outfit.preview(id)).join('') + `<span>Você ganhou: ${prize.map(id => Outfit.BY[id].name).join(' e ')}!</span><button type="button" class="use-now" data-ids="${prize.join(',')}">Usar agora</button>`;
     $('ovWin').classList.add('show'); Base.dim(true);
     Sound.win(); confetti();
+    if (got) dropStars(got);
+  }
+  // as estrelas caem uma a uma nas casas vazias ("tum"); com 3, brilham juntas
+  let dropT = [];
+  function dropStars(n) {
+    dropT.forEach(clearTimeout); dropT = [];
+    const ws = [...$('winStars').querySelectorAll('.ws')], rm = reduceMotion();
+    ws.slice(0, n).forEach((w, k) => dropT.push(setTimeout(() => {
+      const f = w.querySelector('.f'); f.style.opacity = '1';
+      if (!rm) animate(f, [{ transform: 'translateY(-2.4rem) scale(1.7) rotate(-40deg)', opacity: 0 }, { transform: 'translateY(0) scale(.85) rotate(0)', opacity: 1, offset: .62 },
+        { transform: 'translateY(0) scale(1.18)', offset: .8 }, { transform: 'translateY(0) scale(1)' }], { duration: 420, easing: 'cubic-bezier(.5,0,.75,0)' });
+      Sound.star(k);
+    }, 650 + k * 430)));
+    if (n === 3) dropT.push(setTimeout(() => {
+      Sound.sparkle();
+      if (!rm) ws.forEach((w, k) => animate(w, [{ transform: 'scale(1)', filter: 'drop-shadow(0 0 0 #fff27a)' }, { transform: 'scale(1.25)', filter: 'drop-shadow(0 0 .5rem #fff27a)', offset: .45 }, { transform: 'scale(1)', filter: 'drop-shadow(0 0 0 #fff27a)' }], { duration: 520, delay: k * 70, easing: 'ease-out' }));
+    }, 650 + 3 * 430 + 80));
   }
   function showStuck() {
     if (!Game.over || Rules.isWin(Game.state)) return;
@@ -2265,6 +2293,12 @@ const UI = (() => {
   }
   function restoreDraw() { $('levels').classList.remove('hidden'); $('btnSwap').classList.remove('hidden'); drawing = false; if (reviewing) setReview(false); }
   $('btnAgain').addEventListener('click', () => { hideOverlays(); startGame(); });
+  // prêmio novo: veste na hora, sem passar pelo guarda-roupa
+  $('winPrize').addEventListener('click', e => {
+    const b = e.target.closest('.use-now'); if (!b || b.disabled) return;
+    b.dataset.ids.split(',').forEach(id => { if (!Outfit.isWorn(id)) Outfit.wear(id); });
+    Sound.pick(); b.textContent = 'Usando ✓'; b.disabled = true;
+  });
   $('btnNewWin').addEventListener('click', () => {
     if (Game.card && Game.card.career != null) { const from = Game.card.career; hideOverlays(); Game.active = false; Sound.click(); Career.open({ hopFrom: from }); }
     else newCard();
@@ -2447,8 +2481,9 @@ const Career = (() => {
     PRIZE[TOTAL + 4] = ['antenas']; PRIZE[ALL - 1] = ['capacete', 'jetpack'];
   }
   let done = Math.max(0, Math.min(bonusOpen ? ALL : TOTAL, +Store.get('career', 0) || 0));
-  /* Estrelas (1 a 3 por fase, vale a melhor). Um pântano só abre com 2×fases + metade das fases (arredondada
-     para baixo) em estrelas no pântano anterior: ex. Iniciante (13) → 32 = 6 fases com 3★ e 7 com 2★.
+  /* Estrelas (1 a 3 por fase, vale a melhor; no tutorial sempre 3). Um pântano só abre com 2×fases + metade das fases
+     (arredondada para baixo) em estrelas no pântano anterior: ex. Iniciante (13) → 32 = 6 fases com 3★ e 7 com 2★.
+     O Iniciante pede as 9 do tutorial.
      Fechar um pântano inteiro com 3★ (do Iniciante em diante) dá um prêmio raro. */
   const START = []; REGIONS.reduce((a, R, r) => (START[r] = a, a + R.count), 0);
   const RARE = { iniciante: 'zerezes', medio: 'oldskool', avancado: 'guitarra', expert: 'asas', espaco: 'oculos3d' };
@@ -2459,13 +2494,14 @@ const Career = (() => {
     Store.set('stars', stars); Store.set('opened', opened);
   }
   if (!Array.isArray(opened)) opened = [];
+  for (let i = 0; i < REGIONS[0].count; i++) if (i < done && stars[i] !== 3) { stars[i] = 3; Store.set('stars', stars); }   // tutorial feito vale 3★
   if (!Array.isArray(rare)) rare = [];
   const regionOf = i => { let r = 0; while (r < REGIONS.length - 1 && i >= START[r + 1]) r++; return r; };
   const regionStars = r => stars.slice(START[r], START[r] + REGIONS[r].count).reduce((a, b) => a + (b || 0), 0);
-  const need = r => { const n = REGIONS[r - 1].count; return 2 * n + Math.floor(n / 2); };
+  const need = r => { const n = REGIONS[r - 1].count; return r === 1 ? 3 * n : 2 * n + Math.floor(n / 2); };   // tutorial: todas com 3★ (sempre dá 3)
   const isOpen = r => r === 0 || !!REGIONS[r].bonus || opened.includes(r) || regionStars(r - 1) >= need(r);
   const playable = i => i <= done && isOpen(regionOf(i));
-  const gateMsg = r => `Junte ${need(r)} ★ no ${REGIONS[r - 1].name} para abrir (você tem ${regionStars(r - 1)})`;
+  const gateMsg = r => `🔒 ${need(r)} ⭐ no ${REGIONS[r - 1].name} para desbloquear`;
   const totalStars = () => stars.reduce((a, b) => a + (b || 0), 0);
   const owned = () => Object.keys(PRIZE).filter(i => +i < done).flatMap(i => PRIZE[i]).concat(rare);
   let list = null, built = null, nodes = [], finalPos = null, portalPos = null, starPos = null, lastW = 0, avatar = null;
@@ -2659,12 +2695,12 @@ ${portalPos ? `<path d="M${finalPos.x} ${finalPos.y} L${portalPos.x} ${portalPos
 <svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" aria-hidden="true">${R.bank ? Deco.bank(W, R.bank) : ''}${items.map(i => i.s).join('')}</svg>
 ${tw.join('')}<div class="cbanner"><i style="left:22%"></i><i style="right:22%"></i><b>${R.name}</b><small>${R.sub}</small>${bannerStars(R)}</div></div>`;
   }
-  // faixa do pântano: estrelas juntadas / possíveis; fechado: quantas faltam para abrir
+  // placa do pântano: estrelas juntadas nele / possíveis; fechado: quantas estrelas (no pântano anterior) abrem
   function bannerStars(R) {
     const r = REGIONS.indexOf(R);
-    if (!isOpen(r)) return `<em class="gate">🔒 ${need(r)} ★ no ${REGIONS[r - 1].name} · você tem ${regionStars(r - 1)}</em>`;
-    if (r === 0 || START[r] > done) return '';
-    return `<em class="rst">★ ${regionStars(r)}/${R.count * 3}${RARE[R.id] && !rare.includes(RARE[R.id]) ? ' · 3★ em todas = 🎁' : ''}</em>`;
+    if (!isOpen(r)) return `<em class="gate">🔒 ${need(r)} ⭐ para desbloquear</em>`;
+    if (START[r] > done) return '';
+    return `<em class="rst">⭐ ${regionStars(r)}/${R.count * 3}</em>`;
   }
   function placeAvatar(i) {
     const p = posOf(i); if (!p || !avatar) return;
