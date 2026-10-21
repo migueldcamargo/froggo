@@ -2655,7 +2655,7 @@ ${portalPos ? `<path d="M${finalPos.x} ${finalPos.y} L${portalPos.x} ${portalPos
     avatar = $('cavatar');
     $('careerProg').textContent = `${done}/${limit()}`;
     $('careerStars').textContent = String(totalStars());
-    placeAvatar(done);
+    placeAvatar(spot());
     syncBase();
   }
   function regionHTML(R, r, rc, W, ns) {
@@ -2753,6 +2753,20 @@ ${tw.join('')}<div class="cbanner"><i style="left:22%"></i><i style="right:22%">
     else if (b >= ALL) { toast('Você conquistou o espaço!'); Sound.win(); }
     else if (list[b].n === 1) toast(REGIONS[list[b].region].bonus ? 'Pântano espacial desbloqueado!' : `Novo pântano: ${REGIONS[list[b].region].name}!`);
   }
+  // onde o sapo fica: na fase atual ou, se o próximo pântano ainda estiver fechado, na última fase concluída
+  const spot = () => done > 0 && done < limit() && !playable(done) ? done - 1 : done;
+  // tentativa de pulo que não passa: sobe um pouco na direção da fase fechada e volta
+  async function bump(a, b) {
+    const pa = posOf(a), pb = posOf(b); if (!pa || !pb || !avatar) return;
+    const dx = (pb.x - pa.x) * .3, dy = (pb.y - pa.y) * .3;
+    Sound.jump();
+    await animate(avatar, reduceMotion() ? [{ opacity: .5 }, { opacity: 1 }] : [
+      { transform: 'translate(0,0)' }, { transform: `translate(${dx}px,${dy - 46}px) scale(1.15) rotate(${dx > 0 ? -10 : 10}deg)`, offset: .45 },
+      { transform: `translate(${dx * .4}px,${dy * .4}px) rotate(${dx > 0 ? 8 : -8}deg)`, offset: .7 }, { transform: 'translate(0,0)' }], { duration: 620, easing: 'ease-in-out' });
+    Sound.invalid();
+    const node = inner.querySelector(`.cnode[data-i="${b}"]`);
+    if (node && !reduceMotion()) animate(node, [0, -6, 6, -4, 4, 0].map(x => ({ transform: `translateX(${x}px)` })), { duration: 320 });
+  }
   async function open(opts = {}) {
     UI.hideOverlays();
     UI.show('career');
@@ -2761,12 +2775,14 @@ ${tw.join('')}<div class="cbanner"><i style="left:22%"></i><i style="right:22%">
     const key = [map.clientWidth, done, bonusOpen, JSON.stringify(Outfit.worn), stars.join('')].join('|');
     if (key !== mapKey) { render(); mapKey = key; } else syncBase();
     const from = opts.hopFrom;
-    if (from != null && from + 1 === done && done < limit() && !playable(done)) { scrollToIdx(from, false); toast(gateMsg(regionOf(done))); }
+    if (from != null && from + 1 === done && done < limit() && !playable(done)) {      // pântano fechado: tenta pular, não consegue e fica na última fase
+      placeAvatar(from); scrollToIdx(from, false); await wait(380); await bump(from, done); toast(gateMsg(regionOf(done)));
+    }
     else if (from != null && from + 1 === done) {
       placeAvatar(from); scrollToIdx(from, false);
       await wait(380);
       await hop(from, done);
-    } else scrollToIdx(done, false);
+    } else scrollToIdx(spot(), false);
   }
   function complete(i, st = 1) {
     const r = regionOf(i), wasOpen = isOpen(r + 1 < REGIONS.length ? r + 1 : r);
@@ -2783,7 +2799,7 @@ ${tw.join('')}<div class="cbanner"><i style="left:22%"></i><i style="right:22%">
   }
   function relayout() {
     if (!list || Math.abs(map.clientWidth - lastW) < 2) return;
-    render(); mapKey = ''; scrollToIdx(done, false);
+    render(); mapKey = ''; scrollToIdx(spot(), false);
   }
   // ---- Big Bang: a explosão que abre o pântano espacial (tela inteira) ----
   function bigBang() {
