@@ -3090,8 +3090,13 @@ const Daily = (() => {
   const dayNum = () => String(+today().slice(8));
   const hash = str => { let h = 2166136261; for (let i = 0; i < str.length; i++) { h ^= str.charCodeAt(i); h = Math.imul(h, 16777619); } return h >>> 0; };
   const dateBR = (iso, long) => { const [y, m, d] = iso.split('-').map(Number), dt = new Date(y, m - 1, d); if (!long) return `${pad(d)}/${pad(m)}/${y}`; const t = dt.toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long' }); return t.charAt(0).toUpperCase() + t.slice(1); };
-  // desempenho de cada mapa: 🤩 no mínimo, 😃 até +4, 😭 acima disso, 🤣 com o dobro do mínimo ou mais
-  const mood = (mv, min) => mv >= 2 * min ? '🤣' : ['', '😭', '😃', '🤩'][starsFor(mv, min)];
+  /* desempenho de cada mapa, com 3 emojis por faixa para variar: no mínimo, até +4, acima disso e o dobro do mínimo ou mais.
+     Quando a faixa se repete no mesmo desafio, usa o próximo da fila; a fila começa num ponto diferente a cada dia. */
+  const MOODS = { 3: ['🤩', '🎉', '🔥'], 2: ['😃', '😎', '👍'], 1: ['😭', '😩', '😢'], x: ['🤣', '🫠', '🥴'] };
+  function moods(date, moves, mins) {
+    const off = hash('froggo-mood-' + date) % 3, seen = {};
+    return moves.map((mv, i) => { const t = mv >= 2 * mins[i] ? 'x' : starsFor(mv, mins[i]), n = seen[t] = (seen[t] || 0) + 1; return MOODS[t][(off + n - 1) % 3]; });
+  }
   const sum = a => a.reduce((x, y) => x + y, 0);
   const grade = r => Math.round(sum(r.moves.map((mv, i) => starsFor(mv, r.mins[i]))) / r.moves.length);   // nota do desafio = média das estrelas das fases
   let run = null, afterWin = false, shown = null;   // run: { date, phase, moves[5] }; shown = data aberta no painel
@@ -3106,7 +3111,8 @@ const Daily = (() => {
     const nota = n => '⭐'.repeat(n) + '⚪'.repeat(3 - n);    // ⚪ = estrela que faltou
     // só "Froggo" em negrito (*…*); o resto sem
     if (!multi(r)) return `🐸 *Froggo* · ${d} de ${mes}\n${r.moves} ${r.moves === 1 ? 'movimento' : 'movimentos'}${r.min ? ' ' + nota(starsFor(r.moves, r.min)) : ''}\n${LINK}`;
-    return `🐸 *Froggo* · ${d} de ${mes}\n${r.moves.map((mv, i) => mv + mood(mv, r.mins[i])).join(' ')}\nTotal: ${sum(r.moves)} pulos ${nota(grade(r))}\n${LINK}`;
+    const em = moods(r.date, r.moves, r.mins);
+    return `🐸 *Froggo* · ${d} de ${mes}\n${r.moves.map((mv, i) => mv + em[i]).join(' ')}\nTotal: ${sum(r.moves)} pulos ${nota(grade(r))}\n${LINK}`;
   }
   function paintButton() {
     $('dailyNum').textContent = dayNum();
@@ -3128,7 +3134,8 @@ const Daily = (() => {
       shareLink(message(r));
       if (multi(r)) {
         $('dMoves').textContent = String(sum(r.moves)); $('dStars').innerHTML = starHTML(grade(r));
-        $('dPhases').textContent = r.moves.map((mv, i) => mv + mood(mv, r.mins[i])).join('  '); $('dPhases').hidden = false;
+        const em = moods(r.date, r.moves, r.mins);
+        $('dPhases').textContent = r.moves.map((mv, i) => mv + em[i]).join('  '); $('dPhases').hidden = false;
         $('dMin').textContent = `Mínimo: ${sum(r.mins)} movimentos`; $('dMin').hidden = false;
       } else {
         $('dMoves').textContent = String(r.moves);
@@ -3207,7 +3214,8 @@ const Daily = (() => {
     const d = shown || today(), r = Store.get('daily', null);
     afterWin = false; $('ovDaily').classList.remove('show'); Base.dim(false);
     const cards = []; for (let k = 0; k < N; k++) cards.push(await card(d, k));
-    const tags = r && r.date === d && multi(r) ? r.moves.map((mv, i) => `${mv} ${mood(mv, r.mins[i])}`) : [];
+    const em = r && r.date === d && multi(r) ? moods(d, r.moves, r.mins) : [];
+    const tags = em.length ? r.moves.map((mv, i) => `${mv} ${em[i]}`) : [];
     await UI.dailyReview(cards, tags, 'Desafio do dia · ' + dateBR(d));
   }
   // partida em andamento: mapa atual e movimentos de cada mapa
@@ -3234,7 +3242,8 @@ const Daily = (() => {
     const k = run.phase, c = Game.card, mv = run.moves[k];
     if (k < N - 1) {
       save(k + 1);
-      UI.phasePop(`Mapa ${k + 1}/${N}`, `${mv} ${mood(mv, Rules.greens(c.start))}`);
+      const mins = []; for (let i = 0; i < k; i++) mins.push(Rules.greens((await card(run.date, i)).start)); mins.push(Rules.greens(c.start));
+      UI.phasePop(`Mapa ${k + 1}/${N}`, `${mv} ${moods(run.date, run.moves.slice(0, k + 1), mins)[k]}`);
       await wait(1300);
       if (!run || run.phase !== k) return;       // saiu no meio da transição
       UI.startGame({ ...(await card(run.date, k + 1)), quick: true });
@@ -3266,7 +3275,7 @@ const Daily = (() => {
   });
   paintButton();
   setInterval(paintButton, 60000);     // vira o dia sozinho se o app ficar aberto à meia-noite
-  return { N, card, kindOf, begin, move, save, pause, phaseWon, invite, practiced, replayWon, reopen, redo, message, today, hash, closePanel, mood, get running() { return !!run; }, get moves() { return run ? run.moves[run.phase] : 0; } };
+  return { N, card, kindOf, begin, move, save, pause, phaseWon, invite, practiced, replayWon, reopen, redo, message, today, hash, closePanel, moods, get running() { return !!run; }, get moves() { return run ? run.moves[run.phase] : 0; } };
 })();
 
 /* ---------------------------------------------------------------------
@@ -3439,7 +3448,7 @@ const Tests = {
     const cA = await Daily.card('2026-11-03', 2), cB = await Daily.card('2026-11-03', 2);
     t('desafio do dia: fase com solução conferida e igual para a mesma data', Rules.toStr(cA.start) === Rules.toStr(cB.start) && !cA.start.n && cA.solution && cA.solution.length === Rules.greens(cA.start));
     const msg = Daily.message({ date: '2026-10-21', moves: [5, 7, 12, 6, 14], mins: [5, 6, 6, 6, 7] }).split('\n');
-    t('desafio do dia: mensagem do Zap com os 5 mapas, total e nota (sem tempo)', msg.length === 4 && msg[1] === '5🤩 7😃 12🤣 6🤩 14🤣' && msg[2] === 'Total: 44 pulos ⭐⭐⚪', msg.join(' | '));
+    t('desafio do dia: mensagem do Zap com os 5 mapas (emojis variando), total e nota (sem tempo)', msg.length === 4 && msg[1].split(' ').length === 5 && msg[1].split(' ')[0].replace(/^\d+/, '') !== msg[1].split(' ')[3].replace(/^\d+/, '') && msg[2] === 'Total: 44 pulos ⭐⭐⚪', msg.join(' | '));
     // 11. áudio
     t('áudio não é criado antes de um gesto', window.__frogGesture ? true : Sound.ctx === null, window.__frogGesture ? 'houve gesto antes do teste' : 'sem gesto: sem AudioContext');
     return { out, fails };
