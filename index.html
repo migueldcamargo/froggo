@@ -2948,11 +2948,11 @@ const Daily = (() => {
   function message(r) {
     const [, m, d] = r.date.split('-').map(Number), sec = Math.max(1, Math.round(r.time / 1000));
     const mes = ['janeiro', 'fevereiro', 'março', 'abril', 'maio', 'junho', 'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro'][m - 1];
-    // negrito (*…*) no número de movimentos e no tempo
-    const n = (v, um, varios) => `*${v}* ${v === 1 ? um : varios}`, mi = Math.floor(sec / 60), se = sec % 60;
-    const tempo = `*${mi ? mi + 'min' + (se ? pad(se) + 's' : '') : se + 's'}*`;   // ex.: *1min29s*, *45s*
+    // só "Froggo" em negrito (*…*); o resto sem
+    const n = (v, um, varios) => `${v} ${v === 1 ? um : varios}`, mi = Math.floor(sec / 60), se = sec % 60;
+    const tempo = mi ? mi + 'min' + (se ? pad(se) + 's' : '') : se + 's';   // ex.: 1min29s, 45s
     const st = r.min ? ' ' + '⭐'.repeat(starsFor(r.moves, r.min)) : '';
-    return `🐸 Froggo · ${d} de ${mes}\n${n(r.moves, 'movimento', 'movimentos')}${st}\n${tempo}\n${LINK}`;
+    return `🐸 *Froggo* · ${d} de ${mes}\n${n(r.moves, 'movimento', 'movimentos')}${st}\n${tempo}\n${LINK}`;
   }
   function paintButton() {
     $('dailyNum').textContent = dayNum();
