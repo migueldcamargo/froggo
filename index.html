@@ -187,6 +187,11 @@ svg{display:block}
 .flip{transform-style:preserve-3d}
 .flip .face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden}
 .flip .cback{transform:rotateY(180deg)}
+.deck.stack{z-index:0}
+.flip{z-index:1}
+.deck.stack .cback{opacity:0}
+.deck.stack .cback:nth-last-child(1){opacity:1;transform:translate(14px,10px) rotate(6deg)!important}
+.deck.stack .cback:nth-last-child(2){opacity:1;transform:translate(-12px,12px) rotate(-5deg)!important}
 .cface{border-radius:calc(var(--cw,200px) * .08);background:linear-gradient(180deg,#fffef7,#fff3d6);color:var(--ink);overflow:hidden;
   border:calc(var(--cw,200px) * .03) solid #fff;box-shadow:0 .5rem 1.4rem rgba(0,20,60,.4), inset 0 0 0 calc(var(--cw,200px) * .012) #ffd23f;
   display:flex;flex-direction:column;align-items:center;font-size:calc(var(--cw,200px) * .062)}
@@ -397,7 +402,7 @@ canvas.confetti{position:absolute;inset:0;width:100%;height:100%;pointer-events:
 .dcal svg{width:100%;height:100%}
 .dcal b{position:absolute;left:0;right:0;top:50%;text-align:center;font-size:1.25rem;font-weight:900;color:#9a1810}
 .ddate{font-weight:900!important;opacity:.75!important;margin-top:-.3rem}
-.dstats{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;width:100%}
+.dstats{display:grid;grid-template-columns:1fr;gap:.5rem;width:min(100%,12rem)}
 .dst{font-size:.95rem;letter-spacing:.05em;line-height:1;margin-top:.15rem}
 .st-on{color:#f2b400}.st-off{color:rgba(0,30,60,.2)}
 .dphases{font-size:1rem!important;font-weight:900!important;letter-spacing:.02em;opacity:1!important;margin-top:-.1rem}
@@ -577,7 +582,7 @@ canvas.bigbang{position:absolute;inset:0;width:100%;height:100%;z-index:400;poin
       <button class="btn green big" id="btnStart" disabled>
         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>Começar</button>
       <button class="btn green big" id="btnRedo" hidden>
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>Refazer esta fase</button>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>Refazer este mapa</button>
       <button class="btn blue" id="btnRedoAll" hidden>Refazer desafio completo</button>
     </div>
   </section>
@@ -662,14 +667,13 @@ canvas.bigbang{position:absolute;inset:0;width:100%;height:100%;z-index:400;poin
       <h3 id="dTitle">Desafio do dia</h3>
       <p class="ddate" id="dDate"></p>
       <div class="dstats" id="dStats" hidden>
-        <div><b id="dTime">0s</b><small>tempo</small></div>
         <div><b id="dMoves">0</b><small>movimentos</small><span class="dst" id="dStars"></span></div>
       </div>
       <p class="dphases" id="dPhases" hidden></p>
       <p class="dmin" id="dMin" hidden></p>
       <div class="row">
         <button class="btn green big" id="btnDailyPlay">Jogar</button>
-        <button class="btn blue dreview" id="btnDailyReview" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2.5"/><path d="M9 9.5h6M9 13h6M9 16.5h3.5" stroke-linecap="round"/></svg>Rever fases</button>
+        <button class="btn blue dreview" id="btnDailyReview" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2.5"/><path d="M9 9.5h6M9 13h6M9 16.5h3.5" stroke-linecap="round"/></svg>Rever mapas</button>
 
         <a class="btn wa" id="btnDailyShare" target="_blank" rel="noopener" hidden><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.5a9.5 9.5 0 0 0-8.2 14.3L2.5 21.5l4.9-1.3A9.5 9.5 0 1 0 12 2.5zm0 2a7.5 7.5 0 1 1-3.8 14l-.3-.2-2.9.8.8-2.8-.2-.3A7.5 7.5 0 0 1 12 4.5zm-3.1 3.6c-.2 0-.5.1-.7.3-.3.3-.9.9-.9 2.1s.9 2.4 1 2.6c.1.2 1.8 2.8 4.4 3.9 2.2.9 2.6.7 3.1.7s1.5-.6 1.7-1.2c.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.6-.3l-1.6-.8c-.2-.1-.4-.1-.6.1l-.7.9c-.1.2-.3.2-.5.1-.3-.1-1-.4-1.9-1.2-.7-.6-1.2-1.4-1.3-1.6-.1-.3 0-.4.1-.5l.4-.5.3-.4c.1-.2 0-.3 0-.5l-.7-1.8c-.2-.4-.4-.4-.6-.4h-.5z"/></svg>Mandar no Zap</a>
       </div>
@@ -1906,7 +1910,9 @@ ${card.note ? `<div class="sub">${card.note}</div>` : ''}
       { transform: 'translateY(0) rotateY(0) scale(1)' }
     ], { duration: 620, easing: 'cubic-bezier(.3,1.2,.5,1)' });
   }
-  return { cycle, reveal, showDeck, renderFace };
+  // pilha atrás da carta (rever fases): duas cartas viradas, um pouco tortas, aparecendo nas bordas
+  function stack(on) { deck.classList.toggle('stack', on); if (on) deck.classList.remove('hidden'); }
+  return { cycle, reveal, showDeck, renderFace, stack };
 })();
 
 /* ---------------------------------------------------------------------
@@ -2119,7 +2125,7 @@ const UI = (() => {
   }
   // ---- HUD ----
   function hud() {
-    $('hudMoves').textContent = Game.card && Game.card.daily && Daily.running ? `${Daily.clock(Daily.elapsed())} · ${Daily.moves} mov.` : 'Movimentos: ' + Game.count;
+    $('hudMoves').textContent = 'Movimentos: ' + (Game.card && Game.card.daily && Daily.running ? Daily.moves : Game.count);
     $('btnUndo').disabled = Game.moves === 0;
   }
   // "Como jogar": vermelho come verde, verde come verde, verde não come vermelho e o objetivo
@@ -2174,7 +2180,7 @@ const UI = (() => {
   function showWin() {
     if (!Game.over || !Rules.isWin(Game.state)) return;
     if (Game.card.daily) { Sound.win(); confetti(); Daily.phaseWon(); return; }
-    if (Game.card.replay) { Sound.win(); confetti(); if (Game.card.chain && Game.card.phase < Daily.N - 1) phasePop(`Fase ${Game.card.phase + 1} de ${Daily.N}`, '✓'); Daily.replayWon(); return; }
+    if (Game.card.replay) { Sound.win(); confetti(); if (Game.card.chain && Game.card.phase < Daily.N - 1) phasePop(`Mapa ${Game.card.phase + 1}/${Daily.N}`, '✓'); Daily.replayWon(); return; }
     if (Game.card.practice) {
       const last = Game.card.step >= LESSONS.length - 1;
       Sound.win(); confetti(); if (last) Daily.practiced();
@@ -2324,8 +2330,8 @@ const UI = (() => {
   let rv = { cards: [], tags: [], i: 0, label: '' };
   function paintReview() {
     const c = rv.cards[rv.i];
-    Deck.renderFace({ ...c, note: `Fase ${rv.i + 1} de ${rv.cards.length}${rv.tags[rv.i] ? ' · ' + rv.tags[rv.i] : ''}` });
-    $('drawStatus').textContent = '← Deslize para ver as outras fases →';
+    Deck.renderFace({ ...c, note: rv.tags[rv.i] || '' });
+    $('drawStatus').textContent = rv.label;
   }
   async function dailyReview(cards, tags, label) {
     hideOverlays(); drawToken++; drawing = false;
@@ -2333,8 +2339,8 @@ const UI = (() => {
     $('levels').classList.add('hidden'); $('btnSwap').classList.add('hidden'); $('btnStart').classList.add('hidden');
     rv = { cards, tags, i: 0, label };
     Deck.showDeck();
-    await Deck.reveal({ ...cards[0], note: `Fase 1 de ${cards.length}${tags[0] ? ' · ' + tags[0] : ''}` });
-    paintReview();
+    await Deck.reveal({ ...cards[0], note: tags[0] || '' });
+    paintReview(); Deck.stack(true);          // as outras cartas aparecem empilhadas atrás
   }
   async function swipeTo(dir) {
     const f = $('flip'), w = f.getBoundingClientRect().width || 200, rm = reduceMotion();
@@ -2361,7 +2367,7 @@ const UI = (() => {
     animate(el, reduceMotion() ? [{ opacity: 0 }, { opacity: 1 }, { opacity: 1 }, { opacity: 0 }] : [{ opacity: 0, transform: 'translate(-50%,-50%) scale(.6)' }, { opacity: 1, transform: 'translate(-50%,-50%) scale(1.08)', offset: .2 },
       { opacity: 1, transform: 'translate(-50%,-50%) scale(1)', offset: .8 }, { opacity: 0, transform: 'translate(-50%,-50%) scale(.9)' }], { duration: 1300, easing: 'ease-out' }).then(() => el.remove());
   }
-  function restoreDraw() { $('levels').classList.remove('hidden'); $('btnSwap').classList.remove('hidden'); drawing = false; if (reviewing) setReview(false); }
+  function restoreDraw() { Deck.stack(false); $('levels').classList.remove('hidden'); $('btnSwap').classList.remove('hidden'); drawing = false; if (reviewing) setReview(false); }
   $('btnAgain').addEventListener('click', () => { hideOverlays(); startGame(); });
   // prêmio novo: veste na hora, sem passar pelo guarda-roupa
   $('winPrize').addEventListener('click', e => {
@@ -3063,27 +3069,23 @@ const Daily = (() => {
   };
   const dayNum = () => String(+today().slice(8));
   const hash = str => { let h = 2166136261; for (let i = 0; i < str.length; i++) { h ^= str.charCodeAt(i); h = Math.imul(h, 16777619); } return h >>> 0; };
-  const fmtTime = ms => { const t = Math.max(1, Math.round(ms / 1000)), m = Math.floor(t / 60), s = t % 60; return m ? `${m}min ${pad(s)}s` : `${s}s`; };
-  const clock = ms => { const t = Math.floor(ms / 1000); return `${Math.floor(t / 60)}:${pad(t % 60)}`; };
   const dateBR = (iso, long) => { const [y, m, d] = iso.split('-').map(Number), dt = new Date(y, m - 1, d); if (!long) return `${pad(d)}/${pad(m)}/${y}`; const t = dt.toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long' }); return t.charAt(0).toUpperCase() + t.slice(1); };
-  // desempenho de cada fase: 🤩 no mínimo, 🙂 até +4, 😢 acima disso, 🤣 com o dobro do mínimo ou mais
-  const mood = (mv, min) => mv >= 2 * min ? '🤣' : ['', '😢', '🙂', '🤩'][starsFor(mv, min)];
+  // desempenho de cada mapa: 🤩 no mínimo, 🤨 até +4, 😭 acima disso, 🤣 com o dobro do mínimo ou mais
+  const mood = (mv, min) => mv >= 2 * min ? '🤣' : ['', '😭', '🤨', '🤩'][starsFor(mv, min)];
   const sum = a => a.reduce((x, y) => x + y, 0);
   const grade = r => Math.round(sum(r.moves.map((mv, i) => starsFor(mv, r.mins[i]))) / r.moves.length);   // nota do desafio = média das estrelas das fases
-  let run = null, afterWin = false, shown = null;   // run: { date, phase, t0, acc, moves[5] }; shown = data aberta no painel
-  // partida salva: ao sair do desafio ou do app, o cronômetro trava e a fase, o tabuleiro e os movimentos ficam guardados
+  let run = null, afterWin = false, shown = null;   // run: { date, phase, moves[5] }; shown = data aberta no painel
+  // partida salva: ao sair do desafio ou do app, o mapa, o tabuleiro e os movimentos ficam guardados
   const saved = () => { const v = Store.get('dailyRun', null); return v && v.v === 2 && v.date === today() ? v : null; };
-  let tick = 0;
   const result = () => { const r = Store.get('daily', null); return r && r.date === today() ? r : null; };
   const multi = r => Array.isArray(r.moves);       // resultado do desafio de 5 fases (o antigo tinha 1 mapa só)
   function message(r) {
-    const [, m, d] = r.date.split('-').map(Number), sec = Math.max(1, Math.round(r.time / 1000));
+    const [, m, d] = r.date.split('-').map(Number);
     const mes = ['janeiro', 'fevereiro', 'março', 'abril', 'maio', 'junho', 'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro'][m - 1];
-    const mi = Math.floor(sec / 60), se = sec % 60, tempo = mi ? mi + 'min' + (se ? pad(se) + 's' : '') : se + 's';   // ex.: 1min29s, 45s
     const nota = n => '⭐'.repeat(n) + '⚪'.repeat(3 - n);    // ⚪ = estrela que faltou
     // só "Froggo" em negrito (*…*); o resto sem
-    if (!multi(r)) return `🐸 *Froggo* · ${d} de ${mes}\n${r.moves} ${r.moves === 1 ? 'movimento' : 'movimentos'}${r.min ? ' ' + nota(starsFor(r.moves, r.min)) : ''}\n${tempo}\n${LINK}`;
-    return `🐸 *Froggo* · ${d} de ${mes}\n${r.moves.map((mv, i) => mv + mood(mv, r.mins[i])).join(' ')}\nTotal: ${sum(r.moves)} pulos ${nota(grade(r))}\n${tempo}\n${LINK}`;
+    if (!multi(r)) return `🐸 *Froggo* · ${d} de ${mes}\n${r.moves} ${r.moves === 1 ? 'movimento' : 'movimentos'}${r.min ? ' ' + nota(starsFor(r.moves, r.min)) : ''}\n${LINK}`;
+    return `🐸 *Froggo* · ${d} de ${mes}\n${r.moves.map((mv, i) => mv + mood(mv, r.mins[i])).join(' ')}\nTotal: ${sum(r.moves)} pulos ${nota(grade(r))}\n${LINK}`;
   }
   function paintButton() {
     $('dailyNum').textContent = dayNum();
@@ -3097,10 +3099,10 @@ const Daily = (() => {
     $('dTitle').textContent = justWon ? 'Desafio do dia completo!' : r ? 'Você já jogou hoje' : 'Desafio do dia';
     $('dStats').hidden = !r; $('btnDailyPlay').hidden = !!r; $('btnDailyShare').hidden = !r; $('btnDailyReview').hidden = !r; shown = d;
     const sv = !r && saved();
-    $('btnDailyPlay').textContent = sv ? `Continuar (fase ${sv.phase + 1} de ${N})` : 'Jogar';
+    $('btnDailyPlay').textContent = sv ? `Continuar (mapa ${sv.phase + 1} de ${N})` : 'Jogar';
     $('dMin').hidden = true; $('dPhases').hidden = true; $('dStars').innerHTML = '';
     if (r) {
-      $('dTime').textContent = fmtTime(r.time); shareLink(message(r));
+      shareLink(message(r));
       if (multi(r)) {
         $('dMoves').textContent = String(sum(r.moves)); $('dStars').innerHTML = starHTML(grade(r));
         $('dPhases').textContent = r.moves.map((mv, i) => mv + mood(mv, r.mins[i])).join('  '); $('dPhases').hidden = false;
@@ -3133,8 +3135,8 @@ const Daily = (() => {
     await Solver.precompute();
     const h = hash(`froggo-daily-${iso}-${k}`), [lvl, size, idx] = kindOf(iso, k);
     const pick = Career.dailyPick(h, lvl, idx), start = { g: pick.start.g, r: pick.start.r }, solution = Solver.solve(start);
-    return { daily: iso, phase: k, level: { name: 'Desafio do dia', color: '#f08a00' }, levelId: lvl, skin: 'daily', size, label: `Desafio ${k + 1}/${N}`, start,
-      greens: Rules.greens(start), jumps: Rules.greens(start), solution, code: `D-${iso}-${k + 1}`, note: `Fase ${k + 1} de ${N}` };
+    return { daily: iso, phase: k, level: { name: `Mapa ${k + 1}/${N}`, color: '#f08a00' }, levelId: lvl, skin: 'daily', size, label: `Mapa ${k + 1}/${N}`, start,
+      greens: Rules.greens(start), jumps: Rules.greens(start), solution, code: `D-${iso}-${k + 1}` };
   }
   /* treino da 1ª vez: as 3 fases de LESSONS, que não valem ponto */
   function practice(k = 0) {
@@ -3169,7 +3171,7 @@ const Daily = (() => {
     const d = shown || today();
     afterWin = false; $('ovDaily').classList.remove('show'); Base.dim(false);
     const c = await card(d, k);
-    await UI.startGame({ ...c, daily: null, replay: d, chain: !!all, quick: !!all && k > 0, label: all ? `De novo ${k + 1}/${N}` : 'De novo', code: 'R-' + c.code });
+    await UI.startGame({ ...c, daily: null, replay: d, chain: !!all, quick: !!all && k > 0, label: `Mapa ${k + 1}/${N}`, code: 'R-' + c.code });
   }
   function replayWon() {
     const c = Game.card;
@@ -3185,34 +3187,31 @@ const Daily = (() => {
     const tags = r && r.date === d && multi(r) ? r.moves.map((mv, i) => `${mv} ${mood(mv, r.mins[i])}`) : [];
     await UI.dailyReview(cards, tags, 'Desafio do dia · ' + dateBR(d));
   }
-  // cronômetro: um só para as 5 fases (o tempo do desafio é a soma)
+  // partida em andamento: mapa atual e movimentos de cada mapa
   function begin(c) {
     if (!run || run.date !== c.daily) {
       const sv = saved();
-      run = { date: c.daily, phase: c.phase, t0: 0, acc: sv ? sv.acc : 0, moves: sv ? sv.moves.slice() : new Array(N).fill(0) };
+      run = { date: c.daily, phase: c.phase, moves: sv ? sv.moves.slice() : new Array(N).fill(0) };
       if (sv && sv.phase === c.phase && sv.map === Rules.toStr(c.start)) for (const [f, t] of sv.hist) if (!Game.play(f, t)) break;   // refaz a posição salva
     }
-    run.phase = c.phase; run.t0 = document.hidden ? 0 : performance.now();
-    clearInterval(tick); tick = setInterval(() => UI.hud(), 1000);
+    run.phase = c.phase;
   }
-  function elapsed() { return run ? run.acc + (run.t0 ? performance.now() - run.t0 : 0) : 0; }
   function save(next) {
     if (!run) return;
     const fresh = next != null;
     if (!fresh && (!Game.card || Game.card.daily !== run.date)) return;
-    Store.set('dailyRun', { v: 2, date: run.date, phase: fresh ? next : run.phase, map: fresh ? '' : Rules.toStr(Game.card.start), acc: Math.round(elapsed()), moves: run.moves, hist: fresh ? [] : Game.history.map(h => [h.jump.from, h.jump.to]) });
+    Store.set('dailyRun', { v: 2, date: run.date, phase: fresh ? next : run.phase, map: fresh ? '' : Rules.toStr(Game.card.start), moves: run.moves, hist: fresh ? [] : Game.history.map(h => [h.jump.from, h.jump.to]) });
   }
   function move() { if (run) { run.moves[run.phase]++; save(); } }
-  function pause() { if (!run) return; save(); clearInterval(tick); tick = 0; run = null; }   // sair: trava o tempo
-  function stop() { clearInterval(tick); tick = 0; run = null; }
-  // venceu uma fase: pausa o tempo, mostra como foi e já abre a próxima; na última, o resultado
+  function pause() { if (!run) return; save(); run = null; }   // sair: guarda onde parou
+  function stop() { run = null; }
+  // venceu um mapa: mostra como foi e já abre o próximo; no último, o resultado
   async function phaseWon() {
     if (!run) return;
-    if (run.t0) { run.acc += performance.now() - run.t0; run.t0 = 0; }
     const k = run.phase, c = Game.card, mv = run.moves[k];
     if (k < N - 1) {
       save(k + 1);
-      UI.phasePop(`Fase ${k + 1} de ${N}`, `${mv} ${mood(mv, Rules.greens(c.start))}`);
+      UI.phasePop(`Mapa ${k + 1}/${N}`, `${mv} ${mood(mv, Rules.greens(c.start))}`);
       await wait(1300);
       if (!run || run.phase !== k) return;       // saiu no meio da transição
       UI.startGame({ ...(await card(run.date, k + 1)), quick: true });
@@ -3220,14 +3219,13 @@ const Daily = (() => {
     }
     Store.set('dailyRun', null);
     const mins = []; for (let i = 0; i < N; i++) mins.push(i === k ? Rules.greens(c.start) : Rules.greens((await card(run.date, i)).start));
-    const r = { date: run.date, time: Math.round(run.acc), moves: run.moves.slice(), mins };
+    const r = { date: run.date, moves: run.moves.slice(), mins };
     if (!result()) Store.set('daily', r);
     stop(); paintButton(); openPanel(true, r);   // mostra o resultado mesmo se o desafio virou a meia-noite
   }
   document.addEventListener('visibilitychange', () => {
     if (!document.hidden) setTimeout(invite, 300);     // voltou ao app num dia novo
-    if (!run) return;
-    if (document.hidden) { if (run.t0) run.acc += performance.now() - run.t0; run.t0 = 0; save(); } else if (Game.active) run.t0 = performance.now();
+    if (run && document.hidden) save();
   });
   window.addEventListener('pagehide', () => save());
   $('btnDaily').addEventListener('click', () => { Sound.click(); paintButton(); openPanel(false); });
@@ -3238,7 +3236,7 @@ const Daily = (() => {
   $('btnDailyClose').addEventListener('click', () => { Sound.click(); closePanel(); });
   paintButton();
   setInterval(paintButton, 60000);     // vira o dia sozinho se o app ficar aberto à meia-noite
-  return { N, card, kindOf, begin, move, save, pause, phaseWon, invite, practiced, replayWon, reopen, redo, elapsed, clock, fmtTime, message, today, hash, closePanel, mood, get running() { return !!run; }, get moves() { return run ? run.moves[run.phase] : 0; } };
+  return { N, card, kindOf, begin, move, save, pause, phaseWon, invite, practiced, replayWon, reopen, redo, message, today, hash, closePanel, mood, get running() { return !!run; }, get moves() { return run ? run.moves[run.phase] : 0; } };
 })();
 
 /* ---------------------------------------------------------------------
@@ -3410,8 +3408,8 @@ const Tests = {
     t('desafio do dia: nenhum desenho se repete nos primeiros 120 dias', norep);
     const cA = await Daily.card('2026-11-03', 2), cB = await Daily.card('2026-11-03', 2);
     t('desafio do dia: fase com solução conferida e igual para a mesma data', Rules.toStr(cA.start) === Rules.toStr(cB.start) && !cA.start.n && cA.solution && cA.solution.length === Rules.greens(cA.start));
-    const msg = Daily.message({ date: '2026-10-21', time: 192000, moves: [5, 7, 12, 6, 14], mins: [5, 6, 6, 6, 7] }).split('\n');
-    t('desafio do dia: mensagem do Zap com as 5 fases, total, nota e tempo', msg[1] === '5🤩 7🙂 12🤣 6🤩 14🤣' && msg[2] === 'Total: 44 pulos ⭐⭐⚪' && msg[3] === '3min12s', msg.join(' | '));
+    const msg = Daily.message({ date: '2026-10-21', moves: [5, 7, 12, 6, 14], mins: [5, 6, 6, 6, 7] }).split('\n');
+    t('desafio do dia: mensagem do Zap com os 5 mapas, total e nota (sem tempo)', msg.length === 4 && msg[1] === '5🤩 7🤨 12🤣 6🤩 14🤣' && msg[2] === 'Total: 44 pulos ⭐⭐⚪', msg.join(' | '));
     // 11. áudio
     t('áudio não é criado antes de um gesto', window.__frogGesture ? true : Sound.ctx === null, window.__frogGesture ? 'houve gesto antes do teste' : 'sem gesto: sem AudioContext');
     return { out, fails };
