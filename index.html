@@ -48,8 +48,7 @@ svg{display:block}
     linear-gradient(180deg,#4fd2ff 0%, #19a2ec 45%, var(--sky2) 100%);}
 .app::before{content:"";position:absolute;inset:-20%;pointer-events:none;opacity:.18;
   background:repeating-radial-gradient(circle at 30% 40%, transparent 0 18px, rgba(255,255,255,.55) 19px 20px, transparent 21px 46px);
-  animation:drift 40s linear infinite}
-@keyframes drift{to{transform:translate(6%,4%)}}
+}
 .bubble{position:absolute;bottom:-40px;border-radius:50%;pointer-events:none;
   background:radial-gradient(circle at 30% 30%,rgba(255,255,255,.9),rgba(255,255,255,.15) 45%,rgba(255,255,255,.05) 70%);
   border:1px solid rgba(255,255,255,.35);animation:rise linear infinite}
@@ -77,7 +76,7 @@ svg{display:block}
 .btn.big{font-size:1.35rem;min-height:3.6rem;padding:.6em 1.6em}
 .btn svg{width:1.25em;height:1.25em;flex:none}
 .icon-btn{width:2.9rem;height:2.9rem;min-width:2.9rem;padding:0;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;
-  background:rgba(255,255,255,.2);border:2px solid rgba(255,255,255,.55);box-shadow:0 .2rem .6rem rgba(0,30,70,.2);backdrop-filter:blur(4px)}
+  background:rgba(255,255,255,.2);border:2px solid rgba(255,255,255,.55);box-shadow:0 .2rem .6rem rgba(0,30,70,.2)}
 .icon-btn svg{width:1.5rem;height:1.5rem}
 .icon-btn:active{transform:scale(.92)}
 .pill-btn{display:inline-flex;align-items:center;gap:.35em;min-height:2.6rem;padding:0 .9em 0 .6em;border-radius:999px;font-weight:800;font-size:.9rem;
@@ -127,10 +126,14 @@ svg{display:block}
 .title span:nth-child(3),.title span:nth-child(6){color:#ff6a55;-webkit-text-stroke-color:#6d0d0d;text-shadow:0 .03em 0 #e0302a,0 .06em 0 #b82020,0 .09em 0 #921616,0 .12em 0 #6d0d0d,0 .2em .25em rgba(0,25,60,.45)}
 @keyframes titleBob{50%{transform:rotate(-2deg) translateY(-.06em)}}
 .hero-art{position:relative;flex:1 1 auto;width:100%;min-height:0}
-.hero-art>svg{position:absolute;inset:0;width:100%;height:100%}
-.hero-frog{animation:heroHop 2.8s ease-in-out infinite;transform-box:fill-box;transform-origin:50% 100%}
+.hero-stage{position:absolute;left:50%;top:50%;width:var(--hw,100%);height:var(--hh,100%);transform:translate(-50%,-50%)}
+.hero-bg{position:absolute;inset:0;width:100%;height:100%}
+.hero-stage .hero-frog{position:absolute;left:26%;top:10%;width:48%;height:80%}
+.hero-stage .hero-mini{position:absolute;left:75%;top:50.8%;width:20%;height:32.3%}
+.hero-stage .hero-frog svg,.hero-stage .hero-mini svg{width:100%;height:100%;overflow:visible}
+.hero-frog{animation:heroHop 2.8s ease-in-out infinite;transform-origin:50% 100%;will-change:transform}
 @keyframes heroHop{0%,62%,100%{transform:translateY(0) scale(1,1)}68%{transform:translateY(0) scale(1.06,.92)}78%{transform:translateY(-4%) scale(.97,1.03)}88%{transform:translateY(0) scale(1.04,.95)}}
-.hero-mini{animation:miniBob 2.4s ease-in-out infinite;transform-box:fill-box;transform-origin:50% 100%}
+.hero-mini{animation:miniBob 2.4s ease-in-out infinite;transform-origin:50% 100%;will-change:transform}
 @keyframes miniBob{50%{transform:translateY(-4%) rotate(-3deg)}}
 .cta{grid-area:cta;display:flex;justify-content:center;align-items:center;gap:.6rem}
 .cta #btnPick{flex:1 1 auto;width:auto;max-width:22rem;min-width:0}
@@ -215,8 +218,8 @@ svg{display:block}
 .app.land .gctrl .btn{max-width:none;flex:none}
 .app.land .board-wrap{width:var(--bs-land,60vh)}
 
-.board{position:relative;width:var(--bs,300px);height:var(--bs,300px);flex:none;touch-action:none;
-  filter:drop-shadow(0 .8rem 1.2rem rgba(0,25,70,.35))}
+.board{position:relative;width:var(--bs,300px);height:var(--bs,300px);flex:none;touch-action:none;border-radius:11%;
+  box-shadow:0 .8rem 1.4rem rgba(0,25,70,.3)}
 .board>svg.bsvg{position:absolute;inset:0;width:100%;height:100%}
 .pmark{position:absolute;width:var(--psz,15%);height:var(--psz,15%);margin:calc(var(--psz,15%) / -2) 0 0 calc(var(--psz,15%) / -2);border-radius:50%;pointer-events:none;transition:box-shadow .15s, background .15s}
 .pmark.bad{box-shadow:0 0 0 .6vmin #ff3b30, 0 0 2vmin .6vmin rgba(255,59,48,.85);background:rgba(255,59,48,.3)}
@@ -229,10 +232,12 @@ svg{display:block}
 .frog.dragging{z-index:20}
 .frog.dragging .fi{filter:drop-shadow(0 1.2rem .6rem rgba(0,20,60,.45))}
 .frog.flying{z-index:15}
-.frog .fbody{animation:breathe 2.6s ease-in-out infinite;transform-box:fill-box;transform-origin:50% 100%}
+.frog .fi{animation:breathe 2.6s ease-in-out infinite;transform-origin:50% 92%;will-change:transform}
 @keyframes breathe{50%{transform:scale(1.03,.975)}}
-.lids ellipse{transform:scaleY(0);transform-box:fill-box;transform-origin:50% 50%;animation:blink 4.5s infinite}
-@keyframes blink{0%,94%,100%{transform:scaleY(0)}96.5%{transform:scaleY(1)}}
+/* piscar: em vez de dezenas de animações rodando sem parar, alguns sapos piscam de vez em quando (ver Blink) */
+.lids ellipse{transform:scaleY(0);transform-box:fill-box;transform-origin:50% 50%}
+.lids.b ellipse{animation:blink .24s ease-in-out}
+@keyframes blink{50%{transform:scaleY(1)}}
 .splash{position:absolute;width:calc(16% * var(--k,1));height:calc(16% * var(--k,1));margin:calc(-8% * var(--k,1)) 0 0 calc(-8% * var(--k,1));border-radius:50%;border:.5vmin solid rgba(255,255,255,.95);pointer-events:none;z-index:3}
 .drop{position:absolute;width:2.2%;height:2.2%;margin:-1.1% 0 0 -1.1%;border-radius:50%;background:#dff8ff;pointer-events:none;z-index:3}
 
@@ -241,6 +246,11 @@ svg{display:block}
   padding:calc(var(--sat) + .8rem) calc(var(--sar) + .8rem) calc(var(--sab) + .8rem) calc(var(--sal) + .8rem);
   background:linear-gradient(180deg,rgba(4,30,70,0) 0,rgba(4,30,70,.55) calc(var(--sat) + 5rem));backdrop-filter:blur(3px)}
 .overlay.show{display:flex;animation:fadeIn .2s ease-out}
+/* repouso: sem toques por alguns segundos, as animações de enfeite param e a tela fica totalmente parada (economia de bateria) */
+.app.idle .bubble,.app.idle .title,.app.idle .hero-frog,.app.idle .hero-mini,.app.idle .frog .fi,.app.idle .cavatar svg,.app.idle .cnode.cur::before,
+.app.idle .cnode .prize,.app.idle .cnode.portal,.app.idle .pspin,.app.idle .tw,.app.idle .win .res-art svg.rfrog,.app.idle .win .star{animation:none!important}
+.app.idle .win .star{opacity:1}
+.app.ov::before,.app.ov .bubble,.app.ov .title,.app.ov .hero-frog,.app.ov .hero-mini,.app.ov .frog .fi{animation-play-state:paused}
 @keyframes fadeIn{from{opacity:0}}
 .panel{position:relative;width:min(100%,25rem);max-height:100%;overflow:hidden;border-radius:1.6rem;padding:1rem 1.1rem 1.1rem;color:var(--ink);
   background:linear-gradient(180deg,#fffef8,#fff1cf);border:4px solid #fff;box-shadow:0 1rem 2.5rem rgba(0,20,60,.45), inset 0 0 0 3px #ffd23f;
@@ -373,9 +383,10 @@ canvas.confetti{position:absolute;inset:0;width:100%;height:100%;pointer-events:
 .cnode.locked .prize svg{filter:none}
 @keyframes prizeBob{50%{transform:translateY(-4px)}}
 .cnode.final svg{filter:drop-shadow(0 0 12px rgba(255,220,80,.8))}
-.dff{animation:ffly 2.4s ease-in-out infinite}
+.tw{position:absolute;border-radius:50%;pointer-events:none;will-change:opacity;animation:ffly 2.4s ease-in-out infinite}
+.tw.ff{width:14px;height:14px;margin:-7px 0 0 -7px;background:radial-gradient(circle,#fffbc0 0 16%,rgba(255,243,107,.35) 30%,rgba(255,243,107,0) 70%)}
+.tw.st{width:4px;height:4px;margin:-2px 0 0 -2px;background:#fff;box-shadow:0 0 6px 1px rgba(255,255,255,.8)}
 @keyframes ffly{50%{opacity:.25}}
-.dtw{animation:ffly 2.2s ease-in-out infinite}
 .cnode.portal{filter:drop-shadow(0 0 16px rgba(201,182,255,.9));animation:portalPulse 1.6s ease-in-out infinite}
 .cnode.portal .num{background:linear-gradient(180deg,#c9b6ff,#7b3fe4);color:#fff;bottom:-14px}
 .pspin{animation:spin 3s linear infinite;transform-origin:0 0}
@@ -386,13 +397,13 @@ canvas.confetti{position:absolute;inset:0;width:100%;height:100%;pointer-events:
 .cnode.star svg{filter:drop-shadow(0 0 14px rgba(255,220,80,.9))}
 canvas.bigbang{position:absolute;inset:0;width:100%;height:100%;z-index:400;pointer-events:auto}
 .app.space-mode{background:radial-gradient(90% 50% at 80% 25%, rgba(155,108,255,.3), transparent 60%),radial-gradient(80% 50% at 0% 100%, rgba(111,208,255,.2), transparent 60%),linear-gradient(180deg,#4fd2ff 0,#3a5bc0 calc(var(--sat) + 2.5rem),#1d1450 calc(var(--sat) + 10rem),#05030f)}
-.board.space{filter:drop-shadow(0 .8rem 1.4rem rgba(80,40,200,.45))}
+.board.space{box-shadow:0 .8rem 1.6rem rgba(80,40,200,.4)}
 .cavatar{position:absolute;z-index:6;pointer-events:none}
 .cavatar svg{width:100%;height:100%;overflow:visible}
-.cavatar .fbody{animation:breathe 2.6s ease-in-out infinite;transform-box:fill-box;transform-origin:50% 100%}
+.cavatar svg{animation:breathe 2.6s ease-in-out infinite;transform-origin:50% 92%;will-change:transform}
 
 @media (prefers-reduced-motion: reduce){
-  .app::before,.bubble,.title,.dtw,.pspin,.cnode.portal,.cnode.cur::before,.cnode .prize,.dff,.cavatar .fbody,.hero-frog,.hero-mini,.frog .fbody,.lids ellipse,.loading .lfrog,.win .res-art svg.rfrog{animation:none!important}
+  .app::before,.bubble,.title,.tw,.pspin,.cnode.portal,.cnode.cur::before,.cnode .prize,.cavatar svg,.hero-frog,.hero-mini,.frog .fi,.lids.b ellipse,.loading .lfrog,.win .res-art svg.rfrog{animation:none!important}
   .win .star{animation:none!important;opacity:1}
   .overlay.show,.panel{animation:none}
 }
@@ -913,7 +924,7 @@ const Art = {
 <circle cx="31" cy="26" r="11" fill="url(#eyeW)"/><circle cx="69" cy="26" r="11" fill="url(#eyeW)"/>
 <circle cx="33" cy="27.5" r="6" fill="#0d1b26"/><circle cx="67" cy="27.5" r="6" fill="#0d1b26"/>
 <circle cx="35.2" cy="24.6" r="2.3" fill="#fff"/><circle cx="69.2" cy="24.6" r="2.3" fill="#fff"/>
-${opts.still ? '' : `<g class="lids"><ellipse cx="31" cy="26" rx="12" ry="12" fill="url(#${B})" style="animation-delay:${d * 1.7}s"/><ellipse cx="69" cy="26" rx="12" ry="12" fill="url(#${B})" style="animation-delay:${d * 1.7}s"/></g>`}
+${opts.still ? '' : `<g class="lids"><ellipse cx="31" cy="26" rx="12" ry="12" fill="url(#${B})"/><ellipse cx="69" cy="26" rx="12" ry="12" fill="url(#${B})"/></g>`}
 <ellipse cx="22.5" cy="50" rx="6" ry="3.6" fill="#ff7aa8" opacity=".55"/><ellipse cx="77.5" cy="50" rx="6" ry="3.6" fill="#ff7aa8" opacity=".55"/>
 <path d="M33 49 Q50 62 67 49" stroke="${line}" stroke-width="2.8" fill="none" stroke-linecap="round"/>
 <circle cx="45" cy="40" r="1.3" fill="${line}" opacity=".6"/><circle cx="55" cy="40" r="1.3" fill="${line}" opacity=".6"/>
@@ -1002,18 +1013,17 @@ ${dim ? '' : `<path d="M${x - r * .32} ${y - r * .42} q${r * .12} -${r * .14} ${
     return `<svg viewBox="0 0 100 100" data-state="${Rules.toStr(s)}" role="img" aria-label="Disposição inicial">
 <rect x="1" y="1" width="98" height="98" rx="10" fill="url(#bdTop)" stroke="#0a5aa8" stroke-width="1"/>${Art.boardLines('rgba(225,248,255,.3)', .7, false)}${pads}${frogs}</svg>`;
   },
+  // tela inicial: desenho fixo (vitórias-régias, brilhos) + os dois sapos em camadas próprias que pulam
   heroScene() {
-    return `<svg viewBox="0 0 200 130" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+    return `<div class="hero-stage"><svg class="hero-bg" viewBox="0 0 200 130" aria-hidden="true">
 <ellipse cx="100" cy="112" rx="88" ry="15" fill="rgba(255,255,255,.18)"/>
 <ellipse cx="100" cy="110" rx="62" ry="13" fill="#145e17" opacity=".5"/>
 <path d="M40 106 A60 14 0 1 0 160 106 A60 14 0 0 0 108 93 L100 106 L94 93 A60 14 0 0 0 40 106Z" fill="url(#lily)" stroke="#155f1a" stroke-width="1.2"/>
 <path d="M100 106 L70 98 M100 106 L130 98 M100 106 L60 108 M100 106 L140 108" stroke="#2e8f2a" stroke-width="1" opacity=".6"/>
 <ellipse cx="170" cy="104" rx="20" ry="6" fill="url(#lily)" stroke="#155f1a" stroke-width="1"/>
 <ellipse cx="26" cy="110" rx="16" ry="5" fill="url(#lily)" stroke="#155f1a" stroke-width="1"/>
-<g class="hero-frog">${Art.frog('green', { outfit: Outfit.worn, attrs: 'x="52" y="13" width="96" height="104"' })}</g>
-<g class="hero-mini">${Art.frog('red', { delay: .7, attrs: 'x="150" y="66" width="40" height="42"' })}</g>
 <g fill="#fff" opacity=".85"><path d="M20 30l2 5 5 2-5 2-2 5-2-5-5-2 5-2z"/><path d="M178 26l1.5 4 4 1.5-4 1.5-1.5 4-1.5-4-4-1.5 4-1.5z"/><path d="M160 52l1 2.6 2.6 1-2.6 1-1 2.6-1-2.6-2.6-1 2.6-1z"/></g>
-</svg>`;
+</svg><div class="hero-frog">${Art.frog('green', { outfit: Outfit.worn })}</div><div class="hero-mini">${Art.frog('red')}</div></div>`;
   },
   star(fill = '#ffd23f') {
     return `<svg viewBox="0 0 24 24"><path d="M12 1.8l3.1 6.4 7 1-5.1 4.9 1.2 7L12 17.8l-6.2 3.3 1.2-7L1.9 9.2l7-1z" fill="${fill}" stroke="#c98a00" stroke-width="1.2" stroke-linejoin="round"/><path d="M9 7.5l1.5-3" stroke="#fff" stroke-width="1.4" stroke-linecap="round" opacity=".8"/></svg>`;
@@ -1206,7 +1216,7 @@ const Sound = (() => {
   let timer = null, nextT = 0, step = 0;
   const f = m => 440 * Math.pow(2, (m - 69) / 12);
   function unlock() {
-    if (unlocked) { if (ctx && ctx.state === 'suspended' && !muted && !document.hidden) ctx.resume().catch(() => {}); return; }
+    if (unlocked) { wake(); return; }
     unlocked = true;
     const AC = window.AudioContext || window.webkitAudioContext;
     if (!AC) return;
@@ -1261,6 +1271,21 @@ const Sound = (() => {
     reveal() { if (!ok()) return; const t = ctx.currentTime; tone(f(84), t, .5, { type: 'triangle', vol: .14 }); tone(f(88), t + .08, .5, { type: 'triangle', vol: .12 }); tone(f(91), t + .16, .7, { type: 'triangle', vol: .12 }); },
     win() { if (!ok()) return; const t = ctx.currentTime; [72, 76, 79, 84, 88, 91].forEach((m, i) => tone(f(m), t + i * .1, .45, { type: 'triangle', vol: .18 })); tone(f(96), t + .65, .9, { type: 'sine', vol: .12 }); croak(t + 1.0, 230, .2); },
     lose() { if (!ok()) return; const t = ctx.currentTime; [67, 64, 60].forEach((m, i) => tone(f(m), t + i * .18, .3, { type: 'triangle', vol: .14 })); },
+    // coro angelical: acorde maior com vogal "a" (filtros de formante), vibrato suave e brilho agudo
+    angel() {
+      if (!ok()) return;
+      const t = ctx.currentTime, out = ctx.createGain();
+      out.gain.setValueAtTime(0.0001, t); out.gain.exponentialRampToValueAtTime(.55, t + .35); out.gain.setValueAtTime(.55, t + 1); out.gain.exponentialRampToValueAtTime(0.0001, t + 2.4);
+      out.connect(sfx);
+      const formants = [[800, 6, 1], [1150, 8, .6], [2900, 10, .25]].map(([fq, q, g]) => { const b = ctx.createBiquadFilter(), gg = ctx.createGain(); b.type = 'bandpass'; b.frequency.value = fq; b.Q.value = q; gg.gain.value = g; b.connect(gg); gg.connect(out); return b; });
+      const lfo = ctx.createOscillator(), lg = ctx.createGain(); lfo.frequency.value = 5.2; lg.gain.value = 3.5; lfo.connect(lg); lfo.start(t); lfo.stop(t + 2.5);
+      [72, 76, 79, 84].forEach(m => [-6, 6].forEach(cents => {
+        const o = ctx.createOscillator(), g = ctx.createGain();
+        o.type = 'sawtooth'; o.frequency.value = f(m) * Math.pow(2, cents / 1200); lg.connect(o.frequency);
+        g.gain.value = .05; o.connect(g); formants.forEach(b => g.connect(b)); o.start(t); o.stop(t + 2.5);
+      }));
+      tone(f(96), t + .15, 1.6, { type: 'sine', vol: .06, attack: .3 }); tone(f(103), t + .3, 1.4, { type: 'sine', vol: .04, attack: .3 });
+    },
     bigBang() {
       if (!ok()) return;
       const t = ctx.currentTime;
@@ -1282,7 +1307,7 @@ const Sound = (() => {
   function schedule() {
     if (!ctx || muted) return;
     if (nextT < ctx.currentTime - 0.3) nextT = ctx.currentTime + 0.05;
-    while (nextT < ctx.currentTime + 0.25) {
+    while (nextT < ctx.currentTime + 0.6) {
       const loop = Math.floor(step / 32), bar = BARS[Math.floor(step / 8) % 4], i = step % 8;
       const m = bar.mel[i];
       if (m && !(loop % 2 === 1 && i === 5)) { tone(f(m), nextT, .32, { type: 'sine', vol: .5, bus: music, attack: .004 }); tone(f(m + 12), nextT, .12, { type: 'sine', vol: .12, bus: music }); }
@@ -1292,21 +1317,25 @@ const Sound = (() => {
       nextT += STEP; step++;
     }
   }
-  function startMusic() { if (!ctx || timer) return; nextT = ctx.currentTime + 0.1; timer = setInterval(schedule, 80); }
+  function startMusic() { if (!ctx || timer) return; nextT = ctx.currentTime + 0.1; timer = setInterval(schedule, 250); }
   function stopMusic() { clearInterval(timer); timer = null; }
   function setMuted(v) {
     muted = v; Store.set('muted', v);
     document.getElementById('app').classList.toggle('is-muted', v);
     if (!ctx) return;
     master.gain.setTargetAtTime(v ? 0 : 0.7, ctx.currentTime, 0.03);
-    if (v) stopMusic(); else { ctx.resume().catch(() => {}); startMusic(); }
+    if (v) { stopMusic(); setTimeout(() => { if (muted && ctx) ctx.suspend().catch(() => {}); }, 200); }   // mudo: motor de áudio desligado
+    else wake();
   }
+  // dormir: sem música e com o motor de áudio parado; acorda no próximo toque
+  function sleep() { if (!ctx) return; stopMusic(); ctx.suspend().catch(() => {}); }
+  function wake() { if (!ctx || muted || document.hidden) return; if (ctx.state === 'suspended') ctx.resume().catch(() => {}); startMusic(); }
   document.addEventListener('visibilitychange', () => {
     if (!ctx) return;
     if (document.hidden) { stopMusic(); ctx.suspend().catch(() => {}); }
     else if (!muted) { ctx.resume().catch(() => {}); startMusic(); }
   });
-  S.unlock = unlock; S.setMuted = setMuted;
+  S.unlock = unlock; S.setMuted = setMuted; S.sleep = sleep; S.wake = wake;
   Object.defineProperty(S, 'muted', { get: () => muted });
   Object.defineProperty(S, 'ctx', { get: () => ctx });
   return S;
@@ -1330,7 +1359,7 @@ const Base = (() => {
   const hex = c => [1, 3, 5].map(i => parseInt(c.slice(i, i + 2), 16));
   const toHex = a => '#' + a.map(v => Math.round(Math.max(0, Math.min(255, v))).toString(16).padStart(2, '0')).join('');
   const mix = (a, b, t) => { const x = hex(a), y = hex(b); return toHex(x.map((v, i) => v + (y[i] - v) * t)); };
-  return { set() {}, dim() {}, mix };
+  return { set() {}, dim(on) { app && app.classList.toggle('ov', !!on); }, mix };
 })();
 function toast(msg) { const t = $('toast'); t.textContent = msg; t.classList.add('show'); clearTimeout(toast._t); toast._t = setTimeout(() => t.classList.remove('show'), 1800); }
 
@@ -1383,7 +1412,7 @@ const Board = (() => {
   function makeFrog(color, cell) {
     const f = document.createElement('div');
     f.className = 'frog'; f.dataset.color = color;
-    f.innerHTML = `<div class="fi">${Art.frog(color, { delay: +(Math.random() * 2).toFixed(2) })}</div>`;
+    f.innerHTML = `<div class="fi" style="animation-delay:-${(Math.random() * 2.6).toFixed(2)}s">${Art.frog(color)}</div>`;
     place(f, cell); el.appendChild(f); return f;
   }
   function place(f, cell) { f.style.left = G.PX[cell] + '%'; f.style.top = G.PY[cell] + '%'; f.dataset.cell = cell; }
@@ -1632,7 +1661,7 @@ const Layout = (() => {
     app.classList.toggle('land', land);
     const fs = land ? Math.max(11, Math.min(16.5, H * 0.041, W * 0.021)) : Math.max(12, Math.min(19, Math.min(W, H * .62) * 0.04));
     document.documentElement.style.fontSize = fs.toFixed(2) + 'px';
-    fitBoard(W, H, land); fitCard();
+    fitBoard(W, H, land); fitCard(); fitHero();
     try { if ($('career').classList.contains('active')) Career.relayout(); } catch (e) { /* carreira ainda não iniciada */ }
   }
   function fitBoard(W, H, land) {
@@ -1650,6 +1679,12 @@ const Layout = (() => {
       board.style.setProperty('--bs', Math.floor(Math.max(120, Math.min(w, h))) + 'px');
     }
   }
+  function fitHero() {
+    const h = $('heroArt'), w = h.clientWidth, hh = h.clientHeight;
+    if (!w || !hh) return;
+    const bw = Math.min(w, hh * 200 / 130);
+    h.style.setProperty('--hw', bw.toFixed(1) + 'px'); h.style.setProperty('--hh', (bw * 130 / 200).toFixed(1) + 'px');
+  }
   function fitCard() {
     const st = $('stage'); const w = st.clientWidth, h = st.clientHeight;
     if (!w || !h) return;
@@ -1661,7 +1696,7 @@ const Layout = (() => {
   window.addEventListener('resize', () => { Board.cancelDrag(); schedule(); });
   window.addEventListener('orientationchange', () => { Board.cancelDrag(); schedule(); });
   if (window.visualViewport) visualViewport.addEventListener('resize', schedule);
-  if (window.ResizeObserver) { const ro = new ResizeObserver(schedule); ro.observe($('boardWrap')); ro.observe($('stage')); }
+  if (window.ResizeObserver) { const ro = new ResizeObserver(schedule); ro.observe($('boardWrap')); ro.observe($('stage')); ro.observe($('heroArt')); }
   return { update, schedule };
 })();
 
@@ -1673,11 +1708,11 @@ const UI = (() => {
   if (!Array.isArray(levels)) levels = ['iniciante'];
   levels = LEVEL_IDS.filter(id => levels.includes(id));
   if (!levels.length) levels = ['iniciante'];
-  let card = null, lastKey = null, drawToken = 0, drawing = false, starting = false, confettiRAF = 0;
+  let heroKey = null, card = null, lastKey = null, drawToken = 0, drawing = false, starting = false, confettiRAF = 0;
 
   // ---- telas ----
   function show(id) {
-    if (id === 'home') $('heroArt').innerHTML = Art.heroScene();          // mostra a roupa atual do sapo
+    if (id === 'home') { const k = JSON.stringify(Outfit.worn); if (k !== heroKey) { heroKey = k; $('heroArt').innerHTML = Art.heroScene(); } }   // só redesenha se a roupa mudou
     document.querySelectorAll('.screen').forEach(s => s.classList.toggle('active', s.id === id));
     if (id !== 'game') { Game.active = false; Board.cancelDrag(); app.classList.remove('space-mode'); }
     Layout.update();
@@ -1952,7 +1987,7 @@ const Deco = {
 ${moss ? '<path d="M18 -48 v12 M22 -52 v9 M-16 -61 v13 M-19 -64 v8" stroke="#6f8f4a" stroke-width="1.6" opacity=".8"/>' : ''}</g>`;
   },
   fog: (x, y, k) => `<ellipse cx="${x}" cy="${y}" rx="${70 * k}" ry="${11 * k}" fill="#e8f4f0" opacity=".1"/><ellipse cx="${x + 20 * k}" cy="${y + 6 * k}" rx="${45 * k}" ry="${7 * k}" fill="#e8f4f0" opacity=".08"/>`,
-  firefly: (x, y, k, d) => `<g class="dff" style="animation-delay:${d}s"><circle cx="${x}" cy="${y}" r="${6 * k}" fill="#fff36b" opacity=".22"/><circle cx="${x}" cy="${y}" r="${2 * k}" fill="#fffbc0"/></g>`,
+  firefly: (x, y, k) => `<circle cx="${x}" cy="${y}" r="${6 * k}" fill="#fff36b" opacity=".22"/><circle cx="${x}" cy="${y}" r="${2 * k}" fill="#fffbc0"/>`,
   mushroom(x, y, k) {
     return `<g transform="translate(${x} ${y}) scale(${k})"><ellipse cx="0" cy="1" rx="11" ry="3" fill="#000" opacity=".2"/><rect x="-2.5" y="-10" width="5" height="11" rx="2" fill="#e8e0f0"/><path d="M-11 -9 Q0 -24 11 -9 Z" fill="#9b6cff"/><circle cx="-4" cy="-13" r="1.6" fill="#e6dcff"/><circle cx="3" cy="-15" r="1.3" fill="#e6dcff"/>
 <rect x="9" y="-6" width="3.6" height="7" rx="1.5" fill="#e8e0f0"/><path d="M5 -5 Q10.8 -14 16.6 -5 Z" fill="#6fd0ff"/><circle cx="0" cy="-12" r="14" fill="#9b6cff" opacity=".12"/></g>`;
@@ -1980,7 +2015,7 @@ ${moss ? '<path d="M18 -48 v12 M22 -52 v9 M-16 -61 v13 M-19 -64 v8" stroke="#6f8
     for (let i = 0; i < n * 2; i++) { const x = (i + .5) * W / (n * 2); tufts += `<path d="M${x - 4} 16 l2 -9 l2 9 l2 -7 l2 7" fill="${color}" stroke="${color}" stroke-width="1"/>`; }
     return `<path d="${d} Z" fill="${color}"/><path d="${d.replace(/^M0 0 H[\d.]+ V10/, 'M' + W + ' 10')}" fill="none" stroke="#000" stroke-opacity=".15" stroke-width="2"/>${tufts}`;
   },
-  star: (x, y, k, d) => `<circle class="dtw" style="animation-delay:${d}s" cx="${x}" cy="${y}" r="${1.4 * k}" fill="#fff"/>`,
+  star: (x, y, k) => `<circle cx="${x}" cy="${y}" r="${1.4 * k}" fill="#fff" opacity=".85"/>`,
   nebula: (x, y, k, c) => `<ellipse cx="${x}" cy="${y}" rx="${80 * k}" ry="${30 * k}" fill="${c}" opacity=".1"/><ellipse cx="${x + 20 * k}" cy="${y - 8 * k}" rx="${46 * k}" ry="${18 * k}" fill="${c}" opacity=".1"/>`,
   planet(x, y, k, c, ring) {
     return `<g transform="translate(${x} ${y}) scale(${k})"><circle r="17" fill="${c}"/><path d="M-17 0 A17 17 0 0 0 17 0 A17 12 0 0 1 -17 0Z" fill="#000" opacity=".18"/><circle cx="-6" cy="-6" r="5" fill="#fff" opacity=".2"/>
@@ -2003,15 +2038,18 @@ ${ring ? '<ellipse rx="29" ry="7" fill="none" stroke="#ffe3b0" stroke-width="3" 
 <text y="7" text-anchor="middle" font-size="20" font-weight="900" fill="#2a0f6b" font-family="system-ui,sans-serif">?</text></svg>`;
   },
   bigStar() {
-    return `<svg viewBox="-30 -30 60 60" aria-hidden="true"><circle r="26" fill="#ffd23f" opacity=".18"/><path d="M0 -24 l7 14.5 16 2.3 -11.6 11.3 2.7 16 -14.1 -7.5 -14.1 7.5 2.7 -16 -11.6 -11.3 16 -2.3z" fill="url(#crown)" stroke="#b07a00" stroke-width="1.6" stroke-linejoin="round"/><path d="M-4 -12 l3 -6" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg>`;
+    const star = 'M0 -24 l7 14.5 16 2.3 -11.6 11.3 2.7 16 -14.1 -7.5 -14.1 7.5 2.7 -16 -11.6 -11.3 16 -2.3z';
+    return `<svg viewBox="-30 -30 60 60" aria-hidden="true"><defs><clipPath id="sclip"><path d="${star}"/></clipPath></defs><circle r="26" fill="#ffd23f" opacity=".18"/><path d="${star}" fill="url(#crown)" stroke="#b07a00" stroke-width="1.6" stroke-linejoin="round"/><path d="M-4 -12 l3 -6" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
+<g clip-path="url(#sclip)"><rect class="shine" x="-60" y="-40" width="10" height="80" fill="#fff" opacity=".9" transform="rotate(22)"/></g></svg>`;
   },
   trophy() {
-    return `<svg viewBox="-30 -36 60 66" aria-hidden="true"><ellipse cx="0" cy="24" rx="26" ry="6" fill="#000" opacity=".25"/>
+    return `<svg viewBox="-30 -36 60 66" aria-hidden="true"><defs><clipPath id="tclip"><path d="M-14 -26 H14 V-8 A14 14 0 0 1 -14 -8 Z"/><rect x="-3.5" y="4" width="7" height="8"/><rect x="-12" y="12" width="24" height="9" rx="2"/></clipPath></defs><ellipse cx="0" cy="24" rx="26" ry="6" fill="#000" opacity=".25"/>
 <path d="M-14 -26 H14 V-8 A14 14 0 0 1 -14 -8 Z" fill="#ffd23f" stroke="#b07a00" stroke-width="2"/>
 <path d="M14 -22 H22 V-16 A9 9 0 0 1 12 -6 M-14 -22 H-22 V-16 A9 9 0 0 0 -12 -6" fill="none" stroke="#e0a800" stroke-width="3.5"/>
 <rect x="-3.5" y="4" width="7" height="8" fill="#e0a800"/><rect x="-12" y="12" width="24" height="9" rx="2" fill="#c98a00" stroke="#8a5a00" stroke-width="1.5"/>
 <path d="M-8 -22 Q-9 -12 -4 -6" stroke="#fff" stroke-width="2.5" fill="none" stroke-linecap="round" opacity=".7"/>
-<path d="M0 -20 l2.2 4.6 5 .7 -3.6 3.5 .9 5 -4.5 -2.4 -4.5 2.4 .9 -5 -3.6 -3.5 5 -.7 z" fill="#fff8c0"/></svg>`;
+<path d="M0 -20 l2.2 4.6 5 .7 -3.6 3.5 .9 5 -4.5 -2.4 -4.5 2.4 .9 -5 -3.6 -3.5 5 -.7 z" fill="#fff8c0"/>
+<g clip-path="url(#tclip)"><rect class="shine" x="-60" y="-40" width="10" height="80" fill="#fff" opacity=".9" transform="rotate(22)"/></g></svg>`;
   }
 };
 
@@ -2083,7 +2121,7 @@ const Career = (() => {
   let done = Math.max(0, Math.min(bonusOpen ? ALL : TOTAL, +Store.get('career', 0) || 0));
   let list = null, built = null, nodes = [], finalPos = null, portalPos = null, starPos = null, lastW = 0, avatar = null;
   const map = $('cmap'), inner = $('cmapInner');
-  let baseRects = [];
+  let baseRects = [], mapKey = '';
   function syncBase() {
     const y = map.scrollTop + map.clientHeight - 1;
     const rc = baseRects.find(r => y >= r.top && y < r.top + r.h) || baseRects[baseRects.length - 1];
@@ -2217,6 +2255,7 @@ ${portalPos ? `<path d="M${finalPos.x} ${finalPos.y} L${portalPos.x} ${portalPos
       }
     };
     const area = W * H / 10000;
+    const tw = [], twinkle = (x, y, kind, q) => { tw.push(`<i class="tw ${kind}" style="left:${x.toFixed(0)}px;top:${y.toFixed(0)}px;animation-delay:-${(q * 3).toFixed(2)}s"></i>`); return ''; };
     if (R.id === 'tutorial') {
       place(Math.round(area * .5), 18, (x, y) => Deco.ripple(x, y, k));
       place(2, 24, (x, y, q) => Deco.buoy(x, y, k));
@@ -2239,9 +2278,9 @@ ${portalPos ? `<path d="M${finalPos.x} ${finalPos.y} L${portalPos.x} ${portalPos
       place(Math.round(area * .25), 14, (x, y, q) => Deco.lily(x, y, k * .8, q() * 360));
       place(7, 16, (x, y) => Deco.mushroom(x, y, k));
       place(3, 26, (x, y, q) => Deco.tree(x, y, k, q() < .5, true));
-      place(Math.round(area * 1.1), 6, (x, y, q) => Deco.firefly(x, y, k, (q() * 3).toFixed(2)));
+      place(Math.round(area * 1.1), 6, (x, y, q) => q() < .3 ? twinkle(x, y, 'ff', q()) : Deco.firefly(x, y, k));
     } else if (R.bonus) {
-      place(Math.round(area * 2.2), 3, (x, y, q) => Deco.star(x, y, k * (.5 + q()), (q() * 3).toFixed(2)));
+      place(Math.round(area * 2.2), 3, (x, y, q) => q() < .08 ? twinkle(x, y, 'st', q()) : Deco.star(x, y, k * (.5 + q())));
       place(5, 70, (x, y, q) => Deco.nebula(x, y, k, ['#ff6ad5', '#6fd0ff', '#9b6cff'][Math.floor(q() * 3)]));
       place(3, 34, (x, y, q) => Deco.planet(x, y, k * (.8 + q() * .6), ['#ff8a5c', '#6fd0ff', '#ffd23f'][Math.floor(q() * 3)], q() < .6));
       place(6, 24, (x, y, q) => Deco.et(x, y, k, q() < .5));
@@ -2259,7 +2298,7 @@ ${portalPos ? `<path d="M${finalPos.x} ${finalPos.y} L${portalPos.x} ${portalPos
     items.sort((a, b) => a.y - b.y);
     return `<div class="creg${R.bonus ? ' space' : ''}" style="top:${rc.top}px;height:${H}px;background:${R.bg || `linear-gradient(180deg,${R.top},${R.bot})`}">
 <svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" aria-hidden="true">${R.bank ? Deco.bank(W, R.bank) : ''}${items.map(i => i.s).join('')}</svg>
-<div class="cbanner"><i style="left:22%"></i><i style="right:22%"></i><b>${R.name}</b><small>${R.sub}</small></div></div>`;
+${tw.join('')}<div class="cbanner"><i style="left:22%"></i><i style="right:22%"></i><b>${R.name}</b><small>${R.sub}</small></div></div>`;
   }
   function placeAvatar(i) {
     const p = posOf(i); if (!p || !avatar) return;
@@ -2293,7 +2332,9 @@ ${portalPos ? `<path d="M${finalPos.x} ${finalPos.y} L${portalPos.x} ${portalPos
     UI.hideOverlays();
     UI.show('career');
     await ensureBuilt();
-    render();
+    // a trilha só é refeita se algo mudou (largura, progresso, bônus ou roupa do sapo)
+    const key = [map.clientWidth, done, bonusOpen, JSON.stringify(Outfit.worn)].join('|');
+    if (key !== mapKey) { render(); mapKey = key; } else syncBase();
     const from = opts.hopFrom;
     if (from != null && from + 1 === done) {
       placeAvatar(from); scrollToIdx(from, false);
@@ -2307,7 +2348,7 @@ ${portalPos ? `<path d="M${finalPos.x} ${finalPos.y} L${portalPos.x} ${portalPos
   }
   function relayout() {
     if (!list || Math.abs(map.clientWidth - lastW) < 2) return;
-    render(); scrollToIdx(done, false);
+    render(); mapKey = ''; scrollToIdx(done, false);
   }
   // ---- Big Bang: a explosão que abre o pântano espacial (tela inteira) ----
   function bigBang() {
@@ -2367,6 +2408,17 @@ ${portalPos ? `<path d="M${finalPos.x} ${finalPos.y} L${portalPos.x} ${portalPos
       requestAnimationFrame(frame);
     });
   }
+  // toque no troféu ou na estrela final: chacoalha com zoom, um brilho passa por ele e o coro canta "aaah"
+  function celebrate(el) {
+    Sound.angel();
+    if (reduceMotion()) return;
+    animate(el, [{ transform: 'scale(1) rotate(0)' }, { transform: 'scale(1.2) rotate(-9deg)', offset: .18 }, { transform: 'scale(1.2) rotate(8deg)', offset: .36 },
+      { transform: 'scale(1.18) rotate(-6deg)', offset: .54 }, { transform: 'scale(1.14) rotate(4deg)', offset: .72 }, { transform: 'scale(1) rotate(0)' }], { duration: 760, easing: 'ease-out' });
+    const r = el.querySelector('.shine'); if (!r) return;
+    const t0 = performance.now();
+    const step = now => { const p = Math.min(1, (now - t0) / 650); r.setAttribute('x', (-60 + p * 110).toFixed(1)); if (p < 1) requestAnimationFrame(step); else r.setAttribute('x', '-60'); };
+    requestAnimationFrame(step);
+  }
   let opening = false;
   async function openBonus() {
     if (opening || bonusOpen || done < TOTAL) return;
@@ -2399,8 +2451,7 @@ ${portalPos ? `<path d="M${finalPos.x} ${finalPos.y} L${portalPos.x} ${portalPos
     const b = e.target.closest('.cnode'); if (!b) return;
     const tag = b.dataset.i;
     if (tag === 'P') { openBonus(); return; }
-    if (tag === 'T') { toast(done >= TOTAL ? 'Carreira concluída! Parabéns!' : 'Chegue até aqui completando todas as fases'); return; }
-    if (tag === 'S') { toast(done >= ALL ? 'Você conquistou o espaço!' : 'Complete o pântano espacial'); return; }
+    if (tag === 'T' || tag === 'S') { celebrate(b); return; }
     const i = +tag;
     if (i > done) {
       Sound.invalid();
@@ -2592,13 +2643,23 @@ const Tests = {
   // bolhas decorativas
   if (!reduceMotion()) {
     const bb = $('bubbles');
-    for (let i = 0; i < 7; i++) {
+    for (let i = 0; i < 5; i++) {
       const b = document.createElement('div'); b.className = 'bubble';
       const sz = 8 + Math.random() * 22; b.style.width = b.style.height = sz + 'px';
       b.style.left = (Math.random() * 100) + '%'; b.style.animationDuration = (9 + Math.random() * 10) + 's'; b.style.animationDelay = (-Math.random() * 15) + 's';
       bb.appendChild(b);
     }
   }
+  // piscar de vez em quando: poucos sapos da tela atual por vez (barato, em vez de animações eternas)
+  if (!reduceMotion()) setInterval(() => {
+    if (document.hidden || app.classList.contains('idle')) return;
+    const all = app.querySelectorAll('.screen.active .lids, .overlay.show .lids, .loading .lids');
+    if (!all.length) return;
+    for (let i = 0, n = Math.min(3, Math.ceil(all.length / 6)); i < n; i++) {
+      const g = all[Math.floor(Math.random() * all.length)];
+      g.classList.add('b'); setTimeout(() => g.classList.remove('b'), 260);
+    }
+  }, 1100);
   // áudio só depois de um gesto explícito
   const gesture = () => { window.__frogGesture = true; Sound.unlock(); };
   document.addEventListener('pointerdown', gesture, true);
@@ -2611,7 +2672,18 @@ const Tests = {
 
   UI.show('home');
   Gen.validateCatalog();
-  Solver.precompute().then(() => { if (/[?&#]test/.test(location.href)) Tests.show(); });
+  setTimeout(() => Solver.precompute().then(() => { if (/[?&#]test/.test(location.href)) Tests.show(); }), 600);
+  // repouso: 8 s sem toque param as animações de enfeite; 45 s param a música e o motor de áudio
+  let idleT = 0, sleepT = 0;
+  const poke = () => {
+    app.classList.remove('idle');
+    clearTimeout(idleT); clearTimeout(sleepT);
+    idleT = setTimeout(() => app.classList.add('idle'), 8000);
+    sleepT = setTimeout(() => Sound.sleep(), 45000);
+  };
+  ['pointerdown', 'keydown', 'wheel'].forEach(ev => document.addEventListener(ev, poke, { capture: true, passive: true }));
+  $('cmap').addEventListener('scroll', poke, { passive: true }); $('wGrid').addEventListener('scroll', poke, { passive: true });
+  poke();
   Install.boot();
   window.__frog = { Geo, Rules, Solver, Gen, Game, Board, UI, Tests, Sound, Career, Outfit, Wardrobe };
 })();
