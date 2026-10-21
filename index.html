@@ -2951,7 +2951,7 @@ const Daily = (() => {
     // só "Froggo" em negrito (*…*); o resto sem
     const n = (v, um, varios) => `${v} ${v === 1 ? um : varios}`, mi = Math.floor(sec / 60), se = sec % 60;
     const tempo = mi ? mi + 'min' + (se ? pad(se) + 's' : '') : se + 's';   // ex.: 1min29s, 45s
-    const st = r.min ? ' ' + '⭐'.repeat(starsFor(r.moves, r.min)) + '☆'.repeat(3 - starsFor(r.moves, r.min)) : '';   // ☆ = estrela que faltou
+    const st = r.min ? ' ' + '⭐'.repeat(starsFor(r.moves, r.min)) + '⚪'.repeat(3 - starsFor(r.moves, r.min)) : '';   // ⚪ = estrela que faltou
     return `🐸 *Froggo* · ${d} de ${mes}\n${n(r.moves, 'movimento', 'movimentos')}${st}\n${tempo}\n${LINK}`;
   }
   function paintButton() {
