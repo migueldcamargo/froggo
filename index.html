@@ -84,6 +84,8 @@ svg{display:block}
   background:rgba(255,255,255,.2);border:2px solid rgba(255,255,255,.55);box-shadow:0 .2rem .6rem rgba(0,30,70,.2)}
 .pill-btn svg{width:1.2rem;height:1.2rem}
 .pill-btn:active{transform:scale(.95)}
+.pill-btn.only-icon{padding:0;width:2.6rem;justify-content:center}
+.pill-btn.only-icon svg{width:1.4rem;height:1.4rem}
 .muted-x{display:none}
 .is-muted .muted-x{display:inline}
 .is-muted .sound-waves{display:none}
@@ -137,7 +139,10 @@ svg{display:block}
 .hero-mini{animation:miniBob 2.4s ease-in-out infinite;transform-origin:50% 100%;will-change:transform}
 @keyframes miniBob{50%{transform:translateY(-4%) rotate(-3deg)}}
 .cta{grid-area:cta;display:flex;justify-content:center;align-items:center;gap:.6rem}
-.cta #btnCareer{flex:1 1 auto;width:auto;max-width:22rem;min-width:0}
+.cta #btnCareer{flex:1 1 auto;width:auto;max-width:22rem;min-width:0;color:#fff;text-shadow:0 1px 0 rgba(120,40,0,.5);
+  background:linear-gradient(180deg,#ffc24d 0%,#ff9a1f 45%,#f06a00 100%);box-shadow:0 .28rem 0 #a84700,0 .5rem 1rem rgba(0,30,70,.3),inset 0 2px 0 rgba(255,255,255,.6)}
+.cta #btnCareer:active{box-shadow:0 .06rem 0 #a84700,0 .2rem .5rem rgba(0,30,70,.3)}
+.cta #btnCareer svg{width:1.5em;height:1.5em}
 .cta .round{flex:none;width:3.4rem;height:3.4rem;min-width:3.4rem;min-height:3.4rem;padding:0;border-radius:50%}
 .cta .cards,.cta .wardrobe{color:#7a4a00}
 .cta .round svg{width:1.8rem;height:1.8rem}
@@ -157,7 +162,7 @@ svg{display:block}
 .draw-status{grid-area:status;text-align:center;font-weight:900;font-size:1rem;min-height:1.3em;text-shadow:0 1px 0 rgba(0,40,90,.4)}
 .draw-actions{grid-area:actions;display:flex;gap:.6rem;justify-content:center;flex-wrap:wrap}
 .draw-actions .btn{flex:1 1 9rem;max-width:15rem}
-.draw-actions #btnStart{order:-1;flex-basis:100%;max-width:22rem}
+.draw-actions #btnStart,.draw-actions #btnRedo{order:-1;flex-basis:100%;max-width:22rem}
 .app.land #draw{grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);grid-template-rows:auto minmax(0,1fr) auto auto;
   grid-template-areas:"stage top" "stage ." "stage status" "stage actions";column-gap:1rem}
 .app.land .draw-actions{flex-direction:column;align-items:stretch}
@@ -268,8 +273,11 @@ svg{display:block}
 .overlay.show{display:flex;animation:fadeIn .2s ease-out}
 /* repouso: sem toques por alguns segundos, as animações de enfeite param e a tela fica totalmente parada (economia de bateria) */
 .app.idle .bubble,.app.idle .title,.app.idle .hero-frog,.app.idle .hero-mini,.app.idle .frog .fi,.app.idle .cavatar svg,.app.idle .cnode.cur::before,
-.app.idle .cnode .prize,.app.idle .cnode.portal,.app.idle .pspin,.app.idle .tw,.app.idle .win .res-art svg.rfrog,.app.idle .win .star{animation:none!important}
-.app.idle .win .star{opacity:1}
+.app.idle .cnode .prize,.app.idle .cnode.portal,.app.idle .pspin,.app.idle .tw,.app.idle .win .res-art svg.rfrog,.app.idle .win .star,
+/* economia de bateria (Android avisa bateria fraca e sem carregar): enfeites sempre parados */
+.app.lite .bubble,.app.lite .title,.app.lite .hero-frog,.app.lite .hero-mini,.app.lite .frog .fi,.app.lite .cavatar svg,.app.lite .cnode.cur::before,.app.lite .cnode .prize,.app.lite .cnode.portal,.app.lite .pspin,.app.lite .tw,.app.lite .win .res-art svg.rfrog,.app.lite .win .star{animation:none!important}
+.app.idle .win .star,.app.lite .win .star{opacity:1}
+.app.lite #bubbles{display:none}
 .app.ov::before,.app.ov .bubble,.app.ov .title,.app.ov .hero-frog,.app.ov .hero-mini,.app.ov .frog .fi{animation-play-state:paused}
 @keyframes fadeIn{from{opacity:0}}
 .panel{position:relative;width:min(100%,25rem);max-height:100%;overflow:hidden;border-radius:1.6rem;padding:1rem 1.1rem 1.1rem;color:var(--ink);
@@ -368,7 +376,7 @@ canvas.confetti{position:absolute;inset:0;width:100%;height:100%;pointer-events:
 .prize-won svg{width:2.4rem;height:2.4rem;flex:none}
 
 /* ---------- Mapa do dia ---------- */
-.home-right{display:flex;align-items:center;gap:.5rem}
+.home-right{display:flex;align-items:center;gap:.5rem;margin-left:auto}   /* fica à direita mesmo sem o botão Instalar (app instalado) */
 .btn.round.daily{position:relative;width:2.9rem;height:2.9rem;min-width:2.9rem;min-height:2.9rem;padding:0;border-radius:50%;color:#fff;
   background:linear-gradient(180deg,#ff8a7a 0%,#f2402f 45%,#cf1f16 100%);box-shadow:0 .28rem 0 #8e120c,0 .5rem 1rem rgba(0,30,70,.3),inset 0 2px 0 rgba(255,255,255,.55)}
 .btn.round.daily:active{box-shadow:0 .06rem 0 #8e120c,0 .2rem .5rem rgba(0,30,70,.3)}
@@ -383,14 +391,14 @@ canvas.confetti{position:absolute;inset:0;width:100%;height:100%;pointer-events:
 .dcal b{position:absolute;left:0;right:0;top:50%;text-align:center;font-size:1.25rem;font-weight:900;color:#9a1810}
 .ddate{font-weight:900!important;opacity:.75!important;margin-top:-.3rem}
 .dstats{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;width:100%}
+.dst{font-size:.95rem;letter-spacing:.05em;line-height:1;margin-top:.15rem}
+.st-on{color:#f2b400}.st-off{color:rgba(0,30,60,.2)}
 .dmin{font-size:.8rem!important;font-weight:700!important;opacity:.55!important;margin-top:-.25rem}
 .dstats div{background:#fff;border-radius:1rem;padding:.55rem .4rem;box-shadow:0 .15rem .4rem rgba(0,20,60,.12);display:flex;flex-direction:column;align-items:center}
 .dstats b{font-size:1.4rem;font-weight:900;font-variant-numeric:tabular-nums;color:var(--ink)}
 .dstats small{font-size:.75rem;font-weight:800;opacity:.65;text-transform:uppercase;letter-spacing:.05em}
 .panel .row .btn.wa{flex:1 1 100%}
-.panel .row .btn.dreview{flex:1 1 auto}
-.panel .row .btn.dredo{flex:none;width:2.9rem;height:2.9rem;padding:0;border-radius:50%}
-.panel .row .btn.dredo svg{width:1.4rem;height:1.4rem}
+.panel .row .btn.dreview{flex:1 1 100%}
 .btn.wa{color:#fff;text-decoration:none;text-shadow:0 1px 0 rgba(0,60,20,.4);background:linear-gradient(180deg,#5ef08f,#25d366 50%,#18a74c);box-shadow:0 .28rem 0 #0f7a36,0 .5rem 1rem rgba(0,30,70,.3),inset 0 2px 0 rgba(255,255,255,.5);flex:1 1 100%}
 .btn.wa svg{width:1.4em;height:1.4em}
 .dclose{position:absolute;top:.75rem;right:.75rem;width:2.2rem;height:2.2rem;border-radius:.55rem;display:grid;place-items:center;color:#fff;
@@ -412,6 +420,15 @@ canvas.confetti{position:absolute;inset:0;width:100%;height:100%;pointer-events:
 .cbanner{position:absolute;left:50%;top:22px;transform:translateX(-50%) rotate(-1.5deg);z-index:2;padding:8px 20px 9px;border-radius:12px;text-align:center;white-space:nowrap;
   background:linear-gradient(180deg,#c8884a,#9a5d2b);border:3px solid #6e3d17;box-shadow:0 5px 0 #5a3010,0 8px 14px rgba(0,0,0,.3);color:#fff8e6}
 .cbanner b{display:block;font-size:20px;font-weight:900;text-shadow:0 2px 0 rgba(0,0,0,.3)}
+.wstars{font-size:2rem;letter-spacing:.12em;line-height:1;text-shadow:0 2px 0 rgba(0,0,0,.12)}
+.wmin{font-size:.8rem!important;font-weight:700!important;opacity:.6!important;margin-top:.1rem}
+.cleft{display:flex;align-items:center;gap:.4rem}
+.cstars{display:inline-flex;align-items:center;gap:.2rem;height:2.2rem;padding:0 .7rem;border-radius:999px;background:rgba(255,255,255,.9);color:var(--ink);font-weight:900;font-size:.95rem;box-shadow:0 .15rem .4rem rgba(0,30,60,.2)}
+.cstars::before{content:"★";color:#f2b400;font-size:1.05rem}
+.cnode .cst{position:absolute;left:50%;bottom:-.55rem;transform:translateX(-50%);font-size:.72rem;letter-spacing:.02em;line-height:1;white-space:nowrap;text-shadow:0 1px 0 rgba(0,0,0,.35);pointer-events:none}
+.cnode .cst .st-off{color:rgba(255,255,255,.45)}
+.cbanner em{display:block;font-style:normal;font-size:.72rem;font-weight:800;margin-top:.15rem;opacity:.95}
+.cbanner em.gate{background:rgba(0,0,0,.35);border-radius:999px;padding:.1rem .55rem;display:inline-block}
 .cbanner small{display:block;font-size:12px;font-weight:800;opacity:.9}
 .cbanner i{position:absolute;top:-14px;width:6px;height:16px;background:#6e3d17;border-radius:3px}
 .ctrail{position:absolute;left:0;top:0;pointer-events:none}
@@ -538,6 +555,8 @@ canvas.bigbang{position:absolute;inset:0;width:100%;height:100%;z-index:400;poin
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h13l-3-3M20 17H7l3 3"/></svg><span id="swapLabel">Embaralhar</span></button>
       <button class="btn green big" id="btnStart" disabled>
         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>Começar</button>
+      <button class="btn green big" id="btnRedo" hidden>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>Tentar novamente</button>
     </div>
   </section>
 
@@ -562,7 +581,7 @@ canvas.bigbang{position:absolute;inset:0;width:100%;height:100%;z-index:400;poin
   <!-- ================= CARREIRA ================= -->
   <section class="screen" id="career" aria-label="Modo carreira">
     <div class="topbar">
-      <button class="icon-btn" id="btnCareerHome" aria-label="Voltar para o início"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h5v-6h4v6h5V10"/></svg></button>
+<div class="cleft">      <button class="icon-btn" id="btnCareerHome" aria-label="Voltar para o início"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h5v-6h4v6h5V10"/></svg></button><span class="cstars" id="careerStars" aria-label="Estrelas">0</span></div>
       <h2 class="ctitle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4h10v5a5 5 0 0 1-10 0z" fill="currentColor" fill-opacity=".3"/><path d="M17 5h3v2a4 4 0 0 1-3.6 4M7 5H4v2a4 4 0 0 0 3.6 4"/><path d="M12 14v3M8.5 20h7M9.5 17h5v3h-5z"/></svg>Carreira <span class="badge soft" id="careerProg">0/43</span></h2>
       <button class="icon-btn snd" aria-label="Som ligado/desligado"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9h4l5-4v14l-5-4H4z" fill="currentColor"/><g class="sound-waves"><path d="M16 9a4 4 0 0 1 0 6"/><path d="M18.5 6.5a7.5 7.5 0 0 1 0 11"/></g><g class="muted-x"><path d="M16.5 9.5l5 5M21.5 9.5l-5 5"/></g></svg></button>
     </div>
@@ -588,6 +607,7 @@ canvas.bigbang{position:absolute;inset:0;width:100%;height:100%;z-index:400;poin
       <div class="res-art" id="winArt"></div>
       <div class="res-text">
         <h3 id="winTitle">Você venceu!</h3>
+        <div id="winStars"></div>
         <div class="prize-won hidden" id="winPrize"></div>
         <div class="row win-row">
           <button class="btn round home" id="btnWinHome" aria-label="Página inicial"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h5v-6h4v6h5V10"/></svg></button>
@@ -621,13 +641,13 @@ canvas.bigbang{position:absolute;inset:0;width:100%;height:100%;z-index:400;poin
       <p class="ddate" id="dDate"></p>
       <div class="dstats" id="dStats" hidden>
         <div><b id="dTime">0s</b><small>tempo</small></div>
-        <div><b id="dMoves">0</b><small>movimentos</small></div>
+        <div><b id="dMoves">0</b><small>movimentos</small><span class="dst" id="dStars"></span></div>
       </div>
       <p class="dmin" id="dMin" hidden></p>
       <div class="row">
         <button class="btn green big" id="btnDailyPlay">Jogar</button>
         <button class="btn blue dreview" id="btnDailyReview" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2.5"/><path d="M9 9.5h6M9 13h6M9 16.5h3.5" stroke-linecap="round"/></svg>Rever mapa</button>
-        <button class="btn blue round dredo" id="btnDailyRedo" aria-label="Jogar de novo (não conta)" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg></button>
+
         <a class="btn wa" id="btnDailyShare" target="_blank" rel="noopener" hidden><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.5a9.5 9.5 0 0 0-8.2 14.3L2.5 21.5l4.9-1.3A9.5 9.5 0 1 0 12 2.5zm0 2a7.5 7.5 0 1 1-3.8 14l-.3-.2-2.9.8.8-2.8-.2-.3A7.5 7.5 0 0 1 12 4.5zm-3.1 3.6c-.2 0-.5.1-.7.3-.3.3-.9.9-.9 2.1s.9 2.4 1 2.6c.1.2 1.8 2.8 4.4 3.9 2.2.9 2.6.7 3.1.7s1.5-.6 1.7-1.2c.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.6-.3l-1.6-.8c-.2-.1-.4-.1-.6.1l-.7.9c-.1.2-.3.2-.5.1-.3-.1-1-.4-1.9-1.2-.7-.6-1.2-1.4-1.3-1.6-.1-.3 0-.4.1-.5l.4-.5.3-.4c.1-.2 0-.3 0-.5l-.7-1.8c-.2-.4-.4-.4-.6-.4h-.5z"/></svg>Mandar no Zap</a>
       </div>
     </div>
@@ -1207,7 +1227,6 @@ ${dim ? '' : `<path d="M${x - r * .32} ${y - r * .42} q${r * .12} -${r * .14} ${
    A ordem da lista é a ordem dos prêmios (do mais simples ao mais nobre).
    --------------------------------------------------------------------- */
 const Outfit = (() => {
-  const SLOT_NAMES = { head: 'Cabeça', eyes: 'Olhos', neck: 'Pescoço', chest: 'Peito', back: 'Costas', hand: 'Mão' };
   const ITEMS = [
     // presentes do tutorial (um por fase)
     { id: 'cardigan', name: 'Cardigan verde', slot: 'torso', box: '18 52 64 34',
@@ -1284,7 +1303,64 @@ const Outfit = (() => {
 <path d="M20 16 A36 36 0 0 1 42 -3" stroke="#fff" stroke-width="3.4" opacity=".75" fill="none" stroke-linecap="round"/><path d="M78 46 A30 30 0 0 1 70 58" stroke="#fff" stroke-width="2" opacity=".5" fill="none" stroke-linecap="round"/>` },
     { id: 'jetpack', name: 'Mochila a jato', slot: 'back', space: true, box: '4 34 92 64',
       svg: () => `<rect x="9" y="38" width="15" height="36" rx="7" fill="url(#ufoBody)" stroke="#5b6884" stroke-width="1.2"/><rect x="76" y="38" width="15" height="36" rx="7" fill="url(#ufoBody)" stroke="#5b6884" stroke-width="1.2"/>
-<rect x="9" y="46" width="15" height="4" fill="#ff4b3a"/><rect x="76" y="46" width="15" height="4" fill="#ff4b3a"/><path d="M11 74 Q16.5 94 22 74 Z" fill="#ffb800"/><path d="M13.5 74 Q16.5 86 19.5 74 Z" fill="#fff27a"/><path d="M78 74 Q83.5 94 89 74 Z" fill="#ffb800"/><path d="M80.5 74 Q83.5 86 86.5 74 Z" fill="#fff27a"/>` }
+<rect x="9" y="46" width="15" height="4" fill="#ff4b3a"/><rect x="76" y="46" width="15" height="4" fill="#ff4b3a"/><path d="M11 74 Q16.5 94 22 74 Z" fill="#ffb800"/><path d="M13.5 74 Q16.5 86 19.5 74 Z" fill="#fff27a"/><path d="M78 74 Q83.5 94 89 74 Z" fill="#ffb800"/><path d="M80.5 74 Q83.5 86 86.5 74 Z" fill="#fff27a"/>` },
+    // prêmios raros: um pântano inteiro com 3 estrelas
+    { id: 'zerezes', name: 'Zerezes', slot: 'eyes', rare: true, box: '12 10 76 32',
+      // só a frente: lentes octogonais; metade de cima em acetato tartaruga translúcido (ponte "buraco de fechadura"), metade de baixo em fio prateado
+      svg: () => {
+        const oct = (c, top) => { const y = 27, w = 14.5, h = 11.5, k = 5.5;
+          return top ? `M${c - w} ${y + 1} L${c - w} ${y - h + k} L${c - w + k} ${y - h} L${c + w - k} ${y - h} L${c + w} ${y - h + k} L${c + w} ${y + 1}`
+                     : `M${c - w} ${y} L${c - w} ${y + h - k} L${c - w + k} ${y + h} L${c + w - k} ${y + h} L${c + w} ${y + h - k} L${c + w} ${y}`; };
+        const lens = c => `M${c - 14.5} ${32.5} L${c - 14.5} ${21} L${c - 9} 15.5 L${c + 9} 15.5 L${c + 14.5} 21 L${c + 14.5} 32.5 L${c + 9} 38.5 L${c - 9} 38.5 Z`;
+        return `<path d="${lens(31)} ${lens(69)}" fill="#e8f2f8" fill-opacity=".2"/>
+<path d="${oct(31, false)} ${oct(69, false)}" fill="none" stroke="#c7ccd3" stroke-width="1.1" stroke-linejoin="round"/>
+<path d="${oct(31, true)} ${oct(69, true)}" fill="none" stroke="#7a2e10" stroke-width="5.6" stroke-linejoin="round" opacity=".55"/>
+<path d="${oct(31, true)} ${oct(69, true)}" fill="none" stroke="#b5501f" stroke-width="4.2" stroke-linejoin="round" opacity=".92"/>
+<path d="M45.5 17.5 Q50 20.5 54.5 17.5 M45.4 18 L44.6 29 M54.6 18 L55.4 29" stroke="#b5501f" stroke-width="3.4" fill="none" stroke-linecap="round" opacity=".92"/>
+<path d="M17.5 16.6 L44 16.6 M56 16.6 L82.5 16.6" stroke="#e98a50" stroke-width=".9" opacity=".6"/>
+<g fill="#e3e6ea"><circle cx="20" cy="19.6" r=".9"/><circle cx="42" cy="19.6" r=".9"/><circle cx="58" cy="19.6" r=".9"/><circle cx="80" cy="19.6" r=".9"/></g>
+<path d="M21 30 L25 35 M59 30 L63 35" stroke="#fff" stroke-width="1.2" opacity=".45" stroke-linecap="round"/>`;
+      } },
+    { id: 'oldskool', name: 'Vans', slot: 'feet', rare: true, box: '6 70 88 28',
+      // Old Skool de perfil, bicos para fora: lona preta, biqueira e calcanhar em camurça, faixa lateral branca
+      // contornada, costuras brancas, gola acolchoada, cadarço e solado branco alto com a linha preta
+      svg: () => {
+        const shoe = `<path d="M-3 5 H30 Q34 5 34 8.5 V12.5 H-3 Q-4 12.5 -4 11 V6 Q-4 5 -3 5 Z" fill="#f5f2ea" stroke="#c9c2ae" stroke-width=".5"/>
+<path d="M-3.6 10.6 H33.6" stroke="#141414" stroke-width=".9"/><path d="M28 6.4 V9.6 M29.6 6.4 V9.6 M31.2 6.6 V9.6" stroke="#d8d2c0" stroke-width=".5"/>
+<path d="M-2.5 5.2 Q-3.6 -2.6 .5 -4.6 Q3 -5.4 7 -4.6 L12 -3.6 Q16 -5.6 21 -2.6 Q29 1.2 31.5 5.2 Z" fill="#141414"/>
+<path d="M21 -2.6 Q29 1.2 31.5 5.2 L22.4 5.2 Q20.6 1.6 21 -2.6 Z" fill="#2a2a2a"/><path d="M-2.5 5.2 Q-3.6 -2.6 .5 -4.6 L2.8 -4.4 Q1.2 .2 3.2 5.2 Z" fill="#2a2a2a"/>
+<path d="M21.8 -1.6 Q21.6 2 23 4.6 M2.2 -3.6 Q.8 .4 2.4 4.6 M-1.6 4.2 H30" stroke="#fff" stroke-width=".35" stroke-dasharray=".8 .7" fill="none" opacity=".85"/>
+<path d="M-.4 -4.2 Q4 -6.2 9.6 -4.2" stroke="#2e2e2e" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+<path d="M3 4.2 C6.4 4.6 8 1.2 11 1 C14 .8 14.8 3.4 17.8 3.1 C19.8 2.9 20.6 .9 21.4 -1" stroke="#141414" stroke-width="3" fill="none" stroke-linecap="round"/>
+<path d="M3 4.2 C6.4 4.6 8 1.2 11 1 C14 .8 14.8 3.4 17.8 3.1 C19.8 2.9 20.6 .9 21.4 -1" stroke="#fff" stroke-width="1.9" fill="none" stroke-linecap="round"/>
+<path d="M12.4 -3.4 L14.8 -1.8 M14.6 -3.9 L17 -2.2 M16.8 -3.6 L19.2 -1.6 M18.8 -2.7 L21 -.8" stroke="#fff" stroke-width=".85" stroke-linecap="round"/>`;
+        return `<g transform="translate(44 81) scale(-.9 .9)">${shoe}</g><g transform="translate(56 81) scale(.9)">${shoe}</g>`;
+      } },
+    { id: 'guitarra', name: 'Les Paul', slot: 'hand', rare: true, box: '62 10 44 82',
+      // sunburst tabaco: borda escura e centro âmbar, escudo creme, dois captadores cromados, botões dourados
+      svg: red => `<defs><radialGradient id="lpSun" cx="45%" cy="62%" r="62%"><stop offset="0" stop-color="#f0b452"/><stop offset=".45" stop-color="#c46a1c"/><stop offset=".78" stop-color="#5a2208"/><stop offset="1" stop-color="#1f0a02"/></radialGradient></defs>
+<g transform="translate(84 66) rotate(16) scale(1.18)">
+<rect x="-1.5" y="-40" width="3" height="28" rx=".8" fill="#4a2412"/><g fill="#efe6c8"><rect x="-1.4" y="-35" width="2.8" height=".7"/><rect x="-1.4" y="-29" width="2.8" height=".7"/><rect x="-1.4" y="-23" width="2.8" height=".7"/></g>
+<path d="M-2.4 -40 L-3.6 -48 Q0 -50.5 3.6 -48 L2.4 -40 Z" fill="#141414"/><g fill="#e8d9a8"><circle cx="-4.6" cy="-46" r="1"/><circle cx="-4.4" cy="-43" r="1"/><circle cx="4.6" cy="-46" r="1"/><circle cx="4.4" cy="-43" r="1"/></g>
+<path d="M-2 -14 C-9 -15.5 -11.5 -9 -9 -4 C-14.5 0 -14 10.5 -8 14.5 C-3 17.5 5 17.5 9 13.5 C13 9.5 12.5 2 9 -1 C11.2 -4.5 11 -9 8.6 -11 L6 -9.6 C5 -12.5 3 -14.2 1.8 -14 Z" fill="url(#lpSun)" stroke="#120601" stroke-width=".8"/>
+<path d="M2.6 -9.6 L7.6 -7.6 Q8.4 -1 4.6 2.4 L2.8 -1.6 Z" fill="#efe3c0"/>
+<rect x="-4.6" y="-7" width="6.4" height="3.4" rx=".7" fill="#d9dce0" stroke="#7d8288" stroke-width=".5"/><rect x="-4.6" y="-.6" width="6.4" height="3.4" rx=".7" fill="#d9dce0" stroke="#7d8288" stroke-width=".5"/>
+<rect x="-4.4" y="5.4" width="6" height="1.4" rx=".5" fill="#c8ccd2"/><rect x="-4.2" y="8.6" width="5.6" height="1.1" rx=".5" fill="#c8ccd2"/>
+<g fill="#d9a400" stroke="#8a6400" stroke-width=".3"><circle cx="5" cy="7.6" r="1.2"/><circle cx="8.2" cy="10.4" r="1.2"/><circle cx="3.6" cy="11.6" r="1.2"/><circle cx="6.6" cy="14" r="1.2"/></g>
+<path d="M-.9 -40 V8 M.9 -40 V8" stroke="#f4f4f4" stroke-width=".3" opacity=".8"/>
+<ellipse cx="1.5" cy="-17" rx="5.6" ry="4.3" fill="url(#${red ? 'rD' : 'gD'})"/></g>` },
+    { id: 'asas', name: 'Asas de anjo', slot: 'back', rare: true, box: '-8 18 116 66',
+      svg: () => {
+        const wing = `<path d="M0 2 C-8 -18 -26 -31 -45 -29 C-52 -28 -52 -21 -46 -19 C-53 -16 -52 -9 -45 -8.5 C-51 -4.5 -48 2 -41 1 C-45 6.5 -39 10.5 -33 7.5 C-34 13 -27 15 -22.5 11 C-21.5 15.5 -14 15.5 -12 11 C-8 13 -3 10 0 7 Z" fill="#fff" stroke="#b7c4d6" stroke-width="1.1" stroke-linejoin="round"/>
+<path d="M-6 1 C-16 -6 -29 -15 -42 -19 M-6 4 C-17 -.5 -29 -4.5 -41 -8 M-8 7 C-16 6 -25 4 -36 2.5" stroke="#cdd8e8" stroke-width="1" fill="none" stroke-linecap="round"/>
+<path d="M-4 -2 C-12 -14 -24 -23 -38 -25" stroke="#eef4ff" stroke-width="2.2" fill="none" stroke-linecap="round" opacity=".9"/>`;
+        return `<g transform="translate(30 56)">${wing}</g><g transform="translate(70 56) scale(-1 1)">${wing}</g>`;
+      } },
+    { id: 'oculos3d', name: 'Óculos de estrela', slot: 'eyes', rare: true, space: true, box: '8 6 84 40',
+      svg: () => {
+        const star = (x, y) => `<path transform="translate(${x} ${y}) scale(1.25)" d="M0 -11 l3.2 6.6 7.3 1 -5.3 5.1 1.3 7.2 -6.5 -3.4 -6.5 3.4 1.3 -7.2 -5.3 -5.1 7.3 -1z" fill="#ff6ad5" fill-opacity=".55" stroke="#ffd23f" stroke-width="2.2" stroke-linejoin="round"/>`;
+        return `${star(31, 26)}${star(69, 26)}<path d="M44 24 Q50 20 56 24" stroke="#ffd23f" stroke-width="2.2" fill="none"/><path d="M17 23 L9 25 M83 23 L91 25" stroke="#ffd23f" stroke-width="2" stroke-linecap="round"/>`;
+      } }
   ];
   // grupos do guarda-roupa: cabeça (chapéus, óculos, antenas…), corpo e o que ele segura
   const GROUP = { head: 'cabeca', eyes: 'cabeca', torso: 'corpo', neck: 'corpo', chest: 'corpo', strap: 'corpo', feet: 'corpo', back: 'corpo', hand: 'mao' };
@@ -1308,7 +1384,7 @@ const Outfit = (() => {
   }
   function preview(id) { const it = BY[id]; return `<svg viewBox="${it.box}" overflow="visible" aria-hidden="true">${it.svg(false)}${it.front ? it.front() : ''}</svg>`; }
   return {
-    ITEMS, BY, SLOT_NAMES, GROUP, layers, preview,
+    ITEMS, BY, GROUP, layers, preview,
     get worn() { return { ...worn }; },
     wear(id) { const it = BY[id]; if (!it) return; if (worn[it.slot] === id) delete worn[it.slot]; else worn[it.slot] = id; Store.set('outfit', worn); },
     isWorn: id => BY[id] && worn[BY[id].slot] === id,
@@ -1480,6 +1556,9 @@ function toast(msg) { const t = $('toast'); t.textContent = msg; t.classList.add
    progressivas. As duas primeiras têm a mãozinha mostrando cada salto;
    a terceira (3 saltos) é livre e tenta o jogador a pular o vermelho.
    --------------------------------------------------------------------- */
+const starHTML = n => `<span class="st-on">${'★'.repeat(n)}</span><span class="st-off">${'★'.repeat(3 - n)}</span>`;
+// estrelas: 3 no mínimo de saltos (= nº de verdes), 2 até 4 movimentos a mais, 1 acima disso
+const starsFor = (moves, min) => moves <= min ? 3 : moves <= min + 4 ? 2 : 1;
 const LESSONS = [
   { s: '.....RG......', guide: [[5, 7]] },                 // vermelho come verde
   { s: '.G....G.....R', guide: [[1, 11], [12, 10]] },      // verde come verde; depois o vermelho
@@ -1490,18 +1569,18 @@ const LESSONS = [
    Game — estado da partida (fonte única de verdade)
    --------------------------------------------------------------------- */
 const Game = {
-  card: null, state: null, history: [], over: false, busy: false, active: false,
-  start(card) { this.card = card; this.state = { ...card.start }; this.history = []; this.over = false; this.busy = false; this.active = true; },
+  card: null, state: null, history: [], count: 0, over: false, busy: false, active: false,   // count: saltos + desfazer (para as estrelas)
+  start(card) { this.card = card; this.state = { ...card.start }; this.history = []; this.count = 0; this.over = false; this.busy = false; this.active = true; },
   play(from, to) {
     if (this.over) return null;
     const j = Rules.findMove(this.state, from, to);
     if (!j) return null;                                   // inválido: estado intacto
-    this.history.push({ state: this.state, jump: j });
+    this.history.push({ state: this.state, jump: j }); this.count++;
     this.state = Rules.apply(this.state, j);
     return j;
   },
-  undo() { const h = this.history.pop(); if (!h) return null; this.state = h.state; this.over = false; return h.jump; },
-  restart() { this.state = { ...this.card.start }; this.history = []; this.over = false; },
+  undo() { const h = this.history.pop(); if (!h) return null; this.state = h.state; this.over = false; this.count++; return h.jump; },
+  restart() { this.state = { ...this.card.start }; this.history = []; this.count = 0; this.over = false; },
   get moves() { return this.history.length; },
   get inProgress() { return this.active && this.history.length > 0 && !this.over; },
   status() { if (Rules.isWin(this.state)) return 'win'; if (Rules.legalMoves(this.state).length === 0) return 'stuck'; return 'play'; }
@@ -1993,7 +2072,7 @@ const UI = (() => {
   }
   // ---- HUD ----
   function hud() {
-    $('hudMoves').textContent = Game.card && Game.card.daily && Daily.running ? `${Daily.clock(Daily.elapsed())} · ${Daily.moves} mov.` : 'Movimentos: ' + Game.moves;
+    $('hudMoves').textContent = Game.card && Game.card.daily && Daily.running ? `${Daily.clock(Daily.elapsed())} · ${Daily.moves} mov.` : 'Movimentos: ' + Game.count;
     $('btnUndo').disabled = Game.moves === 0;
   }
   // "Como jogar": vermelho come verde, verde come verde, verde não come vermelho e o objetivo
@@ -2060,16 +2139,19 @@ const UI = (() => {
       [[0, 4, '#ffd23f', .1], [76, 2, '#ffd23f', .3], [40, -14, '#fff27a', .5], [6, 60, '#b9f55a', .7], [74, 58, '#ff9cbc', .9]]
         .map(([x, y, c, d]) => `<div class="star" style="left:${x}%;top:${y}%;animation-delay:${d}s,${d + .6}s">${Art.star(c)}</div>`).join('');
     const c = Game.card;
-    let title = 'Você venceu!', next = 'Próxima carta', prize = null;
+    let title = 'Você venceu!', next = 'Próxima carta', prize = null, stars = '';
     if (c.career != null) {
       if (c.career === LESSONS.length - 1) Daily.practiced();     // terminou o tutorial da trilha: o mapa do dia não repete o treino
-      const res = Career.complete(c.career);
+      const min = Rules.greens(c.start), st = starsFor(Game.count, min);
+      const res = Career.complete(c.career, st);
+      stars = `<div class="wstars" aria-label="${st} de 3 estrelas">${starHTML(st)}</div>${st < 3 ? `<p class="wmin"><span class="st-on">★★★</span> ${min} movimentos</p>` : ''}`;
+      if (res.unlocked) setTimeout(() => toast(`Novo pântano liberado: ${res.unlocked}!`), 900);
       next = 'Próxima fase';
       if (res.finished) { title = 'Carreira concluída!'; next = 'Ver troféu'; }
       if (res.bonusFinished) { title = 'Bônus concluído!'; next = 'Ver estrela'; }
       prize = res.prize;
     }
-    $('winTitle').textContent = title; $('btnNewWin').textContent = next;
+    $('winTitle').textContent = title; $('btnNewWin').textContent = next; $('winStars').innerHTML = stars;
     $('winPrize').classList.toggle('hidden', !prize);
     if (prize) $('winPrize').innerHTML = prize.map(id => Outfit.preview(id)).join('') + `<span>Você ganhou: ${prize.map(id => Outfit.BY[id].name).join(' e ')}!</span>`;
     $('ovWin').classList.add('show'); Base.dim(true);
@@ -2132,7 +2214,12 @@ const UI = (() => {
   $('btnPick').addEventListener('click', () => { Sound.click(); enterDraw(); });
   $('btnSwap').addEventListener('click', () => { if (!drawing && !starting) { Sound.click(); setMenu(false); draw(); } });
   $('btnStart').addEventListener('click', () => { Sound.click(); startGame(); });
-  $('btnDrawBack').addEventListener('click', () => { drawToken++; drawing = false; restoreDraw(); Sound.click(); setMenu(false); show('home'); });
+  $('btnDrawBack').addEventListener('click', () => {
+    const back = reviewing;
+    drawToken++; drawing = false; restoreDraw(); Sound.click(); setMenu(false); show('home');
+    if (back) Daily.reopen();                       // volta para o painel "Você já jogou hoje"
+  });
+  $('btnRedo').addEventListener('click', () => { Sound.click(); restoreDraw(); Daily.redo(); });
   $('btnUndo').addEventListener('click', undo);
   $('btnRestart').addEventListener('click', () => restart(false));
   $('btnGameBack').addEventListener('click', () => {
@@ -2160,15 +2247,23 @@ const UI = (() => {
     startGame(c);
   }
   // rever o mapa do dia já jogado: a carta aparece na mesa, sem botões de jogar
+  // a carta do mapa do dia já jogado: seta para voltar ao painel e "Tentar novamente" (não conta)
+  const DRAW_BACK = $('btnDrawBack').innerHTML, ARROW = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>';
+  let reviewing = false;
+  function setReview(on) {
+    reviewing = on; $('btnRedo').hidden = !on;
+    $('btnDrawBack').innerHTML = on ? ARROW : DRAW_BACK; $('btnDrawBack').classList.toggle('only-icon', on);
+    $('btnDrawBack').setAttribute('aria-label', on ? 'Voltar' : 'Voltar para o início');
+  }
   async function dailyReview(c, label) {
     hideOverlays(); drawToken++; drawing = false;
-    show('draw'); setMenu(false);
+    show('draw'); setMenu(false); setReview(true);
     $('levels').classList.add('hidden'); $('btnSwap').classList.add('hidden'); $('btnStart').classList.add('hidden');
     $('drawStatus').textContent = label;
     Deck.showDeck();
     await Deck.reveal(c);
   }
-  function restoreDraw() { $('levels').classList.remove('hidden'); $('btnSwap').classList.remove('hidden'); drawing = false; }
+  function restoreDraw() { $('levels').classList.remove('hidden'); $('btnSwap').classList.remove('hidden'); drawing = false; if (reviewing) setReview(false); }
   $('btnAgain').addEventListener('click', () => { hideOverlays(); startGame(); });
   $('btnNewWin').addEventListener('click', () => {
     if (Game.card && Game.card.career != null) { const from = Game.card.career; hideOverlays(); Game.active = false; Sound.click(); Career.open({ hopFrom: from }); }
@@ -2351,8 +2446,28 @@ const Career = (() => {
     PRIZE[TOTAL - 1] = ['coroa', 'trofeu'];
     PRIZE[TOTAL + 4] = ['antenas']; PRIZE[ALL - 1] = ['capacete', 'jetpack'];
   }
-  const owned = () => Object.keys(PRIZE).filter(i => +i < done).flatMap(i => PRIZE[i]);
   let done = Math.max(0, Math.min(bonusOpen ? ALL : TOTAL, +Store.get('career', 0) || 0));
+  /* Estrelas (1 a 3 por fase, vale a melhor). Um pântano só abre com 2×fases + metade das fases (arredondada
+     para baixo) em estrelas no pântano anterior: ex. Iniciante (13) → 32 = 6 fases com 3★ e 7 com 2★.
+     Fechar um pântano inteiro com 3★ (do Iniciante em diante) dá um prêmio raro. */
+  const START = []; REGIONS.reduce((a, R, r) => (START[r] = a, a + R.count), 0);
+  const RARE = { iniciante: 'zerezes', medio: 'oldskool', avancado: 'guitarra', expert: 'asas', espaco: 'oculos3d' };
+  let stars = Store.get('stars', null), opened = Store.get('opened', null), rare = Store.get('rare', []);
+  if (!Array.isArray(stars)) {        // quem já jogava antes das estrelas: fases feitas valem 1★ e os pântanos já alcançados seguem abertos
+    stars = Array.from({ length: ALL }, (_, i) => i < done ? 1 : 0);
+    opened = REGIONS.map((R, r) => r).filter(r => START[r] <= done);
+    Store.set('stars', stars); Store.set('opened', opened);
+  }
+  if (!Array.isArray(opened)) opened = [];
+  if (!Array.isArray(rare)) rare = [];
+  const regionOf = i => { let r = 0; while (r < REGIONS.length - 1 && i >= START[r + 1]) r++; return r; };
+  const regionStars = r => stars.slice(START[r], START[r] + REGIONS[r].count).reduce((a, b) => a + (b || 0), 0);
+  const need = r => { const n = REGIONS[r - 1].count; return 2 * n + Math.floor(n / 2); };
+  const isOpen = r => r === 0 || !!REGIONS[r].bonus || opened.includes(r) || regionStars(r - 1) >= need(r);
+  const playable = i => i <= done && isOpen(regionOf(i));
+  const gateMsg = r => `Junte ${need(r)} ★ no ${REGIONS[r - 1].name} para abrir (você tem ${regionStars(r - 1)})`;
+  const totalStars = () => stars.reduce((a, b) => a + (b || 0), 0);
+  const owned = () => Object.keys(PRIZE).filter(i => +i < done).flatMap(i => PRIZE[i]).concat(rare);
   let list = null, built = null, nodes = [], finalPos = null, portalPos = null, starPos = null, lastW = 0, avatar = null;
   const map = $('cmap'), inner = $('cmapInner');
   let baseRects = [], mapKey = '';
@@ -2467,9 +2582,9 @@ ${portalPos ? `<path d="M${finalPos.x} ${finalPos.y} L${portalPos.x} ${portalPos
     const lock = '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"><rect x="5" y="11" width="14" height="10" rx="2" fill="#fff"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>';
     const ok = '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"/></svg>';
     nodes.forEach((p, i) => {
-      const st = i < done ? 'done' : i === done ? 'cur' : 'locked', L = list[i];
+      const st = i < done ? 'done' : i === done && playable(i) ? 'cur' : 'locked', L = list[i];
       html += `<button class="cnode ${st}" data-i="${i}" style="left:${p.x - ns / 2}px;top:${p.y - ns / 2}px;width:${ns}px;height:${ns}px" aria-label="${REGIONS[L.region].name} fase ${L.n}${st === 'locked' ? ' (bloqueada)' : ''}">
-<svg viewBox="-12 -12 24 24">${REGIONS[L.region].bonus ? Art.saucer(0, 0, 10.5) : Art.lily(0, 0, 10.5, (i * 47) % 360, true)}</svg><span class="num">${L.n}</span>${st === 'locked' ? `<span class="lock">${lock}</span>` : st === 'done' ? `<span class="ok">${ok}</span>` : ''}${PRIZE[i] && i === done ? `<span class="prize" title="Prêmio desta fase">${Outfit.preview(PRIZE[i][0])}</span>` : PRIZE[i] && i > done ? '<span class="prize mystery" title="Prêmio surpresa">?</span>' : ''}</button>`;
+<svg viewBox="-12 -12 24 24">${REGIONS[L.region].bonus ? Art.saucer(0, 0, 10.5) : Art.lily(0, 0, 10.5, (i * 47) % 360, true)}</svg><span class="num">${L.n}</span>${st === 'locked' ? `<span class="lock">${lock}</span>` : st === 'done' ? `<span class="ok">${ok}</span>` : ''}${stars[i] ? `<span class="cst">${starHTML(stars[i])}</span>` : ''}${PRIZE[i] && i === done ? `<span class="prize" title="Prêmio desta fase">${Outfit.preview(PRIZE[i][0])}</span>` : PRIZE[i] && i > done ? '<span class="prize mystery" title="Prêmio surpresa">?</span>' : ''}</button>`;
     });
     const fs = ns * 1.3;
     html += `<button class="cnode final${done === TOTAL && !bonusOpen ? ' cur' : ''}" data-i="T" style="left:${finalPos.x - fs / 2}px;top:${finalPos.y - fs / 2}px;width:${fs}px;height:${fs}px" aria-label="Troféu final">${Deco.trophy()}</button>`;
@@ -2480,6 +2595,7 @@ ${portalPos ? `<path d="M${finalPos.x} ${finalPos.y} L${portalPos.x} ${portalPos
     watchRegions();
     avatar = $('cavatar');
     $('careerProg').textContent = `${done}/${limit()}`;
+    $('careerStars').textContent = String(totalStars());
     placeAvatar(done);
     syncBase();
   }
@@ -2541,7 +2657,14 @@ ${portalPos ? `<path d="M${finalPos.x} ${finalPos.y} L${portalPos.x} ${portalPos
     items.sort((a, b) => a.y - b.y);
     return `<div class="creg${R.bonus ? ' space' : ''}" style="top:${rc.top}px;height:${H}px;background:${R.bg || `linear-gradient(180deg,${R.top},${R.bot})`}">
 <svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" aria-hidden="true">${R.bank ? Deco.bank(W, R.bank) : ''}${items.map(i => i.s).join('')}</svg>
-${tw.join('')}<div class="cbanner"><i style="left:22%"></i><i style="right:22%"></i><b>${R.name}</b><small>${R.sub}</small></div></div>`;
+${tw.join('')}<div class="cbanner"><i style="left:22%"></i><i style="right:22%"></i><b>${R.name}</b><small>${R.sub}</small>${bannerStars(R)}</div></div>`;
+  }
+  // faixa do pântano: estrelas juntadas / possíveis; fechado: quantas faltam para abrir
+  function bannerStars(R) {
+    const r = REGIONS.indexOf(R);
+    if (!isOpen(r)) return `<em class="gate">🔒 ${need(r)} ★ no ${REGIONS[r - 1].name} · você tem ${regionStars(r - 1)}</em>`;
+    if (r === 0 || START[r] > done) return '';
+    return `<em class="rst">★ ${regionStars(r)}/${R.count * 3}${RARE[R.id] && !rare.includes(RARE[R.id]) ? ' · 3★ em todas = 🎁' : ''}</em>`;
   }
   function placeAvatar(i) {
     const p = posOf(i); if (!p || !avatar) return;
@@ -2576,18 +2699,28 @@ ${tw.join('')}<div class="cbanner"><i style="left:22%"></i><i style="right:22%">
     UI.show('career');
     await ensureBuilt();
     // a trilha só é refeita se algo mudou (largura, progresso, bônus ou roupa do sapo)
-    const key = [map.clientWidth, done, bonusOpen, JSON.stringify(Outfit.worn)].join('|');
+    const key = [map.clientWidth, done, bonusOpen, JSON.stringify(Outfit.worn), stars.join('')].join('|');
     if (key !== mapKey) { render(); mapKey = key; } else syncBase();
     const from = opts.hopFrom;
-    if (from != null && from + 1 === done) {
+    if (from != null && from + 1 === done && done < limit() && !playable(done)) { scrollToIdx(from, false); toast(gateMsg(regionOf(done))); }
+    else if (from != null && from + 1 === done) {
       placeAvatar(from); scrollToIdx(from, false);
       await wait(380);
       await hop(from, done);
     } else scrollToIdx(done, false);
   }
-  function complete(i) {
-    if (i === done && done < limit()) { done++; Store.set('career', done); return { advanced: true, finished: done === TOTAL, bonusFinished: done === ALL, prize: PRIZE[i] || null }; }
-    return { advanced: false, finished: false, bonusFinished: false, prize: null };
+  function complete(i, st = 1) {
+    const r = regionOf(i), wasOpen = isOpen(r + 1 < REGIONS.length ? r + 1 : r);
+    if (st > (stars[i] || 0)) { stars[i] = st; Store.set('stars', stars); }
+    let prize = null;
+    const R = REGIONS[r], gift = RARE[R.id];
+    if (gift && !rare.includes(gift) && stars.slice(START[r], START[r] + R.count).every(v => v === 3)) { rare.push(gift); Store.set('rare', rare); prize = [gift]; }
+    const unlocked = r + 1 < REGIONS.length && !REGIONS[r + 1].bonus && !wasOpen && isOpen(r + 1) ? REGIONS[r + 1].name : null;
+    if (i === done && done < limit() && playable(i)) {
+      done++; Store.set('career', done);
+      return { advanced: true, finished: done === TOTAL, bonusFinished: done === ALL, prize: (PRIZE[i] || []).concat(prize || []).length ? (PRIZE[i] || []).concat(prize || []) : null, unlocked };
+    }
+    return { advanced: false, finished: false, bonusFinished: false, prize, unlocked };
   }
   function relayout() {
     if (!list || Math.abs(map.clientWidth - lastW) < 2) return;
@@ -2696,6 +2829,7 @@ ${tw.join('')}<div class="cbanner"><i style="left:22%"></i><i style="right:22%">
     if (tag === 'P') { openBonus(); return; }
     if (tag === 'T' || tag === 'S') { celebrate(b); return; }
     const i = +tag;
+    if (i <= done && !playable(i)) { Sound.invalid(); toast(gateMsg(regionOf(i))); return; }
     if (i > done) {
       Sound.invalid();
       animate(b, [0, -6, 6, -4, 4, 0].map(x => ({ transform: `translateX(${x}px)` })), { duration: 320 });
@@ -2723,7 +2857,7 @@ ${tw.join('')}<div class="cbanner"><i style="left:22%"></i><i style="right:22%">
     }
     return { start: xform(Rules.fromKey(pick.c), MAPS[Math.floor(h / 7) % 8]), levelId: pick.id, cls: pick.c };
   }
-  return { open, complete, relayout, ensureBuilt, syncBase, dailyPick, get dailyCount() { dailyPick(0); return { medio: dailyClasses.filter(x => x.id === 'medio').length, avancado: dailyClasses.filter(x => x.id === 'avancado').length }; }, seeded, cardFor, owned, openBonus, bigBang, REGIONS, TOTAL, ALL, PRIZE, BONUS, get bonusOpen() { return bonusOpen; }, set bonusOpen(v) { bonusOpen = v; }, get list() { return list; }, get done() { return done; }, set done(v) { done = v; } };
+  return { open, complete, relayout, ensureBuilt, syncBase, dailyPick, get stars() { return stars.slice(); }, totalStars, playable, get dailyCount() { dailyPick(0); return { medio: dailyClasses.filter(x => x.id === 'medio').length, avancado: dailyClasses.filter(x => x.id === 'avancado').length }; }, seeded, cardFor, owned, openBonus, bigBang, REGIONS, TOTAL, ALL, PRIZE, BONUS, get bonusOpen() { return bonusOpen; }, set bonusOpen(v) { bonusOpen = v; }, get list() { return list; }, get done() { return done; }, set done(v) { done = v; } };
 })();
 
 /* ---------------------------------------------------------------------
@@ -2758,7 +2892,8 @@ const Daily = (() => {
     // negrito (*…*) no número de movimentos e no tempo
     const n = (v, um, varios) => `*${v}* ${v === 1 ? um : varios}`, mi = Math.floor(sec / 60), se = sec % 60;
     const tempo = `*${mi ? mi + 'min' + (se ? pad(se) + 's' : '') : se + 's'}*`;   // ex.: *1min29s*, *45s*
-    return `🐸 Froggo · ${d} de ${mes}\n${n(r.moves, 'movimento', 'movimentos')}\n${tempo}\n${LINK}`;
+    const st = r.min ? ' ' + '⭐'.repeat(starsFor(r.moves, r.min)) : '';
+    return `🐸 Froggo · ${d} de ${mes}\n${n(r.moves, 'movimento', 'movimentos')}${st}\n${tempo}\n${LINK}`;
   }
   function paintButton() {
     $('dailyNum').textContent = dayNum();
@@ -2770,12 +2905,12 @@ const Daily = (() => {
     $('dCalDay').textContent = String(+(just ? just.date : today()).slice(8));
     $('dDate').textContent = dateBR(d, true);
     $('dTitle').textContent = justWon ? 'Mapa do dia completo!' : r ? 'Você já jogou hoje' : 'Mapa do dia';
-    $('dStats').hidden = !r; $('btnDailyPlay').hidden = !!r; $('btnDailyShare').hidden = !r; $('btnDailyReview').hidden = !r; $('btnDailyRedo').hidden = !r; shown = d;
+    $('dStats').hidden = !r; $('btnDailyPlay').hidden = !!r; $('btnDailyShare').hidden = !r; $('btnDailyReview').hidden = !r; shown = d;
     $('btnDailyPlay').textContent = !r && saved() ? 'Continuar' : 'Jogar';
     if (r) { $('dTime').textContent = fmtTime(r.time); $('dMoves').textContent = String(r.moves); shareLink(message(r)); }
     // menor número de movimentos possível (= nº de sapos verdes: cada pulo come um), discreto, só depois de jogar
-    const showMin = n => { $('dMin').textContent = `Dava para fazer em ${n} movimentos`; $('dMin').hidden = false; };
-    $('dMin').hidden = true;
+    const showMin = n => { $('dMin').innerHTML = `<span class="st-on">★★★</span> ${n} movimentos`; $('dMin').hidden = false; if (r) $('dStars').innerHTML = starHTML(starsFor(r.moves, n)); };
+    $('dMin').hidden = true; $('dStars').innerHTML = '';
     if (r && r.min) showMin(r.min);
     else if (r) card(r.date).then(c => { if (shown === r.date && $('ovDaily').classList.contains('show')) showMin(Rules.greens(c.start)); });
     $('ovDaily').classList.add('show'); Base.dim(true);
@@ -2838,6 +2973,7 @@ const Daily = (() => {
     await UI.startGame({ ...c, daily: null, replay: d, label: 'De novo', code: 'R-' + d });
   }
   function replayWon() { openPanel(false); afterWin = true; }
+  function reopen() { openPanel(false); }
   // já jogou: só mostra a carta do mapa daquele dia, sem jogar de novo
   async function review() {
     const d = shown || today();
@@ -2876,13 +3012,12 @@ const Daily = (() => {
   $('btnDaily').addEventListener('click', () => { Sound.click(); paintButton(); openPanel(false); });
   $('btnDailyPlay').addEventListener('click', () => { Sound.click(); play(); });
   $('btnDailyReview').addEventListener('click', () => { Sound.click(); review(); });
-  $('btnDailyRedo').addEventListener('click', () => { Sound.click(); redo(); });
   $('btnTutGo').addEventListener('click', () => { Sound.click(); UI.hideOverlays(); practiceNext(); });
   $('btnTutClose').addEventListener('click', () => { Sound.click(); UI.hideOverlays(); UI.show('home'); });
   $('btnDailyClose').addEventListener('click', () => { Sound.click(); closePanel(); });
   paintButton();
   setInterval(paintButton, 60000);     // vira o dia sozinho se o app ficar aberto à meia-noite
-  return { card, kindOf, begin, move, save, pause, finish, invite, practiced, replayWon, elapsed, clock, fmtTime, message, today, hash, closePanel, get running() { return !!run; }, get moves() { return run ? run.moves : 0; } };
+  return { card, kindOf, begin, move, save, pause, finish, invite, practiced, replayWon, reopen, redo, elapsed, clock, fmtTime, message, today, hash, closePanel, get running() { return !!run; }, get moves() { return run ? run.moves : 0; } };
 })();
 
 /* ---------------------------------------------------------------------
@@ -3023,7 +3158,9 @@ const Tests = {
     const CL = Career.list;
     const RC = Career.REGIONS.map(r => r.count);
     t('carreira: 50 fases; expert 10, avançado 12, iniciante ≥ médio ≥ avançado > expert', Career.TOTAL === 50 && CL.length === 60 && RC[4] === 10 && RC[3] === 12 && RC[1] >= RC[2] && RC[2] >= RC[3], RC.slice(0, 5).join(' + ') + ' (+10 bônus)');
-    t('prêmios: 1 por fase do tutorial, depois 1 a cada 5 fases; 17 apetrechos sem repetir', [0, 1, 2].every(i => Career.PRIZE[i]) && [7, 12, 17, 22, 27, 32, 37, 42, 47, 49, 54, 59].every(i => Career.PRIZE[i]) && Object.keys(Career.PRIZE).length === 15 && new Set(Object.values(Career.PRIZE).flat()).size === 17 && Outfit.ITEMS.length === 17);
+    t('prêmios: 1 por fase do tutorial, depois 1 a cada 5 fases; 17 apetrechos sem repetir', [0, 1, 2].every(i => Career.PRIZE[i]) && [7, 12, 17, 22, 27, 32, 37, 42, 47, 49, 54, 59].every(i => Career.PRIZE[i]) && Object.keys(Career.PRIZE).length === 15 && new Set(Object.values(Career.PRIZE).flat()).size === 17 && Outfit.ITEMS.filter(i => !i.rare).length === 17);
+    t('5 prêmios raros (pântano inteiro com 3★), do Iniciante ao Bônus', Outfit.ITEMS.filter(i => i.rare).length === 5 && Outfit.ITEMS.filter(i => i.rare).every(i => !Object.values(Career.PRIZE).flat().includes(i.id)));
+    t('estrelas: 3 no mínimo, 2 até +4, 1 acima', starsFor(5, 5) === 3 && starsFor(6, 5) === 2 && starsFor(9, 5) === 2 && starsFor(10, 5) === 1);
     t('tutorial com 1, 2 e 3 sapos verdes', [0, 1, 2].every(i => Rules.greens(CL[i].start) === i + 1));
     t('todas as fases da carreira têm solução', CL.filter(l => !Career.REGIONS[l.region].bonus).every(l => !!Solver.solve(l.start)));
     const BL = CL.filter(l => Career.REGIONS[l.region].bonus);
@@ -3094,7 +3231,7 @@ const Tests = {
   if (!reduceMotion()) setInterval(() => {
     if (document.hidden || app.classList.contains('idle')) return;
     const all = app.querySelectorAll('.screen.active .lids, .overlay.show .lids, .loading .lids');
-    if (!all.length) return;
+    if (!all.length || Math.random() > all.length / 5) return;      // com 1 sapo, pisca a cada ~5 s; com muitos, alguns por vez
     for (let i = 0, n = Math.min(3, Math.ceil(all.length / 6)); i < n; i++) {
       const g = all[Math.floor(Math.random() * all.length)];
       g.classList.add('b'); setTimeout(() => g.classList.remove('b'), 260);
@@ -3123,6 +3260,8 @@ const Tests = {
     sleepT = setTimeout(() => Sound.sleep(), 45000);
   };
   ['pointerdown', 'keydown', 'wheel'].forEach(ev => document.addEventListener(ev, poke, { capture: true, passive: true }));
+  // bateria fraca e fora da tomada (onde o navegador informa; o iPhone não informa): enfeites parados
+  try { if (navigator.getBattery) navigator.getBattery().then(b => { const upd = () => app.classList.toggle('lite', !b.charging && b.level <= .2); upd(); b.addEventListener('levelchange', upd); b.addEventListener('chargingchange', upd); }).catch(() => {}); } catch (e) {}
   $('cmap').addEventListener('scroll', poke, { passive: true }); $('wGrid').addEventListener('scroll', poke, { passive: true });
   poke();
   Install.boot();
