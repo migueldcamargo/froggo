@@ -3116,7 +3116,7 @@ const Daily = (() => {
     return moves.map((mv, i) => { const t = mv >= 2 * mins[i] ? 'x' : starsFor(mv, mins[i]), n = seen[t] = (seen[t] || 0) + 1; return MOODS[t][(off + n - 1) % 3]; });
   }
   const sum = a => a.reduce((x, y) => x + y, 0);
-  const grade = r => Math.round(sum(r.moves.map((mv, i) => starsFor(mv, r.mins[i]))) / r.moves.length);   // nota do desafio = média das estrelas das fases
+  const grade = r => starsFor(sum(r.moves) / r.moves.length, sum(r.mins) / r.mins.length);   // nota do desafio = média de pulos por mapa contra a média dos mínimos
   let run = null, afterWin = false, shown = null;   // run: { date, phase, moves[5] }; shown = data aberta no painel
   // partida salva: ao sair do desafio ou do app, o mapa, o tabuleiro e os movimentos ficam guardados
   const saved = () => { const v = Store.get('dailyRun', null); return v && v.v === 2 && v.date === today() ? v : null; };
@@ -3470,6 +3470,8 @@ const Tests = {
     t('desafio do dia: fase com solução conferida e igual para a mesma data', Rules.toStr(cA.start) === Rules.toStr(cB.start) && !cA.start.n && cA.solution && cA.solution.length === Rules.greens(cA.start));
     const msg = Daily.message({ date: '2026-10-21', moves: [5, 7, 12, 6, 14], mins: [5, 6, 6, 6, 7] }).split('\n');
     t('desafio do dia: mensagem do Zap com os 5 mapas (emojis variando), total e nota (sem tempo)', msg.length === 4 && msg[1].split(' ').length === 5 && msg[1].split(' ')[0].replace(/^\d+/, '') !== msg[1].split(' ')[3].replace(/^\d+/, '') && msg[2] === 'Total: 44 pulos ⭐⭐⚪', msg.join(' | '));
+    const far = Daily.message({ date: '2026-10-21', moves: [5, 4, 69, 7, 4], mins: [5, 4, 7, 7, 4] }).split('\n')[2];
+    t('desafio do dia: nota pela soma dos pulos (um mapa ruim derruba o total)', far === 'Total: 89 pulos ⭐⚪⚪', far);
     // 11. áudio
     t('áudio não é criado antes de um gesto', window.__frogGesture ? true : Sound.ctx === null, window.__frogGesture ? 'houve gesto antes do teste' : 'sem gesto: sem AudioContext');
     return { out, fails };
