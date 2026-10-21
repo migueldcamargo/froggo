@@ -221,6 +221,15 @@ svg{display:block}
 .pmark{position:absolute;width:var(--psz,15%);height:var(--psz,15%);margin:calc(var(--psz,15%) / -2) 0 0 calc(var(--psz,15%) / -2);border-radius:50%;pointer-events:none;transition:box-shadow .15s, background .15s}
 .pmark.bad{box-shadow:0 0 0 .6vmin #ff3b30, 0 0 2vmin .6vmin rgba(255,59,48,.85);background:rgba(255,59,48,.3)}
 .pmark.origin{box-shadow:0 0 0 .5vmin #ffd23f, 0 0 1.8vmin .5vmin rgba(255,210,63,.9)}
+/* treino guiado do mapa do dia: sapo a pegar, casa de destino e a mãozinha mostrando o arrasto */
+.pmark.gfrom{box-shadow:0 0 0 .6vmin #ffd23f, 0 0 2.4vmin .8vmin rgba(255,210,63,.95);animation:gpulse 1s ease-in-out infinite}
+.pmark.gto{background:rgba(255,255,255,.45);box-shadow:0 0 0 .5vmin #fff, 0 0 2.2vmin .6vmin rgba(255,255,255,.9);animation:gpulse 1s ease-in-out .5s infinite}
+@keyframes gpulse{50%{transform:scale(1.18)}}
+.ghand{position:absolute;width:0;height:0;pointer-events:none;z-index:6}
+.ghand span{position:absolute;left:-.32em;top:-.12em;line-height:1;filter:drop-shadow(0 .06em .08em rgba(0,0,0,.4))}
+#game.guided .gctrl{visibility:hidden}
+.tut-art{width:5.2rem;height:5.2rem}
+.tut-art svg{width:100%;height:100%}
 @keyframes pulse{50%{transform:scale(1.12)}}
 .frog{position:absolute;width:var(--fsz,19%);height:var(--fsz,19%);margin:calc(var(--fsz,19%) * -.58) 0 0 calc(var(--fsz,19%) / -2);pointer-events:none;will-change:transform;z-index:2}
 .frog .fi{position:absolute;inset:0}
@@ -349,10 +358,11 @@ canvas.confetti{position:absolute;inset:0;width:100%;height:100%;pointer-events:
 .btn.round.daily{position:relative;width:2.9rem;height:2.9rem;min-width:2.9rem;min-height:2.9rem;padding:0;border-radius:50%;color:#fff;
   background:linear-gradient(180deg,#ff8a7a 0%,#f2402f 45%,#cf1f16 100%);box-shadow:0 .28rem 0 #8e120c,0 .5rem 1rem rgba(0,30,70,.3),inset 0 2px 0 rgba(255,255,255,.55)}
 .btn.round.daily:active{box-shadow:0 .06rem 0 #8e120c,0 .2rem .5rem rgba(0,30,70,.3)}
+/* já jogou hoje: o botão inteiro fica verde */
+.btn.round.daily.done{background:linear-gradient(180deg,#b8f56a 0%,#55cf3a 45%,#24a12a 100%);box-shadow:0 .28rem 0 #13701a,0 .5rem 1rem rgba(0,30,70,.3),inset 0 2px 0 rgba(255,255,255,.6)}
+.btn.round.daily.done:active{box-shadow:0 .06rem 0 #13701a,0 .2rem .5rem rgba(0,30,70,.3)}
 .btn.round.daily svg{width:1.7rem;height:1.7rem}
 .daily .dnum{position:absolute;left:0;right:0;top:52%;text-align:center;font-size:.72rem;font-weight:900;line-height:1;color:#fff}
-.daily .dok{position:absolute;right:-3px;top:-3px;width:1.1rem;height:1.1rem;border-radius:50%;background:#2fbf3a;display:grid;place-items:center;box-shadow:0 0 0 2px #fff}
-.daily .dok svg{width:.7rem;height:.7rem}
 .daily-panel{width:min(100%,22rem)}
 .dcal{position:relative;width:4.2rem;height:4.2rem;color:#e8352b}
 .dcal svg{width:100%;height:100%}
@@ -475,7 +485,7 @@ canvas.bigbang{position:absolute;inset:0;width:100%;height:100%;z-index:400;poin
       </button>
       <div class="home-right">
         <button class="icon-btn snd" aria-label="Som ligado/desligado"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9h4l5-4v14l-5-4H4z" fill="currentColor"/><g class="sound-waves"><path d="M16 9a4 4 0 0 1 0 6"/><path d="M18.5 6.5a7.5 7.5 0 0 1 0 11"/></g><g class="muted-x"><path d="M16.5 9.5l5 5M21.5 9.5l-5 5"/></g></svg></button>
-        <button class="btn round daily" id="btnDaily" aria-label="Mapa do dia"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="15.5" rx="3" fill="currentColor" fill-opacity=".18"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg><span class="dnum" id="dailyNum">1</span><span class="dok" id="dailyOk" hidden><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"/></svg></span></button>
+        <button class="btn round daily" id="btnDaily" aria-label="Mapa do dia"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="15.5" rx="3" fill="currentColor" fill-opacity=".18"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg><span class="dnum" id="dailyNum">1</span></button>
       </div>
     </div>
     <div class="hero">
@@ -603,6 +613,16 @@ canvas.bigbang{position:absolute;inset:0;width:100%;height:100%;z-index:400;poin
   </div>
 
   <!-- Confirmação -->
+  <!-- Fim do treino do mapa do dia (só na 1ª vez) -->
+  <div class="overlay" id="ovTut" role="dialog" aria-modal="true" aria-labelledby="tutTitle">
+    <div class="panel daily-panel">
+      <button class="dclose" id="btnTutClose" type="button" aria-label="Fechar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+      <div class="tut-art" id="tutArt"></div>
+      <h3 id="tutTitle">Você pegou o jeito!</h3>
+      <div class="row"><button class="btn green big" id="btnTutGo">Jogar mapa do dia</button></div>
+    </div>
+  </div>
+
   <div class="overlay" id="ovConfirm" role="alertdialog" aria-modal="true" aria-labelledby="cfTitle">
     <div class="panel">
       <h3 id="cfTitle">Tem certeza?</h3>
@@ -1510,11 +1530,33 @@ const Board = (() => {
     return best;
   }
   const size = () => el.getBoundingClientRect().width || 1;
+  // treino guiado: só vale o salto indicado no passo atual
+  const guideOk = (a, b) => { const g = Game.card && Game.card.guide; if (!g) return true; const st = g[Game.moves]; return !!st && st[0] === a && st[1] === b; };
+  let hand = null;
+  function hint(step) {
+    marks.forEach(m => m.classList.remove('gfrom', 'gto'));
+    if (hand) { hand.remove(); hand = null; }
+    if (!step || !G) return;
+    const [a, b] = step;
+    marks[a].classList.add('gfrom'); marks[b].classList.add('gto');
+    hand = document.createElement('div'); hand.className = 'ghand';
+    hand.style.left = G.PX[a] + '%'; hand.style.top = G.PY[a] + '%'; hand.style.fontSize = (size() * .13).toFixed(1) + 'px';
+    hand.innerHTML = '<span>👆</span>'; el.appendChild(hand);
+    const [vx, vy] = cellVec(b, a);
+    if (typeof hand.animate === 'function') hand.animate([
+      { transform: 'translate(0,0) scale(1.1)', opacity: 0 },
+      { transform: 'translate(0,0) scale(1.1)', opacity: 1, offset: .15 },
+      { transform: 'translate(0,0) scale(.9)', opacity: 1, offset: .28 },
+      { transform: `translate(${vx}px,${vy}px) scale(.9)`, opacity: 1, offset: .78 },
+      { transform: `translate(${vx}px,${vy}px) scale(1.1)`, opacity: 0 }
+    ], { duration: 2000, iterations: Infinity, easing: 'ease-in-out' });
+  }
   function cellVec(a, b) { const s = size() / 100; return [(G.PX[a] - G.PX[b]) * s, (G.PY[a] - G.PY[b]) * s]; }
 
   // ---- Movimento válido: salto em arco + captura ----
   async function commit(from, to, offset) {
     const f = frogs[from];
+    if (!guideOk(from, to)) return false;
     const j = Game.play(from, to);
     if (!j) return false;
     if (Game.card && Game.card.daily) Daily.move();
@@ -1541,6 +1583,7 @@ const Board = (() => {
     if (!rm) animate(f.firstChild, [{ transform: 'scale(1.18,.8)' }, { transform: 'scale(.95,1.06)' }, { transform: 'scale(1)' }], { duration: 220, easing: 'ease-out' });
     sync(false);
     Game.busy = false;
+    if (Game.card && Game.card.guide) UI.guide();
     UI.checkEnd();
     return true;
   }
@@ -1600,7 +1643,7 @@ const Board = (() => {
       try { el.setPointerCapture(e.pointerId); } catch (err) {}
     } else if (selected >= 0) {
       const from = selected;
-      if (Rules.findMove(Game.state, from, c)) commit(from, c, null);
+      if (Rules.findMove(Game.state, from, c) && guideOk(from, c)) commit(from, c, null);
       else rejectAt(c);                                   // casa onde ele não pode ir
     }
   });
@@ -1622,7 +1665,7 @@ const Board = (() => {
     if (d.moved) {
       if (d.el) d.el.classList.remove('dragging');
       const c = cellAt(e.clientX, e.clientY, 14);
-      if (c >= 0 && c !== d.cell && Rules.findMove(Game.state, d.cell, c)) { commit(d.cell, c, [d.dx, d.dy]); return; }
+      if (c >= 0 && c !== d.cell && Rules.findMove(Game.state, d.cell, c) && guideOk(d.cell, c)) { commit(d.cell, c, [d.dx, d.dy]); return; }
       snapBack(d.el, d.dx, d.dy);
       if (c >= 0 && c !== d.cell) { rejectAt(c); clearSel(); }
       else select(d.cell);                                 // soltou na própria casa: fica selecionado para tocar no destino
@@ -1634,7 +1677,7 @@ const Board = (() => {
   el.addEventListener('lostpointercapture', e => { if (drag && e.pointerId === drag.id) cancelDrag(); });
   el.addEventListener('contextmenu', e => e.preventDefault());
   configure();
-  return { configure, reset, sync, undoAnim, cancelDrag, clearSel, commit, el, get frogs() { return frogs; }, get selected() { return selected; } };
+  return { configure, reset, sync, undoAnim, cancelDrag, clearSel, commit, hint, el, get frogs() { return frogs; }, get selected() { return selected; } };
 })();
 
 /* ---------------------------------------------------------------------
@@ -1775,7 +1818,7 @@ const UI = (() => {
     if (id === 'home') { const k = JSON.stringify(Outfit.worn); if (k !== heroKey) { heroKey = k; $('heroArt').innerHTML = Art.heroScene(); } }   // só redesenha se a roupa mudou
     document.querySelectorAll('.screen').forEach(s => s.classList.toggle('active', s.id === id));
     app.scrollTop = 0;                               // o foco num botão de painel pode ter rolado o contêiner
-    if (id !== 'game') { Game.active = false; Board.cancelDrag(); setSkin(''); try { Daily.pause(); } catch (e) { /* ainda iniciando */ } }
+    if (id !== 'game') { Game.active = false; Board.cancelDrag(); Board.hint(null); setSkin(''); try { Daily.pause(); } catch (e) { /* ainda iniciando */ } }
     Layout.update();
     if (id === 'career') Career.syncBase(); else Base.set(app.classList.contains('space-mode') ? '#06051a' : '#0b7bd6');
   }
@@ -1882,7 +1925,7 @@ const UI = (() => {
     Game.start(card);
     show('game');
     $('hudLevel').textContent = card.label || card.level.name; $('hudLevel').style.setProperty('--lvc', card.level.color);
-    $('gtip').textContent = card.tip || ''; $('game').classList.toggle('has-tip', !!card.tip);
+    $('gtip').textContent = card.tip || ''; $('game').classList.toggle('has-tip', !!card.tip); $('game').classList.toggle('guided', !!card.guide);
     $('btnGameBack').setAttribute('aria-label', card.career != null ? 'Voltar para a trilha' : 'Voltar para as cartas');
     Layout.update();
     // skin do jogo = pântano/dificuldade da fase (espaço no bônus)
@@ -1891,6 +1934,7 @@ const UI = (() => {
     Board.configure(card.start.n || 3, skin);
     if (card.daily) Daily.begin(card); else Daily.pause();
     Board.reset(); hud(); Sound.start();
+    if (card.guide) guide();
     if (card.daily && Game.moves) checkEnd();       // partida retomada que já estava sem saída
     Game.active = true;
     starting = false;
@@ -1900,16 +1944,19 @@ const UI = (() => {
     $('hudMoves').textContent = Game.card && Game.card.daily && Daily.running ? `${Daily.clock(Daily.elapsed())} · ${Daily.moves} mov.` : 'Movimentos: ' + Game.moves;
     $('btnUndo').disabled = Game.moves === 0;
   }
+  // treino guiado: mãozinha mostrando qual sapo pegar e para onde arrastar
+  function guide() { Board.hint(Game.card.guide[Game.moves]); }
   function checkEnd() {
     const st = Game.status();
     if (st === 'win') { Game.over = true; setTimeout(showWin, 380); }
     else if (st === 'stuck') { Game.over = true; setTimeout(showStuck, 450); }
   }
   // ---- overlays ----
-  function hideOverlays() { ['ovWin', 'ovStuck', 'ovConfirm', 'ovDaily'].forEach(id => $(id).classList.remove('show')); stopConfetti(); Base.dim(false); }
+  function hideOverlays() { ['ovWin', 'ovStuck', 'ovConfirm', 'ovDaily', 'ovTut'].forEach(id => $(id).classList.remove('show')); stopConfetti(); Base.dim(false); }
   function showWin() {
     if (!Game.over || !Rules.isWin(Game.state)) return;
     if (Game.card.daily) { Sound.win(); confetti(); Daily.finish(); return; }
+    if (Game.card.practice) { Sound.win(); confetti(); Daily.practiced(); $('tutArt').innerHTML = Art.frog('red', { cls: 'rfrog' }); $('ovTut').classList.add('show'); Base.dim(true); return; }
     $('winArt').innerHTML = Art.frog('red', { cls: 'rfrog' }) +
       [[0, 4, '#ffd23f', .1], [76, 2, '#ffd23f', .3], [40, -14, '#fff27a', .5], [6, 60, '#b9f55a', .7], [74, 58, '#ff9cbc', .9]]
         .map(([x, y, c, d]) => `<div class="star" style="left:${x}%;top:${y}%;animation-delay:${d}s,${d + .6}s">${Art.star(c)}</div>`).join('');
@@ -1990,7 +2037,7 @@ const UI = (() => {
   $('btnRestart').addEventListener('click', () => restart(false));
   $('btnGameBack').addEventListener('click', () => {
     if (Game.busy) return;
-    const inCareer = Game.card && Game.card.career != null, inDaily = Game.card && Game.card.daily;
+    const inCareer = Game.card && Game.card.career != null, inDaily = Game.card && (Game.card.daily || Game.card.practice);
     const go = () => { hideOverlays(); if (inDaily) show('home'); else if (inCareer) Career.open(); else backToCard(); };
     if (inDaily) go();                              // o mapa do dia fica salvo; dá para continuar depois
     else if (Game.inProgress) confirm(inCareer ? 'Voltar para a trilha?' : 'Voltar para as cartas?', '', 'Voltar', go); else go();
@@ -2034,7 +2081,7 @@ const UI = (() => {
   $('btnStuckHome').addEventListener('click', () => { hideOverlays(); Sound.click(); show('home'); });
   document.querySelectorAll('.snd').forEach(b => b.addEventListener('click', () => { Sound.unlock(); Sound.setMuted(!Sound.muted); toast(Sound.muted ? 'Som desligado' : 'Som ligado'); }));
 
-  return { show, hud, checkEnd, draw, startGame, hideOverlays, dailyIntro, dailyReview, get card() { return card; }, get levels() { return levels; } };
+  return { show, hud, checkEnd, guide, draw, startGame, hideOverlays, dailyIntro, dailyReview, get card() { return card; }, get levels() { return levels; } };
 })();
 
 /* ---------------------------------------------------------------------
@@ -2583,7 +2630,7 @@ ${tw.join('')}<div class="cbanner"><i style="left:22%"></i><i style="right:22%">
    aparelho; compartilhamento pronto para o WhatsApp.
    --------------------------------------------------------------------- */
 const Daily = (() => {
-  const LINK = 'https://migueldcamargo.github.io/froggo/';
+  const LINK = 'migueldcamargo.github.io/froggo';   // sem https:// e sem barra final: o WhatsApp ainda reconhece o link
   const pad = n => String(n).padStart(2, '0');
   // o dia vira à meia-noite de Brasília, em qualquer aparelho (fallback: UTC−3, sem horário de verão)
   const today = () => {
@@ -2601,12 +2648,16 @@ const Daily = (() => {
   let tick = 0;
   const result = () => { const r = Store.get('daily', null); return r && r.date === today() ? r : null; };
   function message(r) {
-    // *texto* = negrito no WhatsApp
-    return `🐸 *Froggo* ·  ${dateBR(r.date)}\nCompletei o mapa do dia em *${r.moves} ${r.moves === 1 ? 'movimento' : 'movimentos'}* e levei *${fmtTime(r.time)}.*\nTente você também!\n${LINK}`;
+    const [, m, d] = r.date.split('-').map(Number), sec = Math.max(1, Math.round(r.time / 1000));
+    const mes = ['janeiro', 'fevereiro', 'março', 'abril', 'maio', 'junho', 'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro'][m - 1];
+    // negrito (*…*) só nos números
+    const n = (v, um, varios) => `*${v}* ${v === 1 ? um : varios}`, mi = Math.floor(sec / 60), se = sec % 60;
+    const tempo = mi ? n(mi, 'minuto', 'minutos') + (se ? ' e ' + n(se, 'segundo', 'segundos') : '') : n(se, 'segundo', 'segundos');
+    return `🐸 Froggo · ${d} de ${mes}\n${n(r.moves, 'movimento', 'movimentos')}\n${tempo}\n${LINK}`;
   }
   function paintButton() {
     $('dailyNum').textContent = dayNum();
-    $('dailyOk').hidden = !result();
+    $('btnDaily').classList.toggle('done', !!result());
   }
   function openPanel(justWon, just) {
     afterWin = !!justWon;
@@ -2634,11 +2685,26 @@ const Daily = (() => {
     return { daily: iso, level: { name: 'Mapa do dia', color: '#f08a00' }, levelId: lvl, skin: 'daily', size, label: 'Mapa do dia', start,
       greens: Rules.greens(start), jumps: Rules.greens(start), solution, code: 'D-' + iso };
   }
+  /* treino da 1ª vez: tabuleiro fixo que não vale ponto; a mãozinha mostra cada salto (sem texto) */
+  function practice() {
+    const start = Rules.fromStr('RG...GG......');
+    return { practice: true, level: { name: 'Treino', color: '#f08a00' }, levelId: 'medio', skin: 'daily', size: 3, label: 'Treino', start,
+      greens: 3, jumps: 3, solution: Solver.solve(start), code: 'T-daily', guide: [[0, 2], [5, 7], [2, 12]] };
+  }
+  function practiced() { Store.set('dailyTut', true); }
   async function play() {
     closePanel();
+    if (!Store.get('dailyTut', false)) { await Solver.precompute(); return UI.startGame(practice()); }
     const c = await card();
     if (saved()) await UI.startGame(c);       // continua de onde parou
     else await UI.dailyIntro(c);              // embaralha, revela e começa sozinho
+  }
+  // 1º acesso de cada dia: o convite do mapa do dia é a primeira coisa que aparece
+  function invite() {
+    const d = today();
+    if (Store.get('dailyInvite', null) === d || result()) return;
+    if (!$('home').classList.contains('active') || document.querySelector('.overlay.show')) return;
+    Store.set('dailyInvite', d); paintButton(); openPanel(false);
   }
   // já jogou: só mostra a carta do mapa daquele dia, sem jogar de novo
   async function review() {
@@ -2670,6 +2736,7 @@ const Daily = (() => {
     stop(); paintButton(); openPanel(true, r);   // mostra o resultado mesmo se a partida virou a meia-noite
   }
   document.addEventListener('visibilitychange', () => {
+    if (!document.hidden) setTimeout(invite, 300);     // voltou ao app num dia novo
     if (!run) return;
     if (document.hidden) { if (run.t0) run.acc += performance.now() - run.t0; run.t0 = 0; save(); } else run.t0 = performance.now();
   });
@@ -2677,10 +2744,12 @@ const Daily = (() => {
   $('btnDaily').addEventListener('click', () => { Sound.click(); paintButton(); openPanel(false); });
   $('btnDailyPlay').addEventListener('click', () => { Sound.click(); play(); });
   $('btnDailyReview').addEventListener('click', () => { Sound.click(); review(); });
+  $('btnTutGo').addEventListener('click', () => { Sound.click(); UI.hideOverlays(); play(); });
+  $('btnTutClose').addEventListener('click', () => { Sound.click(); UI.hideOverlays(); UI.show('home'); });
   $('btnDailyClose').addEventListener('click', () => { Sound.click(); closePanel(); });
   paintButton();
   setInterval(paintButton, 60000);     // vira o dia sozinho se o app ficar aberto à meia-noite
-  return { card, kindOf, begin, move, save, pause, finish, elapsed, clock, fmtTime, message, today, hash, closePanel, get running() { return !!run; }, get moves() { return run ? run.moves : 0; } };
+  return { card, kindOf, begin, move, save, pause, finish, invite, practiced, elapsed, clock, fmtTime, message, today, hash, closePanel, get running() { return !!run; }, get moves() { return run ? run.moves : 0; } };
 })();
 
 /* ---------------------------------------------------------------------
@@ -2909,6 +2978,7 @@ const Tests = {
   document.addEventListener('dblclick', e => e.preventDefault());
 
   UI.show('home');
+  Daily.invite();
   Gen.validateCatalog();
   setTimeout(() => Solver.precompute().then(() => { if (/[?&#]test/.test(location.href)) Tests.show(); }), 600);
   // repouso: 8 s sem toque param as animações de enfeite; 45 s param a música e o motor de áudio
