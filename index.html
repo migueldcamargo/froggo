@@ -1402,7 +1402,7 @@ const Outfit = (() => {
 <path d="M-4 -2 C-12 -14 -24 -23 -38 -25" stroke="#eef4ff" stroke-width="2.2" fill="none" stroke-linecap="round" opacity=".9"/>`;
         return `<g transform="translate(30 56)">${wing}</g><g transform="translate(70 56) scale(-1 1)">${wing}</g>`;
       } },
-    { id: 'bolovo', name: '5Panel', slot: 'head', rare: true, box: '28 -8 44 36',
+    { id: 'bolovo', name: '5Panel BLV', slot: 'head', rare: true, box: '28 -8 44 36',
       // 5 panel xadrez verde com aba bege e o B, L, V bordados em escadinha descendo (prêmio do desafio do dia perfeito)
       svg: () => `<defs><pattern id="blvPlaid" width="7" height="7" patternUnits="userSpaceOnUse"><rect width="7" height="7" fill="#3f5a3a"/><rect width="7" height="2.2" fill="#56724b" opacity=".9"/><rect width="2.2" height="7" fill="#56724b" opacity=".9"/>
 <rect y="4.4" width="7" height=".35" fill="#e6dcbc" opacity=".75"/><rect x="4.4" width=".35" height="7" fill="#e6dcbc" opacity=".75"/><rect y="1" width="7" height=".35" fill="#22361f"/><rect x="1" width=".35" height="7" fill="#22361f"/></pattern></defs>
@@ -1410,6 +1410,22 @@ const Outfit = (() => {
 <path d="M42 3.4 Q40.6 12 41.2 22 M58 3.4 Q59.4 12 58.8 22" stroke="#22361f" stroke-width=".7" fill="none" opacity=".75"/><circle cx="50" cy="2.3" r="1.6" fill="#3f5a3a" stroke="#22361f" stroke-width=".6"/>
 <g font-family="Georgia,'Times New Roman',serif" font-size="6.6" font-weight="700" fill="#efe6c8" text-anchor="middle"><text x="46.6" y="12.6">B</text><text x="50" y="15.4">L</text><text x="53.4" y="18.2">V</text></g>
 <path d="M33 21 Q50 31 67 21 L65.4 18.6 Q50 26.6 34.6 18.6 Z" fill="#c9b48f" stroke="#8f7a55" stroke-width=".8"/><path d="M36 21.6 Q50 28.6 64 21.6" stroke="#e8dcc0" stroke-width=".5" fill="none" stroke-dasharray="1 .8"/></g>` },
+    { id: 'bellato', name: '5Panel Bellato', slot: 'head', rare: true, box: '28 -8 44 36',
+      // 5 panel oncinha rosado: painel da frente e aba em oncinha, laterais rosadas em cima e tela cinza embaixo com faixa
+      // refletiva, e o patch redondo com o passarinho e "ALICE"
+      svg: () => `<defs><pattern id="leoPrint" width="4.6" height="4.6" patternUnits="userSpaceOnUse"><rect width="4.6" height="4.6" fill="#ecc9bd"/><ellipse cx="1.3" cy="1.3" rx=".62" ry=".5" fill="#a5643c"/><path d="M0.4 1.1 q.3 -.9 1.2 -.75 M2.25 1.0 q.35 .8 -.25 1.15 M0.55 1.85 q.6 .5 1.2 .25" stroke="#2e1f1a" stroke-width=".5" fill="none" stroke-linecap="round"/><ellipse cx="3.6" cy="3.5" rx=".62" ry=".5" fill="#a5643c"/><path d="M2.7 3.3 q.3 -.9 1.2 -.75 M4.55 3.2 q.35 .8 -.25 1.15 M2.85 4.05 q.6 .5 1.2 .25" stroke="#2e1f1a" stroke-width=".5" fill="none" stroke-linecap="round"/><path d="M3.4 .8 q.4 -.3 .7 .1 M.7 3.7 q.4 .3 .7 -.1" stroke="#2e1f1a" stroke-width=".45" fill="none" stroke-linecap="round"/></pattern>
+<pattern id="meshDots" width="1.6" height="1.6" patternUnits="userSpaceOnUse"><rect width="1.6" height="1.6" fill="#625d66"/><circle cx=".8" cy=".8" r=".42" fill="#8d8692"/></pattern>
+<path id="alicePath" d="M45.45 13 A4.55 4.55 0 0 1 54.55 13"/></defs>
+<g transform="translate(0 -3.5)"><path d="M31 22 Q30.5 2.5 50 2 Q69.5 2.5 69 22 Z" fill="#e6c1b4" stroke="#7a5f58" stroke-width=".9"/>
+<path d="M31.1 15 Q31.6 18.5 31 22 H40.6 Q40.2 18.4 40.4 15 Z M68.9 15 Q68.4 18.5 69 22 H59.4 Q59.8 18.4 59.6 15 Z" fill="url(#meshDots)"/>
+<path d="M31.2 14.6 H40.5 M59.5 14.6 H68.8" stroke="#b8b4ba" stroke-width="1"/>
+<circle cx="35" cy="10" r=".7" fill="#5b5760"/><circle cx="65" cy="10" r=".7" fill="#5b5760"/>
+<path d="M40.4 22 Q39.6 10 43 3 Q50 1.4 57 3 Q60.4 10 59.6 22 Z" fill="url(#leoPrint)" stroke="#c9a397" stroke-width=".5"/><circle cx="50" cy="2.3" r="1.4" fill="url(#leoPrint)" stroke="#7a5f58" stroke-width=".5"/>
+<circle cx="50" cy="13" r="5.7" fill="#e9c8bd" stroke="#6d6a70" stroke-width=".9"/><circle cx="50" cy="13" r="3.55" fill="none" stroke="#8d8692" stroke-width=".25"/>
+<text font-family="system-ui,sans-serif" font-size="1.5" font-weight="800" fill="#6d6a70" letter-spacing=".2" dominant-baseline="middle"><textPath href="#alicePath" startOffset="50%" text-anchor="middle">ALICE</textPath></text>
+<g transform="translate(50 13) scale(.78) translate(-50 -13)"><path d="M47.6 14.8 Q48.6 12.4 50.6 12.8 Q52 11.6 52.6 12.6 Q51.6 13.2 51.2 14 Q50 15.8 47.6 14.8 Z M49 13.8 Q48.4 12.6 49.2 12.2" fill="none" stroke="#6d6a70" stroke-width=".5" stroke-linejoin="round"/>
+<path d="M52.8 11.8 L53.6 11.2 M53.2 12.8 L54.2 12.7 M52.6 10.8 L53 10" stroke="#6d6a70" stroke-width=".4" stroke-linecap="round"/></g>
+<path d="M33 21 Q50 31 67 21 L65.4 18.6 Q50 26.6 34.6 18.6 Z" fill="url(#leoPrint)" stroke="#e6c1b4" stroke-width="1.1"/></g>` },
     { id: 'oculos3d', name: 'Óculos de estrela', slot: 'eyes', rare: true, space: true, box: '14 8 72 38',
       svg: () => {
         const star = (x, y) => `<path transform="translate(${x} ${y}) scale(1.25)" d="M0 -11 l3.2 6.6 7.3 1 -5.3 5.1 1.3 7.2 -6.5 -3.4 -6.5 3.4 1.3 -7.2 -5.3 -5.1 7.3 -1z" fill="#ff6ad5" fill-opacity=".55" stroke="#ffd23f" stroke-width="2.2" stroke-linejoin="round"/>`;
@@ -3253,8 +3269,9 @@ const Daily = (() => {
     const mins = []; for (let i = 0; i < N; i++) mins.push(i === k ? Rules.greens(c.start) : Rules.greens((await card(run.date, i)).start));
     const r = { date: run.date, moves: run.moves.slice(), mins }, first = !result();
     if (first) Store.set('daily', r);
-    // todos os mapas no mínimo de movimentos, na tentativa que vale: ganha o boné 5Panel (uma vez só)
-    const prize = first && r.moves.every((mv, i) => mv === mins[i]) && Career.grant('bolovo') ? 'bolovo' : null;
+    // todos os mapas no mínimo de movimentos, na tentativa que vale: 1º desafio perfeito dá o 5Panel BLV, o 2º o 5Panel Bellato
+    const perfect = first && r.moves.every((mv, i) => mv === mins[i]);
+    const prize = !perfect ? null : Career.grant('bolovo') ? 'bolovo' : Career.grant('bellato') ? 'bellato' : null;
     stop(); paintButton(); openPanel(true, r, prize);   // mostra o resultado mesmo se o desafio virou a meia-noite
   }
   document.addEventListener('visibilitychange', () => {
@@ -3417,7 +3434,7 @@ const Tests = {
     const RC = Career.REGIONS.map(r => r.count);
     t('carreira: 50 fases; expert 10, avançado 12, iniciante ≥ médio ≥ avançado > expert', Career.TOTAL === 50 && CL.length === 60 && RC[4] === 10 && RC[3] === 12 && RC[1] >= RC[2] && RC[2] >= RC[3], RC.slice(0, 5).join(' + ') + ' (+10 bônus)');
     t('prêmios: 1 por fase do tutorial, depois 1 a cada 5 fases; 17 apetrechos sem repetir', [0, 1, 2].every(i => Career.PRIZE[i]) && [7, 12, 17, 22, 27, 32, 37, 42, 47, 49, 54, 59].every(i => Career.PRIZE[i]) && Object.keys(Career.PRIZE).length === 15 && new Set(Object.values(Career.PRIZE).flat()).size === 17 && Outfit.ITEMS.filter(i => !i.rare).length === 17);
-    t('prêmios raros: 5 por pântano inteiro com 3★ + o 5Panel do desafio perfeito', Outfit.ITEMS.filter(i => i.rare).length === 6 && !!Outfit.BY.bolovo && Outfit.ITEMS.filter(i => i.rare).every(i => !Object.values(Career.PRIZE).flat().includes(i.id)));
+    t('prêmios raros: 5 por pântano inteiro com 3★ + os 5Panel do desafio perfeito', Outfit.ITEMS.filter(i => i.rare).length === 7 && !!Outfit.BY.bolovo && !!Outfit.BY.bellato && Outfit.ITEMS.filter(i => i.rare).every(i => !Object.values(Career.PRIZE).flat().includes(i.id)));
     t('estrelas: 3 no mínimo, 2 até +4, 1 acima', starsFor(5, 5) === 3 && starsFor(6, 5) === 2 && starsFor(9, 5) === 2 && starsFor(10, 5) === 1);
     t('tutorial com 1, 2 e 3 sapos verdes', [0, 1, 2].every(i => Rules.greens(CL[i].start) === i + 1));
     t('todas as fases da carreira têm solução', CL.filter(l => !Career.REGIONS[l.region].bonus).every(l => !!Solver.solve(l.start)));
