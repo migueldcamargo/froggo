@@ -383,6 +383,7 @@ canvas.confetti{position:absolute;inset:0;width:100%;height:100%;pointer-events:
 .dcal b{position:absolute;left:0;right:0;top:50%;text-align:center;font-size:1.25rem;font-weight:900;color:#9a1810}
 .ddate{font-weight:900!important;opacity:.75!important;margin-top:-.3rem}
 .dstats{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;width:100%}
+.dmin{font-size:.8rem!important;font-weight:700!important;opacity:.55!important;margin-top:-.25rem}
 .dstats div{background:#fff;border-radius:1rem;padding:.55rem .4rem;box-shadow:0 .15rem .4rem rgba(0,20,60,.12);display:flex;flex-direction:column;align-items:center}
 .dstats b{font-size:1.4rem;font-weight:900;font-variant-numeric:tabular-nums;color:var(--ink)}
 .dstats small{font-size:.75rem;font-weight:800;opacity:.65;text-transform:uppercase;letter-spacing:.05em}
@@ -622,6 +623,7 @@ canvas.bigbang{position:absolute;inset:0;width:100%;height:100%;z-index:400;poin
         <div><b id="dTime">0s</b><small>tempo</small></div>
         <div><b id="dMoves">0</b><small>movimentos</small></div>
       </div>
+      <p class="dmin" id="dMin" hidden></p>
       <div class="row">
         <button class="btn green big" id="btnDailyPlay">Jogar</button>
         <button class="btn blue dreview" id="btnDailyReview" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2.5"/><path d="M9 9.5h6M9 13h6M9 16.5h3.5" stroke-linecap="round"/></svg>Rever mapa</button>
@@ -2771,6 +2773,11 @@ const Daily = (() => {
     $('dStats').hidden = !r; $('btnDailyPlay').hidden = !!r; $('btnDailyShare').hidden = !r; $('btnDailyReview').hidden = !r; $('btnDailyRedo').hidden = !r; shown = d;
     $('btnDailyPlay').textContent = !r && saved() ? 'Continuar' : 'Jogar';
     if (r) { $('dTime').textContent = fmtTime(r.time); $('dMoves').textContent = String(r.moves); shareLink(message(r)); }
+    // menor número de movimentos possível (= nº de sapos verdes: cada pulo come um), discreto, só depois de jogar
+    const showMin = n => { $('dMin').textContent = `Dava para fazer em ${n} movimentos`; $('dMin').hidden = false; };
+    $('dMin').hidden = true;
+    if (r && r.min) showMin(r.min);
+    else if (r) card(r.date).then(c => { if (shown === r.date && $('ovDaily').classList.contains('show')) showMin(Rules.greens(c.start)); });
     $('ovDaily').classList.add('show'); Base.dim(true);
   }
   /* No Android, o desvio wa.me → api.whatsapp.com estraga emojis (o 🐸 vira "?"); lá o link abre o app
@@ -2856,7 +2863,7 @@ const Daily = (() => {
   function finish() {
     if (!run) return;
     Store.set('dailyRun', null);
-    const r = { date: run.date, time: Math.round(elapsed()), moves: run.moves };
+    const r = { date: run.date, time: Math.round(elapsed()), moves: run.moves, min: Rules.greens(Game.card.start) };
     if (!result()) Store.set('daily', r);
     stop(); paintButton(); openPanel(true, r);   // mostra o resultado mesmo se a partida virou a meia-noite
   }
