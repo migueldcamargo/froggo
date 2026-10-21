@@ -229,6 +229,21 @@ svg{display:block}
 .ghand span{position:absolute;left:-.32em;top:-.12em;line-height:1;filter:drop-shadow(0 .06em .08em rgba(0,0,0,.4))}
 #game.guided .gctrl{visibility:hidden}
 .tut-art{width:5.2rem;height:5.2rem}
+/* "Como jogar": as 3 regras, cada uma com uma cena animada em loop */
+.rdemo{position:relative;width:15rem;height:5rem;margin:.2rem auto 0;flex:none}
+.rdemo>svg{position:absolute;inset:0;width:100%;height:100%}
+.rdemo .rf{position:absolute;top:.15rem;width:4rem;height:4rem;margin-left:-2rem}
+.rdemo .rf svg{width:100%;height:100%;overflow:visible}
+.rdemo .rno{position:absolute;left:7.5rem;top:.2rem;width:2rem;height:2rem;margin-left:-1rem;border-radius:50%;background:#e81123;color:#fff;display:grid;place-items:center;opacity:0;box-shadow:0 0 0 3px #fff}
+.rdemo .rno svg{width:1.1rem;height:1.1rem}
+.rdemo .rwin{position:absolute;left:12.5rem;top:-1.3rem;width:2.4rem;height:2.4rem;margin-left:-1.2rem;opacity:0;z-index:2}
+.rdemo .rwin svg{width:100%;height:100%}
+.rcap{display:flex;align-items:center;justify-content:center;gap:.4rem;font-size:1.25rem!important;font-weight:900!important;opacity:1!important}
+.rcap i{width:1.6rem;height:1.6rem;border-radius:50%;display:grid;place-items:center;color:#fff;flex:none}
+.rcap i svg{width:1rem;height:1rem}
+.rdots{display:flex;gap:.4rem;justify-content:center}
+.rdots i{width:.55rem;height:.55rem;border-radius:50%;background:rgba(0,30,60,.2)}
+.rdots i.on{background:#2fbf3a}
 .tut-art svg{width:100%;height:100%}
 @keyframes pulse{50%{transform:scale(1.12)}}
 .frog{position:absolute;width:var(--fsz,19%);height:var(--fsz,19%);margin:calc(var(--fsz,19%) * -.58) 0 0 calc(var(--fsz,19%) / -2);pointer-events:none;will-change:transform;z-index:2}
@@ -613,7 +628,19 @@ canvas.bigbang{position:absolute;inset:0;width:100%;height:100%;z-index:400;poin
   </div>
 
   <!-- Confirmação -->
-  <!-- Fim do treino do mapa do dia (só na 1ª vez) -->
+  <!-- Como jogar: regras animadas antes do 1º treino -->
+  <div class="overlay" id="ovRules" role="dialog" aria-modal="true" aria-labelledby="rlTitle">
+    <div class="panel daily-panel">
+      <button class="dclose" id="btnRulesClose" type="button" aria-label="Fechar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+      <h3 id="rlTitle">Como jogar</h3>
+      <div class="rdemo" id="rDemo"></div>
+      <p class="rcap" id="rCap"></p>
+      <div class="rdots" id="rDots"><i></i><i></i><i></i><i></i></div>
+      <div class="row"><button class="btn green big" id="btnRulesNext">Próximo</button></div>
+    </div>
+  </div>
+
+  <!-- Fim de cada fase do treino (só na 1ª vez) -->
   <div class="overlay" id="ovTut" role="dialog" aria-modal="true" aria-labelledby="tutTitle">
     <div class="panel daily-panel">
       <button class="dclose" id="btnTutClose" type="button" aria-label="Fechar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
@@ -1443,6 +1470,17 @@ const Base = (() => {
 function toast(msg) { const t = $('toast'); t.textContent = msg; t.classList.add('show'); clearTimeout(toast._t); toast._t = setTimeout(() => t.classList.remove('show'), 1800); }
 
 /* ---------------------------------------------------------------------
+   Treino (tutorial da trilha e 1ª vez no mapa do dia): 3 fases fáceis e
+   progressivas. As duas primeiras têm a mãozinha mostrando cada salto;
+   a terceira (3 saltos) é livre e tenta o jogador a pular o vermelho.
+   --------------------------------------------------------------------- */
+const LESSONS = [
+  { s: '.....RG......', guide: [[5, 7]] },                 // vermelho come verde
+  { s: '.G....G.....R', guide: [[1, 11], [12, 10]] },      // verde come verde; depois o vermelho
+  { s: 'GR.GG........' }                                   // livre: A→G, B→H, H→F
+];
+
+/* ---------------------------------------------------------------------
    Game — estado da partida (fonte única de verdade)
    --------------------------------------------------------------------- */
 const Game = {
@@ -1624,6 +1662,12 @@ const Board = (() => {
     if (reduceMotion()) animate(wrap, [{ opacity: 1 }, { opacity: .6 }, { opacity: 1 }], { duration: 300 });
     else animate(wrap, [0, -9, 9, -7, 7, -4, 4, 0].map(x => ({ transform: `translateX(${x}px)` })), { duration: 380, easing: 'ease-out' });
   }
+  // tentou pular o vermelho com um verde: explica a regra
+  function why(from, to) {
+    const s = Game.state; if (s.r === from || !G) return;
+    const j = (G.FROM[from] || []).find(x => x.to === to);
+    if (j && s.r === j.over) toast('Verde não come vermelho!');
+  }
   function cancelDrag() {
     if (!drag) return;
     const d = drag; drag = null;
@@ -1644,7 +1688,7 @@ const Board = (() => {
     } else if (selected >= 0) {
       const from = selected;
       if (Rules.findMove(Game.state, from, c) && guideOk(from, c)) commit(from, c, null);
-      else rejectAt(c);                                   // casa onde ele não pode ir
+      else { rejectAt(c); why(from, c); }                                   // casa onde ele não pode ir
     }
   });
   el.addEventListener('pointermove', e => {
@@ -1667,7 +1711,7 @@ const Board = (() => {
       const c = cellAt(e.clientX, e.clientY, 14);
       if (c >= 0 && c !== d.cell && Rules.findMove(Game.state, d.cell, c) && guideOk(d.cell, c)) { commit(d.cell, c, [d.dx, d.dy]); return; }
       snapBack(d.el, d.dx, d.dy);
-      if (c >= 0 && c !== d.cell) { rejectAt(c); clearSel(); }
+      if (c >= 0 && c !== d.cell) { rejectAt(c); why(d.cell, c); clearSel(); }
       else select(d.cell);                                 // soltou na própria casa: fica selecionado para tocar no destino
     } else {
       if (selected === d.cell) clearSel(); else { select(d.cell); Sound.pick(); }
@@ -1935,6 +1979,7 @@ const UI = (() => {
     if (card.daily) Daily.begin(card); else Daily.pause();
     Board.reset(); hud(); Sound.start();
     if (card.guide) guide();
+    if (card.intro) rules();
     if (card.daily && Game.moves) checkEnd();       // partida retomada que já estava sem saída
     Game.active = true;
     starting = false;
@@ -1944,6 +1989,46 @@ const UI = (() => {
     $('hudMoves').textContent = Game.card && Game.card.daily && Daily.running ? `${Daily.clock(Daily.elapsed())} · ${Daily.moves} mov.` : 'Movimentos: ' + Game.moves;
     $('btnUndo').disabled = Game.moves === 0;
   }
+  // "Como jogar": vermelho come verde, verde come verde, verde não come vermelho e o objetivo
+  const RULES = [['red', 'green', true, 'Vermelho come verde'], ['green', 'green', true, 'Verde come verde'], ['green', 'red', false, 'Verde não come vermelho'],
+    ['red', 'green', 'win', 'Só o vermelho? Venceu!']];
+  const ICON_WIN = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 3h10v2h3v3a4 4 0 0 1-4 4h-.3A5 5 0 0 1 13 14.9V18h3v3H8v-3h3v-3.1A5 5 0 0 1 8.3 12H8a4 4 0 0 1-4-4V5h3zm0 4H6v1a2 2 0 0 0 1 1.7zm10 0v2.7A2 2 0 0 0 18 8V7z"/></svg>';
+  const ICON_OK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"/></svg>';
+  const ICON_NO = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>';
+  let ruleStep = 0;
+  function rules() { ruleStep = 0; paintRule(); $('ovRules').classList.add('show'); Base.dim(true); }
+  function closeRules() { $('ovRules').classList.remove('show'); $('rDemo').innerHTML = ''; Base.dim(false); }
+  function paintRule() {
+    const [a, b, ok, txt] = RULES[ruleStep], d = $('rDemo');
+    const win = ok === 'win';
+    $('rCap').innerHTML = `<i style="background:${win ? '#f2b400' : ok ? '#2fbf3a' : '#e81123'}">${win ? ICON_WIN : ok ? ICON_OK : ICON_NO}</i>${txt}`;
+    $('rDots').querySelectorAll('i').forEach((e, i) => e.classList.toggle('on', i === ruleStep));
+    $('btnRulesNext').textContent = ruleStep < RULES.length - 1 ? 'Próximo' : 'Começar';
+    d.innerHTML = `<svg viewBox="0 0 150 50" aria-hidden="true"><path d="M25 27H125" stroke="rgba(0,60,80,.25)" stroke-width="2" stroke-dasharray="4 5"/>${Art.lily(25, 27, 17, 30, false)}${Art.lily(75, 27, 17, 150, false)}${Art.lily(125, 27, 17, 260, false)}</svg>
+<div class="rf" style="left:2.5rem">${Art.frog(a)}</div><div class="rf" style="left:7.5rem">${Art.frog(b)}</div><div class="rno">${ICON_NO}</div>${win ? `<div class="rwin">${Art.star('#ffd23f')}</div>` : ''}`;
+    const [fa, fb] = d.querySelectorAll('.rf'), no = d.querySelector('.rno'), o = { duration: 2400, iterations: Infinity, easing: 'ease-in-out' };
+    if (typeof fa.animate !== 'function' || reduceMotion()) return;
+    if (ok) {
+      fa.animate([{ transform: 'translate(0,0)', opacity: 1 }, { transform: 'translate(0,0)', offset: .18 }, { transform: 'translate(5rem,-2.2rem) scale(1.12)', offset: .34 },
+        { transform: 'translate(10rem,0)', opacity: 1, offset: .5 },
+        ...(win ? [{ transform: 'translate(10rem,-.9rem) scale(1.08)', offset: .6 }, { transform: 'translate(10rem,0)', offset: .68 }, { transform: 'translate(10rem,-.6rem)', offset: .74 }] : []),
+        { transform: 'translate(10rem,0)', opacity: 1, offset: .84 }, { transform: 'translate(10rem,0)', opacity: 0, offset: .92 },
+        { transform: 'translate(0,0)', opacity: 0, offset: .93 }, { transform: 'translate(0,0)', opacity: 1 }], o);
+      fb.animate([{ transform: 'scale(1)', opacity: 1 }, { transform: 'scale(1)', opacity: 1, offset: .36 }, { transform: 'scale(0) rotate(140deg)', opacity: 0, offset: .48 },
+        { transform: 'scale(0)', opacity: 0, offset: .93 }, { transform: 'scale(1)', opacity: 1 }], o);
+      if (win) d.querySelector('.rwin').animate([{ opacity: 0, transform: 'scale(.3)' }, { opacity: 0, transform: 'scale(.3)', offset: .52 }, { opacity: 1, transform: 'scale(1.3) rotate(15deg)', offset: .6 },
+        { opacity: 1, transform: 'scale(1)', offset: .68 }, { opacity: 1, transform: 'scale(1)', offset: .84 }, { opacity: 0, transform: 'scale(1)', offset: .92 }, { opacity: 0 }], o);
+    } else {
+      fa.animate([{ transform: 'translate(0,0)' }, { transform: 'translate(0,0)', offset: .2 }, { transform: 'translate(2.4rem,-1.4rem) scale(1.1)', offset: .32 },
+        { transform: 'translate(0,0)', offset: .46 }, { transform: 'translate(0,0)' }], o);
+      fb.animate([{ transform: 'translateX(0)' }, { transform: 'translateX(0)', offset: .3 }, { transform: 'translateX(-.25rem)', offset: .34 }, { transform: 'translateX(.25rem)', offset: .38 },
+        { transform: 'translateX(-.15rem)', offset: .42 }, { transform: 'translateX(0)', offset: .46 }, { transform: 'translateX(0)' }], o);
+      no.animate([{ opacity: 0, transform: 'scale(.4)' }, { opacity: 0, transform: 'scale(.4)', offset: .3 }, { opacity: 1, transform: 'scale(1.15)', offset: .38 },
+        { opacity: 1, transform: 'scale(1)', offset: .8 }, { opacity: 0, transform: 'scale(1)', offset: .9 }, { opacity: 0 }], o);
+    }
+  }
+  $('btnRulesNext').addEventListener('click', () => { Sound.click(); if (ruleStep < RULES.length - 1) { ruleStep++; paintRule(); } else closeRules(); });
+  $('btnRulesClose').addEventListener('click', () => { Sound.click(); closeRules(); });
   // treino guiado: mãozinha mostrando qual sapo pegar e para onde arrastar
   function guide() { Board.hint(Game.card.guide[Game.moves]); }
   function checkEnd() {
@@ -1952,17 +2037,24 @@ const UI = (() => {
     else if (st === 'stuck') { Game.over = true; setTimeout(showStuck, 450); }
   }
   // ---- overlays ----
-  function hideOverlays() { ['ovWin', 'ovStuck', 'ovConfirm', 'ovDaily', 'ovTut'].forEach(id => $(id).classList.remove('show')); stopConfetti(); Base.dim(false); }
+  function hideOverlays() { $('rDemo').innerHTML = ''; ['ovWin', 'ovStuck', 'ovConfirm', 'ovDaily', 'ovTut', 'ovRules'].forEach(id => $(id).classList.remove('show')); stopConfetti(); Base.dim(false); }
   function showWin() {
     if (!Game.over || !Rules.isWin(Game.state)) return;
     if (Game.card.daily) { Sound.win(); confetti(); Daily.finish(); return; }
-    if (Game.card.practice) { Sound.win(); confetti(); Daily.practiced(); $('tutArt').innerHTML = Art.frog('red', { cls: 'rfrog' }); $('ovTut').classList.add('show'); Base.dim(true); return; }
+    if (Game.card.practice) {
+      const last = Game.card.step >= LESSONS.length - 1;
+      Sound.win(); confetti(); if (last) Daily.practiced();
+      $('tutTitle').textContent = last ? 'Você pegou o jeito!' : 'Muito bem!';
+      $('btnTutGo').textContent = last ? 'Jogar mapa do dia' : 'Próxima fase';
+      $('tutArt').innerHTML = Art.frog('red', { cls: 'rfrog' }); $('ovTut').classList.add('show'); Base.dim(true); return;
+    }
     $('winArt').innerHTML = Art.frog('red', { cls: 'rfrog' }) +
       [[0, 4, '#ffd23f', .1], [76, 2, '#ffd23f', .3], [40, -14, '#fff27a', .5], [6, 60, '#b9f55a', .7], [74, 58, '#ff9cbc', .9]]
         .map(([x, y, c, d]) => `<div class="star" style="left:${x}%;top:${y}%;animation-delay:${d}s,${d + .6}s">${Art.star(c)}</div>`).join('');
     const c = Game.card;
     let title = 'Você venceu!', next = 'Próxima carta', prize = null;
     if (c.career != null) {
+      if (c.career === LESSONS.length - 1) Daily.practiced();     // terminou o tutorial da trilha: o mapa do dia não repete o treino
       const res = Career.complete(c.career);
       next = 'Próxima fase';
       if (res.finished) { title = 'Carreira concluída!'; next = 'Ver troféu'; }
@@ -2234,11 +2326,7 @@ const Career = (() => {
     { n: 5, s: 'GG.G...GG.GG...G.GG...GG..G..G.GGGRG....G', sol: [18,28,22,12,31,21,32,24,33,25,10,20,24,16,40,30,30,20,0,2,2,4,11,29,34,24,12,20,4,12,21,3,24,16,3,11,16,6] },
     { n: 5, s: '.G.G..GGG.G.GRG.G.G.G..GG..G..GGGG..GG.G.', sol: [39,21,37,29,20,38,1,19,3,11,36,28,27,29,18,28,28,10,12,20,24,16,16,26,38,20,6,16,14,6,13,3,31,21,21,11,20,2,3,1,1,11] }
   ];
-  const TUTORIAL = [
-    { s: 'RG...........', tip: 'Arraste o sapo vermelho por cima do verde até a vitória-régia vazia.' },
-    { s: 'RG.....G.....', tip: 'Cada salto tira um sapo verde. Pule os dois e deixe só o vermelho!' },
-    { s: '..R..GG....G.', tip: 'Sapos verdes também podem pular por cima de outros verdes.' }
-  ];
+  const TUTORIAL = LESSONS;
   const MAIN = REGIONS.filter(r => !r.bonus);
   const TOTAL = MAIN.reduce((a, r) => a + r.count, 0);            // 50 fases da carreira
   const ALL = TOTAL + REGIONS.find(r => r.bonus).count;           // + 10 do bônus
@@ -2280,7 +2368,7 @@ const Career = (() => {
 
   function build() {
     const out = [];
-    TUTORIAL.forEach((t, i) => out.push({ region: 0, n: i + 1, start: Rules.fromStr(t.s), tip: t.tip }));
+    TUTORIAL.forEach((t, i) => out.push({ region: 0, n: i + 1, start: Rules.fromStr(t.s), guide: t.guide, intro: i === 0 }));
     const pools = Gen.ensurePools();
     MAIN.slice(1).forEach((R, ri) => {
       const seen = new Set(), classes = [];
@@ -2310,7 +2398,7 @@ const Career = (() => {
     const level = R.id === 'tutorial' || R.bonus ? { name: R.name, color: R.color } : LEVELS[R.id];
     const start = { ...L.start }, greens = Rules.greens(start);
     return { career: i, level, levelId: R.id, label: `${R.name} ${L.n}/${R.count}`, start, greens, jumps: greens,
-      solution: R.bonus ? L.solution : Solver.solve(start), tip: L.tip || '', theme: R.bonus ? 'space' : '', code: 'C-' + (i + 1) };
+      solution: R.bonus ? L.solution : Solver.solve(start), tip: L.tip || '', guide: L.guide, intro: L.intro, theme: R.bonus ? 'space' : '', code: 'C-' + (i + 1) };
   }
   const limit = () => bonusOpen ? ALL : TOTAL;
   const posOf = i => i < TOTAL ? nodes[i] : !bonusOpen ? (i === TOTAL ? finalPos : null) : i < ALL ? nodes[i] : starPos;
@@ -2685,16 +2773,22 @@ const Daily = (() => {
     return { daily: iso, level: { name: 'Mapa do dia', color: '#f08a00' }, levelId: lvl, skin: 'daily', size, label: 'Mapa do dia', start,
       greens: Rules.greens(start), jumps: Rules.greens(start), solution, code: 'D-' + iso };
   }
-  /* treino da 1ª vez: tabuleiro fixo que não vale ponto; a mãozinha mostra cada salto (sem texto) */
-  function practice() {
-    const start = Rules.fromStr('RG...GG......');
-    return { practice: true, level: { name: 'Treino', color: '#f08a00' }, levelId: 'medio', skin: 'daily', size: 3, label: 'Treino', start,
-      greens: 3, jumps: 3, solution: Solver.solve(start), code: 'T-daily', guide: [[0, 2], [5, 7], [2, 12]] };
+  /* treino da 1ª vez: as 3 fases de LESSONS, que não valem ponto */
+  function practice(k = 0) {
+    const L = LESSONS[k], start = Rules.fromStr(L.s);
+    return { practice: true, step: k, intro: k === 0, level: { name: 'Treino', color: '#f08a00' }, levelId: 'medio', skin: 'daily', size: 3, label: `Treino ${k + 1}/${LESSONS.length}`,
+      start, greens: Rules.greens(start), jumps: Rules.greens(start), solution: Solver.solve(start), code: 'T-' + (k + 1), guide: L.guide };
+  }
+  // botão do fim de cada fase do treino: próxima fase ou, no fim, o mapa do dia
+  function practiceNext() {
+    const c = Game.card;
+    if (c && c.practice && c.step < LESSONS.length - 1) UI.startGame(practice(c.step + 1));
+    else play();
   }
   function practiced() { Store.set('dailyTut', true); }
   async function play() {
     closePanel();
-    if (!Store.get('dailyTut', false)) { await Solver.precompute(); return UI.startGame(practice()); }
+    if (!Store.get('dailyTut', false)) { await Solver.precompute(); return UI.startGame(practice(0)); }
     const c = await card();
     if (saved()) await UI.startGame(c);       // continua de onde parou
     else await UI.dailyIntro(c);              // embaralha, revela e começa sozinho
@@ -2744,7 +2838,7 @@ const Daily = (() => {
   $('btnDaily').addEventListener('click', () => { Sound.click(); paintButton(); openPanel(false); });
   $('btnDailyPlay').addEventListener('click', () => { Sound.click(); play(); });
   $('btnDailyReview').addEventListener('click', () => { Sound.click(); review(); });
-  $('btnTutGo').addEventListener('click', () => { Sound.click(); UI.hideOverlays(); play(); });
+  $('btnTutGo').addEventListener('click', () => { Sound.click(); UI.hideOverlays(); practiceNext(); });
   $('btnTutClose').addEventListener('click', () => { Sound.click(); UI.hideOverlays(); UI.show('home'); });
   $('btnDailyClose').addEventListener('click', () => { Sound.click(); closePanel(); });
   paintButton();
