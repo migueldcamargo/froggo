@@ -437,6 +437,10 @@ canvas.confetti{position:absolute;inset:0;width:100%;height:100%;pointer-events:
 .cnode .cst .st-off{color:rgba(255,255,255,.45)}
 .cbanner em{display:block;font-style:normal;font-size:.72rem;font-weight:800;margin-top:.15rem;opacity:.95}
 .cbanner em.gate{background:rgba(0,0,0,.35);border-radius:999px;padding:.1rem .55rem;display:inline-block}
+.cbanner.can{cursor:pointer}
+.cbanner em.unlock{background:#2fbf3a;box-shadow:0 2px 0 #13701a;font-size:.85rem;padding:.2rem .7rem}
+.cbanner .lk{display:inline-block}
+.ckey{position:absolute;z-index:6;font-size:30px;line-height:1;pointer-events:none}
 .cbanner small{display:block;font-size:12px;font-weight:800;opacity:.9}
 .cbanner i{position:absolute;top:-14px;width:6px;height:16px;background:#6e3d17;border-radius:3px}
 .ctrail{position:absolute;left:0;top:0;pointer-events:none}
@@ -1494,6 +1498,7 @@ const Sound = (() => {
     win() { if (!ok()) return; const t = ctx.currentTime; [72, 76, 79, 84, 88, 91].forEach((m, i) => tone(f(m), t + i * .1, .45, { type: 'triangle', vol: .18 })); tone(f(96), t + .65, .9, { type: 'sine', vol: .12 }); croak(t + 1.0, 230, .2); },
     // estrela caindo na casa: "tum" grave + plim, um pouco mais agudo a cada estrela
     star(k = 0) { if (!ok()) return; const t = ctx.currentTime; tone(160, t, .14, { to: 70, vol: .32 }); tone(f(84 + k * 4), t + .02, .4, { type: 'triangle', vol: .17 }); tone(f(96 + k * 4), t + .04, .25, { type: 'sine', vol: .07 }); },
+    key() { if (!ok()) return; const t = ctx.currentTime; tone(1300, t, .04, { type: 'square', vol: .05, filter: 3000 }); tone(950, t + .07, .05, { type: 'square', vol: .06, filter: 2500 }); tone(f(79), t + .16, .3, { type: 'triangle', vol: .14 }); tone(f(86), t + .24, .4, { type: 'triangle', vol: .12 }); },
     sparkle() { if (!ok()) return; const t = ctx.currentTime; [96, 100, 103, 108, 112].forEach((m, i) => tone(f(m), t + i * .055, .35, { type: 'sine', vol: .09 })); },
     lose() { if (!ok()) return; const t = ctx.currentTime; [67, 64, 60].forEach((m, i) => tone(f(m), t + i * .18, .3, { type: 'triangle', vol: .14 })); },
     // coro angelical: acorde maior com vogal "a" (filtros de formante), vibrato suave e brilho agudo
@@ -2522,12 +2527,16 @@ const Career = (() => {
     Store.set('stars', stars); Store.set('opened', opened);
   }
   if (!Array.isArray(opened)) opened = [];
+  // quem já tinha entrado num pântano (fases feitas nele) continua com ele aberto
+  REGIONS.forEach((R, r) => { if (r > 0 && START[r] < done && !opened.includes(r)) { opened.push(r); Store.set('opened', opened); } });
   for (let i = 0; i < REGIONS[0].count; i++) if (i < done && stars[i] !== 3) { stars[i] = 3; Store.set('stars', stars); }   // tutorial feito vale 3★
   if (!Array.isArray(rare)) rare = [];
   const regionOf = i => { let r = 0; while (r < REGIONS.length - 1 && i >= START[r + 1]) r++; return r; };
   const regionStars = r => stars.slice(START[r], START[r] + REGIONS[r].count).reduce((a, b) => a + (b || 0), 0);
   const need = r => { const n = REGIONS[r - 1].count; return r === 1 ? 3 * n : 2 * n + Math.floor(n / 2); };   // tutorial: todas com 3★ (sempre dá 3)
-  const isOpen = r => r === 0 || !!REGIONS[r].bonus || opened.includes(r) || regionStars(r - 1) >= need(r);
+  const isOpen = r => r === 0 || !!REGIONS[r].bonus || opened.includes(r);
+  // pode desbloquear: estrelas suficientes no pântano anterior e já terminou todas as fases dele
+  const canUnlock = r => r > 0 && !isOpen(r) && done >= START[r] && regionStars(r - 1) >= need(r);
   const playable = i => i <= done && isOpen(regionOf(i));
   const totalStars = () => stars.reduce((a, b) => a + (b || 0), 0);
   const owned = () => Object.keys(PRIZE).filter(i => +i < done).flatMap(i => PRIZE[i]).concat(rare);
@@ -2721,11 +2730,12 @@ ${portalPos ? `<path d="M${finalPos.x} ${finalPos.y} L${portalPos.x} ${portalPos
     items.sort((a, b) => a.y - b.y);
     return `<div class="creg${R.bonus ? ' space' : ''}" style="top:${rc.top}px;height:${H}px;background:${R.bg || `linear-gradient(180deg,${R.top},${R.bot})`}">
 <svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" aria-hidden="true">${R.bank ? Deco.bank(W, R.bank) : ''}${items.map(i => i.s).join('')}</svg>
-${tw.join('')}<div class="cbanner"><i style="left:22%"></i><i style="right:22%"></i><b>${R.name}</b><small>${R.sub}</small>${bannerStars(R)}</div></div>`;
+${tw.join('')}<div class="cbanner${canUnlock(REGIONS.indexOf(R)) ? ' can' : ''}" data-r="${REGIONS.indexOf(R)}"><i style="left:22%"></i><i style="right:22%"></i><b>${R.name}</b><small>${R.sub}</small>${bannerStars(R)}</div></div>`;
   }
   // placa do pântano: estrelas juntadas nele / possíveis; fechado: quantas estrelas (no pântano anterior) abrem
   function bannerStars(R) {
     const r = REGIONS.indexOf(R);
+    if (canUnlock(r)) return `<em class="gate unlock"><span class="lk">🔒</span> Desbloquear</em>`;
     if (!isOpen(r)) return `<em class="gate">🔒 ${need(r)} ⭐ para desbloquear</em>`;
     if (START[r] > done) return '';
     return `<em class="rst">⭐ ${regionStars(r)}/${R.count * 3}</em>`;
@@ -2785,6 +2795,45 @@ ${tw.join('')}<div class="cbanner"><i style="left:22%"></i><i style="right:22%">
     if (ban) animate(ban, [{ transform: 'translateX(-50%) rotate(-1.5deg) scale(1)' }, { transform: 'translateX(-50%) rotate(-1.5deg) scale(1.28)', offset: .25 },
       { transform: 'translateX(-50%) rotate(-1.5deg) scale(1.22)', offset: .75 }, { transform: 'translateX(-50%) rotate(-1.5deg) scale(1)' }], { duration: 1500, easing: 'ease-in-out' });
   }
+  // estrelas suficientes, mas o pântano ainda fechado: a trilha mostra a placa e ela cresce um pouco, chamando o toque
+  async function invite(r) {
+    const reg = inner.querySelectorAll('.creg')[r], ban = reg && reg.querySelector('.cbanner');
+    if (!ban) return;
+    scrollToY(reg.offsetTop + 120, true); await wait(380);
+    Sound.reveal();
+    if (!reduceMotion()) animate(ban, [{ transform: 'translateX(-50%) rotate(-1.5deg) scale(1)' }, { transform: 'translateX(-50%) rotate(-1.5deg) scale(1.2)', offset: .4 }, { transform: 'translateX(-50%) rotate(-1.5deg) scale(1)' }], { duration: 900, easing: 'ease-in-out' });
+  }
+  // toque em "Desbloquear": a placa cresce, a chave entra no cadeado, gira, o cadeado abre e o sapo pula para o pântano novo
+  let unlocking = false;
+  async function unlockRegion(r) {
+    if (unlocking || !canUnlock(r)) return;
+    unlocking = true;
+    const reg = inner.querySelectorAll('.creg')[r], ban = reg.querySelector('.cbanner'), lk = ban.querySelector('.lk'), em = ban.querySelector('.unlock'), rm = reduceMotion();
+    scrollToY(reg.offsetTop + 120, true); await wait(300);
+    const T = 'translateX(-50%) rotate(-1.5deg)';
+    if (!rm) await animate(ban, [{ transform: `${T} scale(1)` }, { transform: `${T} scale(1.35)` }], { duration: 380, easing: 'ease-out', fill: 'forwards' });
+    // chave
+    const lr = lk.getBoundingClientRect(), ir = inner.getBoundingClientRect();
+    const key = document.createElement('div'); key.className = 'ckey'; key.textContent = '🗝️';
+    key.style.left = (lr.left - ir.left - 46) + 'px'; key.style.top = (lr.top - ir.top - 6) + 'px'; inner.appendChild(key);
+    if (!rm) {
+      await animate(key, [{ transform: 'translateX(-30px) rotate(-30deg)', opacity: 0 }, { transform: 'translateX(0) rotate(0)', opacity: 1, offset: .5 }, { transform: 'translateX(26px) rotate(0)', opacity: 1 }], { duration: 520, easing: 'ease-out', fill: 'forwards' });
+      Sound.key();
+      await animate(key, [{ transform: 'translateX(26px) rotate(0)' }, { transform: 'translateX(26px) rotate(90deg)' }], { duration: 260, easing: 'ease-in-out', fill: 'forwards' });
+    } else Sound.key();
+    lk.textContent = '🔓'; em.lastChild.textContent = ' Desbloqueado!';
+    if (!rm) animate(lk, [{ transform: 'scale(1)' }, { transform: 'scale(1.6) rotate(-15deg)' }, { transform: 'scale(1)' }], { duration: 420, easing: 'ease-out' });
+    Sound.sparkle();
+    await wait(650);
+    key.remove();
+    if (!rm) await animate(ban, [{ transform: `${T} scale(1.35)` }, { transform: `${T} scale(1)` }], { duration: 300, easing: 'ease-in', fill: 'forwards' });
+    opened.push(r); Store.set('opened', opened);
+    render(); mapKey = [map.clientWidth, done, bonusOpen, JSON.stringify(Outfit.worn), stars.join('')].join('|');
+    placeAvatar(done - 1); scrollToIdx(done - 1, false);
+    await wait(250);
+    await hop(done - 1, done);
+    unlocking = false;
+  }
   async function open(opts = {}) {
     UI.hideOverlays();
     UI.show('career');
@@ -2793,8 +2842,10 @@ ${tw.join('')}<div class="cbanner"><i style="left:22%"></i><i style="right:22%">
     const key = [map.clientWidth, done, bonusOpen, JSON.stringify(Outfit.worn), stars.join('')].join('|');
     if (key !== mapKey) { render(); mapKey = key; } else syncBase();
     const from = opts.hopFrom;
-    if (from != null && from + 1 === done && done < limit() && !playable(done)) {      // pântano fechado: tenta pular, não consegue e fica na última fase
-      placeAvatar(from); scrollToIdx(from, false); await wait(380); await bump(from, done); await denied(regionOf(done));
+    if (from != null && from + 1 === done && done < limit() && !playable(done)) {      // pântano fechado: o sapo fica na última fase
+      placeAvatar(from); scrollToIdx(from, false); await wait(380);
+      if (canUnlock(regionOf(done))) await invite(regionOf(done));           // já tem as estrelas: a placa chama para desbloquear
+      else { await bump(from, done); await denied(regionOf(done)); }       // faltam estrelas: tenta pular e não passa
     }
     else if (from != null && from + 1 === done) {
       placeAvatar(from); scrollToIdx(from, false);
@@ -2915,12 +2966,13 @@ ${tw.join('')}<div class="cbanner"><i style="left:22%"></i><i style="right:22%">
     try { map.scrollTo({ top, behavior: smooth && !reduceMotion() ? 'smooth' : 'auto' }); } catch (e) { map.scrollTop = top; }
   }
   inner.addEventListener('click', e => {
+    const ban = e.target.closest('.cbanner.can'); if (ban) { unlockRegion(+ban.dataset.r); return; }
     const b = e.target.closest('.cnode'); if (!b) return;
     const tag = b.dataset.i;
     if (tag === 'P') { openBonus(); return; }
     if (tag === 'T' || tag === 'S') { celebrate(b); return; }
     const i = +tag;
-    if (i <= done && !playable(i)) { denied(regionOf(i)); return; }
+    if (i <= done && !playable(i)) { if (canUnlock(regionOf(i))) invite(regionOf(i)); else denied(regionOf(i)); return; }
     if (i > done) {
       Sound.invalid();
       animate(b, [0, -6, 6, -4, 4, 0].map(x => ({ transform: `translateX(${x}px)` })), { duration: 320 });
