@@ -386,7 +386,10 @@ canvas.confetti{position:absolute;inset:0;width:100%;height:100%;pointer-events:
 .dstats div{background:#fff;border-radius:1rem;padding:.55rem .4rem;box-shadow:0 .15rem .4rem rgba(0,20,60,.12);display:flex;flex-direction:column;align-items:center}
 .dstats b{font-size:1.4rem;font-weight:900;font-variant-numeric:tabular-nums;color:var(--ink)}
 .dstats small{font-size:.75rem;font-weight:800;opacity:.65;text-transform:uppercase;letter-spacing:.05em}
-.panel .row .btn.dreview,.panel .row .btn.wa{flex:1 1 100%}
+.panel .row .btn.wa{flex:1 1 100%}
+.panel .row .btn.dreview{flex:1 1 auto}
+.panel .row .btn.dredo{flex:none;width:2.9rem;height:2.9rem;padding:0;border-radius:50%}
+.panel .row .btn.dredo svg{width:1.4rem;height:1.4rem}
 .btn.wa{color:#fff;text-decoration:none;text-shadow:0 1px 0 rgba(0,60,20,.4);background:linear-gradient(180deg,#5ef08f,#25d366 50%,#18a74c);box-shadow:0 .28rem 0 #0f7a36,0 .5rem 1rem rgba(0,30,70,.3),inset 0 2px 0 rgba(255,255,255,.5);flex:1 1 100%}
 .btn.wa svg{width:1.4em;height:1.4em}
 .dclose{position:absolute;top:.75rem;right:.75rem;width:2.2rem;height:2.2rem;border-radius:.55rem;display:grid;place-items:center;color:#fff;
@@ -622,6 +625,7 @@ canvas.bigbang{position:absolute;inset:0;width:100%;height:100%;z-index:400;poin
       <div class="row">
         <button class="btn green big" id="btnDailyPlay">Jogar</button>
         <button class="btn blue dreview" id="btnDailyReview" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2.5"/><path d="M9 9.5h6M9 13h6M9 16.5h3.5" stroke-linecap="round"/></svg>Rever mapa</button>
+        <button class="btn blue round dredo" id="btnDailyRedo" aria-label="Jogar de novo (não conta)" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg></button>
         <a class="btn wa" id="btnDailyShare" target="_blank" rel="noopener" hidden><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.5a9.5 9.5 0 0 0-8.2 14.3L2.5 21.5l4.9-1.3A9.5 9.5 0 1 0 12 2.5zm0 2a7.5 7.5 0 1 1-3.8 14l-.3-.2-2.9.8.8-2.8-.2-.3A7.5 7.5 0 0 1 12 4.5zm-3.1 3.6c-.2 0-.5.1-.7.3-.3.3-.9.9-.9 2.1s.9 2.4 1 2.6c.1.2 1.8 2.8 4.4 3.9 2.2.9 2.6.7 3.1.7s1.5-.6 1.7-1.2c.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.6-.3l-1.6-.8c-.2-.1-.4-.1-.6.1l-.7.9c-.1.2-.3.2-.5.1-.3-.1-1-.4-1.9-1.2-.7-.6-1.2-1.4-1.3-1.6-.1-.3 0-.4.1-.5l.4-.5.3-.4c.1-.2 0-.3 0-.5l-.7-1.8c-.2-.4-.4-.4-.6-.4h-.5z"/></svg>Mandar no Zap</a>
       </div>
     </div>
@@ -2042,6 +2046,7 @@ const UI = (() => {
   function showWin() {
     if (!Game.over || !Rules.isWin(Game.state)) return;
     if (Game.card.daily) { Sound.win(); confetti(); Daily.finish(); return; }
+    if (Game.card.replay) { Sound.win(); confetti(); Daily.replayWon(); return; }
     if (Game.card.practice) {
       const last = Game.card.step >= LESSONS.length - 1;
       Sound.win(); confetti(); if (last) Daily.practiced();
@@ -2130,7 +2135,7 @@ const UI = (() => {
   $('btnRestart').addEventListener('click', () => restart(false));
   $('btnGameBack').addEventListener('click', () => {
     if (Game.busy) return;
-    const inCareer = Game.card && Game.card.career != null, inDaily = Game.card && (Game.card.daily || Game.card.practice);
+    const inCareer = Game.card && Game.card.career != null, inDaily = Game.card && (Game.card.daily || Game.card.practice || Game.card.replay);
     const go = () => { hideOverlays(); if (inDaily) show('home'); else if (inCareer) Career.open(); else backToCard(); };
     if (inDaily) go();                              // o mapa do dia fica salvo; dá para continuar depois
     else if (Game.inProgress) confirm(inCareer ? 'Voltar para a trilha?' : 'Voltar para as cartas?', '', 'Voltar', go); else go();
@@ -2763,7 +2768,7 @@ const Daily = (() => {
     $('dCalDay').textContent = String(+(just ? just.date : today()).slice(8));
     $('dDate').textContent = dateBR(d, true);
     $('dTitle').textContent = justWon ? 'Mapa do dia completo!' : r ? 'Você já jogou hoje' : 'Mapa do dia';
-    $('dStats').hidden = !r; $('btnDailyPlay').hidden = !!r; $('btnDailyShare').hidden = !r; $('btnDailyReview').hidden = !r; shown = d;
+    $('dStats').hidden = !r; $('btnDailyPlay').hidden = !!r; $('btnDailyShare').hidden = !r; $('btnDailyReview').hidden = !r; $('btnDailyRedo').hidden = !r; shown = d;
     $('btnDailyPlay').textContent = !r && saved() ? 'Continuar' : 'Jogar';
     if (r) { $('dTime').textContent = fmtTime(r.time); $('dMoves').textContent = String(r.moves); shareLink(message(r)); }
     $('ovDaily').classList.add('show'); Base.dim(true);
@@ -2817,6 +2822,15 @@ const Daily = (() => {
     if (!$('home').classList.contains('active') || document.querySelector('.overlay.show')) return;
     Store.set('dailyInvite', d); paintButton(); openPanel(false);
   }
+  /* jogar de novo o mapa do dia já feito: só por diversão. Não tem cronômetro e não muda o resultado
+     guardado (vale sempre a 1ª vez); ao vencer, o painel volta mostrando o resultado original. */
+  async function redo() {
+    const d = shown || today();
+    afterWin = false; $('ovDaily').classList.remove('show'); Base.dim(false);
+    const c = await card(d);
+    await UI.startGame({ ...c, daily: null, replay: d, label: 'De novo', code: 'R-' + d });
+  }
+  function replayWon() { openPanel(false); afterWin = true; }
   // já jogou: só mostra a carta do mapa daquele dia, sem jogar de novo
   async function review() {
     const d = shown || today();
@@ -2855,12 +2869,13 @@ const Daily = (() => {
   $('btnDaily').addEventListener('click', () => { Sound.click(); paintButton(); openPanel(false); });
   $('btnDailyPlay').addEventListener('click', () => { Sound.click(); play(); });
   $('btnDailyReview').addEventListener('click', () => { Sound.click(); review(); });
+  $('btnDailyRedo').addEventListener('click', () => { Sound.click(); redo(); });
   $('btnTutGo').addEventListener('click', () => { Sound.click(); UI.hideOverlays(); practiceNext(); });
   $('btnTutClose').addEventListener('click', () => { Sound.click(); UI.hideOverlays(); UI.show('home'); });
   $('btnDailyClose').addEventListener('click', () => { Sound.click(); closePanel(); });
   paintButton();
   setInterval(paintButton, 60000);     // vira o dia sozinho se o app ficar aberto à meia-noite
-  return { card, kindOf, begin, move, save, pause, finish, invite, practiced, elapsed, clock, fmtTime, message, today, hash, closePanel, get running() { return !!run; }, get moves() { return run ? run.moves : 0; } };
+  return { card, kindOf, begin, move, save, pause, finish, invite, practiced, replayWon, elapsed, clock, fmtTime, message, today, hash, closePanel, get running() { return !!run; }, get moves() { return run ? run.moves : 0; } };
 })();
 
 /* ---------------------------------------------------------------------
