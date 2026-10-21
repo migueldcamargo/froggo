@@ -2968,7 +2968,7 @@ const Daily = (() => {
     $('btnDailyPlay').textContent = !r && saved() ? 'Continuar' : 'Jogar';
     if (r) { $('dTime').textContent = fmtTime(r.time); $('dMoves').textContent = String(r.moves); shareLink(message(r)); }
     // menor número de movimentos possível (= nº de sapos verdes: cada pulo come um), discreto, só depois de jogar
-    const showMin = n => { $('dMin').innerHTML = `<span class="st-on">★★★</span> ${n} movimentos`; $('dMin').hidden = false; if (r) $('dStars').innerHTML = starHTML(starsFor(r.moves, n)); };
+    const showMin = n => { $('dMin').textContent = `Mínimo: ${n} movimentos`; $('dMin').hidden = false; if (r) $('dStars').innerHTML = starHTML(starsFor(r.moves, n)); };
     $('dMin').hidden = true; $('dStars').innerHTML = '';
     if (r && r.min) showMin(r.min);
     else if (r) card(r.date).then(c => { if (shown === r.date && $('ovDaily').classList.contains('show')) showMin(Rules.greens(c.start)); });
