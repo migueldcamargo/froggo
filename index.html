@@ -137,11 +137,11 @@ svg{display:block}
 .hero-mini{animation:miniBob 2.4s ease-in-out infinite;transform-origin:50% 100%;will-change:transform}
 @keyframes miniBob{50%{transform:translateY(-4%) rotate(-3deg)}}
 .cta{grid-area:cta;display:flex;justify-content:center;align-items:center;gap:.6rem}
-.cta #btnPick{flex:1 1 auto;width:auto;max-width:22rem;min-width:0}
+.cta #btnCareer{flex:1 1 auto;width:auto;max-width:22rem;min-width:0}
 .cta .round{flex:none;width:3.4rem;height:3.4rem;min-width:3.4rem;min-height:3.4rem;padding:0;border-radius:50%}
-.cta .trophy,.cta .wardrobe{color:#7a4a00}
+.cta .cards,.cta .wardrobe{color:#7a4a00}
 .cta .round svg{width:1.8rem;height:1.8rem}
-.cta #btnPick{font-size:clamp(1rem, calc((var(--W) - 9.5rem) * .075), 1.35rem);padding-left:.9em;padding-right:.9em}
+.cta #btnCareer{font-size:clamp(1rem, calc((var(--W) - 9.5rem) * .075), 1.35rem);padding-left:.9em;padding-right:.9em}
 .app.land #home{grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);grid-template-rows:auto minmax(0,1fr) auto;
   grid-template-areas:"hero bar" "hero ." "hero cta";column-gap:1.2rem}
 .app.land #btnInstall span{display:none}
@@ -245,7 +245,6 @@ svg{display:block}
 .rdots i{width:.55rem;height:.55rem;border-radius:50%;background:rgba(0,30,60,.2)}
 .rdots i.on{background:#2fbf3a}
 .tut-art svg{width:100%;height:100%}
-@keyframes pulse{50%{transform:scale(1.12)}}
 .frog{position:absolute;width:var(--fsz,19%);height:var(--fsz,19%);margin:calc(var(--fsz,19%) * -.58) 0 0 calc(var(--fsz,19%) / -2);pointer-events:none;will-change:transform;z-index:2}
 .frog .fi{position:absolute;inset:0}
 .frog svg{width:100%;height:100%;overflow:visible}
@@ -435,6 +434,7 @@ canvas.confetti{position:absolute;inset:0;width:100%;height:100%;pointer-events:
 .tw.ff{width:14px;height:14px;margin:-7px 0 0 -7px;background:radial-gradient(circle,#fffbc0 0 16%,rgba(255,243,107,.35) 30%,rgba(255,243,107,0) 70%)}
 .tw.st{width:4px;height:4px;margin:-2px 0 0 -2px;background:#fff;box-shadow:0 0 6px 1px rgba(255,255,255,.8)}
 @keyframes ffly{50%{opacity:.25}}
+.creg.zz .tw{animation:none}          /* pântano fora da tela: vaga-lumes parados */
 .cnode.portal{filter:drop-shadow(0 0 16px rgba(201,182,255,.9));animation:portalPulse 1.6s ease-in-out infinite}
 .cnode.portal .num{background:linear-gradient(180deg,#c9b6ff,#7b3fe4);color:#fff;bottom:-14px}
 .pspin{animation:spin 3s linear infinite;transform-origin:0 0}
@@ -507,8 +507,8 @@ canvas.bigbang{position:absolute;inset:0;width:100%;height:100%;z-index:400;poin
       <h1 class="title" aria-label="Froggo"><span>F</span><span>r</span><span>o</span><span>g</span><span>g</span><span>o</span></h1>
       <div class="hero-art" id="heroArt"></div>
     </div>
-    <div class="cta"><button class="btn big round trophy" id="btnCareer" aria-label="Modo carreira"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4h10v5a5 5 0 0 1-10 0z" fill="currentColor" fill-opacity=".25"/><path d="M17 5h3v2a4 4 0 0 1-3.6 4M7 5H4v2a4 4 0 0 0 3.6 4"/><path d="M12 14v3M8.5 20h7M9.5 17h5v3h-5z"/></svg></button><button class="btn big" id="btnPick">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"><rect x="3" y="5" width="11" height="15" rx="2" transform="rotate(-10 8 12)"/><rect x="9" y="3" width="11" height="15" rx="2" fill="#fff" fill-opacity=".6"/></svg>Pegar uma carta</button><button class="btn big round wardrobe" id="btnWardrobe" aria-label="Guarda-roupa"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 5.5a2 2 0 1 1 2.6 1.9c-.4.1-.6.5-.6.9V9"/><path d="M12 9L2.8 15.6A1.4 1.4 0 0 0 3.6 18h16.8a1.4 1.4 0 0 0 .8-2.4z" fill="currentColor" fill-opacity=".2"/></svg></button></div>
+    <div class="cta"><button class="btn big round cards" id="btnPick" aria-label="Pegar uma carta"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"><rect x="3" y="5" width="11" height="15" rx="2" transform="rotate(-10 8 12)"/><rect x="9" y="3" width="11" height="15" rx="2" fill="#fff" fill-opacity=".6"/></svg></button><button class="btn big" id="btnCareer">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4h10v5a5 5 0 0 1-10 0z" fill="currentColor" fill-opacity=".25"/><path d="M17 5h3v2a4 4 0 0 1-3.6 4M7 5H4v2a4 4 0 0 0 3.6 4"/><path d="M12 14v3M8.5 20h7M9.5 17h5v3h-5z"/></svg>Modo carreira</button><button class="btn big round wardrobe" id="btnWardrobe" aria-label="Guarda-roupa"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 5.5a2 2 0 1 1 2.6 1.9c-.4.1-.6.5-.6.9V9"/><path d="M12 9L2.8 15.6A1.4 1.4 0 0 0 3.6 18h16.8a1.4 1.4 0 0 0 .8-2.4z" fill="currentColor" fill-opacity=".2"/></svg></button></div>
   </section>
 
   <!-- ================= SORTEIO ================= -->
@@ -1862,6 +1862,7 @@ const UI = (() => {
     if (id === 'home') { const k = JSON.stringify(Outfit.worn); if (k !== heroKey) { heroKey = k; $('heroArt').innerHTML = Art.heroScene(); } }   // só redesenha se a roupa mudou
     document.querySelectorAll('.screen').forEach(s => s.classList.toggle('active', s.id === id));
     app.scrollTop = 0;                               // o foco num botão de painel pode ter rolado o contêiner
+    $('bubbles').hidden = id === 'career' || id === 'wardrobe';   // telas que cobrem o fundo: bolhas desligadas
     if (id !== 'game') { Game.active = false; Board.cancelDrag(); Board.hint(null); setSkin(''); try { Daily.pause(); } catch (e) { /* ainda iniciando */ } }
     Layout.update();
     if (id === 'career') Career.syncBase(); else Base.set(app.classList.contains('space-mode') ? '#06051a' : '#0b7bd6');
@@ -2400,6 +2401,14 @@ const Career = (() => {
     return { career: i, level, levelId: R.id, label: `${R.name} ${L.n}/${R.count}`, start, greens, jumps: greens,
       solution: R.bonus ? L.solution : Solver.solve(start), tip: L.tip || '', guide: L.guide, intro: L.intro, theme: R.bonus ? 'space' : '', code: 'C-' + (i + 1) };
   }
+  // só animam os enfeites do pântano que está na tela
+  let regIO = null;
+  function watchRegions() {
+    if (!('IntersectionObserver' in window)) return;
+    if (regIO) regIO.disconnect();
+    regIO = new IntersectionObserver(es => es.forEach(e => e.target.classList.toggle('zz', !e.isIntersecting)), { root: map, rootMargin: '80px 0px' });
+    inner.querySelectorAll('.creg').forEach(r => { r.classList.add('zz'); regIO.observe(r); });
+  }
   const limit = () => bonusOpen ? ALL : TOTAL;
   const posOf = i => i < TOTAL ? nodes[i] : !bonusOpen ? (i === TOTAL ? finalPos : null) : i < ALL ? nodes[i] : starPos;
 
@@ -2461,6 +2470,7 @@ ${portalPos ? `<path d="M${finalPos.x} ${finalPos.y} L${portalPos.x} ${portalPos
     if (starPos) html += `<button class="cnode final star${done >= ALL ? ' cur' : ''}" data-i="S" style="left:${starPos.x - fs / 2}px;top:${starPos.y - fs / 2}px;width:${fs}px;height:${fs}px" aria-label="Estrela final">${Deco.bigStar()}</button>`;
     html += `<div class="cavatar" id="cavatar" style="width:${ns * .95}px;height:${ns * .95}px">${Art.frog('green', { outfit: Outfit.worn })}</div>`;
     inner.innerHTML = html;
+    watchRegions();
     avatar = $('cavatar');
     $('careerProg').textContent = `${done}/${limit()}`;
     placeAvatar(done);
@@ -2755,8 +2765,15 @@ const Daily = (() => {
     $('dTitle').textContent = justWon ? 'Mapa do dia completo!' : r ? 'Você já jogou hoje' : 'Mapa do dia';
     $('dStats').hidden = !r; $('btnDailyPlay').hidden = !!r; $('btnDailyShare').hidden = !r; $('btnDailyReview').hidden = !r; shown = d;
     $('btnDailyPlay').textContent = !r && saved() ? 'Continuar' : 'Jogar';
-    if (r) { $('dTime').textContent = fmtTime(r.time); $('dMoves').textContent = String(r.moves); $('btnDailyShare').href = 'https://wa.me/?text=' + encodeURIComponent(message(r)); }
+    if (r) { $('dTime').textContent = fmtTime(r.time); $('dMoves').textContent = String(r.moves); shareLink(message(r)); }
     $('ovDaily').classList.add('show'); Base.dim(true);
+  }
+  /* No Android, o desvio wa.me → api.whatsapp.com estraga emojis (o 🐸 vira "?"); lá o link abre o app
+     direto pelo esquema whatsapp://, que entrega o texto intacto. No iPhone o wa.me funciona bem. */
+  function shareLink(text) {
+    const a = $('btnDailyShare'), android = /android/i.test(navigator.userAgent || '');
+    a.href = (android ? 'whatsapp://send?text=' : 'https://wa.me/?text=') + encodeURIComponent(text);
+    if (android) a.removeAttribute('target'); else a.target = '_blank';
   }
   function closePanel() { $('ovDaily').classList.remove('show'); Base.dim(false); if (afterWin) { afterWin = false; UI.show('home'); } }
   /* rodízio diário, sempre 3×3: primeira semana (até 27/10/2026) só Médio; depois alterna Avançado e Médio.
