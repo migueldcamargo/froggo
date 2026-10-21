@@ -233,6 +233,7 @@ svg{display:block}
 .ghand{position:absolute;width:0;height:0;pointer-events:none;z-index:6}
 .ghand span{position:absolute;left:-.32em;top:-.12em;line-height:1;filter:drop-shadow(0 .06em .08em rgba(0,0,0,.4))}
 #game.guided .gctrl{visibility:hidden}
+#btnSwap.dim{opacity:.45}
 .tut-art{width:5.2rem;height:5.2rem}
 /* "Como jogar": as 3 regras, cada uma com uma cena animada em loop */
 .rdemo{position:relative;width:15rem;height:5rem;margin:.2rem auto 0;flex:none}
@@ -1777,12 +1778,6 @@ const Board = (() => {
     if (reduceMotion()) animate(wrap, [{ opacity: 1 }, { opacity: .6 }, { opacity: 1 }], { duration: 300 });
     else animate(wrap, [0, -9, 9, -7, 7, -4, 4, 0].map(x => ({ transform: `translateX(${x}px)` })), { duration: 380, easing: 'ease-out' });
   }
-  // tentou pular o vermelho com um verde: explica a regra
-  function why(from, to) {
-    const s = Game.state; if (s.r === from || !G) return;
-    const j = (G.FROM[from] || []).find(x => x.to === to);
-    if (j && s.r === j.over) toast('Verde não come vermelho!');
-  }
   function cancelDrag() {
     if (!drag) return;
     const d = drag; drag = null;
@@ -1803,7 +1798,7 @@ const Board = (() => {
     } else if (selected >= 0) {
       const from = selected;
       if (Rules.findMove(Game.state, from, c) && guideOk(from, c)) commit(from, c, null);
-      else { rejectAt(c); why(from, c); }                                   // casa onde ele não pode ir
+      else rejectAt(c);                                   // casa onde ele não pode ir
     }
   });
   el.addEventListener('pointermove', e => {
@@ -1826,7 +1821,7 @@ const Board = (() => {
       const c = cellAt(e.clientX, e.clientY, 14);
       if (c >= 0 && c !== d.cell && Rules.findMove(Game.state, d.cell, c) && guideOk(d.cell, c)) { commit(d.cell, c, [d.dx, d.dy]); return; }
       snapBack(d.el, d.dx, d.dy);
-      if (c >= 0 && c !== d.cell) { rejectAt(c); why(d.cell, c); clearSel(); }
+      if (c >= 0 && c !== d.cell) { rejectAt(c); clearSel(); }
       else select(d.cell);                                 // soltou na própria casa: fica selecionado para tocar no destino
     } else {
       if (selected === d.cell) clearSel(); else { select(d.cell); Sound.pick(); }
@@ -1969,7 +1964,6 @@ const UI = (() => {
   let levels = Store.get('levels', ['iniciante']);            // 1º acesso: Iniciante; depois, a última escolha
   if (!Array.isArray(levels)) levels = ['iniciante'];
   levels = LEVEL_IDS.filter(id => levels.includes(id));
-  if (!levels.length) levels = ['iniciante'];
   let heroKey = null, card = null, lastKey = null, drawToken = 0, drawing = false, starting = false, confettiRAF = 0;
 
   // ---- telas ----
@@ -1994,7 +1988,6 @@ const UI = (() => {
     b.innerHTML = `<span class="box">${check}</span>${LEVELS[id].name}`;
     b.addEventListener('click', () => {
       const on = levels.includes(id);
-      if (on && levels.length === 1) { toast('Escolha pelo menos uma dificuldade'); return; }
       levels = LEVEL_IDS.filter(k => k === id ? !on : levels.includes(k));
       Store.set('levels', levels); paintLevels(); Sound.click();
     });
@@ -2002,6 +1995,12 @@ const UI = (() => {
   });
   function paintLevels() {
     LEVEL_IDS.forEach(id => $('lvl-' + id).setAttribute('aria-checked', String(levels.includes(id))));
+    $('btnSwap').classList.toggle('dim', !levels.length);          // nenhuma dificuldade marcada: Embaralhar apagado
+  }
+  // tocou em Embaralhar sem dificuldade: a escolha de dificuldade chacoalha
+  function nudgeLevels() {
+    Sound.invalid();
+    if (!reduceMotion()) animate($('levels'), [0, -9, 9, -7, 7, -4, 4, 0].map(x => ({ transform: `translateX(${x}px)` })), { duration: 420, easing: 'ease-out' });
   }
   function setMenu(open) { menu.classList.toggle('open', open); lvlBtn.setAttribute('aria-expanded', String(open)); }
   lvlBtn.addEventListener('click', () => { setMenu(!menu.classList.contains('open')); Sound.click(); });
@@ -2024,6 +2023,7 @@ const UI = (() => {
   }
   async function draw() {
     if (drawing) return;
+    if (!levels.length) { show('draw'); nudgeLevels(); return; }
     drawing = true;
     const token = ++drawToken;
     show('draw');
@@ -2176,7 +2176,6 @@ const UI = (() => {
       const res = Career.complete(c.career, st);
       got = st;
       stars = `<div class="wstars" aria-label="${st} de 3 estrelas">${[0, 1, 2].map(() => `<span class="ws"><span class="e">${Art.star('#cfd8e3')}</span><span class="f">${Art.star('#ffd23f')}</span></span>`).join('')}</div>${st < 3 ? `<p class="wmin"><span class="st-on">★★★</span> ${min} movimentos</p>` : ''}`;
-      if (res.unlocked) setTimeout(() => toast(`Novo pântano liberado: ${res.unlocked}!`), 900);
       next = 'Próxima fase';
       if (res.finished) { title = 'Carreira concluída!'; next = 'Ver troféu'; }
       if (res.bonusFinished) { title = 'Bônus concluído!'; next = 'Ver estrela'; }
@@ -2253,10 +2252,10 @@ const UI = (() => {
     if (Game.card.daily) Daily.move();          // no mapa do dia, desfazer também conta
     hideOverlays(); Sound.click(); hud(); Board.undoAnim(j);
   }
-  function restart(force) {
+  function restart() {
     if (Game.busy || !Game.active) return;
     const doIt = () => { hideOverlays(); Game.restart(); if (Game.card.daily) Daily.save(); Board.reset(); hud(); Sound.start(); };
-    if (!force && Game.inProgress) confirm('Reiniciar a carta?', '', 'Reiniciar', doIt); else doIt();
+    doIt();
   }
   function newCard() { hideOverlays(); Game.active = false; draw(); }
   $('btnPick').addEventListener('click', () => { Sound.click(); enterDraw(); });
@@ -2269,7 +2268,7 @@ const UI = (() => {
   });
   $('btnRedo').addEventListener('click', () => { Sound.click(); restoreDraw(); Daily.redo(); });
   $('btnUndo').addEventListener('click', undo);
-  $('btnRestart').addEventListener('click', () => restart(false));
+  $('btnRestart').addEventListener('click', () => restart());
   $('btnGameBack').addEventListener('click', () => {
     if (Game.busy) return;
     const inCareer = Game.card && Game.card.career != null, inDaily = Game.card && (Game.card.daily || Game.card.practice || Game.card.replay);
@@ -2329,9 +2328,9 @@ const UI = (() => {
   $('btnCareer').addEventListener('click', () => { Sound.click(); setMenu(false); Career.open(); });
   $('btnWardrobe').addEventListener('click', () => { Sound.click(); setMenu(false); Wardrobe.open(); });
   $('btnWinHome').addEventListener('click', () => { hideOverlays(); Sound.click(); show('home'); });
-  $('btnStuckRestart').addEventListener('click', () => restart(true));
+  $('btnStuckRestart').addEventListener('click', () => restart());
   $('btnStuckHome').addEventListener('click', () => { hideOverlays(); Sound.click(); show('home'); });
-  document.querySelectorAll('.snd').forEach(b => b.addEventListener('click', () => { Sound.unlock(); Sound.setMuted(!Sound.muted); toast(Sound.muted ? 'Som desligado' : 'Som ligado'); }));
+  document.querySelectorAll('.snd').forEach(b => b.addEventListener('click', () => { Sound.unlock(); Sound.setMuted(!Sound.muted); }));
 
   return { show, hud, checkEnd, guide, draw, startGame, hideOverlays, dailyIntro, dailyReview, get card() { return card; }, get levels() { return levels; } };
 })();
@@ -2748,9 +2747,7 @@ ${tw.join('')}<div class="cbanner"><i style="left:22%"></i><i style="right:22%">
     Sound.land();
     const node = inner.querySelector(`.cnode[data-i="${b}"]`);
     if (node && !reduceMotion()) animate(node, [{ transform: 'scale(1)' }, { transform: 'scale(1.25)' }, { transform: 'scale(1)' }], { duration: 380, easing: 'ease-out' });
-    if (b === TOTAL && !bonusOpen) { toast('Você chegou ao troféu!'); Sound.win(); }
-    else if (b >= ALL) { toast('Você conquistou o espaço!'); Sound.win(); }
-    else if (list[b].n === 1) toast(REGIONS[list[b].region].bonus ? 'Pântano espacial desbloqueado!' : `Novo pântano: ${REGIONS[list[b].region].name}!`);
+    if ((b === TOTAL && !bonusOpen) || b >= ALL) Sound.win();
   }
   // onde o sapo fica: na fase atual ou, se o próximo pântano ainda estiver fechado, na última fase concluída
   const spot = () => done > 0 && done < limit() && !playable(done) ? done - 1 : done;
@@ -2798,17 +2795,16 @@ ${tw.join('')}<div class="cbanner"><i style="left:22%"></i><i style="right:22%">
     } else scrollToIdx(spot(), false);
   }
   function complete(i, st = 1) {
-    const r = regionOf(i), wasOpen = isOpen(r + 1 < REGIONS.length ? r + 1 : r);
+    const r = regionOf(i);
     if (st > (stars[i] || 0)) { stars[i] = st; Store.set('stars', stars); }
     let prize = null;
     const R = REGIONS[r], gift = RARE[R.id];
     if (gift && !rare.includes(gift) && stars.slice(START[r], START[r] + R.count).every(v => v === 3)) { rare.push(gift); Store.set('rare', rare); prize = [gift]; }
-    const unlocked = r + 1 < REGIONS.length && !REGIONS[r + 1].bonus && !wasOpen && isOpen(r + 1) ? REGIONS[r + 1].name : null;
     if (i === done && done < limit() && playable(i)) {
       done++; Store.set('career', done);
-      return { advanced: true, finished: done === TOTAL, bonusFinished: done === ALL, prize: (PRIZE[i] || []).concat(prize || []).length ? (PRIZE[i] || []).concat(prize || []) : null, unlocked };
+      return { advanced: true, finished: done === TOTAL, bonusFinished: done === ALL, prize: (PRIZE[i] || []).concat(prize || []).length ? (PRIZE[i] || []).concat(prize || []) : null };
     }
-    return { advanced: false, finished: false, bonusFinished: false, prize, unlocked };
+    return { advanced: false, finished: false, bonusFinished: false, prize };
   }
   function relayout() {
     if (!list || Math.abs(map.clientWidth - lastW) < 2) return;
@@ -2903,7 +2899,6 @@ ${tw.join('')}<div class="cbanner"><i style="left:22%"></i><i style="right:22%">
       { transform: `translate(${dx}px,${dy}px)` }, { transform: `translate(${dx * .5}px,${dy * .5 - 90}px) scale(1.3) rotate(-14deg)`, offset: .5 }, { transform: 'translate(0,0)' }],
       { duration: 900, easing: 'cubic-bezier(.35,.1,.4,1)' });
     Sound.land();
-    toast('Pântano espacial desbloqueado!');
     opening = false;
   }
   function placeAvatarAt(p) { const s = avatar.getBoundingClientRect().width || 56; avatar.style.left = (p.x - s / 2) + 'px'; avatar.style.top = (p.y - s * .82) + 'px'; }
