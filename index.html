@@ -2143,9 +2143,9 @@ const UI = (() => {
       Sound.win(); confetti(); if (last) Daily.practiced();
       $('tutTitle').textContent = last ? 'Você pegou o jeito!' : 'Muito bem!';
       $('btnTutGo').textContent = last ? 'Jogar mapa do dia' : 'Próxima fase';
-      $('tutArt').innerHTML = Art.frog('red', { cls: 'rfrog' }); $('ovTut').classList.add('show'); Base.dim(true); return;
+      $('tutArt').innerHTML = Art.frog('green', { cls: 'rfrog', outfit: Outfit.worn }); $('ovTut').classList.add('show'); Base.dim(true); return;
     }
-    $('winArt').innerHTML = Art.frog('red', { cls: 'rfrog' }) +
+    $('winArt').innerHTML = Art.frog('green', { cls: 'rfrog', outfit: Outfit.worn }) +      // o personagem, com o que estiver vestindo
       [[0, 4, '#ffd23f', .1], [76, 2, '#ffd23f', .3], [40, -14, '#fff27a', .5], [6, 60, '#b9f55a', .7], [74, 58, '#ff9cbc', .9]]
         .map(([x, y, c, d]) => `<div class="star" style="left:${x}%;top:${y}%;animation-delay:${d}s,${d + .6}s">${Art.star(c)}</div>`).join('');
     const c = Game.card;
@@ -2298,6 +2298,9 @@ const UI = (() => {
     const b = e.target.closest('.use-now'); if (!b || b.disabled) return;
     b.dataset.ids.split(',').forEach(id => { if (!Outfit.isWorn(id)) Outfit.wear(id); });
     Sound.pick(); b.textContent = 'Usando ✓'; b.disabled = true;
+    const old = $('winArt').querySelector('svg.rfrog');           // o sapo da vitória troca de roupa na hora (ex.: loafer → Vans)
+    if (old) { old.insertAdjacentHTML('afterend', Art.frog('green', { cls: 'rfrog', outfit: Outfit.worn })); old.remove();
+      if (!reduceMotion()) animate($('winArt').querySelector('svg.rfrog'), [{ transform: 'scale(.85)' }, { transform: 'scale(1.12)' }, { transform: 'scale(1)' }], { duration: 380, easing: 'ease-out', composite: 'add' }); }
   });
   $('btnNewWin').addEventListener('click', () => {
     if (Game.card && Game.card.career != null) { const from = Game.card.career; hideOverlays(); Game.active = false; Sound.click(); Career.open({ hopFrom: from }); }
