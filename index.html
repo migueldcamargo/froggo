@@ -2524,7 +2524,6 @@ const Career = (() => {
   const need = r => { const n = REGIONS[r - 1].count; return r === 1 ? 3 * n : 2 * n + Math.floor(n / 2); };   // tutorial: todas com 3★ (sempre dá 3)
   const isOpen = r => r === 0 || !!REGIONS[r].bonus || opened.includes(r) || regionStars(r - 1) >= need(r);
   const playable = i => i <= done && isOpen(regionOf(i));
-  const gateMsg = r => `🔒 ${need(r)} ⭐ no ${REGIONS[r - 1].name} para desbloquear`;
   const totalStars = () => stars.reduce((a, b) => a + (b || 0), 0);
   const owned = () => Object.keys(PRIZE).filter(i => +i < done).flatMap(i => PRIZE[i]).concat(rare);
   let list = null, built = null, nodes = [], finalPos = null, portalPos = null, starPos = null, lastW = 0, avatar = null;
@@ -2763,9 +2762,23 @@ ${tw.join('')}<div class="cbanner"><i style="left:22%"></i><i style="right:22%">
     await animate(avatar, reduceMotion() ? [{ opacity: .5 }, { opacity: 1 }] : [
       { transform: 'translate(0,0)' }, { transform: `translate(${dx}px,${dy - 46}px) scale(1.15) rotate(${dx > 0 ? -10 : 10}deg)`, offset: .45 },
       { transform: `translate(${dx * .4}px,${dy * .4}px) rotate(${dx > 0 ? 8 : -8}deg)`, offset: .7 }, { transform: 'translate(0,0)' }], { duration: 620, easing: 'ease-in-out' });
-    Sound.invalid();
     const node = inner.querySelector(`.cnode[data-i="${b}"]`);
     if (node && !reduceMotion()) animate(node, [0, -6, 6, -4, 4, 0].map(x => ({ transform: `translateX(${x}px)` })), { duration: 320 });
+  }
+  // pântano fechado: a tela treme (como um salto negado), a placa cresce dizendo quantas estrelas faltam
+  // e o contador de estrelas do topo também treme
+  async function denied(r) {
+    const reg = inner.querySelectorAll('.creg')[r], ban = reg && reg.querySelector('.cbanner'), em = ban && ban.querySelector('.gate');
+    if (em) em.textContent = `🔒 Faltam ${Math.max(1, need(r) - regionStars(r - 1))} ⭐ para desbloquear`;
+    if (reg) { scrollToY(reg.offsetTop + 120, true); await wait(360); }
+    Sound.invalid();
+    try { if (navigator.vibrate) navigator.vibrate(70); } catch (e) {}
+    if (reduceMotion()) return;
+    const shake = [0, -9, 9, -7, 7, -4, 4, 0].map(x => ({ transform: `translateX(${x}px)` }));
+    animate(map, shake, { duration: 380, easing: 'ease-out' });
+    animate($('careerStars'), shake, { duration: 420, easing: 'ease-out' });
+    if (ban) animate(ban, [{ transform: 'translateX(-50%) rotate(-1.5deg) scale(1)' }, { transform: 'translateX(-50%) rotate(-1.5deg) scale(1.28)', offset: .25 },
+      { transform: 'translateX(-50%) rotate(-1.5deg) scale(1.22)', offset: .75 }, { transform: 'translateX(-50%) rotate(-1.5deg) scale(1)' }], { duration: 1500, easing: 'ease-in-out' });
   }
   async function open(opts = {}) {
     UI.hideOverlays();
@@ -2776,7 +2789,7 @@ ${tw.join('')}<div class="cbanner"><i style="left:22%"></i><i style="right:22%">
     if (key !== mapKey) { render(); mapKey = key; } else syncBase();
     const from = opts.hopFrom;
     if (from != null && from + 1 === done && done < limit() && !playable(done)) {      // pântano fechado: tenta pular, não consegue e fica na última fase
-      placeAvatar(from); scrollToIdx(from, false); await wait(380); await bump(from, done); toast(gateMsg(regionOf(done)));
+      placeAvatar(from); scrollToIdx(from, false); await wait(380); await bump(from, done); await denied(regionOf(done));
     }
     else if (from != null && from + 1 === done) {
       placeAvatar(from); scrollToIdx(from, false);
@@ -2904,7 +2917,7 @@ ${tw.join('')}<div class="cbanner"><i style="left:22%"></i><i style="right:22%">
     if (tag === 'P') { openBonus(); return; }
     if (tag === 'T' || tag === 'S') { celebrate(b); return; }
     const i = +tag;
-    if (i <= done && !playable(i)) { Sound.invalid(); toast(gateMsg(regionOf(i))); return; }
+    if (i <= done && !playable(i)) { denied(regionOf(i)); return; }
     if (i > done) {
       Sound.invalid();
       animate(b, [0, -6, 6, -4, 4, 0].map(x => ({ transform: `translateX(${x}px)` })), { duration: 320 });
