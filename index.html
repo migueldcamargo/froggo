@@ -1410,9 +1410,9 @@ const Outfit = (() => {
 <path d="M42 3.4 Q40.6 12 41.2 22 M58 3.4 Q59.4 12 58.8 22" stroke="#22361f" stroke-width=".7" fill="none" opacity=".75"/><circle cx="50" cy="2.3" r="1.6" fill="#3f5a3a" stroke="#22361f" stroke-width=".6"/>
 <g font-family="Georgia,'Times New Roman',serif" font-size="6.6" font-weight="700" fill="#efe6c8" text-anchor="middle"><text x="46.6" y="12.6">B</text><text x="50" y="15.4">L</text><text x="53.4" y="18.2">V</text></g>
 <path d="M33 21 Q50 31 67 21 L65.4 18.6 Q50 26.6 34.6 18.6 Z" fill="#c9b48f" stroke="#8f7a55" stroke-width=".8"/><path d="M36 21.6 Q50 28.6 64 21.6" stroke="#e8dcc0" stroke-width=".5" fill="none" stroke-dasharray="1 .8"/></g>` },
-    { id: 'bellato', name: '5Panel Bellato', slot: 'head', rare: true, box: '28 -8 44 36',
+    { id: 'bellato', name: '5Panel Bellato', slot: 'head', layer: 'top', rare: true, box: '27 -8 46 38',
       // 5 panel oncinha rosado: painel da frente e aba em oncinha, laterais rosadas em cima e tela cinza embaixo com faixa
-      // refletiva, e o patch redondo com o passarinho e "ALICE"
+      // refletiva, patch redondo com a cabeça de um tucano e "ALICE"; desenhado por cima dos olhos para a aba aparecer
       svg: () => `<defs><pattern id="leoPrint" width="4.6" height="4.6" patternUnits="userSpaceOnUse"><rect width="4.6" height="4.6" fill="#ecc9bd"/><ellipse cx="1.3" cy="1.3" rx=".62" ry=".5" fill="#a5643c"/><path d="M0.4 1.1 q.3 -.9 1.2 -.75 M2.25 1.0 q.35 .8 -.25 1.15 M0.55 1.85 q.6 .5 1.2 .25" stroke="#2e1f1a" stroke-width=".5" fill="none" stroke-linecap="round"/><ellipse cx="3.6" cy="3.5" rx=".62" ry=".5" fill="#a5643c"/><path d="M2.7 3.3 q.3 -.9 1.2 -.75 M4.55 3.2 q.35 .8 -.25 1.15 M2.85 4.05 q.6 .5 1.2 .25" stroke="#2e1f1a" stroke-width=".5" fill="none" stroke-linecap="round"/><path d="M3.4 .8 q.4 -.3 .7 .1 M.7 3.7 q.4 .3 .7 -.1" stroke="#2e1f1a" stroke-width=".45" fill="none" stroke-linecap="round"/></pattern>
 <pattern id="meshDots" width="1.6" height="1.6" patternUnits="userSpaceOnUse"><rect width="1.6" height="1.6" fill="#625d66"/><circle cx=".8" cy=".8" r=".42" fill="#8d8692"/></pattern>
 <path id="alicePath" d="M45.45 13 A4.55 4.55 0 0 1 54.55 13"/></defs>
@@ -1423,9 +1423,11 @@ const Outfit = (() => {
 <path d="M40.4 22 Q39.6 10 43 3 Q50 1.4 57 3 Q60.4 10 59.6 22 Z" fill="url(#leoPrint)" stroke="#c9a397" stroke-width=".5"/><circle cx="50" cy="2.3" r="1.4" fill="url(#leoPrint)" stroke="#7a5f58" stroke-width=".5"/>
 <circle cx="50" cy="13" r="5.7" fill="#e9c8bd" stroke="#6d6a70" stroke-width=".9"/><circle cx="50" cy="13" r="3.55" fill="none" stroke="#8d8692" stroke-width=".25"/>
 <text font-family="system-ui,sans-serif" font-size="1.5" font-weight="800" fill="#6d6a70" letter-spacing=".2" dominant-baseline="middle"><textPath href="#alicePath" startOffset="50%" text-anchor="middle">ALICE</textPath></text>
-<g transform="translate(50 13) scale(.78) translate(-50 -13)"><path d="M47.6 14.8 Q48.6 12.4 50.6 12.8 Q52 11.6 52.6 12.6 Q51.6 13.2 51.2 14 Q50 15.8 47.6 14.8 Z M49 13.8 Q48.4 12.6 49.2 12.2" fill="none" stroke="#6d6a70" stroke-width=".5" stroke-linejoin="round"/>
-<path d="M52.8 11.8 L53.6 11.2 M53.2 12.8 L54.2 12.7 M52.6 10.8 L53 10" stroke="#6d6a70" stroke-width=".4" stroke-linecap="round"/></g>
-<path d="M33 21 Q50 31 67 21 L65.4 18.6 Q50 26.6 34.6 18.6 Z" fill="url(#leoPrint)" stroke="#e6c1b4" stroke-width="1.1"/></g>` },
+<circle cx="48.2" cy="13.6" r="1.75" fill="#26232a"/><path d="M47.3 14.7 Q48.2 15.6 49.3 14.9 Q48.8 14.2 47.9 14.3 Z" fill="#fff4cf"/>
+<path d="M49.5 12.4 Q52 11.4 53.9 12.9 Q54.5 13.6 53.9 14.1 Q52 13.6 49.7 14.4 Z" fill="#f29a1e" stroke="#26232a" stroke-width=".25"/><path d="M53.3 12.6 Q54.5 13.3 53.9 14.1 Q53.5 13.5 53 13.4 Z" fill="#26232a"/>
+<path d="M49.7 13.4 Q51.8 12.9 53.6 13.6" stroke="#c0601a" stroke-width=".2" fill="none"/><circle cx="48.7" cy="13.1" r=".55" fill="#7fc4ff"/><circle cx="48.75" cy="13.1" r=".25" fill="#111"/>
+<path d="M30.5 21.2 Q50 34 69.5 21.2 Q50 31.4 30.5 21.2 Z" fill="#3a2620" opacity=".28"/>
+<path d="M30 19.6 Q50 32.4 70 19.6 L67.8 17 Q50 27.4 32.2 17 Z" fill="url(#leoPrint)" stroke="#c98f80" stroke-width="1.3" stroke-linejoin="round"/><path d="M32.6 17.6 Q50 27.8 67.4 17.6" stroke="#7a5f58" stroke-width=".7" fill="none" opacity=".7"/></g>` },
     { id: 'oculos3d', name: 'Óculos de estrela', slot: 'eyes', rare: true, space: true, box: '14 8 72 38',
       svg: () => {
         const star = (x, y) => `<path transform="translate(${x} ${y}) scale(1.25)" d="M0 -11 l3.2 6.6 7.3 1 -5.3 5.1 1.3 7.2 -6.5 -3.4 -6.5 3.4 1.3 -7.2 -5.3 -5.1 7.3 -1z" fill="#ff6ad5" fill-opacity=".55" stroke="#ffd23f" stroke-width="2.2" stroke-linejoin="round"/>`;
