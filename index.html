@@ -1061,9 +1061,9 @@ ${opts.still ? '' : `<g class="lids"><ellipse cx="31" cy="26" rx="12" ry="12" fi
 <circle cx="45" cy="40" r="1.3" fill="${line}" opacity=".6"/><circle cx="55" cy="40" r="1.3" fill="${line}" opacity=".6"/>
 <ellipse cx="37" cy="36" rx="11" ry="4.5" fill="#fff" opacity=".38" transform="rotate(-14 37 36)"/>
 <ellipse cx="27" cy="21" rx="4" ry="2.2" fill="#fff" opacity=".35" transform="rotate(-25 27 21)"/>
-${L.under}<g fill="url(#${D})"><ellipse cx="33" cy="86" rx="9.5" ry="5.2"/>${L.hold ? '' : '<ellipse cx="67" cy="86" rx="9.5" ry="5.2"/>'}
+${L.under}<g fill="url(#${D})"><ellipse cx="33" cy="86" rx="9.5" ry="5.2"/><ellipse cx="67" cy="86" rx="9.5" ry="5.2"/>
 ${L.shoes ? '' : '<circle cx="25.5" cy="88.5" r="2.6"/><circle cx="31" cy="90.5" r="2.6"/><circle cx="37" cy="90.5" r="2.6"/>'}
-${L.shoes || L.hold ? '' : '<circle cx="63" cy="90.5" r="2.6"/><circle cx="69" cy="90.5" r="2.6"/><circle cx="74.5" cy="88.5" r="2.6"/>'}</g>
+${L.shoes ? '' : '<circle cx="63" cy="90.5" r="2.6"/><circle cx="69" cy="90.5" r="2.6"/><circle cx="74.5" cy="88.5" r="2.6"/>'}</g>
 ${L.front}${L.eyes}${L.hand}${L.top}</g></svg>`;
   },
   // Sapinho simplificado para o mini-tabuleiro e a legenda (coordenadas absolutas)
@@ -1247,7 +1247,7 @@ const Outfit = (() => {
       } },
     { id: 'loafer', name: 'Loafer tratorado', slot: 'feet', box: '14 72 72 26',
       // de perfil, com os bicos para fora: gola baixa, tira com moeda (penny), costura no bico e solado tratorado grosso
-      svg: (red, hold) => {
+      svg: () => {
         let lugs = ''; for (let i = 0; i < 8; i++) lugs += ` q1.9 2.6 3.8 0`;
         const shoe = `<path d="M-3 7 H28 Q31.5 7 31.5 10 V12 H-3 Z" fill="#3a3a3a"/><path d="M-3 12${lugs}" fill="#3a3a3a" stroke="#2a2a2a" stroke-width=".4"/><path d="M-3 8.6 H31" stroke="#5a5a5a" stroke-width=".9"/>
 <path d="M-2 7.4 Q-3.2 -.4 2.5 -1.4 L11.5 -.6 Q18 -3.4 24.5 .8 Q30.5 3.6 30 7.4 Z" fill="#121212"/>
@@ -1255,7 +1255,7 @@ const Outfit = (() => {
 <path d="M11.8 .2 Q16.5 -2.6 21.4 1.6" stroke="#2c2c2c" stroke-width="3" fill="none" stroke-linecap="round"/><ellipse cx="16.6" cy="-.4" rx="1.7" ry=".75" fill="#d9a400" stroke="#8a6400" stroke-width=".35" transform="rotate(-12 16.6 -.4)"/>
 <path d="M20.5 1.4 Q27.4 2.2 28.2 6" stroke="#6b6b6b" stroke-width=".6" stroke-dasharray=".9 .8" fill="none"/>
 <path d="M1 1.2 Q4 -.2 9 .3" stroke="#fff" stroke-width=".8" opacity=".35" fill="none" stroke-linecap="round"/><path d="M22 2 Q26 3.4 27.6 5.6" stroke="#fff" stroke-width=".7" opacity=".3" fill="none" stroke-linecap="round"/>`;
-        return `<g transform="translate(45 83) scale(-.82 .82)">${shoe}</g>${hold ? '' : `<g transform="translate(55 83) scale(.82)">${shoe}</g>`}`;
+        return `<g transform="translate(45 83) scale(-.82 .82)">${shoe}</g><g transform="translate(55 83) scale(.82)">${shoe}</g>`;
       } },
     { id: 'celular', name: 'Celular no cordão', slot: 'strap', box: '20 52 66 38',
       svg: () => `<path d="M24.5 63 Q46 73.5 69 77" stroke="#ff8a3d" stroke-width="2.6" fill="none" stroke-linecap="round"/><path d="M24.5 63 Q46 73.5 69 77" stroke="#ffd0a8" stroke-width="1" stroke-dasharray="1.5 2" fill="none"/>
@@ -1263,15 +1263,15 @@ const Outfit = (() => {
     { id: 'cachecol', name: 'Cachecol listrado', slot: 'neck', box: '20 58 60 30',
       svg: () => `<path d="M23.5 61.5 Q50 77 76.5 61.5 L77.5 68 Q50 84 22.5 68 Z" fill="#e53935"/><path d="M31 66 L32.4 72.4 M40 69.2 L41 75.4 M50 70.4 V76.8 M60 69.2 L59 75.4 M69 66 L67.6 72.4" stroke="#fff" stroke-width="2.6"/>
 <path d="M57 71 L60 84 L67 82.6 L64 70 Z" fill="#e53935"/><path d="M58.2 76 L65.2 74.6 M59.4 80.6 L66.4 79.2" stroke="#fff" stroke-width="2.4"/><path d="M60.6 84 l-.6 2.6 M63.2 83.5 l0 2.7 M65.8 83 l.6 2.6" stroke="#e53935" stroke-width="1.2"/>` },
-    { id: 'bone', name: 'Boné de hélice', slot: 'head', box: '30 -10 40 38',
+    { id: 'bone', name: 'Boné de hélice', slot: 'head', box: '30 -14 40 38',
       // boné colorido de gomos com hélice no topo
-      svg: () => `<path d="M50 3 Q33 4 33 22 L41.5 22 Z" fill="#e53935"/><path d="M50 3 L41.5 22 L50 22 Z" fill="#ffd23f"/><path d="M50 3 L50 22 L58.5 22 Z" fill="#2b7de9"/><path d="M50 3 L58.5 22 L67 22 Q67 4 50 3 Z" fill="#2fbf3a"/>
+      svg: () => `<g transform="translate(0 -3.5)"><path d="M50 3 Q33 4 33 22 L41.5 22 Z" fill="#e53935"/><path d="M50 3 L41.5 22 L50 22 Z" fill="#ffd23f"/><path d="M50 3 L50 22 L58.5 22 Z" fill="#2b7de9"/><path d="M50 3 L58.5 22 L67 22 Q67 4 50 3 Z" fill="#2fbf3a"/>
 <path d="M33 22 Q33 3 50 3 Q67 3 67 22 Z" fill="none" stroke="#1d2a44" stroke-width="1.1" stroke-linejoin="round"/><path d="M38 12 Q41 7 46 5.6" stroke="#fff" stroke-width="1.6" opacity=".5" fill="none" stroke-linecap="round"/>
 <path d="M36 21.5 Q50 28.5 64 21.5 L62.4 20 Q50 25.4 37.6 20 Z" fill="#ffd23f" stroke="#a87a00" stroke-width=".8"/>
-<rect x="49.2" y="-2.6" width="1.6" height="6" fill="#555"/><ellipse cx="43.2" cy="-3.4" rx="6.6" ry="1.9" fill="#e53935" stroke="#8a1414" stroke-width=".6" transform="rotate(-8 43.2 -3.4)"/><ellipse cx="56.8" cy="-2.4" rx="6.6" ry="1.9" fill="#2b7de9" stroke="#164a96" stroke-width=".6" transform="rotate(-8 56.8 -2.4)"/><circle cx="50" cy="-2.8" r="1.7" fill="#ffd23f" stroke="#a87a00" stroke-width=".6"/>` },
-    { id: 'cartola', name: 'Cartola', slot: 'head', box: '24 -25 52 42',
+<rect x="49.2" y="-2.6" width="1.6" height="6" fill="#555"/><ellipse cx="43.2" cy="-3.4" rx="6.6" ry="1.9" fill="#e53935" stroke="#8a1414" stroke-width=".6" transform="rotate(-8 43.2 -3.4)"/><ellipse cx="56.8" cy="-2.4" rx="6.6" ry="1.9" fill="#2b7de9" stroke="#164a96" stroke-width=".6" transform="rotate(-8 56.8 -2.4)"/><circle cx="50" cy="-2.8" r="1.7" fill="#ffd23f" stroke="#a87a00" stroke-width=".6"/></g>` },
+    { id: 'cartola', name: 'Cartola', slot: 'head', box: '27 -22 46 42',
       // aba larga e copa alta, acima dos olhos (que são desenhados por cima da camada da cabeça)
-      svg: () => `<g transform="translate(0 -8)"><ellipse cx="50" cy="18" rx="24.5" ry="5" fill="#151515"/><path d="M27 17 Q50 22.6 73 17" stroke="#3a3a3a" stroke-width="1.1" fill="none"/>
+      svg: () => `<g transform="translate(0 -5)"><ellipse cx="50" cy="18" rx="21" ry="4.6" fill="#151515"/><path d="M30 17 Q50 22.2 70 17" stroke="#3a3a3a" stroke-width="1.1" fill="none"/>
 <rect x="38.5" y="-11.5" width="23" height="29.5" rx="2.5" fill="#262626"/><rect x="38.5" y="8.6" width="23" height="5.2" fill="#d9262c"/>
 <ellipse cx="50" cy="-11.5" rx="11.5" ry="2.7" fill="#3a3a3a"/><path d="M42 -7.5 V6" stroke="#fff" stroke-width="1.6" opacity=".25" stroke-linecap="round"/></g>` },
     { id: 'oculos', name: 'Ray-Ban Wayfarer', slot: 'eyes', box: '11 13 78 24',
@@ -1305,11 +1305,11 @@ const Outfit = (() => {
     { id: 'coroa', name: 'Coroa', slot: 'head', box: '26 -10 48 32',
       svg: () => `<g transform="translate(0 -4)"><path d="M33 22 L30.5 3.5 L41 12 L50 -1 L59 12 L69.5 3.5 L67 22 Z" fill="url(#crown)" stroke="#a86a00" stroke-width="1.4" stroke-linejoin="round"/><rect x="32.5" y="18" width="35" height="5.5" rx="1.6" fill="#ffcf1f" stroke="#a86a00" stroke-width="1"/>
 <circle cx="50" cy="12.5" r="2.6" fill="#e0245e"/><circle cx="40.5" cy="16" r="1.7" fill="#2b7de9"/><circle cx="59.5" cy="16" r="1.7" fill="#2fbf3a"/><circle cx="30.5" cy="3.5" r="1.9" fill="#fff59a"/><circle cx="50" cy="-1" r="1.9" fill="#fff59a"/><circle cx="69.5" cy="3.5" r="1.9" fill="#fff59a"/></g>` },
-    { id: 'trofeu', name: 'Troféu', slot: 'hand', box: '70 42 26 36',
-      svg: red => `<g transform="translate(85 58)"><path d="M-8.5 -11 H8.5 V-3.5 A8.5 8.5 0 0 1 -8.5 -3.5 Z" fill="url(#crown)" stroke="#a86a00" stroke-width="1.1"/>
+    { id: 'trofeu', name: 'Troféu', slot: 'hand', box: '76 62 32 32',
+      svg: () => `<g transform="translate(92 77.4) scale(1.08)"><path d="M-8.5 -11 H8.5 V-3.5 A8.5 8.5 0 0 1 -8.5 -3.5 Z" fill="url(#crown)" stroke="#a86a00" stroke-width="1.1"/>
 <path d="M8.5 -9 H12 V-6 A5 5 0 0 1 7 -1 M-8.5 -9 H-12 V-6 A5 5 0 0 0 -7 -1" fill="none" stroke="#e0a800" stroke-width="1.8"/><rect x="-1.6" y="4.5" width="3.2" height="5" fill="#e0a800"/>
 <rect x="-6.5" y="9.5" width="13" height="4.5" rx="1.2" fill="#c98a00" stroke="#8a5a00" stroke-width=".8"/><path d="M0 -9.5 l1.3 2.6 2.9 .4 -2.1 2 .5 2.9 -2.6 -1.4 -2.6 1.4 .5 -2.9 -2.1 -2 2.9 -.4z" fill="#fff8c0"/>
-<ellipse cx="-8" cy="6" rx="5.5" ry="4.3" fill="url(#${red ? 'rD' : 'gD'})"/></g>` },
+</g>` },
     // prêmios do pântano espacial
     { id: 'antenas', name: 'Antenas de ET', slot: 'head', space: true, box: '22 -14 56 38',
       svg: () => `<path d="M33 21 Q50 9 67 21" stroke="#7b3fe4" stroke-width="3.4" fill="none" stroke-linecap="round"/><path d="M40 15 Q35 3 29 -5" stroke="#4f9a2a" stroke-width="2.2" fill="none" stroke-linecap="round"/><path d="M60 15 Q65 3 71 -5" stroke="#4f9a2a" stroke-width="2.2" fill="none" stroke-linecap="round"/>
@@ -1340,7 +1340,7 @@ const Outfit = (() => {
     { id: 'oldskool', name: 'Vans', slot: 'feet', rare: true, box: '6 70 88 28',
       // Old Skool de perfil, bicos para fora: lona preta, biqueira e calcanhar em camurça, faixa lateral branca
       // contornada, costuras brancas, gola acolchoada, cadarço e solado branco alto com a linha preta
-      svg: (red, hold) => {
+      svg: () => {
         const shoe = `<path d="M-3 5 H30 Q34 5 34 8.5 V12.5 H-3 Q-4 12.5 -4 11 V6 Q-4 5 -3 5 Z" fill="#f5f2ea" stroke="#c9c2ae" stroke-width=".5"/>
 <path d="M-3.6 10.6 H33.6" stroke="#141414" stroke-width=".9"/><path d="M28 6.4 V9.6 M29.6 6.4 V9.6 M31.2 6.6 V9.6" stroke="#d8d2c0" stroke-width=".5"/>
 <path d="M-2.5 5.2 Q-3.6 -2.6 .5 -4.6 Q3 -5.4 7 -4.6 L12 -3.6 Q16 -5.6 21 -2.6 Q29 1.2 31.5 5.2 Z" fill="#141414"/>
@@ -1350,21 +1350,29 @@ const Outfit = (() => {
 <path d="M3 4.2 C6.4 4.6 8 1.2 11 1 C14 .8 14.8 3.4 17.8 3.1 C19.8 2.9 20.6 .9 21.4 -1" stroke="#141414" stroke-width="3" fill="none" stroke-linecap="round"/>
 <path d="M3 4.2 C6.4 4.6 8 1.2 11 1 C14 .8 14.8 3.4 17.8 3.1 C19.8 2.9 20.6 .9 21.4 -1" stroke="#fff" stroke-width="1.9" fill="none" stroke-linecap="round"/>
 <path d="M12.4 -3.4 L14.8 -1.8 M14.6 -3.9 L17 -2.2 M16.8 -3.6 L19.2 -1.6 M18.8 -2.7 L21 -.8" stroke="#fff" stroke-width=".85" stroke-linecap="round"/>`;
-        return `<g transform="translate(44 82.6) scale(-.9 .9)">${shoe}</g>${hold ? '' : `<g transform="translate(56 82.6) scale(.9)">${shoe}</g>`}`;
+        return `<g transform="translate(44 82.6) scale(-.9 .9)">${shoe}</g><g transform="translate(56 82.6) scale(.9)">${shoe}</g>`;
       } },
-    { id: 'guitarra', name: 'Les Paul', slot: 'hand', rare: true, box: '62 10 44 82',
-      // sunburst tabaco: borda escura e centro âmbar, escudo creme, dois captadores cromados, botões dourados
-      svg: red => `<defs><radialGradient id="lpSun" cx="45%" cy="62%" r="62%"><stop offset="0" stop-color="#f0b452"/><stop offset=".45" stop-color="#c46a1c"/><stop offset=".78" stop-color="#5a2208"/><stop offset="1" stop-color="#1f0a02"/></radialGradient></defs>
-<g transform="translate(84 66) rotate(16) scale(1.18)">
-<rect x="-1.5" y="-40" width="3" height="28" rx=".8" fill="#4a2412"/><g fill="#efe6c8"><rect x="-1.4" y="-35" width="2.8" height=".7"/><rect x="-1.4" y="-29" width="2.8" height=".7"/><rect x="-1.4" y="-23" width="2.8" height=".7"/></g>
-<path d="M-2.4 -40 L-3.6 -48 Q0 -50.5 3.6 -48 L2.4 -40 Z" fill="#141414"/><g fill="#e8d9a8"><circle cx="-4.6" cy="-46" r="1"/><circle cx="-4.4" cy="-43" r="1"/><circle cx="4.6" cy="-46" r="1"/><circle cx="4.4" cy="-43" r="1"/></g>
-<path d="M-2 -14 C-9 -15.5 -11.5 -9 -9 -4 C-14.5 0 -14 10.5 -8 14.5 C-3 17.5 5 17.5 9 13.5 C13 9.5 12.5 2 9 -1 C11.2 -4.5 11 -9 8.6 -11 L6 -9.6 C5 -12.5 3 -14.2 1.8 -14 Z" fill="url(#lpSun)" stroke="#120601" stroke-width=".8"/>
-<path d="M2.6 -9.6 L7.6 -7.6 Q8.4 -1 4.6 2.4 L2.8 -1.6 Z" fill="#efe3c0"/>
-<rect x="-4.6" y="-7" width="6.4" height="3.4" rx=".7" fill="#d9dce0" stroke="#7d8288" stroke-width=".5"/><rect x="-4.6" y="-.6" width="6.4" height="3.4" rx=".7" fill="#d9dce0" stroke="#7d8288" stroke-width=".5"/>
-<rect x="-4.4" y="5.4" width="6" height="1.4" rx=".5" fill="#c8ccd2"/><rect x="-4.2" y="8.6" width="5.6" height="1.1" rx=".5" fill="#c8ccd2"/>
-<g fill="#d9a400" stroke="#8a6400" stroke-width=".3"><circle cx="5" cy="7.6" r="1.2"/><circle cx="8.2" cy="10.4" r="1.2"/><circle cx="3.6" cy="11.6" r="1.2"/><circle cx="6.6" cy="14" r="1.2"/></g>
-<path d="M-.9 -40 V8 M.9 -40 V8" stroke="#f4f4f4" stroke-width=".3" opacity=".8"/>
-<ellipse cx="1.5" cy="-17" rx="5.6" ry="4.3" fill="url(#${red ? 'rD' : 'gD'})"/></g>` },
+    { id: 'guitarra', name: 'Les Paul', slot: 'hand', rare: true, box: '74 14 36 82',
+      // Gibson Les Paul em pé, apoiada ao lado do sapo: um só recorte (lado agudo), tampo sunburst tabaco com filete creme,
+      // escudo creme, dois humbuckers cromados com moldura creme, ponte e cordal, 4 botões dourados, chave seletora,
+      // braço de jacarandá com filete e marcações trapezoidais, mão "livro aberto" preta com 3+3 tarraxas
+      svg: () => {
+        const body = 'M-2.6 -16.5 C-7 -17 -10.5 -15 -10.5 -10.5 C-10.5 -6.5 -9 -4.5 -10.6 -1.5 C-14 2 -14.2 9.5 -11 13.5 C-7.5 17.8 -2 18.6 1 18.6 C5 18.6 10.5 17 12.6 12.5 C14.6 8 13.6 2 10.6 -1 C9.4 -2.4 9.8 -4.6 10.6 -6.4 C11.6 -9 11 -13 8.4 -15.2 C7 -16.4 5.6 -15.8 5.2 -14.2 C4.8 -12 3.8 -10.6 2.6 -11.2 L2.6 -16.5 Z';
+        let inl = ''; for (const y of [-21, -26, -31, -36, -40]) inl += `<path d="M-.9 ${y} H.9 L.7 ${y + 1.4} H-.7 Z" fill="#efe6c8"/>`;
+        return `<defs><radialGradient id="lpSun" cx="50%" cy="62%" r="64%"><stop offset="0" stop-color="#f2b24a"/><stop offset=".42" stop-color="#c8661a"/><stop offset=".72" stop-color="#5a2208"/><stop offset="1" stop-color="#160701"/></radialGradient></defs>
+<g transform="translate(92.5 72.6) rotate(6) scale(.98)">
+<path d="${body}" fill="url(#lpSun)" stroke="#0e0400" stroke-width="1.6"/><path d="${body}" fill="none" stroke="#efe3c0" stroke-width=".7"/>
+<rect x="-1.8" y="-44" width="3.6" height="28" fill="#3b1d0e"/><path d="M-1.8 -44 V-16.5 M1.8 -44 V-16.5" stroke="#efe3c0" stroke-width=".4"/>${inl}
+<path d="M-2.3 -44 L-4 -52.6 Q-2 -54.2 0 -53.1 Q2 -54.2 4 -52.6 L2.3 -44 Z" fill="#121212"/><path d="M-1.6 -50.4 Q0 -51.2 1.6 -50.4" stroke="#d9b45a" stroke-width=".55" fill="none"/>
+<g fill="#efe6c8" stroke="#8a7a50" stroke-width=".25"><rect x="-6.2" y="-46.6" width="2" height="1.3" rx=".5"/><rect x="-6.4" y="-49" width="2" height="1.3" rx=".5"/><rect x="-6.6" y="-51.4" width="2" height="1.3" rx=".5"/><rect x="4.2" y="-46.6" width="2" height="1.3" rx=".5"/><rect x="4.4" y="-49" width="2" height="1.3" rx=".5"/><rect x="4.6" y="-51.4" width="2" height="1.3" rx=".5"/></g>
+<path d="M3.2 -9 C6.6 -8 8.8 -4.4 8.6 -.4 C8.4 3.6 6.4 6.3 4.2 6.7 L3.4 -8 Z" fill="#efe3c0" stroke="#bfae80" stroke-width=".3"/>
+<rect x="-4.4" y="-9.6" width="8.8" height="4.8" rx=".8" fill="#efe3c0"/><rect x="-3.5" y="-8.8" width="7" height="3.2" rx=".5" fill="#d9dce0" stroke="#8a8f96" stroke-width=".3"/>
+<rect x="-4.4" y="-1.8" width="8.8" height="4.8" rx=".8" fill="#efe3c0"/><rect x="-3.5" y="-1" width="7" height="3.2" rx=".5" fill="#d9dce0" stroke="#8a8f96" stroke-width=".3"/>
+<rect x="-3.8" y="4.6" width="7.6" height="1.1" rx=".4" fill="#c8ccd2"/><rect x="-4.2" y="7.6" width="8.4" height="1.5" rx=".6" fill="#c8ccd2" stroke="#7d8288" stroke-width=".25"/>
+<path d="M-.9 -44 V8.2 M-.3 -44 V8.2 M.3 -44 V8.2 M.9 -44 V8.2" stroke="#f4f4f4" stroke-width=".18" opacity=".9"/>
+<g fill="#e8b84a" stroke="#8a6400" stroke-width=".3"><circle cx="6.2" cy="10" r="1.35"/><circle cx="9.6" cy="7.6" r="1.35"/><circle cx="5.2" cy="14" r="1.35"/><circle cx="8.8" cy="12.2" r="1.35"/></g>
+<circle cx="-7.2" cy="-11.4" r="1.7" fill="#efe3c0"/><circle cx="-7.2" cy="-11.4" r=".6" fill="#2a2a2a"/></g>`;
+      } },
     { id: 'asas', name: 'Asas de anjo', slot: 'back', rare: true, box: '-8 18 116 66',
       svg: () => {
         const wing = `<path d="M0 2 C-8 -18 -26 -31 -45 -29 C-52 -28 -52 -21 -46 -19 C-53 -16 -52 -9 -45 -8.5 C-51 -4.5 -48 2 -41 1 C-45 6.5 -39 10.5 -33 7.5 C-34 13 -27 15 -22.5 11 C-21.5 15.5 -14 15.5 -12 11 C-8 13 -3 10 0 7 Z" fill="#fff" stroke="#b7c4d6" stroke-width="1.1" stroke-linejoin="round"/>
@@ -1396,9 +1404,9 @@ const Outfit = (() => {
     for (const slot of FRONT) {
       const it = get(slot); if (!it) continue;
       const k = slot === 'feet' ? 'front' : 'under';
-      if (slot === 'back') { if (it.front) L[k] += it.front(); } else L[k] += it.svg(red, !!get('hand'));
+      if (slot === 'back') { if (it.front) L[k] += it.front(); } else L[k] += it.svg(red);
     }
-    L.hold = !!get('hand'); L.shoes = !!get('feet');     // segurando algo: a pata direita da frente sobe; de sapato: sem dedinhos
+    L.shoes = !!get('feet');     // de sapato: sem dedinhos
     return L;
   }
   function preview(id) { const it = BY[id]; return `<svg viewBox="${it.box}" overflow="visible" aria-hidden="true">${it.svg(false)}${it.front ? it.front() : ''}</svg>`; }
