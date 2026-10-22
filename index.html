@@ -667,7 +667,7 @@ canvas.bigbang{position:absolute;inset:0;width:100%;height:100%;z-index:400;poin
       <button class="icon-btn" id="btnGameBack" aria-label="Voltar para as cartas"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button>
       <div class="hud">
         <span class="badge" id="hudLevel">Médio</span>
-        <span class="badge soft" id="hudMoves">Movimentos: 0</span>
+        <span class="badge soft" id="hudMoves">0 pulos</span>
       </div>
       <button class="icon-btn snd" aria-label="Som ligado/desligado"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9h4l5-4v14l-5-4H4z" fill="currentColor"/><g class="sound-waves"><path d="M16 9a4 4 0 0 1 0 6"/><path d="M18.5 6.5a7.5 7.5 0 0 1 0 11"/></g><g class="muted-x"><path d="M16.5 9.5l5 5M21.5 9.5l-5 5"/></g></svg></button>
     </div>
@@ -845,7 +845,7 @@ canvas.bigbang{position:absolute;inset:0;width:100%;height:100%;z-index:400;poin
 
 <script>
 'use strict';
-const BUILD = '2026-10-22.1340';      // versão publicada: trocada pela data e hora a cada publicação (ver Update, no fim); 'dev' não confere
+const BUILD = '2026-10-22.1349';      // versão publicada: trocada pela data e hora a cada publicação (ver Update, no fim); 'dev' não confere
 /* =====================================================================
    FROGGO — jogo de sapos saltadores (peg-solitaire), arquivo único e offline.
    Módulos (todos neste arquivo): Store · Geo · Rules · Solver · Gen ·
@@ -1907,6 +1907,7 @@ ${vest}<g transform="translate(100 0) scale(-1 1)">${vest}</g>
     { id: 'corujao', name: 'Corujão', at: 'nebuloso' }, { id: 'caramelo', name: 'Caramelo', at: 'carnaval' }, { id: 'porco', name: 'Porco', at: 'festa' }, { id: 'tatu', name: 'Tatu', at: 'skatepark' },
     { id: 'topogigio', name: 'Topogígio', at: 'esgoto' }, { id: 'baurets', name: 'Baurets', at: 'espaco' }];
   let char = Store.get('char', 'sapo'), charRed = Store.get('charRed', 'sapo');
+  if (char === charRed && char !== 'sapo') { charRed = 'sapo'; Store.set('charRed', charRed); }     // verde e vermelho não podem ser o mesmo personagem (só o sapo)
   const big = o => flies(o) || !!(o && o.ride);       // ocupa mais espaço em volta do sapo (chama, caixa)
   function layers(o, red) {
     const L = { back: '', head: '', under: '', front: '', eyes: '', hand: '', top: '' };
@@ -1933,7 +1934,8 @@ ${vest}<g transform="translate(100 0) scale(-1 1)">${vest}</g>
     get worn() { return { ...worn }; },
     get wornRed() { return { ...wornRed }; },
     CHARS, get char() { return char; }, get charRed() { return charRed; },
-    setChar(id, red) { if (red) { charRed = id; Store.set('charRed', id); } else { char = id; Store.set('char', id); } },
+    // verde e vermelho não podem ser o mesmo personagem (no tabuleiro ficaria confuso); o sapo pode nos dois. Devolve false se recusou
+    setChar(id, red) { if (id !== 'sapo' && id === (red ? char : charRed)) return false; if (red) { charRed = id; Store.set('charRed', id); } else { char = id; Store.set('char', id); } return true; },
     // personagem que ainda não chegou (ex.: progresso zerado) volta a ser o sapo
     pruneChars(have) { if (!have.includes(char)) this.setChar('sapo', false); if (!have.includes(charRed)) this.setChar('sapo', true); },
     // veste/tira (red: no sapinho vermelho)
@@ -2175,8 +2177,9 @@ const Board = (() => {
   function makeFrog(color, cell) {
     const f = document.createElement('div');
     f.className = 'frog'; f.dataset.color = color;
-    // o vermelho é exatamente o do guarda-roupa (personagem e roupa escolhidos para o sapinho vermelho)
-    const art = color === 'red' ? Art.frog('red', { outfit: Outfit.wornRed, char: Outfit.charRed }) : Art.frog(color);
+    // as peças são os personagens do guarda-roupa: os verdes viram o personagem principal (sem roupa; um deles veste,
+    // ver sync) e o vermelho é exatamente o vermelho escolhido, com a roupa dele
+    const art = color === 'red' ? Art.frog('red', { outfit: Outfit.wornRed, char: Outfit.charRed }) : Art.frog(color, { char: Outfit.char });
     f.innerHTML = `<div class="fi" style="animation-delay:-${(Math.random() * 2.6).toFixed(2)}s">${art}</div>`;
     place(f, cell); el.appendChild(f); return f;
   }
@@ -2201,7 +2204,7 @@ const Board = (() => {
     const o = Outfit.worn, fs = Object.values(frogs);
     if (Object.keys(o).length && !fs.some(f => f.classList.contains('dressed'))) {
       const gs = fs.filter(f => f.dataset.color === 'green');
-      if (gs.length) { const f = gs[Math.floor(Math.random() * gs.length)]; f.classList.add('dressed'); f.firstChild.innerHTML = Art.frog('green', { outfit: o }); }
+      if (gs.length) { const f = gs[Math.floor(Math.random() * gs.length)]; f.classList.add('dressed'); f.firstChild.innerHTML = Art.frog('green', { outfit: o, char: Outfit.char }); }
     }
   }
   function reset() { for (const c in frogs) frogs[c].remove(); frogs = {}; clearSel(); cancelDrag(); sync(true); }
@@ -2644,7 +2647,8 @@ const UI = (() => {
   }
   // ---- HUD ----
   function hud() {
-    $('hudMoves').textContent = Game.card && Game.card.daily && Daily.running ? `${Daily.clock(Daily.elapsed())} · ${Daily.moves} mov.` : 'Movimentos: ' + Game.count;
+    const pulos = n => n === 1 ? '1 pulo' : `${n} pulos`;
+    $('hudMoves').textContent = Game.card && Game.card.daily && Daily.running ? `${Daily.clock(Daily.elapsed())} · ${pulos(Daily.moves)}` : pulos(Game.count);
     $('btnUndo').disabled = Game.moves === 0;
   }
   // "Como jogar": vermelho come verde, verde come verde, verde não come vermelho e o objetivo
@@ -3398,7 +3402,7 @@ const Career = (() => {
     const L = list[i], R = REGIONS[L.region];
     const level = { name: R.name, color: R.color };
     const start = { ...L.start }, greens = Rules.greens(start);
-    return { career: i, level, levelId: R.id, label: `Fase ${i + 1} · ${R.name}`, start, greens, jumps: greens,
+    return { career: i, level, levelId: R.id, label: `${R.name.replace(/^Pântano /, '')} - ${i + 1}`, start, greens, jumps: greens,
       solution: R.bonus ? L.solution : Solver.solve(start), tip: L.tip || '', guide: L.guide, intro: L.intro, theme: R.bonus ? 'space' : '', code: 'C-' + (i + 1) };
   }
   // só animam os enfeites do pântano que está na tela
@@ -4344,7 +4348,10 @@ ${stageFrog(false, 0)}${stageFrog(true, 104, .5)}</svg></div>`;
       clearTimeout(b._t); b._t = setTimeout(() => { t.textContent = '???'; b.classList.remove('hint'); }, 2600);
       return;
     }
-    if (b.dataset.char) { Outfit.setChar(b.dataset.char, red); Sound.pick(); render(); return; }
+    if (b.dataset.char) {
+      if (!Outfit.setChar(b.dataset.char, red)) { toast('O sapo vermelho e o verde têm que ser personagens diferentes'); Sound.click(); animate(b, [0, -5, 5, -3, 3, 0].map(v => ({ transform: `translateX(${v}px)` })), { duration: 300 }); return; }
+      Sound.pick(); render(); return;
+    }
     Outfit.wear(b.dataset.id, red); Sound.pick(); render();
   });
   $('wStage').addEventListener('click', e => {
