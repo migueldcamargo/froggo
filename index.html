@@ -1303,14 +1303,14 @@ const Outfit = (() => {
 <path d="M17.6 19.8 L43.2 19.5 L41.1 30 Q40.6 31.8 38.7 31.8 L22.9 31.8 Q20.7 31.8 20.2 30 Z" fill="#26352c"/><path d="M22 21.5 L27 29.5" stroke="#9fd8c0" stroke-width="1.8" opacity=".4" stroke-linecap="round"/><circle cx="16.4" cy="18.6" r=".8" fill="#d6dade"/>`;
         return `${lens}<g transform="translate(100 0) scale(-1 1)">${lens}</g><path d="M46 20 Q50 17.4 54 20" stroke="#101010" stroke-width="2.8" fill="none"/>`;
       } },
-    { id: 'gravata', name: 'Gravata-borboleta', slot: 'neck', box: '34 61 32 22',
+    { id: 'gravata', name: 'Gravata-borboleta', slot: 'neck', rare: true, box: '34 61 32 22',
       svg: () => `<g transform="translate(0 9)"><path d="M50 63 L37 55.5 Q35 63 37 70.5 Z" fill="#e53b6b" stroke="#a8173f" stroke-width="1"/><path d="M50 63 L63 55.5 Q65 63 63 70.5 Z" fill="#e53b6b" stroke="#a8173f" stroke-width="1"/>
 <rect x="46.5" y="59.5" width="7" height="7" rx="2.2" fill="#c21f4f"/><g fill="#fff" opacity=".85"><circle cx="40.5" cy="60" r="1.2"/><circle cx="41" cy="66.5" r="1.2"/><circle cx="59.5" cy="60" r="1.2"/><circle cx="59" cy="66.5" r="1.2"/></g></g>` },
     { id: 'pirata', name: 'Chapéu de pirata', slot: 'head', box: '20 -4 60 30',
       svg: () => `<path d="M23 22 Q28 5 50 3 Q72 5 77 22 Q50 13.5 23 22 Z" fill="#1d1d1d" stroke="#ffd23f" stroke-width="1.8" stroke-linejoin="round"/>
 <path d="M44 18 L56 8 M56 18 L44 8" stroke="#fff" stroke-width="1.6" stroke-linecap="round"/><circle cx="50" cy="11" r="3.8" fill="#fff"/><rect x="47.8" y="13.4" width="4.4" height="2.4" rx=".9" fill="#fff"/>
 <circle cx="48.6" cy="10.8" r=".9" fill="#1d1d1d"/><circle cx="51.4" cy="10.8" r=".9" fill="#1d1d1d"/>` },
-    { id: 'capa', name: 'Capa de herói', slot: 'back', box: '2 40 96 54',
+    { id: 'capa', name: 'Capa de herói', slot: 'back', rare: true, box: '2 40 96 54',
       svg: () => `<path d="M26 44 Q50 52 74 44 L96 84 Q86 90 76 86 Q64 92 50 88 Q36 92 24 86 Q14 90 4 84 Z" fill="#2f6bff" stroke="#1d47b8" stroke-width="1.5" stroke-linejoin="round"/><path d="M26 44 L9 82 M74 44 L91 82" stroke="#6f98ff" stroke-width="1.6" opacity=".7"/>`,
       front: () => `<circle cx="30" cy="67" r="2.8" fill="#ffd23f" stroke="#b07a00" stroke-width=".8"/><circle cx="70" cy="67" r="2.8" fill="#ffd23f" stroke="#b07a00" stroke-width=".8"/>` },
     { id: 'medalha', name: 'Medalha de ouro', slot: 'chest', box: '38 64 24 30',
@@ -1343,7 +1343,7 @@ const Outfit = (() => {
       svg: () => `<rect x="9" y="38" width="15" height="36" rx="7" fill="url(#ufoBody)" stroke="#5b6884" stroke-width="1.2"/><rect x="76" y="38" width="15" height="36" rx="7" fill="url(#ufoBody)" stroke="#5b6884" stroke-width="1.2"/>
 <rect x="9" y="46" width="15" height="4" fill="#ff4b3a"/><rect x="76" y="46" width="15" height="4" fill="#ff4b3a"/><path d="M11 74 Q16.5 94 22 74 Z" fill="#ffb800"/><path d="M13.5 74 Q16.5 86 19.5 74 Z" fill="#fff27a"/><path d="M78 74 Q83.5 94 89 74 Z" fill="#ffb800"/><path d="M80.5 74 Q83.5 86 86.5 74 Z" fill="#fff27a"/>` },
     // prêmios raros: um pântano inteiro com 3 estrelas
-    { id: 'zerezes', name: 'Zerezes', slot: 'eyes', rare: true, box: '12 10 76 32',
+    { id: 'zerezes', name: 'Zerezes', slot: 'eyes', box: '12 10 76 32',
       // só a frente: lentes octogonais; metade de cima em acetato tartaruga translúcido (ponte "buraco de fechadura"), metade de baixo em fio prateado
       svg: () => {
         const oct = (c, top) => { const y = 27, w = 14.5, h = 11.5, k = 5.5;
@@ -1376,7 +1376,7 @@ const Outfit = (() => {
         const one = strap(80.6) + strap(84.6);
         return `${one}<g transform="translate(100 0) scale(-1 1)">${one}</g>`;
       } },
-    { id: 'oldskool', name: 'Vans', slot: 'feet', rare: true, box: '6 70 88 28',
+    { id: 'oldskool', name: 'Vans', slot: 'feet', box: '6 70 88 28',
       // Old Skool de perfil, bicos para fora: lona preta, biqueira e calcanhar em camurça, faixa lateral branca
       // contornada, costuras brancas, gola acolchoada, cadarço e solado branco alto com a linha preta
       svg: () => {
@@ -1391,7 +1391,7 @@ const Outfit = (() => {
 <path d="M12.4 -3.4 L14.8 -1.8 M14.6 -3.9 L17 -2.2 M16.8 -3.6 L19.2 -1.6 M18.8 -2.7 L21 -.8" stroke="#fff" stroke-width=".85" stroke-linecap="round"/>`;
         return `<g transform="translate(44 82.6) scale(-.9 .9)">${shoe}</g><g transform="translate(56 82.6) scale(.9)">${shoe}</g>`;
       } },
-    { id: 'guitarra', name: 'Les Paul', slot: 'hand', rare: true, box: '74 14 36 82',
+    { id: 'guitarra', name: 'Les Paul', slot: 'hand', box: '74 14 36 82',
       // Gibson Les Paul em pé, apoiada ao lado do sapo: um só recorte (lado agudo), tampo sunburst tabaco com filete creme,
       // escudo creme, dois humbuckers cromados com moldura creme, ponte e cordal, 4 botões dourados, chave seletora,
       // braço de jacarandá com filete e marcações trapezoidais, mão "livro aberto" preta com 3+3 tarraxas
@@ -1427,7 +1427,7 @@ const Outfit = (() => {
 <path d="M42 3.4 Q40.6 12 41.2 22 M58 3.4 Q59.4 12 58.8 22" stroke="#22361f" stroke-width=".7" fill="none" opacity=".75"/><circle cx="50" cy="2.3" r="1.6" fill="#3f5a3a" stroke="#22361f" stroke-width=".6"/>
 <g font-family="Georgia,'Times New Roman',serif" font-size="6.6" font-weight="700" fill="#efe6c8" text-anchor="middle"><text x="46.6" y="12.6">B</text><text x="50" y="15.4">L</text><text x="53.4" y="18.2">V</text></g>
 <path d="M33 21 Q50 31 67 21 L65.4 18.6 Q50 26.6 34.6 18.6 Z" fill="#c9b48f" stroke="#8f7a55" stroke-width=".8"/><path d="M36 21.6 Q50 28.6 64 21.6" stroke="#e8dcc0" stroke-width=".5" fill="none" stroke-dasharray="1 .8"/></g>` },
-    { id: 'bellato', name: '5Panel Bellato', slot: 'head', layer: 'top', box: '27 -8 46 38',
+    { id: 'bellato', name: '5Panel Bellato', slot: 'head', rare: true, layer: 'top', box: '27 -8 46 38',
       // 5 panel oncinha rosado: painel da frente e aba em oncinha, laterais rosadas em cima e tela cinza embaixo com faixa
       // refletiva, patch redondo com a cabeça de um tucano e "ALICE"; desenhado por cima dos olhos para a aba aparecer
       svg: () => `<defs><pattern id="leoPrint" width="4.6" height="4.6" patternUnits="userSpaceOnUse"><rect width="4.6" height="4.6" fill="#ecc9bd"/><ellipse cx="1.3" cy="1.3" rx=".62" ry=".5" fill="#a5643c"/><path d="M0.4 1.1 q.3 -.9 1.2 -.75 M2.25 1.0 q.35 .8 -.25 1.15 M0.55 1.85 q.6 .5 1.2 .25" stroke="#2e1f1a" stroke-width=".5" fill="none" stroke-linecap="round"/><ellipse cx="3.6" cy="3.5" rx=".62" ry=".5" fill="#a5643c"/><path d="M2.7 3.3 q.3 -.9 1.2 -.75 M4.55 3.2 q.35 .8 -.25 1.15 M2.85 4.05 q.6 .5 1.2 .25" stroke="#2e1f1a" stroke-width=".5" fill="none" stroke-linecap="round"/><path d="M3.4 .8 q.4 -.3 .7 .1 M.7 3.7 q.4 .3 .7 -.1" stroke="#2e1f1a" stroke-width=".45" fill="none" stroke-linecap="round"/></pattern>
@@ -2613,9 +2613,9 @@ const Career = (() => {
   {
     const tut = REGIONS[0].count;
     ['cardigan', 'loafer', 'celular'].forEach((id, i) => { PRIZE[i] = [id]; });
-    const every5 = ['bolovo', 'bellato', 'oculos', 'cachecol', 'gravata', 'pirata', 'capa', 'medalha', 'manto'];
+    const every5 = ['bolovo', 'zerezes', 'cachecol', 'oculos', 'linus', 'pirata', 'medalha', 'guitarra', 'manto'];
     for (let k = 0, i = tut + 4; i < TOTAL - 1 && k < every5.length; i += 5, k++) PRIZE[i] = [every5[k]];
-    PRIZE[tut + 11] = ['linus'];          // Iniciante 12
+    PRIZE[tut + 11] = ['oldskool'];       // Iniciante 12
     PRIZE[TOTAL - 1] = ['coroa', 'trofeu'];
     PRIZE[TOTAL + 4] = ['antenas']; PRIZE[ALL - 1] = ['capacete', 'jetpack'];
   }
@@ -2625,7 +2625,7 @@ const Career = (() => {
      O Iniciante pede as 9 do tutorial.
      Fechar um pântano inteiro com 3★ (do Iniciante em diante) dá um prêmio raro. */
   const START = []; REGIONS.reduce((a, R, r) => (START[r] = a, a + R.count), 0);
-  const RARE = { iniciante: 'zerezes', medio: 'oldskool', avancado: 'guitarra', expert: 'asas', espaco: 'oculos3d' };
+  const RARE = { iniciante: 'bellato', medio: 'gravata', avancado: 'capa', expert: 'asas', espaco: 'oculos3d' };
   let stars = Store.get('stars', null), opened = Store.get('opened', null), rare = Store.get('rare', []);
   if (!Array.isArray(stars)) {        // quem já jogava antes das estrelas: fases feitas valem 1★ e os pântanos já alcançados seguem abertos
     stars = Array.from({ length: ALL }, (_, i) => i < done ? 1 : 0);
@@ -2649,6 +2649,16 @@ const Career = (() => {
   const playable = i => i <= done && isOpen(regionOf(i));
   const totalStars = () => stars.reduce((a, b) => a + (b || 0), 0);
   const owned = () => Object.keys(PRIZE).filter(i => +i < done).flatMap(i => PRIZE[i]).concat(rare);
+  /* Nova ordem de prêmios (Zerezes no Iniciante 10, Vans no 12, Cachecol/Ray-Ban no Médio 2/7, Linus no Médio 12, Medalha
+     no Avançado 10, Les Paul no Expert 3; Bellato, Gravata e Capa viram prêmio de pântano todo com 3★): ninguém perde o
+     que já tinha, e quem já fechou um pântano com 3★ ganha o prêmio novo dele. Uma vez só. */
+  if (!Store.get('prizeSwap2', false)) {
+    const OLD = { 7: 'bolovo', 12: 'bellato', 14: 'linus', 17: 'oculos', 22: 'cachecol', 27: 'gravata', 32: 'pirata', 37: 'capa', 42: 'medalha', 47: 'manto' };
+    const have = owned();
+    for (const i in OLD) if (done > +i && !have.includes(OLD[i]) && !rare.includes(OLD[i])) rare.push(OLD[i]);
+    REGIONS.forEach((R, r) => { const g = RARE[R.id]; if (g && done >= START[r] + R.count && stars.slice(START[r], START[r] + R.count).every(v => v === 3) && !rare.includes(g)) rare.push(g); });
+    Store.set('rare', rare); Store.set('prizeSwap2', true);
+  }
   let list = null, built = null, nodes = [], finalPos = null, portalPos = null, starPos = null, lastW = 0, avatar = null;
   const map = $('cmap'), inner = $('cmapInner');
   let baseRects = [], mapKey = '';
@@ -3463,8 +3473,8 @@ const Tests = {
     const CL = Career.list;
     const RC = Career.REGIONS.map(r => r.count);
     t('carreira: 50 fases; expert 10, avançado 12, iniciante ≥ médio ≥ avançado > expert', Career.TOTAL === 50 && CL.length === 60 && RC[4] === 10 && RC[3] === 12 && RC[1] >= RC[2] && RC[2] >= RC[3], RC.slice(0, 5).join(' + ') + ' (+10 bônus)');
-    t('prêmios: 1 por fase do tutorial, depois 1 a cada 5 fases (+ Linus no Iniciante 12); 18 apetrechos sem repetir', [0, 1, 2].every(i => Career.PRIZE[i]) && Career.PRIZE[14][0] === 'linus' && [7, 12, 17, 22, 27, 32, 37, 42, 47, 49, 54, 59].every(i => Career.PRIZE[i]) && Object.keys(Career.PRIZE).length === 16 && new Set(Object.values(Career.PRIZE).flat()).size === 18 && Outfit.ITEMS.filter(i => !i.rare).length === 18);
-    t('prêmios raros: 5 por pântano inteiro com 3★ + boné de hélice e cartola do desafio perfeito; 5Panel BLV e Bellato no Iniciante 5 e 10', Outfit.ITEMS.filter(i => i.rare).length === 7 && Outfit.BY.bone.rare && Outfit.BY.cartola.rare && Career.PRIZE[7][0] === 'bolovo' && Career.PRIZE[12][0] === 'bellato' && Outfit.ITEMS.filter(i => i.rare).every(i => !Object.values(Career.PRIZE).flat().includes(i.id)));
+    t('prêmios: 1 por fase do tutorial, depois 1 a cada 5 fases (+ Vans no Iniciante 12); 18 apetrechos sem repetir', [0, 1, 2].every(i => Career.PRIZE[i]) && Career.PRIZE[14][0] === 'oldskool' && Career.PRIZE[12][0] === 'zerezes' && Career.PRIZE[27][0] === 'linus' && Career.PRIZE[42][0] === 'guitarra' && [7, 12, 17, 22, 27, 32, 37, 42, 47, 49, 54, 59].every(i => Career.PRIZE[i]) && Object.keys(Career.PRIZE).length === 16 && new Set(Object.values(Career.PRIZE).flat()).size === 18 && Outfit.ITEMS.filter(i => !i.rare).length === 18);
+    t('prêmios raros: 5 por pântano inteiro com 3★ (Bellato, Gravata, Capa, Asas, Óculos de estrela) + boné de hélice e cartola do desafio perfeito', Outfit.ITEMS.filter(i => i.rare).length === 7 && ['bellato', 'gravata', 'capa', 'asas', 'oculos3d', 'bone', 'cartola'].every(id => Outfit.BY[id].rare) && Career.PRIZE[7][0] === 'bolovo' && Outfit.ITEMS.filter(i => i.rare).every(i => !Object.values(Career.PRIZE).flat().includes(i.id)));
     t('estrelas: 3 no mínimo, 2 até +4, 1 acima', starsFor(5, 5) === 3 && starsFor(6, 5) === 2 && starsFor(9, 5) === 2 && starsFor(10, 5) === 1);
     t('tutorial com 1, 2 e 3 sapos verdes', [0, 1, 2].every(i => Rules.greens(CL[i].start) === i + 1));
     t('todas as fases da carreira têm solução', CL.filter(l => !Career.REGIONS[l.region].bonus).every(l => !!Solver.solve(l.start)));
