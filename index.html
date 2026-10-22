@@ -1809,7 +1809,7 @@ ${vest}<g transform="translate(100 0) scale(-1 1)">${vest}</g>
   const flies = o => !!o && Object.values(o).some(id => BY[id] && BY[id].fly);     // mochila a jato: o sapo flutua
   /* Personagens: o sapo e os amigos que chegam ao abrir certos pântanos. Cada lugar (o seu e o do sapinho vermelho)
      escolhe o seu personagem no guarda-roupa. */
-  const CHARS = [{ id: 'sapo', name: 'Sapo' }, { id: 'johnny', name: 'Johnny Chicken', at: 'montemor' }, { id: 'lollipop', name: 'Lollipop', at: 'praia' },
+  const CHARS = [{ id: 'sapo', name: 'Sapo' }, { id: 'johnny', name: 'Johnny Chicken', at: 'montemor' }, { id: 'lollipop', name: 'Loripop', at: 'praia' },
     { id: 'porco', name: 'Porco', at: 'nebuloso' }, { id: 'caramelo', name: 'Caramelo', at: 'carnaval' }, { id: 'corujao', name: 'Corujão', at: 'festa' }, { id: 'tatu', name: 'Tatu', at: 'skatepark' }];
   let char = Store.get('char', 'sapo'), charRed = Store.get('charRed', 'sapo');
   const big = o => flies(o) || !!(o && o.ride);       // ocupa mais espaço em volta do sapo (chama, caixa)
