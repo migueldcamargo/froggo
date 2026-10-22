@@ -1130,6 +1130,15 @@ const Gen = (() => {
    olhos volumosos, bochechas, patas). O vermelho usa coroa dourada para
    ser distinguível também por quem não diferencia cores.
    --------------------------------------------------------------------- */
+/* Cada desenho que define gradientes/padrões próprios ganha ids únicos: com o mesmo id em duas telas, o navegador
+   usa o primeiro da página e, se ele estiver numa tela escondida, o preenchimento some (fica transparente). */
+let uniqN = 0;
+function uniqIds(svg) {
+  const ids = [...svg.matchAll(/\sid="([^"]+)"/g)].map(m => m[1]);
+  if (!ids.length) return svg;
+  const n = ++uniqN;
+  return ids.reduce((t, id) => t.split(`id="${id}"`).join(`id="${id}-u${n}"`).split(`#${id})`).join(`#${id}-u${n})`).split(`"#${id}"`).join(`"#${id}-u${n}"`), svg);
+}
 const Art = {
   /* Outros personagens (destravados ao abrir certos pântanos). Mesmo molde do sapo — cabeça em (50,45), olhos em
      (31,26)/(69,26), corpo em (50,66), pés em y≈86 — para todos os apetrechos servirem em todos. */
@@ -1214,8 +1223,8 @@ const Art = {
     };
     K[kind]();
     const cls = [opts.cls, opts.outfit && Outfit.flies(opts.outfit) ? 'fly' : ''].filter(Boolean).join(' ');
-    return `<svg viewBox="0 0 100 100" overflow="visible" aria-hidden="true"${cls ? ` class="${cls}"` : ''}${opts.attrs ? ' ' + opts.attrs : ''}><defs>${defs}</defs><ellipse class="fshadow" cx="50" cy="92" rx="31" ry="6" fill="rgba(0,20,50,.3)"/>
-<g class="fbody">${L.back}${back}${body}${L.head}${face}${L.under}${L.shoes ? '' : feet}${L.front}${L.eyes}${L.hand}${L.top}</g></svg>`;
+    return uniqIds(`<svg viewBox="0 0 100 100" overflow="visible" aria-hidden="true"${cls ? ` class="${cls}"` : ''}${opts.attrs ? ' ' + opts.attrs : ''}><defs>${defs}</defs><ellipse class="fshadow" cx="50" cy="92" rx="31" ry="6" fill="rgba(0,20,50,.3)"/>
+<g class="fbody">${L.back}${back}${body}${L.head}${face}${L.under}${L.shoes ? '' : feet}${L.front}${L.eyes}${L.hand}${L.top}</g></svg>`);
   },
   frog(color, opts = {}) {
     if (opts.char && opts.char !== 'sapo') return Art.creature(opts.char, opts);     // personagem escolhido no guarda-roupa
@@ -1228,7 +1237,7 @@ const Art = {
     // pintinhas: marca o vermelho também para quem não distingue as cores
     const spots = red ? '<g fill="#7a0a0a" opacity=".42"><circle cx="50" cy="31" r="2.6"/><circle cx="43.5" cy="35.5" r="1.7"/><circle cx="56.5" cy="35.5" r="1.7"/></g>' : '';
     const cls = [opts.cls, opts.outfit && Outfit.flies(opts.outfit) ? 'fly' : ''].filter(Boolean).join(' ');   // fly: flutuando (mochila a jato, foguete)
-    return `<svg viewBox="0 0 100 100" overflow="visible" aria-hidden="true"${cls ? ` class="${cls}"` : ''}${opts.attrs ? ' ' + opts.attrs : ''}>
+    return uniqIds(`<svg viewBox="0 0 100 100" overflow="visible" aria-hidden="true"${cls ? ` class="${cls}"` : ''}${opts.attrs ? ' ' + opts.attrs : ''}>
 <ellipse class="fshadow" cx="50" cy="92" rx="31" ry="6" fill="rgba(0,20,50,.3)"/>
 <g class="fbody" style="animation-delay:${d}s">${L.back}
 <ellipse cx="20" cy="77" rx="15" ry="11" fill="url(#${D})"/><ellipse cx="80" cy="77" rx="15" ry="11" fill="url(#${D})"/>
@@ -1249,7 +1258,7 @@ ${opts.sad ? `<path d="M37 57 Q50 47.5 63 57" stroke="${line}" stroke-width="2.8
 ${L.under}<g fill="url(#${D})"><ellipse cx="33" cy="86" rx="9.5" ry="5.2"/><ellipse cx="67" cy="86" rx="9.5" ry="5.2"/>
 ${L.shoes ? '' : '<circle cx="25.5" cy="88.5" r="2.6"/><circle cx="31" cy="90.5" r="2.6"/><circle cx="37" cy="90.5" r="2.6"/>'}
 ${L.shoes ? '' : '<circle cx="63" cy="90.5" r="2.6"/><circle cx="69" cy="90.5" r="2.6"/><circle cx="74.5" cy="88.5" r="2.6"/>'}</g>
-${L.front}${L.eyes}${L.hand}${L.top}</g></svg>`;
+${L.front}${L.eyes}${L.hand}${L.top}</g></svg>`);
   },
   // Sapinho simplificado para o mini-tabuleiro e a legenda (coordenadas absolutas)
   miniFrog(x, y, red, s = 1) {
@@ -1823,7 +1832,7 @@ ${vest}<g transform="translate(100 0) scale(-1 1)">${vest}</g>
     L.shoes = !!get('feet') && !get('feet').open || !!(get('torso') && get('torso').over);     // de sapato: sem dedinhos (sandália aberta mostra os dedos)
     return L;
   }
-  function preview(id) { const it = BY[id]; return `<svg viewBox="${it.box}" overflow="visible" aria-hidden="true">${it.sole ? it.sole() : ''}${it.svg(false)}${it.front ? it.front() : ''}</svg>`; }
+  function preview(id) { const it = BY[id]; return uniqIds(`<svg viewBox="${it.box}" overflow="visible" aria-hidden="true">${it.sole ? it.sole() : ''}${it.svg(false)}${it.front ? it.front() : ''}</svg>`); }
   return {
     ITEMS, BY, GROUP, layers, preview, flies, big,
     get worn() { return { ...worn }; },
@@ -2606,7 +2615,7 @@ const UI = (() => {
       const min = Rules.greens(c.start), st = c.levelId === 'tutorial' ? 3 : starsFor(Game.count, min);
       const res = Career.complete(c.career, st);
       got = st;
-      stars = `<div class="wstars" aria-label="${st} de 3 estrelas">${[0, 1, 2].map(() => `<span class="ws"><span class="e">${Art.star('#cfd8e3')}</span><span class="f">${Art.star('#ffd23f')}</span></span>`).join('')}</div>${st < 3 ? (Game.count - min <= 2 ? `<p class="wmin near">Faltou ${Game.count - min} pulo${Game.count - min > 1 ? 's' : ''} para <span class="st-on">★★★</span></p>` : `<p class="wmin"><span class="st-on">★★★</span> ${min} movimentos</p>`) : ''}`;
+      stars = `<div class="wstars" aria-label="${st} de 3 estrelas">${[0, 1, 2].map(() => `<span class="ws"><span class="e">${Art.star('#cfd8e3')}</span><span class="f">${Art.star('#ffd23f')}</span></span>`).join('')}</div>${st < 3 ? (Game.count - min <= 2 ? `<p class="wmin near">Quase <span class="st-on">★★★</span> · +${Game.count - min}</p>` : `<p class="wmin"><span class="st-on">★★★</span> ${min} movimentos</p>`) : ''}`;
       next = 'Próxima fase';
       if (st < 3 && Game.count - min <= 2) $('btnAgain').classList.add('nudge');     // quase 3★: o "jogar de novo" chama atenção
       if (res.finished) { title = 'Carreira concluída!'; next = 'Ver troféu'; winToMap = true; }
@@ -4023,21 +4032,21 @@ const Wardrobe = (() => {
   let red = false;          // vestindo o sapinho vermelho
   const zoom = zoomable($('wStage'), '.wzoom', '.wzoom > svg');
   // os dois sapos lado a lado; o escolhido (toque nele) tem a vitória-régia em destaque
-  function stageFrog(isRed, dx) {
+  function stageFrog(isRed, dx, k = 1) {
     const o = isRed ? Outfit.wornRed : Outfit.worn, sel = isRed === red, ch = isRed ? Outfit.charRed : Outfit.char;
-    return `<g class="wfrog${sel ? ' sel' : ''}" data-red="${isRed ? 1 : 0}" transform="translate(${dx} 0)" role="button" aria-label="Vestir o sapo ${isRed ? 'vermelho' : 'verde'}">
+    return `<g class="wfrog${sel ? ' sel' : ''}" data-red="${isRed ? 1 : 0}" transform="translate(${dx} ${(1 - k) * 110}) scale(${k})" role="button" aria-label="Vestir o sapo ${isRed ? 'vermelho' : 'verde'}">
 <ellipse cx="50" cy="97" rx="50" ry="12" fill="#063f78" opacity=".25"/>
 <path d="M4 94 A46 11 0 1 0 96 94 A46 11 0 0 0 56 83 L50 94 L45 83 A46 11 0 0 0 4 94Z" fill="url(#lily)" stroke="${sel ? '#ffd23f' : '#155f1a'}" stroke-width="${sel ? 3 : 1}"/>
 ${Art.frog(isRed ? 'red' : 'green', { outfit: o, char: ch, attrs: 'x="0" y="5" width="100" height="100"' })}
-<rect x="22" y="${sel ? 113 : 114}" width="56" height="13" rx="6.5" fill="${sel ? '#fffdf4' : 'rgba(255,255,255,.45)'}" stroke="${sel ? '#2fbf3a' : 'none'}" stroke-width="2"/>
-<text x="50" y="${sel ? 122.4 : 123.4}" text-anchor="middle" font-family="Nunito,system-ui,sans-serif" font-weight="900" font-size="8" fill="#123">${ch !== 'sapo' ? Outfit.CHARS.find(c => c.id === ch).name : isRed ? 'Vermelho' : 'Verde'}</text></g>`;
+<g transform="translate(50 ${sel ? 119.5 : 120.5}) scale(${1 / k}) translate(-50 -119.5)"><rect x="18" y="113" width="64" height="13" rx="6.5" fill="${sel ? '#fffdf4' : 'rgba(255,255,255,.45)'}" stroke="${sel ? '#2fbf3a' : 'none'}" stroke-width="2"/>
+<text x="50" y="122.4" text-anchor="middle" font-family="Nunito,system-ui,sans-serif" font-weight="900" font-size="8" fill="#123">${ch !== 'sapo' ? Outfit.CHARS.find(c => c.id === ch).name : isRed ? 'Vermelho' : 'Verde'}</text></g></g>`;
   }
   function render() {
     const owned = Career.owned(), have = Career.chars();
     Outfit.prune(owned); Outfit.pruneChars(have);
     const big = Outfit.big(Outfit.worn) || Outfit.big(Outfit.wornRed);
-    $('wStage').innerHTML = `<div class="wzoom"><svg viewBox="${big ? '-14 -40 248 170' : '-10 -20 240 150'}" preserveAspectRatio="xMidYMid meet" aria-hidden="false">
-${stageFrog(false, 0)}${stageFrog(true, 120)}</svg></div>`;
+    $('wStage').innerHTML = `<div class="wzoom"><svg viewBox="${big ? '-20 -40 196 172' : '-12 -20 182 150'}" preserveAspectRatio="xMidYMid meet" aria-hidden="false">
+${stageFrog(false, 0)}${stageFrog(true, 104, .5)}</svg></div>`;
     zoom.apply();
     $('wCount').textContent = `${Outfit.ITEMS.filter(it => owned.includes(it.id)).length}/${Outfit.ITEMS.length}`;
     const cur = red ? Outfit.charRed : Outfit.char;
