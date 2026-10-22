@@ -855,7 +855,7 @@ canvas.bigbang{position:absolute;inset:0;width:100%;height:100%;z-index:400;poin
 
 <script>
 'use strict';
-const BUILD = '2026-10-22.1909';      // versão publicada: trocada pela data e hora a cada publicação (ver Update, no fim); 'dev' não confere
+const BUILD = '2026-10-22.1919';      // versão publicada: trocada pela data e hora a cada publicação (ver Update, no fim); 'dev' não confere
 /* =====================================================================
    FROGGO — jogo de sapos saltadores (peg-solitaire), arquivo único e offline.
    Módulos (todos neste arquivo): Store · Geo · Rules · Solver · Gen ·
@@ -1949,11 +1949,11 @@ ${vest}<g transform="translate(100 0) scale(-1 1)">${vest}</g>
 <g stroke="#f4f0e4" stroke-width=".35" opacity=".9"><path d="M88.6 14 V83 M89.6 14 V83 M90.4 14 V83 M91.4 14 V83"/></g>
 <path d="M82 58 Q80 64 84 66" stroke="#fff" stroke-width="1.4" opacity=".35" fill="none" stroke-linecap="round"/></g>` },
     { id: 'osso', name: 'Osso', slot: 'hand', rare: true, box: '72 54 36 26',
-      // amigos: osso do Caramelo, na mão
+      // amigos: osso do vira-lata Tatu, na mão
       svg: () => `<g transform="rotate(-24 90 67)"><path d="M78 64 a4 4 0 1 1 3.6 -3.4 H98.4 a4 4 0 1 1 3.6 3.4 a4 4 0 1 1 -3.6 3.4 H81.6 a4 4 0 1 1 -3.6 -3.4 Z" fill="#fff8e6" stroke="#b8a47a" stroke-width="1.1" stroke-linejoin="round"/>
 <path d="M83 62.4 H97" stroke="#fff" stroke-width="1.2" opacity=".8" stroke-linecap="round"/></g>` },
     { id: 'colarprata', name: 'Colar de prata', slot: 'neck', rare: true, box: '18 52 64 34',
-      // amigos: colar de prata do Caramelo, elos grandes só no pescoço
+      // amigos: colar de prata do vira-lata Tatu, elos grandes só no pescoço
       svg: () => { let l = ''; for (let i = 0; i <= 6; i++) { const t = i / 6, x = 25 + 50 * t, y = 64 + 11 * Math.sin(Math.PI * t), a = (i % 2 ? 90 : 0) + Math.cos(Math.PI * t) * -28, tr = `transform="rotate(${a.toFixed(0)} ${x.toFixed(1)} ${y.toFixed(1)})"`;
         l += `<ellipse cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" rx="5.4" ry="3.6" fill="none" stroke="#6f7a84" stroke-width="3.4" ${tr}/><ellipse cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" rx="5.4" ry="3.6" fill="none" stroke="#dfe5ea" stroke-width="2" ${tr}/><ellipse cx="${(x - 1.6).toFixed(1)}" cy="${(y - 2).toFixed(1)}" rx="1.6" ry=".7" fill="#fff" ${tr}/>`; } return l; } },
     { id: 'queijo', name: 'Queijo', slot: 'hand', rare: true, box: '72 52 36 28',
@@ -2006,10 +2006,10 @@ ${vest}<g transform="translate(100 0) scale(-1 1)">${vest}</g>
   const flies = o => !!o && Object.values(o).some(id => BY[id] && BY[id].fly);     // mochila a jato: o sapo flutua
   /* Personagens: o sapo e os amigos que chegam ao abrir certos pântanos. Cada lugar (o seu e o do sapinho vermelho)
      escolhe o seu personagem no guarda-roupa. */
-  // kit: itens que chegam junto com o amigo (o Tatu ainda não tem)
+  // kit: itens que chegam junto com o amigo (o Dillo, tatu do Skatepark, ainda não tem). O vira-lata (id caramelo) se chama Tatu
   const CHARS = [{ id: 'sapo', name: 'Sapo' }, { id: 'johnny', name: 'Johnny Chicken', at: 'montemor', kit: ['prancha'] }, { id: 'lollipop', name: 'Loripop', at: 'praia', kit: ['ninja'] },
-    { id: 'corujao', name: 'Corujão', at: 'nebuloso', kit: ['violao'] }, { id: 'caramelo', name: 'Caramelo', at: 'carnaval', kit: ['osso', 'colarprata'] }, { id: 'porco', name: 'Porco', at: 'festa', kit: ['copofesta'] },
-    { id: 'tatu', name: 'Tatu', at: 'skatepark' }, { id: 'topogigio', name: 'Topogígio', at: 'esgoto', kit: ['queijo'] }, { id: 'roger', name: 'Roger', at: 'avancado', kit: ['pastel'] },
+    { id: 'corujao', name: 'Corujão', at: 'nebuloso', kit: ['violao'] }, { id: 'caramelo', name: 'Tatu', at: 'carnaval', kit: ['osso', 'colarprata'] }, { id: 'porco', name: 'Porco', at: 'festa', kit: ['copofesta'] },
+    { id: 'tatu', name: 'Dillo', at: 'skatepark' }, { id: 'topogigio', name: 'Topogígio', at: 'esgoto', kit: ['queijo'] }, { id: 'roger', name: 'Roger', at: 'avancado', kit: ['pastel'] },
     { id: 'jare', name: 'Jaré', at: 'expert' }, { id: 'baurets', name: 'Baurets', at: 'espaco', kit: ['capacete'] },
     { id: 'kiwi', name: 'Kiwi', gift: true, kit: ['kiwifruta'] }];      // gift: presente do desafio do dia (ver Daily, KIWI)      // gift: presente do desafio do dia (ver Daily, KIWI)
   let char = Store.get('char', 'sapo'), charRed = Store.get('charRed', 'sapo');
@@ -3364,8 +3364,8 @@ const Career = (() => {
   // desafio do dia com nota 3★ (na 1ª tentativa do dia): coleção, um item a cada tantas vezes
   const DAILY = [[1, 'aniversario'], [3, 'bigode'], [5, 'pipoca'], [10, 'polaroid'], [20, 'guardachuva']];
   let done = Math.max(0, Math.min(bonusOpen ? ALL : TOTAL, +Store.get('career', 0) || 0));
-  /* Estrelas (1 a 3 por fase, vale a melhor; no tutorial sempre 3). Um pântano só abre com 2×fases + metade das fases
-     (arredondada para baixo) em estrelas no pântano anterior: ex. 10 fases → 25 = 5 fases com 3★ e 5 com 2★.
+  /* Estrelas (1 a 3 por fase, vale a melhor; no tutorial sempre 3). Um pântano só abre com um total de estrelas na
+     carreira (ver need): cada pântano anterior soma 2×fases + metade das fases (arredondada para baixo), ex. 10 fases → 25.
      O Pântano Tranquilo pede as 9 do tutorial.
      Fechar um pântano inteiro com 3★ (do Tranquilo em diante) dá um prêmio raro. */
   const START = []; REGIONS.reduce((a, R, r) => (START[r] = a, a + R.count), 0);
@@ -3443,10 +3443,13 @@ const Career = (() => {
   for (let i = 0; i < REGIONS[0].count; i++) if (i < done && stars[i] !== 3) { stars[i] = 3; Store.set('stars', stars); }   // tutorial feito vale 3★
   const regionOf = i => { let r = 0; while (r < REGIONS.length - 1 && i >= START[r + 1]) r++; return r; };
   const regionStars = r => stars.slice(START[r], START[r] + REGIONS[r].count).reduce((a, b) => a + (b || 0), 0);
-  const need = r => { const n = REGIONS[r - 1].count; return r === 1 ? 3 * n : 2 * n + Math.floor(n / 2); };   // tutorial: todas com 3★ (sempre dá 3)
+  /* estrelas para abrir o pântano r, contando o TOTAL da carreira: soma, pântano a pântano, 2×fases + metade das fases
+     (o tutorial conta 3★ por fase). Ex.: Tranquilo 9, Monte Mor 29, Praia 54 … Porradinha 129 … Jacaroso 226. */
+  const step = k => { const n = REGIONS[k - 1].count; return k === 1 ? 3 * n : 2 * n + Math.floor(n / 2); };
+  const need = r => { let t = 0; for (let k = 1; k <= r; k++) t += step(k); return t; };
   const isOpen = r => r === 0 || !!REGIONS[r].bonus || opened.includes(r);
-  // pode desbloquear: estrelas suficientes no pântano anterior e já terminou todas as fases dele
-  const canUnlock = r => r > 0 && !isOpen(r) && done >= START[r] && regionStars(r - 1) >= need(r);
+  // pode desbloquear: estrelas suficientes no total da carreira e já terminou todas as fases do pântano anterior
+  const canUnlock = r => r > 0 && !isOpen(r) && done >= START[r] && totalStars() >= need(r);
   const playable = i => i <= done && isOpen(regionOf(i));
   const totalStars = () => stars.reduce((a, b) => a + (b || 0), 0);
   const kits = () => chars().flatMap(id => (Outfit.CHARS.find(c => c.id === id) || {}).kit || []);      // itens que vieram com os amigos
@@ -3779,7 +3782,7 @@ ${portalPos ? `<path d="M${finalPos.x} ${finalPos.y} L${portalPos.x} ${portalPos
   // e o contador de estrelas do topo também treme
   async function denied(r) {
     const reg = inner.querySelectorAll('.creg')[r], ban = reg && reg.querySelector('.cbanner'), em = ban && ban.querySelector('.gate');
-    if (em) em.textContent = `🔒 Faltam ${Math.max(1, need(r) - regionStars(r - 1))} ⭐ para desbloquear`;
+    if (em) em.textContent = `🔒 ${need(r)} ⭐ para desbloquear (faltam ${Math.max(1, need(r) - totalStars())})`;
     if (reg) { scrollToY(reg.offsetTop + 120, true); await wait(360); }
     Sound.invalid();
     try { if (navigator.vibrate) navigator.vibrate(70); } catch (e) {}
