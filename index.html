@@ -115,6 +115,11 @@ svg{display:block}
 .lvl-opt:active{background:rgba(11,37,69,.06)}
 .lvl-opt .box{flex:none;width:1.5rem;height:1.5rem;border-radius:.45rem;border:2.5px solid #9db3c4;display:grid;place-items:center;background:#fff}
 .lvl-opt .box svg{width:1rem;height:1rem;opacity:0}
+.frogs{display:inline-flex;align-items:center;gap:.12em;vertical-align:middle}
+.frogs svg{width:1.45em;height:1.2em;filter:drop-shadow(0 1px 0 rgba(0,0,0,.25))}
+.frogs svg.bolt{width:.62em;height:1.15em}
+.lvl-opt .frogs svg{width:1.95em;height:1.6em}
+.lvl-opt .frogs svg.bolt{width:.8em;height:1.5em}
 .lvl-opt[aria-checked="true"] .box{background:var(--c);border-color:var(--c)}
 .lvl-opt[aria-checked="true"] .box svg{opacity:1}
 .lvl-opt:focus-visible{outline:3px solid #0b6fc9;outline-offset:-3px}
@@ -387,6 +392,7 @@ canvas.confetti{position:absolute;inset:0;width:100%;height:100%;pointer-events:
 .wzoom{position:absolute;inset:0;overflow:hidden;touch-action:none;border-radius:1rem}
 .wzoom>svg{width:100%;height:100%;transition:transform .12s ease-out}
 .wfrog{cursor:pointer}
+.wcount{margin-left:.45rem;padding:.05rem .5rem;border-radius:999px;background:rgba(255,255,255,.25);font-size:.85rem;font-weight:900}
 .wgrid{grid-area:grid;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;touch-action:pan-y;overscroll-behavior:contain;
   display:grid;grid-template-columns:repeat(auto-fill,minmax(6.4rem,1fr));gap:.5rem;align-content:start;padding:.6rem;border-radius:1.2rem;background:rgba(4,40,90,.25);box-shadow:inset 0 0 0 2px rgba(255,255,255,.35)}
 .witem{position:relative;display:flex;flex-direction:column;align-items:center;gap:.25rem;padding:.5rem .4rem .55rem;border-radius:1rem;background:#fffdf4;color:var(--ink);box-shadow:0 .2rem 0 rgba(0,0,0,.15)}
@@ -414,6 +420,11 @@ canvas.confetti{position:absolute;inset:0;width:100%;height:100%;pointer-events:
 .home-right{display:flex;align-items:center;gap:.5rem;margin-left:auto}   /* fica à direita mesmo sem o botão Instalar (app instalado) */
 .btn.round.daily{position:relative;width:2.9rem;height:2.9rem;min-width:2.9rem;min-height:2.9rem;padding:0;border-radius:50%;color:#fff;
   background:linear-gradient(180deg,#ff8a7a 0%,#f2402f 45%,#cf1f16 100%);box-shadow:0 .28rem 0 #8e120c,0 .5rem 1rem rgba(0,30,70,.3),inset 0 2px 0 rgba(255,255,255,.55)}
+.btn.nudge{animation:nudge 1s ease-in-out infinite}
+@keyframes nudge{50%{transform:scale(1.14);box-shadow:0 0 0 .35rem rgba(255,210,63,.75),0 .28rem 0 #0b4f8f}}
+.wmin.near{color:#c25a00;font-weight:900}
+.streak{position:absolute;right:-.55rem;bottom:-.45rem;padding:0 .3rem;border-radius:999px;background:#fff;color:#e8590c;font:900 .72rem/1.15rem Nunito,system-ui,sans-serif;white-space:nowrap;box-shadow:0 .1rem .3rem rgba(0,0,0,.3)}
+.dstreak{font-weight:900;color:#e8590c;margin:-.2rem 0 0}
 .btn.round.daily:active{box-shadow:0 .06rem 0 #8e120c,0 .2rem .5rem rgba(0,30,70,.3)}
 /* já jogou hoje: o botão inteiro fica verde */
 .btn.round.daily.done{background:linear-gradient(180deg,#b8f56a 0%,#55cf3a 45%,#24a12a 100%);box-shadow:0 .28rem 0 #13701a,0 .5rem 1rem rgba(0,30,70,.3),inset 0 2px 0 rgba(255,255,255,.6)}
@@ -503,6 +514,9 @@ canvas.confetti{position:absolute;inset:0;width:100%;height:100%;pointer-events:
 @keyframes pulse{50%{transform:scale(1.1)}}
 .cnode .prize{position:absolute;left:62%;top:-34%;width:58%;height:58%;border-radius:50%;background:#fffdf4;box-shadow:0 0 0 3px #ffd23f,0 4px 8px rgba(0,0,0,.3);display:grid;place-items:center;padding:12%;animation:prizeBob 1.8s ease-in-out infinite}
 .cnode .prize svg{width:100%;height:100%;filter:none}
+.cnode .prize.mystery.next{background:radial-gradient(closest-side,#fffdf4 74%,transparent 76%),conic-gradient(#2fbf3a calc(var(--p) * 360deg),#c5ced6 0);box-shadow:0 0 0 2px #fff,0 4px 8px rgba(0,0,0,.25);color:#2fbf3a}
+/* pântano ainda trancado: o cenário aparece borrado, só para dar curiosidade */
+.creg.veil>svg{filter:blur(3px) saturate(.85);opacity:.9}
 .cnode .prize.mystery{background:#dde3e8;box-shadow:0 0 0 3px #a9b4bd,0 4px 8px rgba(0,0,0,.25);color:#7d8a95;font-weight:900;font-size:20px;line-height:1;animation:none}
 .cnode.locked .prize svg{filter:none}
 @keyframes prizeBob{50%{transform:translateY(-4px)}}
@@ -529,6 +543,13 @@ canvas.bigbang{position:absolute;inset:0;width:100%;height:100%;z-index:400;poin
 .app.skin-avancado{background:radial-gradient(80% 45% at 80% 30%, rgba(155,108,255,.25), transparent 65%),linear-gradient(180deg,#4fd2ff 0,#4f72b0 calc(var(--sat) + 5rem),#33407c 45%,#1b1d48)}
 .app.skin-expert{background:radial-gradient(90% 50% at 50% 110%, rgba(90,70,20,.6), transparent 70%),linear-gradient(180deg,#4fd2ff 0,#6f8f6a calc(var(--sat) + 3rem),#5a5328 calc(var(--sat) + 9rem),#3a3214 55%,#1d190a)}
 .app.skin-avancado::before,.app.skin-expert::before,.app.space-mode::before{opacity:.07}
+.app.skin-montemor{background:radial-gradient(80% 45% at 15% 100%, rgba(242,201,76,.3), transparent 65%),linear-gradient(180deg,#4fd2ff 0,#8ed39a calc(var(--sat) + 6rem),#5aa84f 55%,#3a7a30)}
+.app.skin-praia{background:radial-gradient(70% 40% at 85% 12%, rgba(255,240,170,.55), transparent 70%),linear-gradient(180deg,#4fd2ff 0,#3fe0e8 calc(var(--sat) + 7rem),#56d6cf 55%,#f2d79a 85%,#e8c27a)}
+.app.skin-nebuloso{background:radial-gradient(60% 30% at 20% 30%, rgba(255,255,255,.7), transparent 70%),radial-gradient(60% 30% at 85% 70%, rgba(255,255,255,.55), transparent 70%),linear-gradient(180deg,#9fd8ff 0,#c9d6ee calc(var(--sat) + 8rem),#a9b8d8 60%,#7f90b8)}
+.app.skin-carnaval{background:radial-gradient(70% 40% at 15% 20%, rgba(255,210,63,.35), transparent 70%),linear-gradient(180deg,#4fd2ff 0,#b56bff calc(var(--sat) + 6rem),#e0559f 60%,#a8287a)}
+.app.skin-festa{background:radial-gradient(70% 40% at 80% 25%, rgba(255,106,213,.35), transparent 65%),radial-gradient(60% 35% at 15% 80%, rgba(111,208,255,.3), transparent 65%),linear-gradient(180deg,#4fd2ff 0,#5a3fc0 calc(var(--sat) + 5rem),#2e1a78 50%,#170b3d)}
+.app.skin-skatepark{background:radial-gradient(70% 40% at 80% 90%, rgba(255,106,19,.22), transparent 70%),linear-gradient(180deg,#4fd2ff 0,#a9b4c2 calc(var(--sat) + 6rem),#8a95a4 55%,#5f6a79)}
+.app.skin-festa::before{opacity:.07}
 .app.space-mode{background:radial-gradient(90% 50% at 80% 25%, rgba(155,108,255,.3), transparent 60%),radial-gradient(80% 50% at 0% 100%, rgba(111,208,255,.2), transparent 60%),linear-gradient(180deg,#4fd2ff 0,#3a5bc0 calc(var(--sat) + 2.5rem),#1d1450 calc(var(--sat) + 10rem),#05030f)}
 .board.space{box-shadow:0 .8rem 1.6rem rgba(80,40,200,.4)}
 .cavatar{position:absolute;z-index:6;pointer-events:none}
@@ -577,7 +598,7 @@ canvas.bigbang{position:absolute;inset:0;width:100%;height:100%;z-index:400;poin
       </button>
       <div class="home-right">
         <button class="icon-btn snd" aria-label="Som ligado/desligado"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9h4l5-4v14l-5-4H4z" fill="currentColor"/><g class="sound-waves"><path d="M16 9a4 4 0 0 1 0 6"/><path d="M18.5 6.5a7.5 7.5 0 0 1 0 11"/></g><g class="muted-x"><path d="M16.5 9.5l5 5M21.5 9.5l-5 5"/></g></svg></button>
-        <button class="btn round daily" id="btnDaily" aria-label="Desafio do dia"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="15.5" rx="3" fill="currentColor" fill-opacity=".18"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg><span class="dnum" id="dailyNum">1</span></button>
+        <button class="btn round daily" id="btnDaily" aria-label="Desafio do dia"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="15.5" rx="3" fill="currentColor" fill-opacity=".18"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg><span class="dnum" id="dailyNum">1</span><span class="streak" id="dailyStreak" hidden></span></button>
       </div>
     </div>
     <div class="hero">
@@ -649,7 +670,7 @@ canvas.bigbang{position:absolute;inset:0;width:100%;height:100%;z-index:400;poin
   <section class="screen" id="wardrobe" aria-label="Guarda-roupa">
     <div class="topbar">
       <button class="icon-btn" id="btnWardHome" aria-label="Voltar para o início"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h5v-6h4v6h5V10"/></svg></button>
-      <h2 class="ctitle"><svg class="hg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 5.5a2 2 0 1 1 2.6 1.9c-.4.1-.6.5-.6.9V9"/><path d="M12 9L2.8 15.6A1.4 1.4 0 0 0 3.6 18h16.8a1.4 1.4 0 0 0 .8-2.4z" fill="currentColor" fill-opacity=".2"/></svg>Guarda-roupa</h2>
+      <h2 class="ctitle"><svg class="hg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 5.5a2 2 0 1 1 2.6 1.9c-.4.1-.6.5-.6.9V9"/><path d="M12 9L2.8 15.6A1.4 1.4 0 0 0 3.6 18h16.8a1.4 1.4 0 0 0 .8-2.4z" fill="currentColor" fill-opacity=".2"/></svg>Guarda-roupa<span class="wcount" id="wCount"></span></h2>
       <button class="icon-btn snd" aria-label="Som ligado/desligado"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9h4l5-4v14l-5-4H4z" fill="currentColor"/><g class="sound-waves"><path d="M16 9a4 4 0 0 1 0 6"/><path d="M18.5 6.5a7.5 7.5 0 0 1 0 11"/></g><g class="muted-x"><path d="M16.5 9.5l5 5M21.5 9.5l-5 5"/></g></svg></button>
     </div>
     <div class="wstage" id="wStage"></div>
@@ -697,6 +718,7 @@ canvas.bigbang{position:absolute;inset:0;width:100%;height:100%;z-index:400;poin
       <h3 id="dTitle">Desafio do dia</h3>
       <p class="ddate" id="dDate"></p>
       <div class="dbig" id="dBig" hidden></div>
+      <p class="dstreak" id="dStreak" hidden></p>
       <div class="dstats" id="dStats" hidden>
         <div id="dTimeBox"><b id="dTime">0s</b><small>tempo</small></div>
         <div><b id="dMoves">0</b><small>movimentos</small></div>
@@ -865,6 +887,10 @@ const BigGeo = (() => {
     for (let x = 0; x <= L; x += 2) { const l = []; for (let y = 0; y <= L; y += 2) l.push(idOf(x, y)); LINES.push(l); }
     for (let d = -L; d <= L; d++) { const l = []; for (let x = 0; x <= L; x++) { const i = idOf(x, x - d); if (i >= 0) l.push(i); } if (l.length >= 3) LINES.push(l); }
     for (let t = 0; t <= 2 * L; t++) { const l = []; for (let x = 0; x <= L; x++) { const i = idOf(x, t - x); if (i >= 0) l.push(i); } if (l.length >= 3) LINES.push(l); }
+    // casas do meio (as dos quadradinhos): a partir do 4×4 elas formam fileiras de 3 ou mais, então também
+    // se pula entre elas na horizontal e na vertical (no 3×3 são só 2 por fileira e nada muda)
+    for (let y = 1; y < L; y += 2) { const l = []; for (let x = 1; x < L; x += 2) l.push(idOf(x, y)); if (l.length >= 3) LINES.push(l); }
+    for (let x = 1; x < L; x += 2) { const l = []; for (let y = 1; y < L; y += 2) l.push(idOf(x, y)); if (l.length >= 3) LINES.push(l); }
     const JUMPS = [];
     for (const l of LINES) for (let i = 0; i + 2 < l.length; i++) { JUMPS.push({ from: l[i], over: l[i + 1], to: l[i + 2] }); JUMPS.push({ from: l[i + 2], over: l[i + 1], to: l[i] }); }
     const FROM = Array.from({ length: CELLS.length }, () => []);
@@ -997,11 +1023,21 @@ const Solver = (() => {
    --------------------------------------------------------------------- */
 const LEVELS = {
   iniciante: { name: 'Iniciante', min: 3, max: 4, pMin: 0.25, pMax: 1, color: '#2fbf3a', dots: 1 },
-  medio:     { name: 'Médio', min: 5, max: 7, pMin: 0.06, pMax: 0.5, color: '#14a0e8', dots: 2 },
-  avancado:  { name: 'Avançado', min: 8, max: 10, pMin: 0, pMax: 0.12, color: '#ff8a00', dots: 3 },
-  expert:    { name: 'Expert', min: 11, max: 11, pMin: 0, pMax: 1, color: '#e0251c', dots: 4 }
+  medio:     { name: 'Médio', min: 5, max: 7, pMin: 0.06, pMax: 0.5, color: '#ff9a1f', dots: 2 },
+  avancado:  { name: 'Avançado', min: 8, max: 10, pMin: 0, pMax: 0.12, color: '#e0251c', dots: 3 },
+  expert:    { name: 'Expert', min: 11, max: 11, pMin: 0, pMax: 1, color: '#a50f2d', dots: 4 }
 };
 const LEVEL_IDS = Object.keys(LEVELS);
+/* No Embaralhar a dificuldade aparece em sapinhos, sem nome: 1 verde, 2 laranja, 3 vermelhos e 4 vermelhos com raios */
+{
+  const frog = c => `<svg viewBox="0 0 24 20" aria-hidden="true"><circle cx="7" cy="6" r="4.6" fill="${c}"/><circle cx="17" cy="6" r="4.6" fill="${c}"/><ellipse cx="12" cy="12.6" rx="10.6" ry="7" fill="${c}"/>
+<circle cx="7" cy="6" r="2.7" fill="#fff"/><circle cx="17" cy="6" r="2.7" fill="#fff"/><circle cx="7.5" cy="6.4" r="1.35" fill="#111"/><circle cx="16.5" cy="6.4" r="1.35" fill="#111"/><path d="M8 14 Q12 16.6 16 14" stroke="rgba(0,0,0,.4)" stroke-width="1.3" fill="none" stroke-linecap="round"/></svg>`;
+  const bolt = '<svg class="bolt" viewBox="0 0 12 20" aria-hidden="true"><path d="M7.5 0 L1 11 H5.6 L3.8 20 L11 8 H6.6 Z" fill="#ffd23f" stroke="#a87a00" stroke-width=".9" stroke-linejoin="round"/></svg>';
+  [['iniciante', '#2fbf3a'], ['medio', '#ff9a1f'], ['avancado', '#e0251c'], ['expert', '#e0251c']].forEach(([id, c], i) => {
+    const f = frog(c).repeat(i + 1);
+    LEVELS[id].icons = `<span class="frogs" role="img" aria-label="${LEVELS[id].name}">${id === 'expert' ? bolt + f + bolt : f}</span>`;
+  });
+}
 
 const Gen = (() => {
   const CATALOG = {
@@ -1187,7 +1223,9 @@ ${dim ? '' : `<path d="M${x - r * .32} ${y - r * .42} q${r * .12} -${r * .14} ${
     }
     // cor do tabuleiro conforme o pântano (o padrão azul vale para o Tutorial e para as cartas sem nível)
     const SK = { daily: ['#ffeeb0', '#f6c45c', '#c98a2a', '#fff8dc'], iniciante: ['#4fdccb', '#16a090', '#0b6b62', '#b8fff3'], medio: ['#6bb67a', '#2f6e47', '#1d4630', '#c4f2b4'],
-      avancado: ['#6476bd', '#2c3572', '#191e4a', '#c3ccff'], expert: ['#86753a', '#3d3416', '#221c08', '#e3d394'] }[theme];
+      avancado: ['#6476bd', '#2c3572', '#191e4a', '#c3ccff'], expert: ['#86753a', '#3d3416', '#221c08', '#e3d394'],
+      montemor: ['#a8d870', '#5f9a35', '#3a6a1c', '#efffd0'], praia: ['#ffe2a0', '#e2b45e', '#9a742a', '#fff7dc'], nebuloso: ['#e3ebf8', '#a7b6d6', '#6b7ba0', '#ffffff'],
+      carnaval: ['#ff8fd0', '#c23f98', '#73185e', '#ffe0f4'], festa: ['#8268ff', '#3d24a8', '#1f1260', '#ddd2ff'], skatepark: ['#cfd6df', '#8e99a8', '#525c6b', '#f4f6f9'] }[theme];
     if (SK) return `<svg class="bsvg" viewBox="0 0 100 100" aria-hidden="true"><defs><linearGradient id="bdSkin" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${SK[0]}"/><stop offset="1" stop-color="${SK[1]}"/></linearGradient></defs>
 <rect x=".8" y="2.6" width="98.4" height="96.8" rx="11" fill="${SK[2]}"/>
 <rect x=".8" y=".8" width="98.4" height="96" rx="11" fill="url(#bdSkin)" stroke="${SK[3]}" stroke-opacity=".7" stroke-width=".6"/>
@@ -1320,13 +1358,13 @@ const Outfit = (() => {
     { id: 'cachecol', name: 'Cachecol listrado', slot: 'neck', box: '20 58 60 30',
       svg: () => `<path d="M23.5 61.5 Q50 77 76.5 61.5 L77.5 68 Q50 84 22.5 68 Z" fill="#e53935"/><path d="M31 66 L32.4 72.4 M40 69.2 L41 75.4 M50 70.4 V76.8 M60 69.2 L59 75.4 M69 66 L67.6 72.4" stroke="#fff" stroke-width="2.6"/>
 <path d="M57 71 L60 84 L67 82.6 L64 70 Z" fill="#e53935"/><path d="M58.2 76 L65.2 74.6 M59.4 80.6 L66.4 79.2" stroke="#fff" stroke-width="2.4"/><path d="M60.6 84 l-.6 2.6 M63.2 83.5 l0 2.7 M65.8 83 l.6 2.6" stroke="#e53935" stroke-width="1.2"/>` },
-    { id: 'bone', name: 'Boné de hélice', slot: 'head', rare: true, box: '30 -14 40 38',
+    { id: 'bone', name: 'Boné de hélice', slot: 'head', box: '30 -14 40 38',
       // boné colorido de gomos com hélice no topo
       svg: () => `<g transform="translate(0 -3.5)"><path d="M50 3 Q33 4 33 22 L41.5 22 Z" fill="#e53935"/><path d="M50 3 L41.5 22 L50 22 Z" fill="#ffd23f"/><path d="M50 3 L50 22 L58.5 22 Z" fill="#2b7de9"/><path d="M50 3 L58.5 22 L67 22 Q67 4 50 3 Z" fill="#2fbf3a"/>
 <path d="M33 22 Q33 3 50 3 Q67 3 67 22 Z" fill="none" stroke="#1d2a44" stroke-width="1.1" stroke-linejoin="round"/><path d="M38 12 Q41 7 46 5.6" stroke="#fff" stroke-width="1.6" opacity=".5" fill="none" stroke-linecap="round"/>
 <path d="M36 21.5 Q50 28.5 64 21.5 L62.4 20 Q50 25.4 37.6 20 Z" fill="#ffd23f" stroke="#a87a00" stroke-width=".8"/>
 <rect x="49.2" y="-2.6" width="1.6" height="6" fill="#555"/><ellipse cx="43.2" cy="-3.4" rx="6.6" ry="1.9" fill="#e53935" stroke="#8a1414" stroke-width=".6" transform="rotate(-8 43.2 -3.4)"/><ellipse cx="56.8" cy="-2.4" rx="6.6" ry="1.9" fill="#2b7de9" stroke="#164a96" stroke-width=".6" transform="rotate(-8 56.8 -2.4)"/><circle cx="50" cy="-2.8" r="1.7" fill="#ffd23f" stroke="#a87a00" stroke-width=".6"/></g>` },
-    { id: 'cartola', name: 'Cartola', slot: 'head', rare: true, box: '27 -22 46 42',
+    { id: 'cartola', name: 'Cartola', slot: 'head', box: '27 -22 46 42',
       // aba larga e copa alta, acima dos olhos (que são desenhados por cima da camada da cabeça)
       svg: () => `<g transform="translate(0 -5)"><ellipse cx="50" cy="18" rx="21" ry="4.6" fill="#151515"/><path d="M30 17 Q50 22.2 70 17" stroke="#3a3a3a" stroke-width="1.1" fill="none"/>
 <rect x="38.5" y="-11.5" width="23" height="29.5" rx="2.5" fill="#262626"/><rect x="38.5" y="8.6" width="23" height="5.2" fill="#d9262c"/>
@@ -1416,25 +1454,25 @@ const Outfit = (() => {
 <rect x="59.4" y="76" width="4.8" height="1.6" rx=".5" fill="#e53935"/><rect x="59.4" y="78.6" width="4.8" height="1.6" rx=".5" fill="#2b7de9"/>
 ${boot(33)}${boot(67)}`;
       } },
-    { id: 'coracao', name: 'Óculos de coração', slot: 'eyes', rare: true, box: '12 8 76 36',
+    { id: 'coracao', name: 'Óculos de coração', slot: 'eyes', box: '12 8 76 36',
       svg: () => {
         const heart = x => `<g transform="translate(${x} 27.5) scale(1.25)"><path d="M0 8 C-15 -1 -12 -12 -5.5 -12 C-2.4 -12 0 -9.8 0 -8 C0 -9.8 2.4 -12 5.5 -12 C12 -12 15 -1 0 8 Z" fill="#ff3d7f" fill-opacity=".82" stroke="#b0144f" stroke-width="1.3" stroke-linejoin="round"/>
 <path d="M-8 -7 Q-6 -10 -3 -9.6" stroke="#fff" stroke-width="1.3" opacity=".75" fill="none" stroke-linecap="round"/></g>`;
         return `<path d="M40.6 22.6 Q50 17.6 59.4 22.6" stroke="#b0144f" stroke-width="2" fill="none" stroke-linecap="round"/>${heart(31)}${heart(69)}`;
       } },
-    { id: 'bandana', name: 'Marlon', slot: 'head', rare: true, box: '22 -8 70 36',
+    { id: 'bandana', name: 'Marlon', slot: 'head', box: '22 -8 70 36',
       // bandana vermelha de bolinhas cobrindo o alto da cabeça, com o nó e as pontas saindo do lado direito
       svg: () => `<g transform="translate(0 -1.5)"><path d="M25.6 24.4 Q26 4.6 50 3.4 Q74 4.6 74.4 24.4 Q50 18.6 25.6 24.4 Z" fill="#d32f2f" stroke="#7a0f0f" stroke-width="1" stroke-linejoin="round"/>
 <g fill="#fff" opacity=".85"><circle cx="35" cy="14" r="1.1"/><circle cx="43" cy="9" r="1.1"/><circle cx="52" cy="7.6" r="1.1"/><circle cx="60" cy="10" r="1.1"/><circle cx="67" cy="15.4" r="1.1"/><circle cx="39" cy="19.4" r=".9"/><circle cx="47" cy="14.6" r=".9"/><circle cx="56" cy="14" r=".9"/><circle cx="63" cy="20" r=".9"/><circle cx="30.6" cy="20.6" r=".8"/></g>
 <path d="M26.2 22.2 Q50 16.6 73.8 22.2" stroke="#7a0f0f" stroke-width=".8" fill="none" opacity=".6"/>
 <path d="M69 8 Q77 0 87 -2 Q84 3 81 5 Q87 7 90 11 Q79 12 72 11 Z" fill="#d32f2f" stroke="#7a0f0f" stroke-width="1" stroke-linejoin="round"/><circle cx="71" cy="9.4" r="2.8" fill="#b71c1c" stroke="#7a0f0f" stroke-width=".8"/></g>` },
-    { id: 'fone', name: 'Fone de ouvido', slot: 'head', layer: 'top', rare: true, box: '4 -8 92 50',
+    { id: 'fone', name: 'Fone de ouvido', slot: 'head', layer: 'top', box: '4 -8 92 50',
       // arco por cima dos olhos e conchas grandes dos lados
       svg: () => `<path d="M14.4 30 Q13 -6 50 -6 Q87 -6 85.6 30" stroke="#2a2a33" stroke-width="3.6" fill="none" stroke-linecap="round"/><path d="M22 6 Q34 -3 48 -3.4" stroke="#6b6b7a" stroke-width="1.2" fill="none" stroke-linecap="round"/>
 <rect x="5" y="20" width="12" height="20" rx="5.6" fill="#ff4b3a" stroke="#8a1414" stroke-width="1.1"/><rect x="83" y="20" width="12" height="20" rx="5.6" fill="#ff4b3a" stroke="#8a1414" stroke-width="1.1"/>
 <rect x="14" y="22.4" width="4.6" height="15.2" rx="2.3" fill="#2a2a33"/><rect x="81.4" y="22.4" width="4.6" height="15.2" rx="2.3" fill="#2a2a33"/>
 <path d="M7.6 24 V35 M85.6 24 V35" stroke="#fff" stroke-width="1.2" opacity=".45" stroke-linecap="round"/>` },
-    { id: 'pochete', name: 'Bag', slot: 'strap', rare: true, box: '16 54 70 34',
+    { id: 'pochete', name: 'Bag', slot: 'strap', box: '16 54 70 34',
       // pochete colorida atravessada (crossbody): alça branca da cintura até o ombro, bolsa na barriga inclinada,
       // corpo azul, bolso de cima verde, bolso da frente vermelho com borda amarela escrito RAPINA
       svg: () => `<path d="M19.4 79.6 Q26 77 33 75.6" stroke="#f4f4f4" stroke-width="3" fill="none" stroke-linecap="round"/>
@@ -1447,7 +1485,7 @@ ${boot(33)}${boot(67)}`;
 <path d="M40.6 85.6 Q51 83.4 61.4 85.6 V93.4 Q51 95.2 40.6 93.4 Z" fill="#e53935" stroke="#ffd23f" stroke-width="1.6" stroke-linejoin="round"/><path d="M41.4 86.6 Q51 84.6 60.6 86.6" stroke="#fff" stroke-width=".8" fill="none"/>
 <text x="51" y="91.4" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-weight="700" font-size="2.5" letter-spacing=".25" fill="#fff">RAPINA</text>
 <circle cx="66.4" cy="81.6" r=".9" fill="#c9c9c9" stroke="#777" stroke-width=".3"/></g>` },
-    { id: 'picole', name: 'Pistachio', slot: 'hand', rare: true, box: '74 36 32 56',
+    { id: 'picole', name: 'Pistachio', slot: 'hand', box: '74 36 32 56',
       // picolé de pistache, verde claro com pedacinhos de pistache e uma mordida, na mão direita
       svg: () => `<g transform="rotate(12 89 74)"><rect x="87.2" y="68" width="3.6" height="18" rx="1.6" fill="#e8c38a" stroke="#a8844a" stroke-width=".6"/>
 <path d="M80 70 V50 Q80 41 89 41 Q98 41 98 50 V70 Q89 73.4 80 70 Z" fill="#b9d98a" stroke="#6f8f3c" stroke-width="1"/>
@@ -1455,7 +1493,7 @@ ${boot(33)}${boot(67)}`;
 <g fill="#6f9f2e"><path d="M84 47 l1.6 -.6 .4 1.4 -1.4 .6z"/><path d="M90 52 l1.6 .2 -.2 1.5 -1.5 -.3z"/><path d="M85 58 l1.4 -.8 .7 1.3 -1.4 .7z"/><path d="M93 62 l1.5 .3 -.3 1.4 -1.5 -.3z"/><path d="M87 65 l1.4 -.5 .5 1.3 -1.4 .5z"/></g>
 <g fill="#a4c25a"><circle cx="91" cy="45" r=".7"/><circle cx="82.6" cy="53" r=".7"/><circle cx="94.4" cy="57" r=".7"/><circle cx="83.6" cy="64" r=".7"/></g>
 <path d="M82.6 50 V60" stroke="#fff" stroke-width="1.6" opacity=".45" stroke-linecap="round"/></g>` },
-    { id: 'skate', name: 'Flip', slot: 'hand', rare: true, box: '72 32 38 68',
+    { id: 'skate', name: 'Flip', slot: 'hand', box: '72 32 38 68',
       // shape laranja no estilo da Flip, em pé ao lado do sapo: FROG em letras grossas ao longo do shape,
       // o O como a bolinha branca do logo; trucks e rodinhas
       svg: () => `<g transform="rotate(-10 90 66)"><rect x="82.4" y="36" width="15.2" height="60" rx="7.6" fill="#ff6a13" stroke="#8a3200" stroke-width="1.1"/>
@@ -1467,6 +1505,85 @@ M39 2.6 V1.2 Q37.6 0 34.6 0 Q30.2 0 30.2 4.5 Q30.2 9 34.6 9 Q39 9 39 5.6 V3.8 H3
 <circle cx="90" cy="91.6" r="1.7" fill="#fff" stroke="#2e2a2b" stroke-width=".4"/>
 <rect x="79.6" y="40.4" width="20.8" height="2.4" rx="1" fill="#9aa6bd"/><rect x="79.6" y="89.2" width="20.8" height="2.4" rx="1" fill="#9aa6bd"/>
 <g fill="#f4f1e6" stroke="#9a937a" stroke-width=".6"><circle cx="79.4" cy="41.6" r="2.4"/><circle cx="100.6" cy="41.6" r="2.4"/><circle cx="79.4" cy="90.4" r="2.4"/><circle cx="100.6" cy="90.4" r="2.4"/></g></g>` },
+    // ---- Monte Mor ----
+    { id: 'woody', name: 'Roupa do Woody', slot: 'torso', box: '2 56 96 42',
+      // camisa xadrez amarela, colete de vaquinha, lenço vermelho no pescoço, cinto com fivela e calça jeans nas pernas
+      svg: () => {
+        let plaid = ''; for (let i = 0; i < 9; i++) plaid += `<path d="M${30 + i * 5} 68 V93" stroke="#c0601a" stroke-width=".6" opacity=".55"/>`; for (let j = 0; j < 5; j++) plaid += `<path d="M24 ${72 + j * 4.4} H76" stroke="#c0601a" stroke-width=".6" opacity=".55"/>`;
+        const vest = `<path d="M22.4 64.6 Q19.6 78 25.6 88 L37 90 Q33.4 78 36 70 Z" fill="#fff" stroke="#3a2a1a" stroke-width="1"/><path d="M24 70 q3 -2 5 1 q-1 4 -5 2z M27 79 q4 -1 4 3 q-3 2 -5 0z M24.6 85 q2 -2 4 0 q0 2 -3 2z" fill="#2b2420"/>`;
+        return `<ellipse cx="20" cy="77" rx="15.6" ry="11.6" fill="#3e6fb8" stroke="#24467a" stroke-width="1"/><ellipse cx="80" cy="77" rx="15.6" ry="11.6" fill="#3e6fb8" stroke="#24467a" stroke-width="1"/>
+<path d="M10 74 Q14 82 21 85 M90 74 Q86 82 79 85" stroke="#f2c94c" stroke-width=".7" stroke-dasharray="1.2 1" fill="none"/>
+<path d="M21.4 64 Q19 80 26 88.6 Q50 96.6 74 88.6 Q81 80 78.6 64 Q50 73 21.4 64 Z" fill="#f2c94c" stroke="#a87a1a" stroke-width="1"/>${plaid}
+${vest}<g transform="translate(100 0) scale(-1 1)">${vest}</g>
+<path d="M30 68.2 Q50 74.4 70 68.2 L50 80 Z" fill="#d32f2f" stroke="#7a0f0f" stroke-width=".9" stroke-linejoin="round"/>
+<path d="M26.6 88.8 Q50 96 73.4 88.8" stroke="#6e4520" stroke-width="2.8" fill="none"/><rect x="45.6" y="90.2" width="8.8" height="5" rx="1" fill="#ffd23f" stroke="#a87a00" stroke-width=".7"/>`;
+      } },
+    { id: 'chapeuwoody', name: 'Chapéu do Woody', slot: 'head', box: '14 -10 72 38',
+      // chapéu de vaqueiro marrom: aba larga virada nas pontas, copa com vinco no meio e faixa escura
+      svg: () => `<g transform="translate(0 -3)"><path d="M16 17 Q20 22 32 21 Q50 26 68 21 Q80 22 84 17 Q82 25 70 25.6 Q50 30 30 25.6 Q18 25 16 17 Z" fill="#8a5a2b" stroke="#4f3015" stroke-width="1.1" stroke-linejoin="round"/>
+<path d="M33 21 Q31 4 38 -1 Q44 -3 50 2 Q56 -3 62 -1 Q69 4 67 21 Q50 25 33 21 Z" fill="#9c6a35" stroke="#4f3015" stroke-width="1.1" stroke-linejoin="round"/>
+<path d="M50 2 Q49 9 50 15" stroke="#6e4520" stroke-width="1.2" fill="none"/><path d="M33.4 16 Q50 20.4 66.6 16 L66.8 20.4 Q50 25 33.2 20.4 Z" fill="#3a2414"/>
+<path d="M37 6 Q39 1 43 0" stroke="#c9945a" stroke-width="1.4" fill="none" stroke-linecap="round" opacity=".7"/></g>` },
+    // ---- Praia ----
+    { id: 'havaianas', name: 'Havaianas', slot: 'feet', open: true, box: '18 76 64 24',
+      // chinelo de dedo: solado verde por baixo dos pés (sole), tiras amarelas com bandeirinha por cima (svg)
+      sole: () => [33, 67].map(x => `<ellipse cx="${x}" cy="91.4" rx="12.6" ry="4.6" fill="#1f9a4a" stroke="#14612e" stroke-width=".8"/><ellipse cx="${x}" cy="90.4" rx="11.6" ry="3.6" fill="#2fbf3a"/>`).join(''),
+      svg: () => [33, 67].map(x => `<path d="M${x - 9} 87.4 Q${x - 4} 81.6 ${x} 88.6 Q${x + 4} 81.6 ${x + 9} 87.4" stroke="#ffd23f" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+<rect x="${x - 7.4}" y="84" width="3.4" height="2.4" rx=".4" fill="#1f9a4a" stroke="#fff" stroke-width=".3"/><path d="M${x - 5.7} 84.4 l1.3 .8 -1.3 .8 -1.3 -.8z" fill="#ffd23f"/>`).join('') },
+    { id: 'prancha', name: 'Prancha de surfe', slot: 'hand', rare: true, box: '72 18 38 84',
+      // prancha em pé ao lado do sapo: branca com faixas coloridas, quilha e cordinha
+      svg: () => `<g transform="rotate(-8 90 60)"><path d="M90 20 Q99 36 99 60 Q99 86 90 98 Q81 86 81 60 Q81 36 90 20 Z" fill="#fffdf4" stroke="#7b8aa6" stroke-width="1.2"/>
+<path d="M82.6 50 Q90 47 97.4 50 L97.6 55 Q90 52 82.4 55 Z" fill="#ff6a13"/><path d="M82.2 58 Q90 55 97.8 58 L97.8 61 Q90 58 82.2 61 Z" fill="#2b7de9"/><path d="M90 22 V96" stroke="#c3ccdd" stroke-width=".8"/>
+<path d="M90 86 L94 94 L90 94 Z" fill="#2b7de9"/><path d="M87 28 Q84 40 84 50" stroke="#fff" stroke-width="1.6" opacity=".8" fill="none" stroke-linecap="round"/></g>` },
+    // ---- Festa universitária / Skatepark ----
+    { id: 'coque', name: 'Coque alto', slot: 'head', box: '34 -10 32 30',
+      // coque de cabelo no alto da cabeça, preso com xuxinha rosa
+      svg: () => `<path d="M38 17 Q38 8 50 7.4 Q62 8 62 17 Q50 13.6 38 17 Z" fill="#4a2c18"/><circle cx="50" cy="1" r="8.6" fill="#5c3820" stroke="#3a2010" stroke-width="1"/>
+<path d="M44 -2 Q48 -6 53 -4 M45 3 Q50 0 56 2" stroke="#7a4c2c" stroke-width="1.1" fill="none" stroke-linecap="round"/><ellipse cx="50" cy="8.6" rx="7" ry="2.6" fill="#ff6ad5" stroke="#b0144f" stroke-width=".8"/>` },
+    { id: 'caixasom', name: 'Caixa de som', slot: 'hand', rare: true, box: '72 50 36 44',
+      // caixinha de som portátil na mão direita, com alto-falantes e luz colorida pulsando
+      svg: () => `<g transform="rotate(-6 90 74)"><rect x="76" y="62" width="28" height="22" rx="10" fill="#1c1c22" stroke="#3a3a46" stroke-width="1.2"/><path d="M84 62 Q84 56 90 56 Q96 56 96 62" stroke="#3a3a46" stroke-width="2.2" fill="none"/>
+<circle cx="84" cy="73" r="6" fill="#2a2a33" stroke="#6a6a7a"/><circle cx="96" cy="73" r="6" fill="#2a2a33" stroke="#6a6a7a"/><circle cx="84" cy="73" r="2" fill="#6a6a7a"/><circle cx="96" cy="73" r="2" fill="#6a6a7a"/>
+<rect x="77" y="81" width="26" height="2.4" rx="1.2" class="jflame" fill="#9dff6a"/><path d="M106 66 q4 4 0 8 M109 63 q7 7 0 14" stroke="#ff6ad5" stroke-width="1.4" fill="none" stroke-linecap="round"/></g>` },
+    { id: 'gorro', name: 'Gorro', slot: 'head', box: '26 -8 48 34',
+      // gorro de lã de skatista: copa canelada mostarda e barra dobrada
+      svg: () => {
+        let rib = ''; for (let i = 0; i < 7; i++) rib += `<path d="M${36 + i * 4.6} 5 V17" stroke="#b8902a" stroke-width=".9"/>`;
+        return `<g transform="translate(0 -2)"><path d="M31 20 Q30 -2 50 -4 Q70 -2 69 20 Z" fill="#e0b53a" stroke="#8a6410" stroke-width="1.1"/>${rib}<path d="M30 15 Q50 10 70 15 L70.6 22.6 Q50 18 29.4 22.6 Z" fill="#c99a22" stroke="#8a6410" stroke-width="1.1" stroke-linejoin="round"/>
+<rect x="45" y="15.6" width="10" height="4.4" rx="1" fill="#1c1c22"/><path d="M36 4 Q40 -1 46 -2" stroke="#fff" stroke-width="1.4" opacity=".35" fill="none" stroke-linecap="round"/></g>`;
+      } },
+    { id: 'corrente', name: 'Corrente de ouro', slot: 'neck', rare: true, box: '24 56 52 36',
+      // corrente grossa dourada com pingente redondo de sapinho
+      svg: () => {
+        let links = ''; for (let i = 0; i <= 12; i++) { const t = i / 12, x = 27 + 46 * t, y = 63 + 13 * Math.sin(Math.PI * t); links += `<ellipse cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" rx="2.4" ry="1.6" fill="none" stroke="url(#crown)" stroke-width="1.5" transform="rotate(${(Math.cos(Math.PI * t) * -40).toFixed(0)} ${x.toFixed(1)} ${y.toFixed(1)})"/>`; }
+        return `${links}<circle cx="50" cy="83" r="5.6" fill="url(#crown)" stroke="#a86a00" stroke-width="1"/><circle cx="48" cy="81.6" r="1.1" fill="#2fbf3a"/><circle cx="52" cy="81.6" r="1.1" fill="#2fbf3a"/><path d="M47.6 84.4 Q50 86.2 52.4 84.4" stroke="#a86a00" stroke-width=".8" fill="none"/>`;
+      } },
+    // ---- coleção do desafio do dia ----
+    { id: 'aniversario', name: 'Chapéu de aniversário', slot: 'head', rare: true, box: '32 -24 36 46',
+      // chapéu de festa em cone listrado com pompom
+      svg: () => `<g transform="translate(0 -2)"><path d="M38 20 L50 -14 L62 20 Q50 23 38 20 Z" fill="#2b7de9" stroke="#163a8c" stroke-width="1" stroke-linejoin="round"/>
+<path d="M40.4 13 L59.6 13 L57.6 7 L42.4 7 Z M44.4 1.6 H55.6 L53.8 -4 H46.2 Z" fill="#ffd23f"/><g fill="#ff6ad5"><circle cx="46" cy="16.6" r="1.1"/><circle cx="54" cy="16.6" r="1.1"/><circle cx="50" cy="4.2" r="1"/></g>
+<circle cx="50" cy="-15" r="3.6" fill="#ff4b3a"/><path d="M47.4 -16.4 l-2 -2 M50 -18.6 V-21 M52.6 -16.4 l2 -2" stroke="#ff4b3a" stroke-width="1.2" stroke-linecap="round"/></g>` },
+    { id: 'bigode', name: 'Bigode', slot: 'face', rare: true, box: '34 36 32 16',
+      // bigodão preto de pontas enroladas, entre o nariz e a boca
+      svg: () => `<path d="M50 42.4 Q45 40 40.6 42.6 Q37.6 44.6 36.4 42 Q35.6 46.6 40 47 Q45 47.4 50 44.6 Q55 47.4 60 47 Q64.4 46.6 63.6 42 Q62.4 44.6 59.4 42.6 Q55 40 50 42.4 Z" fill="#2b1a10"/><path d="M42 43.6 Q45 42.6 48 43.6" stroke="#5a3a24" stroke-width=".7" fill="none"/>` },
+    { id: 'pipoca', name: 'Pipoca', slot: 'hand', rare: true, box: '72 40 36 52',
+      // balde listrado de pipoca na mão direita
+      svg: () => `<g transform="rotate(-6 90 72)"><g fill="#fff8dc" stroke="#e8c97a" stroke-width=".5"><circle cx="81" cy="56" r="4"/><circle cx="87" cy="52" r="4.4"/><circle cx="93" cy="53" r="4.2"/><circle cx="99" cy="56" r="4"/><circle cx="84" cy="51" r="3.4"/><circle cx="96" cy="49" r="3.4"/><circle cx="90" cy="47" r="3.6"/></g>
+<path d="M78 58 H102 L98.6 86 H81.4 Z" fill="#fff" stroke="#b71c1c" stroke-width="1"/><path d="M82.6 58 L84.6 86 M87.4 58 L88.2 86 M92.6 58 L91.8 86 M97.4 58 L95.4 86" stroke="#e53935" stroke-width="2.6"/>
+<rect x="84" y="66" width="12" height="7" rx="1.4" fill="#ffd23f" stroke="#a87a00" stroke-width=".6"/><text x="90" y="71.2" text-anchor="middle" font-size="3.6" font-weight="900" font-family="Arial,sans-serif" fill="#b71c1c">POP</text></g>` },
+    { id: 'polaroid', name: 'Câmera polaroid', slot: 'strap', rare: true, box: '20 52 66 40',
+      // câmera instantânea pendurada no pescoço, com uma foto saindo
+      svg: () => `<path d="M24.5 63 Q46 73.5 66 75" stroke="#2a2a33" stroke-width="2" fill="none" stroke-linecap="round"/>
+<g transform="rotate(-8 70 80)"><rect x="60" y="72.4" width="16" height="4" rx="1" fill="#fff" stroke="#c9c9c9" stroke-width=".5"/><rect x="61.6" y="73" width="12.8" height="3" fill="#6fd0ff"/>
+<rect x="57" y="74" width="26" height="18" rx="3" fill="#f4f1e6" stroke="#5a5a66" stroke-width="1"/><rect x="57" y="74" width="26" height="5" rx="2" fill="#2a2a33"/><path d="M57 86 H83" stroke="#ff4b3a" stroke-width="1.2"/><path d="M57 87.6 H83" stroke="#ffd23f" stroke-width="1.2"/><path d="M57 89.2 H83" stroke="#2fbf3a" stroke-width="1.2"/>
+<circle cx="70" cy="82" r="5" fill="#2a2a33" stroke="#9aa6bd" stroke-width="1.2"/><circle cx="70" cy="82" r="2.2" fill="#3a6fb8"/><circle cx="69" cy="81" r=".8" fill="#fff"/><rect x="77" y="76" width="4" height="2.4" rx=".6" fill="#ff4b3a"/></g>` },
+    { id: 'guardachuva', name: 'Guarda-chuva', slot: 'hand', rare: true, box: '46 -16 62 112',
+      // guarda-chuva aberto na mão direita, por cima do sapo
+      svg: () => `<path d="M88 2 V84 Q88 90 83 90 Q79 90 79 86" stroke="#4f3015" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+<path d="M54 10 Q60 -14 88 -14 Q116 -14 122 10 Q116 5 110 10 Q104 4 98 10 Q93 4 88 10 Q83 4 78 10 Q72 4 66 10 Q60 5 54 10 Z" fill="#ff4b3a" stroke="#8a1414" stroke-width="1" stroke-linejoin="round"/>
+<path d="M88 -14 Q78 -6 78 10 M88 -14 Q98 -6 98 10 M88 -14 Q68 -8 66 10 M88 -14 Q108 -8 110 10" stroke="#8a1414" stroke-width=".8" fill="none"/><path d="M66 10 Q72 -6 88 -14 Q98 -6 98 10 Q93 4 88 10 Q83 4 78 10 Q72 4 66 10Z" fill="#fff" opacity=".25"/>
+<circle cx="88" cy="-15.4" r="1.6" fill="#4f3015"/>` },
     { id: 'zerezes', name: 'Zerezes', slot: 'eyes', box: '12 10 76 32',
       // só a frente: lentes octogonais; metade de cima em acetato tartaruga translúcido (ponte "buraco de fechadura"), metade de baixo em fio prateado
       svg: () => {
@@ -1576,7 +1693,7 @@ M39 2.6 V1.2 Q37.6 0 34.6 0 Q30.2 0 30.2 4.5 Q30.2 9 34.6 9 Q39 9 39 5.6 V3.8 H3
       } }
   ];
   // categorias do guarda-roupa
-  const GROUP = { head: 'cabeca', eyes: 'oculos', torso: 'corpo', back: 'corpo', ride: 'corpo', feet: 'pes', neck: 'acess', chest: 'acess', strap: 'acess', hand: 'acess' };
+  const GROUP = { head: 'cabeca', eyes: 'oculos', face: 'acess', torso: 'corpo', back: 'corpo', ride: 'corpo', feet: 'pes', neck: 'acess', chest: 'acess', strap: 'acess', hand: 'acess' };
   // ordem de desenho na frente do corpo (de baixo para cima)
   const FRONT = ['feet', 'torso', 'back', 'neck', 'chest', 'strap'];
   const BY = Object.fromEntries(ITEMS.map(i => [i.id, i]));
@@ -1588,9 +1705,9 @@ M39 2.6 V1.2 Q37.6 0 34.6 0 Q30.2 0 30.2 4.5 Q30.2 9 34.6 9 Q39 9 39 5.6 V3.8 H3
   function layers(o, red) {
     const L = { back: '', head: '', under: '', front: '', eyes: '', hand: '', top: '' };
     const get = slot => BY[o[slot]];
-    for (const slot of ['back', 'head', 'eyes', 'hand']) {
+    for (const slot of ['back', 'head', 'face', 'eyes', 'hand']) {
       const it = get(slot); if (!it) continue;
-      if (it.layer === 'top') L.top += it.svg(red); else L[slot] += it.svg(red);
+      if (it.layer === 'top') L.top += it.svg(red); else L[slot === 'face' ? 'eyes' : slot] += it.svg(red);
     }
     // roupas do corpo por baixo dos pés; calçados por cima
     for (const slot of FRONT) {
@@ -2076,7 +2193,7 @@ const Deck = (() => {
   function renderFace(card) {
     const L = card.level, s = card.start;
     face.style.setProperty('--lvc', L.color);
-    face.innerHTML = `<div class="band"><span class="lv">${L.name}</span></div>
+    face.innerHTML = `<div class="band"><span class="lv">${L.icons || L.name}</span></div>
 <div class="mini" id="cardMini">${Art.miniBoard(s)}</div>
 ${card.note ? `<div class="sub">${card.note}</div>` : ''}
 `;
@@ -2182,7 +2299,7 @@ const UI = (() => {
     Layout.update();
     if (id === 'career') Career.syncBase(); else Base.set(app.classList.contains('space-mode') ? '#06051a' : '#0b7bd6');
   }
-  const SKINS = ['space-mode', 'skin-daily', 'skin-tutorial', 'skin-iniciante', 'skin-medio', 'skin-avancado', 'skin-expert'];
+  const SKINS = ['space-mode', 'skin-daily', 'skin-tutorial', 'skin-iniciante', 'skin-medio', 'skin-avancado', 'skin-expert', 'skin-montemor', 'skin-praia', 'skin-nebuloso', 'skin-carnaval', 'skin-festa', 'skin-skatepark'];
   function setSkin(id) { SKINS.forEach(c => app.classList.remove(c)); if (id) app.classList.add(id === 'space' ? 'space-mode' : 'skin-' + id); }
   // ---- seletor de dificuldade: lista suspensa, pode marcar várias (sorteia entre elas) ----
   const menu = $('lvlMenu'), lvlBtn = $('lvlBtn');
@@ -2191,7 +2308,7 @@ const UI = (() => {
   LEVEL_IDS.forEach(id => {
     const b = document.createElement('button'); b.type = 'button'; b.className = 'lvl-opt'; b.id = 'lvl-' + id;
     b.setAttribute('role', 'menuitemcheckbox'); b.style.setProperty('--c', LEVELS[id].color);
-    b.innerHTML = `<span class="box">${check}</span>${LEVELS[id].name}`;
+    b.innerHTML = `<span class="box">${check}</span>${LEVELS[id].icons}`;
     b.addEventListener('click', () => {
       const on = levels.includes(id);
       levels = LEVEL_IDS.filter(k => k === id ? !on : levels.includes(k));
@@ -2290,7 +2407,7 @@ const UI = (() => {
     if (!card.quick) await loadingScreen();        // entre as fases do desafio, sem tela de carregamento
     Game.start(card);
     show('game');
-    $('hudLevel').textContent = card.label || card.level.name; $('hudLevel').style.setProperty('--lvc', card.level.color);
+    if (card.label || !card.level.icons) $('hudLevel').textContent = card.label || card.level.name; else $('hudLevel').innerHTML = card.level.icons; $('hudLevel').style.setProperty('--lvc', card.level.color);
     $('gtip').textContent = card.tip || ''; $('game').classList.toggle('has-tip', !!card.tip); $('game').classList.toggle('guided', !!card.guide);
     $('btnGameBack').setAttribute('aria-label', card.career != null ? 'Voltar para a trilha' : 'Voltar para as cartas');
     Layout.update();
@@ -2377,14 +2494,15 @@ const UI = (() => {
         .map(([x, y, c, d]) => `<div class="star" style="left:${x}%;top:${y}%;animation-delay:${d}s,${d + .6}s">${Art.star(c)}</div>`).join('');
     const c = Game.card;
     let title = 'Você venceu!', next = 'Próxima carta', prize = null, stars = '', got = 0;
-    winToMap = false;
+    winToMap = false; $('btnAgain').classList.remove('nudge');
     if (c.career != null) {
       if (c.career === LESSONS.length - 1) Daily.practiced();     // terminou o tutorial da trilha: o mapa do dia não repete o treino
       const min = Rules.greens(c.start), st = c.levelId === 'tutorial' ? 3 : starsFor(Game.count, min);
       const res = Career.complete(c.career, st);
       got = st;
-      stars = `<div class="wstars" aria-label="${st} de 3 estrelas">${[0, 1, 2].map(() => `<span class="ws"><span class="e">${Art.star('#cfd8e3')}</span><span class="f">${Art.star('#ffd23f')}</span></span>`).join('')}</div>${st < 3 ? `<p class="wmin"><span class="st-on">★★★</span> ${min} movimentos</p>` : ''}`;
+      stars = `<div class="wstars" aria-label="${st} de 3 estrelas">${[0, 1, 2].map(() => `<span class="ws"><span class="e">${Art.star('#cfd8e3')}</span><span class="f">${Art.star('#ffd23f')}</span></span>`).join('')}</div>${st < 3 ? (Game.count - min <= 2 ? `<p class="wmin near">Faltou ${Game.count - min} pulo${Game.count - min > 1 ? 's' : ''} para <span class="st-on">★★★</span></p>` : `<p class="wmin"><span class="st-on">★★★</span> ${min} movimentos</p>`) : ''}`;
       next = 'Próxima fase';
+      if (st < 3 && Game.count - min <= 2) $('btnAgain').classList.add('nudge');     // quase 3★: o "jogar de novo" chama atenção
       if (res.finished) { title = 'Carreira concluída!'; next = 'Ver troféu'; winToMap = true; }
       if (res.bonusFinished) { title = 'Bônus concluído!'; next = 'Ver estrela'; winToMap = true; }
       prize = res.prize;
@@ -2664,6 +2782,98 @@ ${moss ? '<path d="M18 -48 v12 M22 -52 v9 M-16 -61 v13 M-19 -64 v8" stroke="#6f8
     for (let i = 0; i < n * 2; i++) { const x = (i + .5) * W / (n * 2); tufts += `<path d="M${x - 4} 16 l2 -9 l2 9 l2 -7 l2 7" fill="${color}" stroke="${color}" stroke-width="1"/>`; }
     return `<path d="${d} Z" fill="${color}"/><path d="${d.replace(/^M0 0 H[\d.]+ V10/, 'M' + W + ' 10')}" fill="none" stroke="#000" stroke-opacity=".15" stroke-width="2"/>${tufts}`;
   },
+  // ---- Monte Mor: roça ----
+  cow(x, y, k, flip) {      // vaca boiando: cabeça e costas para fora d'água
+    const f = flip ? -1 : 1;
+    return `${Deco.ripple(x, y + 6 * k, 1.8 * k)}<g transform="translate(${x} ${y}) scale(${k * f} ${k})"><ellipse cx="-10" cy="2" rx="16" ry="6" fill="#fff" stroke="#2b2420" stroke-width="1.2"/><path d="M-18 1 q3 -4 7 -1 q-2 4 -7 1z M-6 -2 q4 -3 6 1 q-3 3 -6 -1z" fill="#2b2420"/>
+<ellipse cx="10" cy="-4" rx="9" ry="8" fill="#fff" stroke="#2b2420" stroke-width="1.2"/><path d="M5 -10 q-3 -6 -7 -6 M15 -10 q3 -6 7 -6" stroke="#e8d7b0" stroke-width="2.4" stroke-linecap="round" fill="none"/><ellipse cx="3" cy="-9" rx="3.4" ry="2" fill="#2b2420" transform="rotate(-25 3 -9)"/><ellipse cx="17" cy="-9" rx="3.4" ry="2" fill="#2b2420" transform="rotate(25 17 -9)"/>
+<ellipse cx="10" cy="0" rx="6.4" ry="4.2" fill="#ffb3c6" stroke="#2b2420" stroke-width="1"/><circle cx="8" cy="0" r=".9" fill="#2b2420"/><circle cx="12" cy="0" r=".9" fill="#2b2420"/><circle cx="7" cy="-6" r="1.3" fill="#2b2420"/><circle cx="13" cy="-6" r="1.3" fill="#2b2420"/><path d="M8 -12 l2 3 2 -3" fill="#2b2420"/></g>`;
+  },
+  fence(x, y, k) {
+    let p = ''; for (let i = 0; i < 4; i++) p += `<rect x="${-27 + i * 16}" y="-20" width="5" height="22" rx="1.5" fill="#a8743f" stroke="#6e4520" stroke-width="1"/>`;
+    return `<g transform="translate(${x} ${y}) scale(${k})"><ellipse cx="0" cy="3" rx="30" ry="4" fill="#000" opacity=".15"/><rect x="-30" y="-15" width="60" height="4" rx="1.5" fill="#c08850" stroke="#6e4520" stroke-width="1"/><rect x="-30" y="-6" width="60" height="4" rx="1.5" fill="#c08850" stroke="#6e4520" stroke-width="1"/>${p}</g>`;
+  },
+  hay(x, y, k) {
+    return `<g transform="translate(${x} ${y}) scale(${k})"><ellipse cx="0" cy="9" rx="16" ry="3.5" fill="#000" opacity=".15"/><rect x="-14" y="-8" width="28" height="17" rx="5" fill="#f2c94c" stroke="#b8902a" stroke-width="1.2"/><path d="M-10 -5 v11 M-4 -6 v13 M2 -6 v13 M8 -5 v11" stroke="#d9ac2e" stroke-width="1.2"/><path d="M-14 -1 H14" stroke="#a5472a" stroke-width="2"/></g>`;
+  },
+  horse(x, y, k, flip) {
+    const f = flip ? -1 : 1;
+    return `<g transform="translate(${x} ${y}) scale(${k * f} ${k})"><ellipse cx="0" cy="17" rx="22" ry="4" fill="#000" opacity=".18"/>
+<path d="M-15 0 Q-16 -9 -6 -10 H10 Q16 -10 17 -4 V2 Q12 6 -10 6 Q-15 6 -15 0 Z" fill="#8a5a2b" stroke="#4f3015" stroke-width="1.2"/>
+<path d="M-12 4 V16 M-6 5 V16 M8 5 V16 M14 3 V16" stroke="#6e4520" stroke-width="3.4" stroke-linecap="round"/>
+<path d="M12 -8 L20 -24 Q24 -27 27 -24 L28 -18 Q27 -15 24 -16 L19 -6 Z" fill="#8a5a2b" stroke="#4f3015" stroke-width="1.2" stroke-linejoin="round"/>
+<path d="M13 -10 Q16 -22 21 -26" stroke="#2b1a0c" stroke-width="3" fill="none" stroke-linecap="round"/><circle cx="23" cy="-22" r="1.1" fill="#111"/>
+<path d="M-15 -4 Q-24 0 -21 9" stroke="#2b1a0c" stroke-width="3" fill="none" stroke-linecap="round"/></g>`;
+  },
+  cart(x, y, k, flip) {      // charrete
+    const f = flip ? -1 : 1, wheel = (cx, r) => `<circle cx="${cx}" cy="6" r="${r}" fill="none" stroke="#5a3a1a" stroke-width="2.4"/><path d="M${cx - r} 6 H${cx + r} M${cx} ${6 - r} V${6 + r} M${cx - r * .7} ${6 - r * .7} L${cx + r * .7} ${6 + r * .7} M${cx - r * .7} ${6 + r * .7} L${cx + r * .7} ${6 - r * .7}" stroke="#5a3a1a" stroke-width="1.2"/><circle cx="${cx}" cy="6" r="1.6" fill="#5a3a1a"/>`;
+    return `<g transform="translate(${x} ${y}) scale(${k * f} ${k})"><ellipse cx="0" cy="18" rx="30" ry="4" fill="#000" opacity=".16"/>
+<path d="M-24 -6 H10 L14 2 H-24 Z" fill="#c0392b" stroke="#6e1a12" stroke-width="1.2"/><path d="M-24 -12 H6 V-6 H-24 Z" fill="#e8d7b0" stroke="#8a6a3a" stroke-width="1"/>
+<path d="M12 0 L34 -3" stroke="#6e4520" stroke-width="2.2" stroke-linecap="round"/>${wheel(-12, 11)}</g>`;
+  },
+  // ---- Praia ----
+  umbrella(x, y, k, c) {
+    return `<g transform="translate(${x} ${y}) scale(${k})"><ellipse cx="0" cy="2" rx="22" ry="4" fill="#000" opacity=".15"/><path d="M0 2 V-30" stroke="#fff" stroke-width="2.2"/>
+<path d="M-26 -26 Q0 -50 26 -26 Q19 -30 13 -26 Q6 -31 0 -26 Q-6 -31 -13 -26 Q-19 -30 -26 -26 Z" fill="${c}" stroke="#fff" stroke-width="1.4" stroke-linejoin="round"/>
+<path d="M0 -26 Q-6 -38 -13 -26 M0 -26 Q6 -38 13 -26" fill="#fff" opacity=".85"/></g>`;
+  },
+  beachball(x, y, k) {
+    return `${Deco.ripple(x, y + 8 * k, 1.2 * k)}<g transform="translate(${x} ${y}) scale(${k})"><circle r="9" fill="#fff" stroke="#c9d6e0" stroke-width=".8"/><path d="M0 -9 Q-7 0 0 9 Q-12 4 -9 -2 Q-8 -7 0 -9 Z" fill="#ff4b3a"/><path d="M0 -9 Q7 0 0 9 Q12 4 9 -2 Q8 -7 0 -9 Z" fill="#2b7de9"/><path d="M-9 -1 Q0 4 9 -1" stroke="#ffd23f" stroke-width="2.4" fill="none"/><circle cx="-3" cy="-4" r="1.6" fill="#fff" opacity=".8"/></g>`;
+  },
+  palm(x, y, k, flip) {
+    const f = flip ? -1 : 1, leaf = (r) => `<path d="M0 0 Q14 -6 26 2 Q14 -1 0 4 Z" fill="#2e9a3a" transform="rotate(${r})"/>`;
+    return `<g transform="translate(${x} ${y}) scale(${k * f} ${k})"><ellipse cx="0" cy="2" rx="14" ry="3.5" fill="#000" opacity=".15"/><path d="M0 0 Q-3 -24 6 -46" stroke="#a8743f" stroke-width="5" fill="none" stroke-linecap="round"/>
+<g transform="translate(6 -46)">${leaf(-20)}${leaf(20)}${leaf(160)}${leaf(200)}${leaf(-80)}<circle cx="-1" cy="3" r="2.6" fill="#7a4b26"/><circle cx="3" cy="4" r="2.6" fill="#7a4b26"/></g></g>`;
+  },
+  shell(x, y, k) {
+    return `<g transform="translate(${x} ${y}) scale(${k})"><path d="M0 4 L-8 -2 Q0 -12 8 -2 Z" fill="#ffc7b0" stroke="#d98a6a" stroke-width="1"/><path d="M0 4 L-4 -6 M0 4 V-8 M0 4 L4 -6" stroke="#d98a6a" stroke-width=".8"/></g>`;
+  },
+  // ---- Nebuloso ----
+  cloud(x, y, k, o) {
+    return `<g class="dcloud" transform="translate(${x} ${y}) scale(${k})" opacity="${o}"><path d="M-30 6 Q-34 -6 -20 -8 Q-18 -22 -2 -18 Q8 -28 20 -16 Q34 -16 32 -2 Q40 6 28 10 H-24 Q-36 12 -30 6 Z" fill="#fff"/><path d="M-24 10 H28" stroke="#c9d6ee" stroke-width="3" stroke-linecap="round"/></g>`;
+  },
+  // ---- Carnaval ----
+  confetti(x, y, k, q) {
+    const cs = ['#ffd23f', '#2fbf3a', '#ff4b3a', '#2b7de9', '#ff6ad5', '#fff'];
+    let p = ''; for (let i = 0; i < 6; i++) p += `<rect x="${(q() - .5) * 40}" y="${(q() - .5) * 30}" width="4" height="2.2" rx=".6" fill="${cs[Math.floor(q() * cs.length)]}" transform="rotate(${q() * 180})"/>`;
+    return `<g transform="translate(${x} ${y}) scale(${k})">${p}</g>`;
+  },
+  streamer(x, y, k, c) {
+    return `<path d="M${x - 30 * k} ${y} q${10 * k} ${-10 * k} ${20 * k} 0 t${20 * k} 0 t${20 * k} 0" stroke="${c}" stroke-width="${2.4 * k}" fill="none" stroke-linecap="round" opacity=".9"/>`;
+  },
+  balloon(x, y, k, c) {
+    return `<g class="dfly" transform="translate(${x} ${y}) scale(${k})"><path d="M0 12 Q-3 20 2 28" stroke="#fff" stroke-width="1" fill="none"/><ellipse cx="0" cy="0" rx="9" ry="11" fill="${c}"/><path d="M-2 11 L2 11 L0 14 Z" fill="${c}"/><ellipse cx="-3" cy="-4" rx="2.4" ry="3.6" fill="#fff" opacity=".45"/></g>`;
+  },
+  mask(x, y, k) {
+    return `<g transform="translate(${x} ${y}) scale(${k})"><path d="M-18 -4 Q-18 -10 -10 -9 Q-3 -8 0 -5 Q3 -8 10 -9 Q18 -10 18 -4 Q18 6 8 5 Q3 4 0 1 Q-3 4 -8 5 Q-18 6 -18 -4 Z" fill="#7b3fe4" stroke="#ffd23f" stroke-width="1.4"/>
+<ellipse cx="-8" cy="-2" rx="4" ry="2.6" fill="#1b1040"/><ellipse cx="8" cy="-2" rx="4" ry="2.6" fill="#1b1040"/><path d="M14 -8 Q22 -22 18 -30 M16 -8 Q28 -18 30 -26" stroke="#ff6ad5" stroke-width="2" fill="none" stroke-linecap="round"/></g>`;
+  },
+  // ---- Festa universitária ----
+  lights(x, y, k, W) {
+    const cs = ['#ffd23f', '#ff6ad5', '#6fd0ff', '#9dff6a'];
+    let d = `M0 ${y}`, b = '';
+    for (let i = 0; i <= 8; i++) { const px = i * W / 8; d += ` Q${px - W / 16} ${y + 16 * k} ${px} ${y}`; if (i) b += `<circle cx="${px - W / 16}" cy="${y + 9 * k}" r="${3.4 * k}" fill="${cs[i % 4]}"/><circle cx="${px - W / 16}" cy="${y + 9 * k}" r="${7 * k}" fill="${cs[i % 4]}" opacity=".25"/>`; }
+    return `<path d="${d}" stroke="#2a2040" stroke-width="${1.4 * k}" fill="none"/>${b}`;
+  },
+  cup(x, y, k) {
+    return `<g transform="translate(${x} ${y}) scale(${k})"><ellipse cx="0" cy="9" rx="8" ry="2" fill="#000" opacity=".2"/><path d="M-6 -8 H6 L4.4 9 H-4.4 Z" fill="#e53935"/><path d="M-6 -8 H6" stroke="#fff" stroke-width="2"/><path d="M-5.6 -4 H5.6" stroke="#b71c1c" stroke-width=".8"/></g>`;
+  },
+  speaker(x, y, k) {
+    return `<g transform="translate(${x} ${y}) scale(${k})"><ellipse cx="0" cy="16" rx="14" ry="3" fill="#000" opacity=".25"/><rect x="-11" y="-16" width="22" height="32" rx="3" fill="#1c1c22" stroke="#3a3a46" stroke-width="1.2"/><circle cy="-7" r="4.6" fill="#3a3a46" stroke="#6a6a7a"/><circle cy="6" r="7" fill="#3a3a46" stroke="#6a6a7a"/><circle cy="6" r="2.4" fill="#6a6a7a"/>
+<path d="M14 -4 q4 4 0 8 M18 -8 q8 8 0 16" stroke="#9dff6a" stroke-width="1.6" fill="none" stroke-linecap="round" opacity=".8"/></g>`;
+  },
+  // ---- Skatepark ----
+  ramp(x, y, k, flip) {
+    const f = flip ? -1 : 1;
+    return `<g transform="translate(${x} ${y}) scale(${k * f} ${k})"><ellipse cx="0" cy="3" rx="34" ry="4" fill="#000" opacity=".15"/><path d="M-30 2 Q8 0 22 -24 H30 V2 Z" fill="#c9d1dc" stroke="#6b7685" stroke-width="1.4" stroke-linejoin="round"/><path d="M22 -24 H31" stroke="#ff6a13" stroke-width="2.6" stroke-linecap="round"/>
+<path d="M-6 -2 Q6 -4 14 -12" stroke="#fff" stroke-width="1.4" opacity=".6" fill="none"/><text x="4" y="-4" font-size="6" font-weight="900" font-family="system-ui,sans-serif" fill="#e53935" transform="rotate(-8 4 -4)">SK8</text></g>`;
+  },
+  cone(x, y, k) {
+    return `<g transform="translate(${x} ${y}) scale(${k})"><ellipse cx="0" cy="2" rx="9" ry="2.4" fill="#000" opacity=".18"/><path d="M-8 1 H8 V3 H-8 Z" fill="#ff6a13"/><path d="M-5 1 L0 -16 L5 1 Z" fill="#ff6a13"/><path d="M-3.2 -5 H3.2 L2.4 -8.4 H-2.4 Z" fill="#fff"/></g>`;
+  },
+  skateboard(x, y, k, rot) {
+    return `<g transform="translate(${x} ${y}) rotate(${rot}) scale(${k})"><rect x="-16" y="-3.4" width="32" height="6.8" rx="3.4" fill="#ff6a13" stroke="#8a3200" stroke-width="1"/><circle cx="-9" cy="5" r="2.2" fill="#fff4cf"/><circle cx="9" cy="5" r="2.2" fill="#fff4cf"/></g>`;
+  },
   star: (x, y, k) => `<circle cx="${x}" cy="${y}" r="${1.4 * k}" fill="#fff" opacity=".85"/>`,
   nebula: (x, y, k, c) => `<ellipse cx="${x}" cy="${y}" rx="${80 * k}" ry="${30 * k}" fill="${c}" opacity=".1"/><ellipse cx="${x + 20 * k}" cy="${y - 8 * k}" rx="${46 * k}" ry="${18 * k}" fill="${c}" opacity=".1"/>`,
   planet(x, y, k, c, ring) {
@@ -2712,15 +2922,23 @@ ${ring ? '<ellipse rx="29" ry="7" fill="none" stroke="#ffe3b0" stroke-width="3" 
    joga a fase atual ou as já concluídas; o progresso fica no aparelho.
    --------------------------------------------------------------------- */
 const Career = (() => {
+  /* Pântanos em ordem. g: quantos sapos verdes tem cada mapa (a dificuldade sobe devagar, em serrote: depois de um
+     mapa mais difícil vem um mais leve). Os ids 'iniciante', 'avancado' e 'expert' ficaram dos pântanos antigos. */
   const REGIONS = [
     { id: 'tutorial', name: 'Tutorial', sub: 'Primeiros pulos', color: '#12a6c4', count: 3, top: '#d4f6ff', bot: '#8fdfee', bank: null },
-    { id: 'iniciante', name: 'Iniciante', sub: 'Lagoa tranquila', color: LEVELS.iniciante.color, count: 13, top: '#8fdfee', bot: '#3fbfa6', bank: '#86cf62' },
-    { id: 'medio', name: 'Médio', sub: 'Pântano pantanoso', color: LEVELS.medio.color, count: 12, top: '#4aae86', bot: '#4c8650', bank: '#5f8f3a' },
-    { id: 'avancado', name: 'Avançado', sub: 'Brejo', color: LEVELS.avancado.color, count: 12, top: '#3d6f78', bot: '#2b3a6e', bank: '#3c5a36' },   // entardecer azul-violeta
-    { id: 'expert', name: 'Expert', sub: 'Pântano jacaroso', color: LEVELS.expert.color, count: 10, top: '#4a4422', bot: '#1d1a0c', bank: '#6b4f2a' },   // lamaçal oliva-marrom, margem de lama
-    // pântano secreto: só aparece depois de concluir as 50 fases e tocar no portal (Big Bang)
+    { id: 'iniciante', name: 'Pântano Tranquilo', sub: 'Lagoa calminha', color: '#2fbf3a', g: [3, 3, 3, 3, 3, 3, 3, 3], top: '#8fdfee', bot: '#3fbfa6', bank: '#86cf62' },
+    { id: 'montemor', name: 'Monte Mor', sub: 'Roça, boiada e charrete', color: '#8a5a2b', g: [3, 3, 4, 3, 4, 4, 3, 4, 4, 4], top: '#9fe0a8', bot: '#5fae5a', bank: '#c9a25a' },
+    { id: 'praia', name: 'Praia', sub: 'Sol, areia e água de coco', color: '#ff9a1f', g: [4, 4, 4, 4, 4, 4, 4, 4, 4, 4], top: '#7fe6f0', bot: '#25c2cf', bank: '#f2d79a' },
+    { id: 'nebuloso', name: 'Pântano Nebuloso', sub: 'Pulando nas nuvens', color: '#7f8fb8', g: [4, 4, 5, 4, 5, 5, 4, 5, 5, 5], top: '#cfdcf2', bot: '#93a6cf', bank: null },
+    { id: 'carnaval', name: 'Carnaval', sub: 'Bloco do sapo', color: '#d63aa0', g: [5, 5, 5, 5, 5, 5, 5, 5, 5, 5], top: '#c86bff', bot: '#ff5c9a', bank: null },
+    { id: 'festa', name: 'Festa Universitária', sub: 'Calourada no brejo', color: '#6a4cff', g: [5, 5, 6, 5, 6, 6, 5, 6, 6, 6], top: '#5a3fc0', bot: '#24124f', bank: null },
+    { id: 'skatepark', name: 'Skatepark', sub: 'Manobra radical', color: '#6b7685', g: [6, 6, 7, 6, 7, 7, 6, 7, 7, 7], top: '#b9c3cf', bot: '#7b8696', bank: '#9aa4b0' },
+    { id: 'avancado', name: 'Brejo', sub: 'Vaga-lumes e cogumelos', color: LEVELS.avancado.color, g: [8, 8, 8, 8, 9, 8, 9, 9, 9, 10, 10, 10], top: '#3d6f78', bot: '#2b3a6e', bank: '#3c5a36' },   // entardecer azul-violeta
+    { id: 'expert', name: 'Pântano Jacaroso', sub: 'Cuidado com os jacarés', color: LEVELS.expert.color, g: [11, 11, 11, 11, 11, 11, 11, 11, 11, 11], top: '#4a4422', bot: '#1d1a0c', bank: '#6b4f2a' },   // lamaçal oliva-marrom
+    // pântano secreto: só aparece depois de concluir a carreira e tocar no portal (Big Bang)
     { id: 'espaco', name: 'Bônus', sub: 'Pântano espacial', color: '#8a5cff', count: 10, bonus: true, bg: 'linear-gradient(180deg,#1d1a0c 0,#1d1450 140px,#120a35 55%,#05030f)', bank: null }
   ];
+  REGIONS.forEach(R => { if (R.g) R.count = R.g.length; });
   /* Fases bônus em tabuleiros maiores (4×4 nas 5 primeiras, 5×5 nas 5 últimas).
      Geradas por construção reversa: parte-se do sapo vermelho sozinho e
      "desfazem-se" saltos válidos; a sequência inversa é uma solução, que fica
@@ -2741,32 +2959,38 @@ const Career = (() => {
   ];
   const TUTORIAL = LESSONS;
   const MAIN = REGIONS.filter(r => !r.bonus);
-  const TOTAL = MAIN.reduce((a, r) => a + r.count, 0);            // 50 fases da carreira
+  const TOTAL = MAIN.reduce((a, r) => a + r.count, 0);            // fases da carreira (93)
   const ALL = TOTAL + REGIONS.find(r => r.bonus).count;           // + 10 do bônus
   let bonusOpen = !!Store.get('bonus', false);
-  /* Prêmios da trilha: um em cada fase do tutorial; em cada pântano, dois no meio (óculos, calçados, acessórios),
-     um boné/chapéu na última fase e um premium para quem fizer o pântano todo com 3★ (RARE, mais abaixo).
-     O Expert já dá pistas do espaço (óculos de estrela, mochila a jato e, com 3★, o capacete). */
+  /* Prêmios da trilha, ligados ao tema de cada pântano: um em cada fase do tutorial; no começo, prêmio a cada 3 ou 4
+     mapas (depois vão se espaçando); um boné/chapéu na última fase e um premium para quem fizer o pântano todo com 3★
+     (RARE, mais abaixo). O Jacaroso já dá pistas do espaço (óculos de estrela, mochila a jato e, com 3★, o capacete). */
   const PRIZE = {};               // índice da fase → itens
   {
     const S = []; REGIONS.reduce((a, R, r) => (S[r] = a, a + R.count), 0);
     const at = (r, n, ...ids) => { PRIZE[S[r] + n - 1] = ids; };      // pântano r, mapa n
     at(0, 1, 'cardigan'); at(0, 2, 'loafer'); at(0, 3, 'celular');
-    at(1, 5, 'oldskool'); at(1, 10, 'oculos'); at(1, 13, 'bolovo');
-    at(2, 4, 'zerezes'); at(2, 8, 'linus'); at(2, 12, 'bellato');
-    at(3, 4, 'cachecol'); at(3, 8, 'gravata'); at(3, 12, 'pirata');
-    at(4, 3, 'oculos3d'); at(4, 7, 'jetpack'); at(4, 10, 'coroa', 'trofeu');
-    at(5, 5, 'traje'); at(5, 10, 'antenas');
+    at(1, 3, 'oldskool'); at(1, 6, 'oculos'); at(1, 8, 'bolovo');                       // Tranquilo
+    at(2, 4, 'linus'); at(2, 7, 'woody'); at(2, 10, 'chapeuwoody');                    // Monte Mor
+    at(3, 4, 'havaianas'); at(3, 7, 'picole'); at(3, 10, 'bellato');                   // Praia
+    at(4, 5, 'zerezes'); at(4, 10, 'cartola');                                         // Nebuloso
+    at(5, 5, 'coracao'); at(5, 10, 'pirata');                                          // Carnaval
+    at(6, 4, 'pochete'); at(6, 7, 'bandana'); at(6, 10, 'coque');                      // Festa Universitária
+    at(7, 4, 'fone'); at(7, 7, 'skate'); at(7, 10, 'gorro');                           // Skatepark
+    at(8, 4, 'cachecol'); at(8, 8, 'gravata'); at(8, 12, 'bone');                      // Brejo
+    at(9, 3, 'oculos3d'); at(9, 7, 'jetpack'); at(9, 10, 'coroa', 'trofeu');           // Jacaroso
+    at(10, 5, 'traje'); at(10, 10, 'antenas');                                         // Bônus
   }
   // desafio do dia com nota 3★ (na 1ª tentativa do dia): coleção, um item a cada tantas vezes
-  const DAILY = [[1, 'bone'], [2, 'cartola'], [3, 'manto'], [5, 'asas'], [10, 'coracao'], [15, 'bandana'], [20, 'fone'], [25, 'pochete'], [30, 'picole'], [40, 'skate']];
+  const DAILY = [[1, 'aniversario'], [3, 'bigode'], [5, 'pipoca'], [10, 'polaroid'], [20, 'guardachuva']];
   let done = Math.max(0, Math.min(bonusOpen ? ALL : TOTAL, +Store.get('career', 0) || 0));
   /* Estrelas (1 a 3 por fase, vale a melhor; no tutorial sempre 3). Um pântano só abre com 2×fases + metade das fases
-     (arredondada para baixo) em estrelas no pântano anterior: ex. Iniciante (13) → 32 = 6 fases com 3★ e 7 com 2★.
-     O Iniciante pede as 9 do tutorial.
-     Fechar um pântano inteiro com 3★ (do Iniciante em diante) dá um prêmio raro. */
+     (arredondada para baixo) em estrelas no pântano anterior: ex. 10 fases → 25 = 5 fases com 3★ e 5 com 2★.
+     O Pântano Tranquilo pede as 9 do tutorial.
+     Fechar um pântano inteiro com 3★ (do Tranquilo em diante) dá um prêmio raro. */
   const START = []; REGIONS.reduce((a, R, r) => (START[r] = a, a + R.count), 0);
-  const RARE = { iniciante: 'medalha', medio: 'guitarra', avancado: 'capa', expert: 'capacete', espaco: 'foguete' };    // pântano todo com 3★
+  const RARE = { iniciante: 'medalha', montemor: 'guitarra', praia: 'prancha', nebuloso: 'asas', carnaval: 'manto', festa: 'caixasom', skatepark: 'corrente',
+    avancado: 'capa', expert: 'capacete', espaco: 'foguete' };    // pântano todo com 3★
   let stars = Store.get('stars', null), opened = Store.get('opened', null), rare = Store.get('rare', []);
   if (!Array.isArray(stars)) {        // quem já jogava antes das estrelas: fases feitas valem 1★ e os pântanos já alcançados seguem abertos
     stars = Array.from({ length: ALL }, (_, i) => i < done ? 1 : 0);
@@ -2774,13 +2998,42 @@ const Career = (() => {
     Store.set('stars', stars); Store.set('opened', opened);
   }
   if (!Array.isArray(opened)) opened = [];
+  if (!Array.isArray(rare)) rare = [];
+  /* Trilha nova (10 pântanos, 93 fases): quem já jogava continua no mesmo ponto de dificuldade. Cada pântano antigo vira
+     um trecho da trilha nova (Iniciante → Tranquilo até Nebuloso; Médio → Carnaval até Skatepark; Avançado → Brejo;
+     Expert → Jacaroso; Bônus → Bônus); as fases novas antes desse ponto contam como feitas, com as estrelas da fase
+     antiga equivalente. Ninguém perde apetrecho: o que a pessoa tinha pela tabela de prêmios da versão em que estava
+     continua dela. Uma vez só. */
+  if (!Store.get('trilha2', false) && (done > 0 || stars.some(v => v))) {
+    const SPANS = [[0, 3, 0, 3], [3, 16, 3, 41], [16, 28, 41, 71], [28, 40, 71, 83], [40, 50, 83, 93], [50, 60, 93, 103]];   // antigo [a,b) → novo [c,d)
+    const five = (list, extra) => { const t = { 0: ['cardigan'], 1: ['loafer'], 2: ['celular'], 49: ['coroa', 'trofeu'] }; list.forEach((id, k) => { t[7 + 5 * k] = [id]; }); return Object.assign(t, extra); };
+    const ERA = !Store.get('prizeSwap', false) ? five(['bone', 'cartola', 'oculos', 'cachecol', 'gravata', 'pirata', 'capa', 'medalha', 'manto'], { 54: ['antenas'], 59: ['capacete', 'jetpack'] })
+      : !Store.get('prizeSwap2', false) ? five(['bolovo', 'bellato', 'oculos', 'cachecol', 'gravata', 'pirata', 'capa', 'medalha', 'manto'], { 14: ['linus'], 54: ['antenas'], 59: ['capacete', 'jetpack'] })
+      : !Store.get('prizeSwap3', false) ? five(['bolovo', 'zerezes', 'cachecol', 'oculos', 'linus', 'pirata', 'medalha', 'guitarra', 'manto'], { 14: ['oldskool'], 54: ['antenas'], 59: ['capacete', 'jetpack'] })
+      : { 0: ['cardigan'], 1: ['loafer'], 2: ['celular'], 7: ['oldskool'], 12: ['oculos'], 15: ['bolovo'], 19: ['zerezes'], 23: ['linus'], 27: ['bellato'], 31: ['cachecol'], 35: ['gravata'],
+        39: ['pirata'], 42: ['oculos3d'], 46: ['jetpack'], 49: ['coroa', 'trofeu'], 54: ['traje'], 59: ['antenas'] };
+    const keep = Object.keys(ERA).filter(i => +i < done).flatMap(i => ERA[i]);
+    const oldDone = done, oldStars = stars.slice(), span = SPANS.findIndex(([a, b]) => oldDone >= a && oldDone < b);
+    const [a, b, c, d] = SPANS.find(([a, b]) => oldDone >= a && oldDone <= b) || SPANS[SPANS.length - 1];
+    done = Math.min(ALL, c + Math.round((oldDone - a) * (d - c) / (b - a)));
+    stars = Array.from({ length: ALL }, (_, j) => {
+      if (j >= done) return 0;
+      const [a, b, c, d] = SPANS.find(([, , c, d]) => j >= c && j < d);
+      return Math.max(1, oldStars[a + Math.floor((j - c) * (b - a) / (d - c))] || 1);
+    });
+    // pântanos já percorridos ficam abertos; o pântano onde a pessoa está fica aberto se o antigo equivalente estava
+    const regNew = i => { let r = 0; while (r < REGIONS.length - 1 && i >= START[r + 1]) r++; return r; };
+    const was = span >= 0 && opened.includes(span);
+    opened = REGIONS.map((R, r) => r).filter(r => r > 0 && (START[r] < done || (was && r === regNew(done))));
+    const mine = Object.keys(PRIZE).filter(i => +i < done).flatMap(i => PRIZE[i]).concat(rare);
+    keep.forEach(id => { if (!mine.includes(id) && !rare.includes(id)) rare.push(id); });
+    Store.set('career', done); Store.set('stars', stars); Store.set('opened', opened); Store.set('rare', rare);
+  }
+  if (!Store.get('trilha2', false)) { ['prizeSwap', 'prizeSwap2', 'prizeSwap3'].forEach(k => Store.set(k, true)); Store.set('trilha2', true); }
+  if (stars.length < ALL) stars = stars.concat(new Array(ALL - stars.length).fill(0));
   // quem já tinha entrado num pântano (fases feitas nele) continua com ele aberto
   REGIONS.forEach((R, r) => { if (r > 0 && START[r] < done && !opened.includes(r)) { opened.push(r); Store.set('opened', opened); } });
   for (let i = 0; i < REGIONS[0].count; i++) if (i < done && stars[i] !== 3) { stars[i] = 3; Store.set('stars', stars); }   // tutorial feito vale 3★
-  if (!Array.isArray(rare)) rare = [];
-  // Iniciante 5 e 10 passaram a dar os bonés BLV e Bellato (antes: boné de hélice e cartola, que viraram prêmio do desafio perfeito);
-  // quem já tinha passado dessas fases continua com o boné e a cartola
-  if (!Store.get('prizeSwap', false)) { [[7, 'bone'], [12, 'cartola']].forEach(([i, id]) => { if (done > i && !rare.includes(id)) rare.push(id); }); Store.set('rare', rare); Store.set('prizeSwap', true); }
   const regionOf = i => { let r = 0; while (r < REGIONS.length - 1 && i >= START[r + 1]) r++; return r; };
   const regionStars = r => stars.slice(START[r], START[r] + REGIONS[r].count).reduce((a, b) => a + (b || 0), 0);
   const need = r => { const n = REGIONS[r - 1].count; return r === 1 ? 3 * n : 2 * n + Math.floor(n / 2); };   // tutorial: todas com 3★ (sempre dá 3)
@@ -2790,27 +3043,8 @@ const Career = (() => {
   const playable = i => i <= done && isOpen(regionOf(i));
   const totalStars = () => stars.reduce((a, b) => a + (b || 0), 0);
   const owned = () => Object.keys(PRIZE).filter(i => +i < done).flatMap(i => PRIZE[i]).concat(rare);
-  /* Nova ordem de prêmios (Zerezes no Iniciante 10, Vans no 12, Cachecol/Ray-Ban no Médio 2/7, Linus no Médio 12, Medalha
-     no Avançado 10, Les Paul no Expert 3; Bellato, Gravata e Capa viram prêmio de pântano todo com 3★): ninguém perde o
-     que já tinha, e quem já fechou um pântano com 3★ ganha o prêmio novo dele. Uma vez só. */
-  if (!Store.get('prizeSwap2', false)) {
-    const OLD = { 7: 'bolovo', 12: 'bellato', 14: 'linus', 17: 'oculos', 22: 'cachecol', 27: 'gravata', 32: 'pirata', 37: 'capa', 42: 'medalha', 47: 'manto' };
-    const have = owned();
-    for (const i in OLD) if (done > +i && !have.includes(OLD[i]) && !rare.includes(OLD[i])) rare.push(OLD[i]);
-    REGIONS.forEach((R, r) => { const g = RARE[R.id]; if (g && done >= START[r] + R.count && stars.slice(START[r], START[r] + R.count).every(v => v === 3) && !rare.includes(g)) rare.push(g); });
-    Store.set('rare', rare); Store.set('prizeSwap2', true);
-  }
-  /* Ordem por categoria (bonés no fim dos pântanos, premium com 3★, coleção no desafio do dia): de novo ninguém perde o
-     que tinha, quem já fechou pântano com 3★ ganha o premium novo, e a coleção do desafio continua de onde a pessoa está. */
-  if (!Store.get('prizeSwap3', false)) {
-    const OLD = [[7, 'bolovo'], [12, 'zerezes'], [14, 'oldskool'], [17, 'cachecol'], [22, 'oculos'], [27, 'linus'], [32, 'pirata'], [37, 'medalha'], [42, 'guitarra'],
-      [47, 'manto'], [49, 'coroa'], [49, 'trofeu'], [54, 'antenas'], [59, 'capacete'], [59, 'jetpack']];
-    const have = owned();
-    for (const [i, id] of OLD) if (done > i && !have.includes(id) && !rare.includes(id)) rare.push(id);
-    REGIONS.forEach((R, r) => { const g = RARE[R.id]; if (g && done >= START[r] + R.count && stars.slice(START[r], START[r] + R.count).every(v => v === 3) && !rare.includes(g)) rare.push(g); });
-    const mine = owned(); Store.set('daily3', DAILY.reduce((n, [k, id]) => mine.includes(id) ? Math.max(n, k) : n, 0));
-    Store.set('rare', rare); Store.set('prizeSwap3', true);
-  }
+  // quem já fechou pântanos inteiros com 3★ (inclusive na passagem para a trilha nova) recebe o premium deles
+  REGIONS.forEach((R, r) => { const g = RARE[R.id]; if (g && done >= START[r] + R.count && stars.slice(START[r], START[r] + R.count).every(v => v === 3) && !rare.includes(g)) { rare.push(g); Store.set('rare', rare); } });
   // desafio do dia com 3★: conta mais uma vez e entrega o que a coleção já liberou (devolve os itens novos ou null)
   function dailyWin() {
     const n = (+Store.get('daily3', 0) || 0) + 1, mine = owned(); Store.set('daily3', n);
@@ -2845,16 +3079,24 @@ const Career = (() => {
   function build() {
     const out = [];
     TUTORIAL.forEach((t, i) => out.push({ region: 0, n: i + 1, start: Rules.fromStr(t.s), guide: t.guide, intro: i === 0 }));
-    const pools = Gen.ensurePools();
+    /* Desenhos por quantidade de sapos verdes, do mais fácil (mais chance de vencer jogando ao acaso) ao mais difícil.
+       A k-ésima vez que a trilha pede um mapa com n verdes pega o desenho na posição k·(total/usos) dessa fila:
+       assim cada pântano fica um pouco mais difícil que o anterior com o mesmo n, e nenhum desenho se repete. */
+    const pools = Gen.ensurePools(), byN = {}, seen = new Set();
+    for (const id of LEVEL_IDS) for (const k of pools[id]) {
+      const s = Rules.fromKey(k), c = canon(s); if (seen.has(c)) continue; seen.add(c);
+      const n = Rules.greens(s); (byN[n] = byN[n] || []).push({ s: Rules.fromKey(c), p: Solver.stats(s).p, c });
+    }
+    for (const n in byN) byN[n].sort((a, b) => b.p - a.p || a.c - b.c);
+    const uses = {}, used = {};
+    MAIN.slice(1).forEach(R => R.g.forEach(n => { uses[n] = (uses[n] || 0) + 1; }));
     MAIN.slice(1).forEach((R, ri) => {
-      const seen = new Set(), classes = [];
-      for (const k of pools[R.id]) { const s = Rules.fromKey(k), c = canon(s); if (seen.has(c)) continue; seen.add(c); classes.push({ s: Rules.fromKey(c), n: Rules.greens(s), p: Solver.stats(s).p, c }); }
-      classes.sort((a, b) => a.n - b.n || b.p - a.p || a.c - b.c);
       const rnd = seeded(97 + ri * 31);
-      for (let n = 0; n < R.count; n++) {
-        const pick = classes[Math.round(n * (classes.length - 1) / (R.count - 1))];
-        out.push({ region: ri + 1, n: n + 1, start: xform(pick.s, MAPS[Math.floor(rnd() * 8)]) });
-      }
+      R.g.forEach((n, m) => {
+        const q = byN[n], k = used[n] = (used[n] || 0) + 1;
+        const pick = q[Math.min(q.length - 1, Math.floor((k - 1) * q.length / uses[n]))];
+        out.push({ region: ri + 1, n: m + 1, start: xform(pick.s, MAPS[Math.floor(rnd() * 8)]) });
+      });
     });
     const bi = REGIONS.findIndex(r => r.bonus);
     BONUS.forEach((b, i) => {
@@ -2871,7 +3113,7 @@ const Career = (() => {
   }
   function cardFor(i) {
     const L = list[i], R = REGIONS[L.region];
-    const level = R.id === 'tutorial' || R.bonus ? { name: R.name, color: R.color } : LEVELS[R.id];
+    const level = { name: R.name, color: R.color };
     const start = { ...L.start }, greens = Rules.greens(start);
     return { career: i, level, levelId: R.id, label: `${R.name} ${L.n}/${R.count}`, start, greens, jumps: greens,
       solution: R.bonus ? L.solution : Solver.solve(start), tip: L.tip || '', guide: L.guide, intro: L.intro, theme: R.bonus ? 'space' : '', code: 'C-' + (i + 1) };
@@ -2935,10 +3177,13 @@ ${portalPos ? `<path d="M${finalPos.x} ${finalPos.y} L${portalPos.x} ${portalPos
     const lock = '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"><rect x="5" y="11" width="14" height="10" rx="2" fill="#fff"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>';
     const ok = '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"/></svg>';
     const okStar = '<svg viewBox="0 0 24 24"><path d="M12 2.6l2.8 5.8 6.3.9-4.6 4.4 1.1 6.3L12 17l-5.6 3 1.1-6.3-4.6-4.4 6.3-.9z" fill="#fff"/></svg>';
+    // próximo prêmio: o "?" ganha um anel que vai enchendo a cada fase vencida desde o prêmio anterior
+    const pk = Object.keys(PRIZE).map(Number).sort((a, b) => a - b), np = pk.find(k => k >= done), pp = pk.filter(k => k < done).pop();
+    const ring = np == null ? 0 : (done - (pp == null ? -1 : pp) - 1) / (np - (pp == null ? -1 : pp));
     nodes.forEach((p, i) => {
       const st = i < done ? 'done' : i === done && playable(i) ? 'cur' : 'locked', L = list[i];
       html += `<button class="cnode ${st}${st === 'done' && stars[i] === 3 ? ' perfect' : ''}" data-i="${i}" style="left:${p.x - ns / 2}px;top:${p.y - ns / 2}px;width:${ns}px;height:${ns}px" aria-label="${REGIONS[L.region].name} fase ${L.n}${st === 'locked' ? ' (bloqueada)' : ''}">
-<svg viewBox="-12 -12 24 24">${REGIONS[L.region].bonus ? Art.saucer(0, 0, 10.5) : Art.lily(0, 0, 10.5, (i * 47) % 360, true)}</svg><span class="num">${L.n}</span>${st === 'locked' ? `<span class="lock">${lock}</span>` : st === 'done' ? `<span class="ok">${stars[i] === 3 ? okStar : ok}</span>` : ''}${stars[i] ? `<span class="cst">${starHTML(stars[i])}</span>` : ''}${PRIZE[i] && i >= done ? '<span class="prize mystery" title="Prêmio surpresa">?</span>' : ''}</button>`;
+<svg viewBox="-12 -12 24 24">${REGIONS[L.region].bonus ? Art.saucer(0, 0, 10.5) : Art.lily(0, 0, 10.5, (i * 47) % 360, true)}</svg><span class="num">${L.n}</span>${st === 'locked' ? `<span class="lock">${lock}</span>` : st === 'done' ? `<span class="ok">${stars[i] === 3 ? okStar : ok}</span>` : ''}${stars[i] ? `<span class="cst">${starHTML(stars[i])}</span>` : ''}${PRIZE[i] && i >= done ? `<span class="prize mystery${i === np ? ' next' : ''}" title="Prêmio surpresa"${i === np ? ` style="--p:${ring.toFixed(3)}"` : ''}>?</span>` : ''}</button>`;
     });
     const fs = ns * 1.3;
     html += `<button class="cnode final${done === TOTAL && !bonusOpen ? ' cur' : ''}" data-i="T" style="left:${finalPos.x - fs / 2}px;top:${finalPos.y - fs / 2}px;width:${fs}px;height:${fs}px" aria-label="Troféu final">${Deco.trophy()}</button>`;
@@ -2980,12 +3225,44 @@ ${portalPos ? `<path d="M${finalPos.x} ${finalPos.y} L${portalPos.x} ${portalPos
       place(Math.round(area * .35), 16, (x, y, q) => Deco.lily(x, y, k * (.7 + q() * .5), q() * 360));
       place(Math.round(area * .3), 18, (x, y) => Deco.lotus(x, y, k));
       place(4, 12, (x, y, q) => Deco.butterfly(x, y, k, ['#ffd23f', '#ff8ac0', '#7fd6ff', '#ffffff'][Math.floor(q() * 4)]));
-    } else if (R.id === 'medio') {
-      place(Math.round(area * .4), 26, (x, y) => Deco.mud(x, y, k));
-      place(Math.round(area * .45), 18, (x, y) => Deco.cattails(x, y, k));
-      place(3, 34, (x, y, q) => Deco.log(x, y, k, q() * 40 - 20));
-      place(Math.round(area * .3), 14, (x, y, q) => Deco.lily(x, y, k * .8, q() * 360));
-      place(Math.round(area * .5), 6, (x, y) => Deco.bubble(x, y, k));
+    } else if (R.id === 'montemor') {
+      place(Math.round(area * .45), 18, (x, y) => Deco.ripple(x, y, k));
+      place(5, 26, (x, y, q) => Deco.cow(x, y, k, q() < .5));
+      place(2, 40, (x, y, q) => Deco.cart(x, y, k, q() < .5));
+      place(2, 34, (x, y, q) => Deco.horse(x, y, k, q() < .5));
+      place(3, 34, (x, y) => Deco.fence(x, y, k));
+      place(4, 18, (x, y) => Deco.hay(x, y, k));
+      place(Math.round(area * .2), 14, (x, y, q) => Deco.lily(x, y, k * .8, q() * 360));
+    } else if (R.id === 'praia') {
+      place(Math.round(area * .55), 18, (x, y) => Deco.ripple(x, y, k));
+      place(3, 30, (x, y, q) => Deco.umbrella(x, y, k, ['#ff4b3a', '#2b7de9', '#ffd23f'][Math.floor(q() * 3)]));
+      place(3, 30, (x, y, q) => Deco.palm(x, y, k, q() < .5));
+      place(4, 14, (x, y) => Deco.beachball(x, y, k));
+      place(3, 24, (x, y, q) => Deco.buoy(x, y, k));
+      place(6, 10, (x, y) => Deco.shell(x, y, k));
+    } else if (R.id === 'nebuloso') {
+      place(Math.round(area * .5), 44, (x, y, q) => Deco.cloud(x, y, k * (.8 + q() * .7), (.55 + q() * .4).toFixed(2)));
+      place(Math.round(area * .2), 14, (x, y, q) => Deco.lily(x, y, k * .8, q() * 360));
+      place(Math.round(area * .2), 60, (x, y) => Deco.fog(x, y, k));
+    } else if (R.id === 'carnaval') {
+      place(Math.round(area * .5), 22, (x, y, q) => Deco.confetti(x, y, k, q));
+      place(6, 30, (x, y, q) => Deco.streamer(x, y, k, ['#ffd23f', '#2fbf3a', '#2b7de9', '#fff'][Math.floor(q() * 4)]));
+      place(6, 16, (x, y, q) => Deco.balloon(x, y, k, ['#ffd23f', '#2fbf3a', '#ff4b3a', '#2b7de9'][Math.floor(q() * 4)]));
+      place(3, 28, (x, y) => Deco.mask(x, y, k));
+      place(Math.round(area * .2), 14, (x, y, q) => Deco.lily(x, y, k * .8, q() * 360));
+    } else if (R.id === 'festa') {
+      for (let ly = 150; ly < H - 60; ly += 260) items.push({ y: ly, s: Deco.lights(0, ly, k, W) });
+      place(6, 12, (x, y) => Deco.cup(x, y, k));
+      place(3, 24, (x, y) => Deco.speaker(x, y, k));
+      place(4, 16, (x, y, q) => Deco.balloon(x, y, k * .8, ['#ff6ad5', '#6fd0ff', '#ffd23f'][Math.floor(q() * 3)]));
+      place(Math.round(area * .2), 14, (x, y, q) => Deco.lily(x, y, k * .8, q() * 360));
+      place(Math.round(area * .8), 6, (x, y, q) => q() < .4 ? twinkle(x, y, 'ff', q()) : Deco.firefly(x, y, k));
+    } else if (R.id === 'skatepark') {
+      place(3, 40, (x, y, q) => Deco.ramp(x, y, k, q() < .5));
+      place(6, 12, (x, y) => Deco.cone(x, y, k));
+      place(4, 18, (x, y, q) => Deco.skateboard(x, y, k, q() * 60 - 30));
+      place(Math.round(area * .25), 14, (x, y, q) => Deco.lily(x, y, k * .8, q() * 360));
+      place(Math.round(area * .3), 18, (x, y) => Deco.ripple(x, y, k));
     } else if (R.id === 'avancado') {
       place(Math.round(area * .25), 60, (x, y) => Deco.fog(x, y, k));
       place(Math.round(area * .25), 14, (x, y, q) => Deco.lily(x, y, k * .8, q() * 360));
@@ -3009,7 +3286,7 @@ ${portalPos ? `<path d="M${finalPos.x} ${finalPos.y} L${portalPos.x} ${portalPos
       place(Math.round(area * .4), 6, (x, y) => Deco.bubble(x, y, k));
     }
     items.sort((a, b) => a.y - b.y);
-    return `<div class="creg${R.bonus ? ' space' : ''}" style="top:${rc.top}px;height:${H}px;background:${R.bg || `linear-gradient(180deg,${R.top},${R.bot})`}">
+    return `<div class="creg${R.bonus ? ' space' : ''}${isOpen(REGIONS.indexOf(R)) ? '' : ' veil'}" style="top:${rc.top}px;height:${H}px;background:${R.bg || `linear-gradient(180deg,${R.top},${R.bot})`}">
 <svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" aria-hidden="true">${R.bank ? Deco.bank(W, R.bank) : ''}${items.map(i => i.s).join('')}</svg>
 ${tw.join('')}<div class="cbanner${canUnlock(REGIONS.indexOf(R)) ? ' can' : ''}" data-r="${REGIONS.indexOf(R)}"><i style="left:22%"></i><i style="right:22%"></i><b>${R.name}</b><small>${R.sub}</small>${bannerStars(R)}</div></div>`;
   }
@@ -3344,7 +3621,11 @@ const Daily = (() => {
     const em = moods(r.date, r.moves, r.mins);
     return `🐸 *Froggo* · ${d} de ${mes}\n${r.moves.map((mv, i) => mv + em[i]).join(' ')}\nTotal: ${sum(r.moves)} pulos ${nota(grade(r))}\n${tempo}${LINK}`;
   }
+  // dias seguidos jogando o desafio (vale enquanto o último foi hoje ou ontem)
+  const prevDay = iso => { const [y, m, d] = iso.split('-').map(Number), t = new Date(Date.UTC(y, m - 1, d - 1)); return t.toISOString().slice(0, 10); };
+  const streak = () => { const st = Store.get('streak', null); return st && (st.d === today() || st.d === prevDay(today())) ? st.n : 0; };
   function paintButton() {
+    const n = streak(); $('dailyStreak').hidden = n < 2; $('dailyStreak').textContent = '🔥' + n;
     $('dailyNum').textContent = dayNum();
     $('btnDaily').classList.toggle('done', !!result());
   }
@@ -3358,6 +3639,7 @@ const Daily = (() => {
     $('dTitle').textContent = 'Desafio do dia';
     const nota = !r ? 0 : multi(r) ? grade(r) : r.min ? starsFor(r.moves, r.min) : 0;
     $('dTitle').hidden = $('dDate').hidden = !!r; $('dBig').hidden = !r;
+    const sn = streak(); $('dStreak').hidden = !r || sn < 2; $('dStreak').textContent = `🔥 ${sn} dias seguidos`;
     $('dBig').setAttribute('aria-label', `${nota} de 3 estrelas`); $('dBig').setAttribute('role', 'img');
     $('dBig').innerHTML = [0, 1, 2].map(k => `<span>${Art.star(k < nota ? '#ffd23f' : '#d9dfe8')}</span>`).join('');
     if (r && justWon && !reduceMotion()) $('dBig').querySelectorAll('span').forEach((e, k) => animate(e, [{ transform: 'scale(0) rotate(-40deg)', opacity: 0 }, { transform: 'scale(1.25)', opacity: 1, offset: .7 }, { transform: 'scale(1)' }], { duration: 420, delay: 250 + k * 180, easing: 'ease-out', fill: 'backwards' }));
@@ -3496,7 +3778,11 @@ const Daily = (() => {
     Store.set('dailyRun', null);
     const mins = []; for (let i = 0; i < N; i++) mins.push(i === k ? Rules.greens(c.start) : Rules.greens((await card(run.date, i)).start));
     const r = { date: run.date, time: Math.round(run.acc), moves: run.moves.slice(), mins }, first = !result();
-    if (first) Store.set('daily', r);
+    if (first) {
+      Store.set('daily', r);
+      const st = Store.get('streak', null);
+      if (!st || st.d !== r.date) Store.set('streak', { d: r.date, n: st && st.d === prevDay(r.date) ? st.n + 1 : 1 });
+    }
     // nota 3★ na tentativa que vale (a 1ª do dia): mais um na coleção do desafio
     const prize = first && grade(r) === 3 ? Career.dailyWin() : null;
     stop(); paintButton(); openPanel(true, r, prize);   // mostra o resultado mesmo se o desafio virou a meia-noite
@@ -3607,6 +3893,7 @@ ${Art.frog(isRed ? 'red' : 'green', { outfit: o, attrs: 'x="0" y="5" width="100"
     $('wStage').innerHTML = `<div class="wzoom"><svg viewBox="${big ? '-14 -40 248 170' : '-10 -20 240 150'}" preserveAspectRatio="xMidYMid meet" aria-hidden="false">
 ${stageFrog(false, 0)}${stageFrog(true, 120)}</svg></div>`;
     zoom.apply();
+    $('wCount').textContent = `${Outfit.ITEMS.filter(it => owned.includes(it.id)).length}/${Outfit.ITEMS.length}`;
     grid.innerHTML = SECTIONS.map(([g, title]) => {
       const items = Outfit.ITEMS.filter(it => Outfit.GROUP[it.slot] === g).sort((a, b) => rank(a.id) - rank(b.id));
       return `<h4 class="wsec">${title}</h4>` + items.map(it => {
@@ -3735,23 +4022,26 @@ const Tests = {
     await Career.ensureBuilt();
     const CL = Career.list;
     const RC = Career.REGIONS.map(r => r.count);
-    t('carreira: 50 fases; expert 10, avançado 12, iniciante ≥ médio ≥ avançado > expert', Career.TOTAL === 50 && CL.length === 60 && RC[4] === 10 && RC[3] === 12 && RC[1] >= RC[2] && RC[2] >= RC[3], RC.slice(0, 5).join(' + ') + ' (+10 bônus)');
+    t('carreira: 10 pântanos e 93 fases (+10 bônus); começa com um pântano curto', Career.TOTAL === 93 && CL.length === 103 && RC.length === 11 && RC[1] === 8 && RC[10] === 10, RC.join(' + '));
     const P = Career.PRIZE, at = (r, n) => P[Career.REGIONS.slice(0, r).reduce((a, R) => a + R.count, 0) + n - 1] || [];
-    t('prêmios da trilha: tutorial 1-3, dois no meio de cada pântano, boné/chapéu na última fase; 18 apetrechos sem repetir',
-      at(0, 1)[0] === 'cardigan' && at(1, 5)[0] === 'oldskool' && at(1, 10)[0] === 'oculos' && at(1, 13)[0] === 'bolovo' && at(2, 12)[0] === 'bellato' && at(3, 12)[0] === 'pirata' && at(4, 10).join() === 'coroa,trofeu' && at(5, 10)[0] === 'antenas'
-      && new Set(Object.values(P).flat()).size === 18 && Object.values(P).flat().every(id => Outfit.BY[id] && !Outfit.BY[id].rare));
-    t('prêmios fora da trilha (marcados rare): 5 de pântano com 3★ + 10 da coleção do desafio; ninguém fica sem jeito de ganhar',
+    const last = r => at(r, Career.REGIONS[r].count);
+    t('prêmios da trilha: tutorial 1-3, Vans logo no 3º mapa, chapéu/boné na última fase de cada pântano; 31 apetrechos sem repetir',
+      at(0, 1)[0] === 'cardigan' && at(1, 3)[0] === 'oldskool' && Career.REGIONS.slice(1).every((R, r) => Outfit.BY[last(r + 1)[0]].slot === 'head') && last(9).join() === 'coroa,trofeu'
+      && at(2, 7)[0] === 'woody' && at(7, 7)[0] === 'skate' && new Set(Object.values(P).flat()).size === 31 && Object.values(P).flat().every(id => Outfit.BY[id] && !Outfit.BY[id].rare));
+    t('prêmios fora da trilha (marcados rare): 10 de pântano com 3★ + 5 da coleção do desafio; ninguém fica sem jeito de ganhar',
       Outfit.ITEMS.filter(i => i.rare).length === 15 && Object.values(Career.RARE).concat(Career.DAILY.map(d => d[1])).every(id => Outfit.BY[id] && Outfit.BY[id].rare)
       && Outfit.ITEMS.every(it => Career.ORDER.includes(it.id)) && Career.ORDER.length === Outfit.ITEMS.length);
     t('estrelas: 3 no mínimo, 2 até +4, 1 acima', starsFor(5, 5) === 3 && starsFor(6, 5) === 2 && starsFor(9, 5) === 2 && starsFor(10, 5) === 1);
     t('tutorial com 1, 2 e 3 sapos verdes', [0, 1, 2].every(i => Rules.greens(CL[i].start) === i + 1));
     t('todas as fases da carreira têm solução', CL.filter(l => !Career.REGIONS[l.region].bonus).every(l => !!Solver.solve(l.start)));
     const BL = CL.filter(l => Career.REGIONS[l.region].bonus);
-    t('tabuleiros bônus: 4×4 com 25 casas/84 saltos e 5×5 com 41 casas/160 saltos', BigGeo(4).N === 25 && BigGeo(4).JUMPS.length === 84 && BigGeo(5).N === 41 && BigGeo(5).JUMPS.length === 160 && BigGeo(3) === Geo);
+    t('tabuleiros bônus: 4×4 com 25 casas/96 saltos e 5×5 com 41 casas/192 saltos (casas do meio pulam na horizontal e na vertical)', BigGeo(4).N === 25 && BigGeo(4).JUMPS.length === 96 && BigGeo(5).N === 41 && BigGeo(5).JUMPS.length === 192 && BigGeo(3) === Geo && Geo.JUMPS.length === 32);
     t('10 fases bônus (5 em 4×4, 5 em 5×5), cada solução conferida jogada a jogada até sobrar só o vermelho',
       BL.length === 10 && BL.every((l, i) => l.valid && l.start.n === (i < 5 ? 4 : 5) && l.solution.length === Rules.greens(l.start)));
-    t('fases de cada pântano na faixa da dificuldade e sem repetir',
-      Career.REGIONS.slice(1).filter(R => !R.bonus).every((R, ri) => { const f = CL.filter(l => l.region === ri + 1); const g = f.map(l => Rules.greens(l.start)); return g.every((n, i) => n >= LEVELS[R.id].min && n <= LEVELS[R.id].max && (i === 0 || n >= g[i - 1])) && new Set(f.map(l => Rules.key(l.start))).size === f.length; }));
+    t('fases de cada pântano com a quantidade de verdes planejada (dificuldade subindo devagar) e sem repetir desenho',
+      Career.REGIONS.slice(1).filter(R => !R.bonus).every((R, ri) => { const f = CL.filter(l => l.region === ri + 1); return f.length === R.g.length && f.every((l, i) => Rules.greens(l.start) === R.g[i]); })
+      && Career.REGIONS.slice(1).filter(R => !R.bonus).every((R, ri) => Math.max(...R.g) <= Math.min(...(Career.REGIONS[ri + 2] && Career.REGIONS[ri + 2].g || [99])) + 1)
+      && new Set(CL.filter(l => !Career.REGIONS[l.region].bonus).map(l => Rules.key(l.start))).size === CL.filter(l => !Career.REGIONS[l.region].bonus).length);
     // sorteio dos desenhos (mesma data, mesmo desenho)
     const days = ['2026-10-21', '2026-10-22', '2026-12-25', '2027-01-01'];
     const picks = days.map(d => Career.dailyPick(Daily.hash('froggo-daily-' + d)));
