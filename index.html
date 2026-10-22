@@ -162,6 +162,12 @@ svg.fly .fshadow{transform-box:fill-box;transform-origin:50% 50%;transform:scale
 .cta #btnCareer svg{width:1.5em;height:1.5em}
 .cta .round{flex:none;width:3.4rem;height:3.4rem;min-width:3.4rem;min-height:3.4rem;padding:0;border-radius:50%}
 .cta .cards,.cta .wardrobe{color:#7a4a00}
+.cta .wardrobe{position:relative}
+/* apetrecho novo ainda não visto: exclamação vermelha pulsando no botão do guarda-roupa e bolinha no item */
+.newdot{position:absolute;top:-.3rem;right:-.3rem;min-width:1.35rem;height:1.35rem;border-radius:999px;background:#ff2d2d;color:#fff;font:900 .95rem/1.35rem Nunito,system-ui,sans-serif;text-align:center;
+  box-shadow:0 0 0 2px #fff,0 .15rem .4rem rgba(0,0,0,.35);animation:newPulse 1.2s ease-in-out infinite}
+@keyframes newPulse{50%{transform:scale(1.18)}}
+.witem.new::after{content:'';position:absolute;top:.35rem;right:.35rem;width:.7rem;height:.7rem;border-radius:50%;background:#ff2d2d;box-shadow:0 0 0 2px #fff}
 .cta .round svg{width:1.8rem;height:1.8rem}
 .cta #btnCareer{font-size:clamp(1rem, calc((var(--W) - 9.5rem) * .075), 1.35rem);padding-left:.9em;padding-right:.9em}
 .app.land #home{grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);grid-template-rows:auto minmax(0,1fr) auto;
@@ -421,16 +427,21 @@ canvas.confetti{position:absolute;inset:0;width:100%;height:100%;pointer-events:
 .ddate{font-weight:900!important;opacity:.75!important;margin-top:-.3rem}
 .dstats{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;width:100%}
 .dstats.notime{grid-template-columns:1fr;width:min(100%,12rem)}
-.dst{font-size:.95rem;letter-spacing:.05em;line-height:1;margin-top:.15rem}
 .st-on{color:#f2b400}.st-off{color:rgba(0,30,60,.2)}
 .dphases{font-size:1rem!important;font-weight:900!important;letter-spacing:.02em;opacity:1!important;margin-top:-.1rem}
 .dmin{font-size:.8rem!important;font-weight:700!important;opacity:.55!important;margin-top:-.25rem}
-.dstats div{background:#fff;border-radius:1rem;padding:.55rem .4rem;box-shadow:0 .15rem .4rem rgba(0,20,60,.12);display:flex;flex-direction:column;align-items:center}
+.dstats div{background:#fff;border-radius:1rem;padding:.55rem .4rem;box-shadow:0 .15rem .4rem rgba(0,20,60,.12);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+/* resultado do desafio: no lugar do título e da data, as estrelas da nota (a do meio um pouco maior e mais alta) */
+.dbig{display:flex;justify-content:center;align-items:flex-end;gap:.3rem;margin:-.2rem 0 .1rem}
+.dbig span{width:2.9rem;height:2.9rem;display:block}
+.dbig span:nth-child(2){width:3.5rem;height:3.5rem;margin-bottom:.45rem}
+.dbig svg{width:100%;height:100%;filter:drop-shadow(0 .15rem .2rem rgba(120,70,0,.3))}
 .dstats b{font-size:1.4rem;font-weight:900;font-variant-numeric:tabular-nums;color:var(--ink)}
 .dstats small{font-size:.75rem;font-weight:800;opacity:.65;text-transform:uppercase;letter-spacing:.05em}
 .panel .row .btn.wa{flex:1 1 100%}
-.btn.career{flex:1 1 100%;color:#fff;text-shadow:0 1px 0 rgba(120,40,0,.5);background:linear-gradient(180deg,#ffc24d 0%,#ff9a1f 45%,#f06a00 100%);box-shadow:0 .28rem 0 #a84700,0 .5rem 1rem rgba(0,30,70,.3),inset 0 2px 0 rgba(255,255,255,.6)}
-.panel .row .btn.dreview{flex:1 1 100%}
+.btn.career{color:#fff;text-shadow:0 1px 0 rgba(120,40,0,.5);background:linear-gradient(180deg,#ffc24d 0%,#ff9a1f 45%,#f06a00 100%);box-shadow:0 .28rem 0 #a84700,0 .5rem 1rem rgba(0,30,70,.3),inset 0 2px 0 rgba(255,255,255,.6)}
+.panel .row .btn.dreview,.panel .row .btn.career{flex:1 1 0;min-width:0;font-size:.95rem;padding:.6rem .5rem;white-space:nowrap}
+.panel .row .btn.dreview svg,.panel .row .btn.career svg{width:1.2em;height:1.2em}
 .btn.wa{color:#fff;text-decoration:none;text-shadow:0 1px 0 rgba(0,60,20,.4);background:linear-gradient(180deg,#5ef08f,#25d366 50%,#18a74c);box-shadow:0 .28rem 0 #0f7a36,0 .5rem 1rem rgba(0,30,70,.3),inset 0 2px 0 rgba(255,255,255,.5);flex:1 1 100%}
 .btn.wa svg{width:1.4em;height:1.4em}
 .dclose{position:absolute;top:.75rem;right:.75rem;width:2.2rem;height:2.2rem;border-radius:.55rem;display:grid;place-items:center;color:#fff;
@@ -574,7 +585,7 @@ canvas.bigbang{position:absolute;inset:0;width:100%;height:100%;z-index:400;poin
       <div class="hero-art" id="heroArt"></div>
     </div>
     <div class="cta"><button class="btn big round cards" id="btnPick" aria-label="Pegar uma carta"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"><rect x="3" y="5" width="11" height="15" rx="2" transform="rotate(-10 8 12)"/><rect x="9" y="3" width="11" height="15" rx="2" fill="#fff" fill-opacity=".6"/></svg></button><button class="btn big" id="btnCareer">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4h10v5a5 5 0 0 1-10 0z" fill="currentColor" fill-opacity=".25"/><path d="M17 5h3v2a4 4 0 0 1-3.6 4M7 5H4v2a4 4 0 0 0 3.6 4"/><path d="M12 14v3M8.5 20h7M9.5 17h5v3h-5z"/></svg>Modo carreira</button><button class="btn big round wardrobe" id="btnWardrobe" aria-label="Guarda-roupa"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 5.5a2 2 0 1 1 2.6 1.9c-.4.1-.6.5-.6.9V9"/><path d="M12 9L2.8 15.6A1.4 1.4 0 0 0 3.6 18h16.8a1.4 1.4 0 0 0 .8-2.4z" fill="currentColor" fill-opacity=".2"/></svg></button></div>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4h10v5a5 5 0 0 1-10 0z" fill="currentColor" fill-opacity=".25"/><path d="M17 5h3v2a4 4 0 0 1-3.6 4M7 5H4v2a4 4 0 0 0 3.6 4"/><path d="M12 14v3M8.5 20h7M9.5 17h5v3h-5z"/></svg>Modo carreira</button><button class="btn big round wardrobe" id="btnWardrobe" aria-label="Guarda-roupa"><span class="newdot" id="wardNew" hidden>!</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 5.5a2 2 0 1 1 2.6 1.9c-.4.1-.6.5-.6.9V9"/><path d="M12 9L2.8 15.6A1.4 1.4 0 0 0 3.6 18h16.8a1.4 1.4 0 0 0 .8-2.4z" fill="currentColor" fill-opacity=".2"/></svg></button></div>
   </section>
 
   <!-- ================= SORTEIO ================= -->
@@ -685,9 +696,10 @@ canvas.bigbang{position:absolute;inset:0;width:100%;height:100%;z-index:400;poin
       <div class="dcal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="15.5" rx="3" fill="currentColor" fill-opacity=".18"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg><b id="dCalDay">21</b></div>
       <h3 id="dTitle">Desafio do dia</h3>
       <p class="ddate" id="dDate"></p>
+      <div class="dbig" id="dBig" hidden></div>
       <div class="dstats" id="dStats" hidden>
         <div id="dTimeBox"><b id="dTime">0s</b><small>tempo</small></div>
-        <div><b id="dMoves">0</b><small>movimentos</small><span class="dst" id="dStars"></span></div>
+        <div><b id="dMoves">0</b><small>movimentos</small></div>
       </div>
       <p class="dphases" id="dPhases" hidden></p>
       <p class="dmin" id="dMin" hidden></p>
@@ -696,7 +708,7 @@ canvas.bigbang{position:absolute;inset:0;width:100%;height:100%;z-index:400;poin
         <button class="btn green big" id="btnDailyPlay">Jogar</button>
         <button class="btn blue dreview" id="btnDailyReview" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2.5"/><path d="M9 9.5h6M9 13h6M9 16.5h3.5" stroke-linecap="round"/></svg>Rever mapas</button>
 
-        <button class="btn career" id="btnDailyCareer" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4h10v5a5 5 0 0 1-10 0z" fill="currentColor" fill-opacity=".25"/><path d="M17 5h3v2a4 4 0 0 1-3.6 4M7 5H4v2a4 4 0 0 0 3.6 4"/><path d="M12 14v3M8.5 20h7M9.5 17h5v3h-5z"/></svg>Ir para o modo carreira</button>
+        <button class="btn career" id="btnDailyCareer" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4h10v5a5 5 0 0 1-10 0z" fill="currentColor" fill-opacity=".25"/><path d="M17 5h3v2a4 4 0 0 1-3.6 4M7 5H4v2a4 4 0 0 0 3.6 4"/><path d="M12 14v3M8.5 20h7M9.5 17h5v3h-5z"/></svg>Carreira</button>
 
         <a class="btn wa" id="btnDailyShare" target="_blank" rel="noopener" hidden><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.5a9.5 9.5 0 0 0-8.2 14.3L2.5 21.5l4.9-1.3A9.5 9.5 0 1 0 12 2.5zm0 2a7.5 7.5 0 1 1-3.8 14l-.3-.2-2.9.8.8-2.8-.2-.3A7.5 7.5 0 0 1 12 4.5zm-3.1 3.6c-.2 0-.5.1-.7.3-.3.3-.9.9-.9 2.1s.9 2.4 1 2.6c.1.2 1.8 2.8 4.4 3.9 2.2.9 2.6.7 3.1.7s1.5-.6 1.7-1.2c.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.6-.3l-1.6-.8c-.2-.1-.4-.1-.6.1l-.7.9c-.1.2-.3.2-.5.1-.3-.1-1-.4-1.9-1.2-.7-.6-1.2-1.4-1.3-1.6-.1-.3 0-.4.1-.5l.4-.5.3-.4c.1-.2 0-.3 0-.5l-.7-1.8c-.2-.4-.4-.4-.6-.4h-.5z"/></svg>Mandar no Zap</a>
       </div>
@@ -2161,6 +2173,7 @@ const UI = (() => {
 
   // ---- telas ----
   function show(id) {
+    if (id === 'home' && window.wardNew) wardNew();
     if (id === 'home') { const k = JSON.stringify([Outfit.worn, Outfit.wornRed]); if (k !== heroKey) { heroKey = k; $('heroArt').innerHTML = Art.heroScene(); if (window.heroZoom) heroZoom.reset(); } }   // só redesenha se a roupa mudou
     document.querySelectorAll('.screen').forEach(s => s.classList.toggle('active', s.id === id));
     app.scrollTop = 0;                               // o foco num botão de painel pode ter rolado o contêiner
@@ -2347,6 +2360,7 @@ const UI = (() => {
   }
   // ---- overlays ----
   function hideOverlays() { $('rDemo').innerHTML = ''; ['ovWin', 'ovStuck', 'ovConfirm', 'ovDaily', 'ovTut', 'ovRules'].forEach(id => $(id).classList.remove('show')); stopConfetti(); Base.dim(false); }
+  let winToMap = false;      // a vitória leva de volta à trilha (troféu, estrela do bônus) em vez de seguir para o próximo mapa
   function showWin() {
     if (!Game.over || !Rules.isWin(Game.state)) return;
     if (Game.card.daily) { Sound.win(); confetti(); Daily.phaseWon(); return; }
@@ -2363,6 +2377,7 @@ const UI = (() => {
         .map(([x, y, c, d]) => `<div class="star" style="left:${x}%;top:${y}%;animation-delay:${d}s,${d + .6}s">${Art.star(c)}</div>`).join('');
     const c = Game.card;
     let title = 'Você venceu!', next = 'Próxima carta', prize = null, stars = '', got = 0;
+    winToMap = false;
     if (c.career != null) {
       if (c.career === LESSONS.length - 1) Daily.practiced();     // terminou o tutorial da trilha: o mapa do dia não repete o treino
       const min = Rules.greens(c.start), st = c.levelId === 'tutorial' ? 3 : starsFor(Game.count, min);
@@ -2370,8 +2385,8 @@ const UI = (() => {
       got = st;
       stars = `<div class="wstars" aria-label="${st} de 3 estrelas">${[0, 1, 2].map(() => `<span class="ws"><span class="e">${Art.star('#cfd8e3')}</span><span class="f">${Art.star('#ffd23f')}</span></span>`).join('')}</div>${st < 3 ? `<p class="wmin"><span class="st-on">★★★</span> ${min} movimentos</p>` : ''}`;
       next = 'Próxima fase';
-      if (res.finished) { title = 'Carreira concluída!'; next = 'Ver troféu'; }
-      if (res.bonusFinished) { title = 'Bônus concluído!'; next = 'Ver estrela'; }
+      if (res.finished) { title = 'Carreira concluída!'; next = 'Ver troféu'; winToMap = true; }
+      if (res.bonusFinished) { title = 'Bônus concluído!'; next = 'Ver estrela'; winToMap = true; }
       prize = res.prize;
     }
     $('winTitle').textContent = title; $('btnNewWin').textContent = next; $('winStars').innerHTML = stars;
@@ -2557,8 +2572,12 @@ const UI = (() => {
       if (!reduceMotion()) animate($('winArt').querySelector('svg.rfrog'), [{ transform: 'scale(.85)' }, { transform: 'scale(1.12)' }, { transform: 'scale(1)' }], { duration: 380, easing: 'ease-out', composite: 'add' }); }
   });
   $('btnNewWin').addEventListener('click', () => {
-    if (Game.card && Game.card.career != null) { const from = Game.card.career; hideOverlays(); Game.active = false; Sound.click(); Career.open({ hopFrom: from }); }
-    else newCard();
+    if (Game.card && Game.card.career != null) {
+      const from = Game.card.career, nx = from + 1; hideOverlays(); Sound.click();
+      // segue direto para o próximo mapa; só volta à trilha no fim da carreira/bônus ou quando o próximo pântano ainda está trancado
+      if (!winToMap && Career.playable(nx)) { startGame(Career.cardFor(nx)); return; }
+      Game.active = false; Career.open({ hopFrom: from });
+    } else newCard();
   });
   $('btnCareer').addEventListener('click', () => { Sound.click(); setMenu(false); Career.open(); });
   $('btnWardrobe').addEventListener('click', () => { Sound.click(); setMenu(false); Wardrobe.open(); });
@@ -3336,22 +3355,27 @@ const Daily = (() => {
     const r = just || result(), d = just ? just.date : today();
     $('dCalDay').textContent = String(+d.slice(8));
     $('dDate').textContent = dateBR(d, true);
-    $('dTitle').textContent = justWon ? 'Desafio do dia completo!' : r ? 'Você já jogou hoje' : 'Desafio do dia';
+    $('dTitle').textContent = 'Desafio do dia';
+    const nota = !r ? 0 : multi(r) ? grade(r) : r.min ? starsFor(r.moves, r.min) : 0;
+    $('dTitle').hidden = $('dDate').hidden = !!r; $('dBig').hidden = !r;
+    $('dBig').setAttribute('aria-label', `${nota} de 3 estrelas`); $('dBig').setAttribute('role', 'img');
+    $('dBig').innerHTML = [0, 1, 2].map(k => `<span>${Art.star(k < nota ? '#ffd23f' : '#d9dfe8')}</span>`).join('');
+    if (r && justWon && !reduceMotion()) $('dBig').querySelectorAll('span').forEach((e, k) => animate(e, [{ transform: 'scale(0) rotate(-40deg)', opacity: 0 }, { transform: 'scale(1.25)', opacity: 1, offset: .7 }, { transform: 'scale(1)' }], { duration: 420, delay: 250 + k * 180, easing: 'ease-out', fill: 'backwards' }));
     $('dStats').hidden = !r; $('btnDailyPlay').hidden = !!r; $('btnDailyShare').hidden = !r; $('btnDailyReview').hidden = !r; $('btnDailyCareer').hidden = !r; shown = d;
     const sv = !r && saved();
     $('btnDailyPlay').textContent = sv ? `Continuar (mapa ${sv.phase + 1} de ${N})` : 'Jogar';
-    $('dMin').hidden = true; $('dPhases').hidden = true; $('dStars').innerHTML = '';
+    $('dMin').hidden = true; $('dPhases').hidden = true;
     if (r) {
       shareLink(message(r));
       $('dTimeBox').hidden = !r.time; $('dStats').classList.toggle('notime', !r.time); if (r.time) $('dTime').textContent = fmtTime(r.time);
       if (multi(r)) {
-        $('dMoves').textContent = String(sum(r.moves)); $('dStars').innerHTML = starHTML(grade(r));
+        $('dMoves').textContent = String(sum(r.moves));
         const em = moods(r.date, r.moves, r.mins);
         $('dPhases').textContent = r.moves.map((mv, i) => mv + em[i]).join('  '); $('dPhases').hidden = false;
         $('dMin').textContent = `Mínimo: ${sum(r.mins)} movimentos`; $('dMin').hidden = false;
       } else {
         $('dMoves').textContent = String(r.moves);
-        if (r.min) { $('dStars').innerHTML = starHTML(starsFor(r.moves, r.min)); $('dMin').textContent = `Mínimo: ${r.min} movimentos`; $('dMin').hidden = false; }
+        if (r.min) { $('dMin').textContent = `Mínimo: ${r.min} movimentos`; $('dMin').hidden = false; }
       }
     }
     $('ovDaily').classList.add('show'); Base.dim(true);
@@ -3559,6 +3583,11 @@ const Wardrobe = (() => {
   const grid = $('wGrid');
   const SECTIONS = [['cabeca', 'Cabeça'], ['oculos', 'Óculos'], ['corpo', 'Corpo'], ['pes', 'Calçados'], ['acess', 'Acessórios']];
   const rank = id => { const i = Career.ORDER.indexOf(id); return i < 0 ? 999 : i; };
+  // apetrechos já vistos no guarda-roupa; quem já jogava começa com tudo o que tem como visto
+  let seen = Store.get('seen', null), fresh = [];
+  if (!Array.isArray(seen)) { seen = Career.owned(); Store.set('seen', seen); }
+  window.wardNew = () => { $('wardNew').hidden = !Career.owned().some(id => !seen.includes(id)); };
+  wardNew();
   let red = false;          // vestindo o sapinho vermelho
   const zoom = zoomable($('wStage'), '.wzoom', '.wzoom > svg');
   // os dois sapos lado a lado; o escolhido (toque nele) tem a vitória-régia em destaque
@@ -3583,7 +3612,7 @@ ${stageFrog(false, 0)}${stageFrog(true, 120)}</svg></div>`;
       return `<h4 class="wsec">${title}</h4>` + items.map(it => {
         if (!owned.includes(it.id)) return `<button type="button" class="witem locked" data-id="${it.id}" aria-label="Apetrecho ainda não ganho"><span class="pv">${Outfit.preview(it.id)}</span><b>???</b></button>`;
         const on = Outfit.isWorn(it.id, red);
-        return `<button type="button" class="witem${on ? ' worn' : ''}" data-id="${it.id}" aria-pressed="${on}"><span class="pv">${Outfit.preview(it.id)}</span><b>${it.name}</b></button>`;
+        return `<button type="button" class="witem${on ? ' worn' : ''}${fresh.includes(it.id) ? ' new' : ''}" data-id="${it.id}" aria-pressed="${on}"><span class="pv">${Outfit.preview(it.id)}</span><b>${it.name}</b></button>`;
       }).join('');
     }).join('');
   }
@@ -3598,7 +3627,11 @@ ${stageFrog(false, 0)}${stageFrog(true, 120)}</svg></div>`;
     red = r; Sound.click(); render();
   });
   $('btnWardHome').addEventListener('click', () => { Sound.click(); UI.show('home'); });
-  function open() { UI.hideOverlays(); UI.show('wardrobe'); red = false; zoom.reset(); render(); }
+  function open() {
+    const owned = Career.owned(); fresh = owned.filter(id => !seen.includes(id));     // os novos ficam com bolinha até sair do guarda-roupa
+    seen = [...new Set(seen.concat(owned))]; Store.set('seen', seen);
+    UI.hideOverlays(); UI.show('wardrobe'); red = false; zoom.reset(); render();
+  }
   return { open, render };
 })();
 
