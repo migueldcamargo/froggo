@@ -848,7 +848,7 @@ canvas.bigbang{position:absolute;inset:0;width:100%;height:100%;z-index:400;poin
 
 <script>
 'use strict';
-const BUILD = '2026-10-22.1741';      // versão publicada: trocada pela data e hora a cada publicação (ver Update, no fim); 'dev' não confere
+const BUILD = '2026-10-22.1828';      // versão publicada: trocada pela data e hora a cada publicação (ver Update, no fim); 'dev' não confere
 /* =====================================================================
    FROGGO — jogo de sapos saltadores (peg-solitaire), arquivo único e offline.
    Módulos (todos neste arquivo): Store · Geo · Rules · Solver · Gen ·
@@ -1297,6 +1297,28 @@ const Art = {
         face = `${eyes('#1a0f06')}<path d="M46.6 41 Q50 39.4 53.4 41 L51.4 71 Q50 73.4 48.6 71 Z" fill="#f2dca4" stroke="#b89a5a" stroke-width=".9" stroke-linejoin="round"/>
   <path d="M48.6 69 Q50 70.2 51.4 69" stroke="#b89a5a" stroke-width=".8" fill="none"/><ellipse cx="24" cy="46" rx="5" ry="3" fill="#ff9ab6" opacity=".45"/><ellipse cx="76" cy="46" rx="5" ry="3" fill="#ff9ab6" opacity=".45"/>${shine}`;
         feet = '<g stroke="#d8c48a" stroke-width="3.4" stroke-linecap="round" fill="none"><path d="M38 84 V90 M38 90 l-5 3 M38 90 l0 4 M38 90 l5 3"/><path d="M62 84 V90 M62 90 l-5 3 M62 90 l0 4 M62 90 l5 3"/></g>';
+      },
+      roger() {      // Roger, a capivara do Brejo: corpão marrom-avermelhado, focinho quadradão, orelhinhas e olhar tranquilão
+        defs = g('cpB', '#c8925a', '#9a6a3a', '#6e4a26');
+        back = '';
+        body = `<ellipse cx="20" cy="78" rx="13" ry="9.6" fill="url(#cpB)"/><ellipse cx="80" cy="78" rx="13" ry="9.6" fill="url(#cpB)"/>
+  <ellipse cx="50" cy="66" rx="33" ry="25" fill="url(#cpB)"/><ellipse cx="50" cy="73" rx="19" ry="13" fill="#b8865a" opacity=".55"/>
+  <ellipse cx="26" cy="13" rx="6.4" ry="5" fill="#7a5230"/><ellipse cx="74" cy="13" rx="6.4" ry="5" fill="#7a5230"/><ellipse cx="26" cy="14" rx="3.4" ry="2.6" fill="#4a3018"/><ellipse cx="74" cy="14" rx="3.4" ry="2.6" fill="#4a3018"/>
+  <ellipse cx="50" cy="36" rx="33" ry="25" fill="url(#cpB)"/>`;
+        face = `${eyes('#2a1a0e', '#9a6a3a')}<rect x="33" y="38" width="34" height="22" rx="10" fill="#8a5c34"/><rect x="35" y="39" width="30" height="13" rx="6.5" fill="#5a3a1e"/>
+  <ellipse cx="43.6" cy="44" rx="2.2" ry="1.6" fill="#1e120a"/><ellipse cx="56.4" cy="44" rx="2.2" ry="1.6" fill="#1e120a"/><path d="M50 52 V55 M44 56 Q50 59 56 56" stroke="#3a2412" stroke-width="1.6" fill="none" stroke-linecap="round"/>${shine}`;
+        feet = '<g fill="#5a3a1e"><ellipse cx="34" cy="88" rx="8.6" ry="4.6"/><ellipse cx="66" cy="88" rx="8.6" ry="4.6"/></g><path d="M30 90 v2.4 M34 91 v2.4 M38 90 v2.4 M62 90 v2.4 M66 91 v2.4 M70 90 v2.4" stroke="#2a1a0e" stroke-width="1" stroke-linecap="round"/>';
+      },
+      jare() {      // Jaré, o jacaré do Jacaroso: verde-oliva, focinho largo com dentinhos, olhos em calombos e barriga clarinha listrada
+        defs = g('jrB', '#9cc45a', '#5f8a2e', '#3a5a1a');
+        back = '<path d="M72 82 Q94 86 98 70 Q92 76 84 74" fill="#5f8a2e" stroke="#3a5a1a" stroke-width="1"/><path d="M80 80 l2 -4 2 4 M88 79 l2 -4 2 4" fill="#3a5a1a"/>';
+        body = `<ellipse cx="20" cy="78" rx="13" ry="9" fill="url(#jrB)"/><ellipse cx="80" cy="78" rx="13" ry="9" fill="url(#jrB)"/>
+  <ellipse cx="50" cy="66" rx="29" ry="24" fill="url(#jrB)"/><ellipse cx="50" cy="72" rx="17" ry="15" fill="#f2e6a8"/><path d="M36 66 H64 M35 72 H65 M37 78 H63 M40 84 H60" stroke="#c9b86a" stroke-width="1.1"/>
+  <ellipse cx="31" cy="24" rx="15" ry="13" fill="url(#jrB)"/><ellipse cx="69" cy="24" rx="15" ry="13" fill="url(#jrB)"/><ellipse cx="50" cy="40" rx="31" ry="19" fill="url(#jrB)"/>`;
+        face = `${eyes('#2a3a0a', '#5f8a2e')}<path d="M26 42 Q50 36 74 42 L72 58 Q50 64 28 58 Z" fill="#7fae42" stroke="#3a5a1a" stroke-width="1.1"/>
+  <ellipse cx="44" cy="44.6" rx="1.8" ry="1.3" fill="#1e2a0a"/><ellipse cx="56" cy="44.6" rx="1.8" ry="1.3" fill="#1e2a0a"/><path d="M29 52 Q50 58 71 52" stroke="#2a3a0a" stroke-width="1.6" fill="none"/>
+  <path d="M33 53.4 l1.6 3 1.6 -2.6 M41 55 l1.6 3 1.6 -2.8 M55 55.2 l1.6 3 1.6 -3 M63 53.6 l1.6 3 1.6 -2.8" fill="#fff" stroke="#fff" stroke-width=".6" stroke-linejoin="round"/><g fill="#3a5a1a" opacity=".5"><circle cx="40" cy="30" r="1.4"/><circle cx="60" cy="30" r="1.4"/><circle cx="50" cy="26" r="1.6"/></g>${shine}`;
+        feet = '<g fill="#5f8a2e" stroke="#3a5a1a" stroke-width=".8"><ellipse cx="34" cy="88" rx="9" ry="4.6"/><ellipse cx="66" cy="88" rx="9" ry="4.6"/></g><path d="M28 90 l-1 3 M33 91 v3 M38 90 l1 3 M62 90 l-1 3 M67 91 v3 M72 90 l1 3" stroke="#f2e6a8" stroke-width="1.2" stroke-linecap="round"/>';
       },
       caramelo() {     // vira-lata caramelo: orelhas caídas, focinho clarinho, peito branco, língua de fora
         defs = g('dgB', '#f2c27a', '#d9963f', '#a8691f');
@@ -1910,6 +1932,47 @@ ${vest}<g transform="translate(100 0) scale(-1 1)">${vest}</g>
       // faixa azul nos olhos com nó e pontas soltas, como as tartarugas que moram no esgoto (Esgoto com 3★)
       svg: () => `<path fill-rule="evenodd" d="M14 21 Q50 13 86 21 L86.6 33 Q50 25 13.4 33 Z M31 21 m-8 6 a8 6.6 0 1 0 16 0 a8 6.6 0 1 0 -16 0 Z M69 21 m-8 6 a8 6.6 0 1 0 16 0 a8 6.6 0 1 0 -16 0 Z" fill="#2b7de9" stroke="#174a8f" stroke-width="1"/>
 <path d="M86 26 Q94 30 98 38 Q92 36 88 30 M86 26 Q95 24 100 18 Q93 20 87 24" fill="#2b7de9" stroke="#174a8f" stroke-width="1" stroke-linejoin="round"/><circle cx="87" cy="26.4" r="2.6" fill="#2b7de9" stroke="#174a8f" stroke-width="1"/>` },
+    // ---- itens que vêm junto com os amigos (kit) e presentes de 3★ da Praia e do Jacaroso ----
+    { id: 'violao', name: 'Violão', slot: 'hand', rare: true, box: '72 10 38 88',
+      // amigos: violão do Corujão, de madeira clara, com boca preta e cordas, em pé ao lado
+      svg: () => `<g transform="rotate(8 90 60)"><rect x="87.4" y="12" width="5.2" height="44" rx="1.2" fill="#5a3418" stroke="#3a200c" stroke-width=".7"/>
+<path d="M86 6 Q90 3 94 6 L94 15 H86 Z" fill="#3a200c"/><g fill="#d9d9d9"><circle cx="85" cy="8" r="1.2"/><circle cx="85" cy="12" r="1.2"/><circle cx="95" cy="8" r="1.2"/><circle cx="95" cy="12" r="1.2"/></g>
+<path d="M90 50 C78 48 76 60 81 66 C74 72 74 92 90 94 C106 92 106 72 99 66 C104 60 102 48 90 50 Z" fill="#e0a85a" stroke="#8a5a20" stroke-width="1.1"/>
+<circle cx="90" cy="68" r="5" fill="#2a1a0a" stroke="#6e4520" stroke-width="1.4"/><rect x="84" y="82" width="12" height="2.6" rx="1" fill="#3a200c"/>
+<g stroke="#f4f0e4" stroke-width=".35" opacity=".9"><path d="M88.6 14 V83 M89.6 14 V83 M90.4 14 V83 M91.4 14 V83"/></g>
+<path d="M82 58 Q80 64 84 66" stroke="#fff" stroke-width="1.4" opacity=".35" fill="none" stroke-linecap="round"/></g>` },
+    { id: 'osso', name: 'Osso', slot: 'hand', rare: true, box: '72 54 36 26',
+      // amigos: osso do Caramelo, na mão
+      svg: () => `<g transform="rotate(-24 90 67)"><path d="M78 64 a4 4 0 1 1 3.6 -3.4 H98.4 a4 4 0 1 1 3.6 3.4 a4 4 0 1 1 -3.6 3.4 H81.6 a4 4 0 1 1 -3.6 -3.4 Z" fill="#fff8e6" stroke="#b8a47a" stroke-width="1.1" stroke-linejoin="round"/>
+<path d="M83 62.4 H97" stroke="#fff" stroke-width="1.2" opacity=".8" stroke-linecap="round"/></g>` },
+    { id: 'colarprata', name: 'Colar de prata', slot: 'neck', rare: true, box: '18 52 64 34',
+      // amigos: colar de prata do Caramelo, elos grandes só no pescoço
+      svg: () => { let l = ''; for (let i = 0; i <= 6; i++) { const t = i / 6, x = 25 + 50 * t, y = 64 + 11 * Math.sin(Math.PI * t), a = (i % 2 ? 90 : 0) + Math.cos(Math.PI * t) * -28, tr = `transform="rotate(${a.toFixed(0)} ${x.toFixed(1)} ${y.toFixed(1)})"`;
+        l += `<ellipse cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" rx="5.4" ry="3.6" fill="none" stroke="#6f7a84" stroke-width="3.4" ${tr}/><ellipse cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" rx="5.4" ry="3.6" fill="none" stroke="#dfe5ea" stroke-width="2" ${tr}/><ellipse cx="${(x - 1.6).toFixed(1)}" cy="${(y - 2).toFixed(1)}" rx="1.6" ry=".7" fill="#fff" ${tr}/>`; } return l; } },
+    { id: 'queijo', name: 'Queijo', slot: 'hand', rare: true, box: '72 52 36 28',
+      // amigos: fatia de queijo do Topogígio, com furinhos
+      svg: () => `<path d="M76 74 L101 60 L104 74 Z" fill="#ffc93a" stroke="#c98a00" stroke-width="1.1" stroke-linejoin="round"/><path d="M76 74 L104 74 L104 78 L76 78 Z" fill="#f0b400" stroke="#c98a00" stroke-width="1.1"/>
+<g fill="#e0a000"><circle cx="93" cy="69" r="2"/><circle cx="99" cy="70.6" r="1.3"/><circle cx="86" cy="72" r="1.2"/><circle cx="96" cy="76" r="1.2"/><circle cx="83" cy="76.2" r="1"/></g>` },
+    { id: 'copofesta', name: 'Copo de festa', slot: 'hand', rare: true, box: '74 50 30 34',
+      // amigos: copo vermelho de festa do Porco
+      svg: () => `<path d="M80 56 H100 L97 82 H83 Z" fill="#e5262b" stroke="#8a0f12" stroke-width="1.1" stroke-linejoin="round"/><path d="M80 56 H100 L99.4 60.4 H80.6 Z" fill="#fff" stroke="#8a0f12" stroke-width=".8"/>
+<path d="M81 66 H99 M82 72 H98" stroke="#b81a1f" stroke-width=".7"/><path d="M84 62 L85.6 80" stroke="#fff" stroke-width="1.4" opacity=".35" stroke-linecap="round"/>` },
+    { id: 'pastel', name: 'Pastel', slot: 'hand', rare: true, box: '70 50 40 34',
+      // amigos: pastel de feira da Roger, retangular, com a borda apertada de garfo
+      svg: () => { let crimp = ''; for (let k = 0; k < 10; k++) crimp += `<path d="M${77.4 + k * 2.8} 58.2 v2.2 M${77.4 + k * 2.8} 77.6 v2.2" stroke="#b8741e" stroke-width=".8" stroke-linecap="round"/>`;
+        return `<g transform="rotate(-12 90 69)"><rect x="75" y="57" width="30" height="24" rx="4" fill="#e9a640" stroke="#9a5a14" stroke-width="1.1"/><rect x="77.6" y="61" width="24.8" height="16" rx="3" fill="#f4c25e"/>${crimp}
+<g fill="#fde4a0" stroke="#d89a3a" stroke-width=".5"><ellipse cx="83" cy="66" rx="2.2" ry="1.5"/><ellipse cx="92" cy="64" rx="1.6" ry="1.1"/><ellipse cx="97" cy="71" rx="2" ry="1.4"/><ellipse cx="87" cy="72.6" rx="1.4" ry="1"/></g>
+<path d="M79 63 Q81 61.4 85 61.2" stroke="#fff" stroke-width="1.2" opacity=".45" fill="none" stroke-linecap="round"/></g>`; } },
+    { id: 'coco', name: 'Coco', slot: 'hand', rare: true, box: '72 40 36 44',
+      // Praia com 3★: coco verde com canudinho, na mão
+      svg: () => `<path d="M95 44 L91 60" stroke="#ff4b8a" stroke-width="2.2" stroke-linecap="round"/><path d="M95 44 L100 41" stroke="#ff4b8a" stroke-width="2.2" stroke-linecap="round"/>
+<circle cx="90" cy="70" r="12" fill="#5ca83a" stroke="#2f6a1a" stroke-width="1.1"/><ellipse cx="90" cy="60.6" rx="6" ry="2.2" fill="#f4f0dc" stroke="#2f6a1a" stroke-width=".8"/>
+<path d="M82 66 Q84 62 88 61" stroke="#fff" stroke-width="1.4" opacity=".4" fill="none" stroke-linecap="round"/><path d="M80 74 Q90 80 100 74" stroke="#3f8a26" stroke-width=".8" fill="none"/>` },
+    { id: 'safari', name: 'Chapéu de safári', slot: 'head', rare: true, layer: 'top', box: '16 -14 68 36',
+      // Jacaroso com 3★: chapéu de safári cáqui com faixa marrom, por cima dos olhos
+      svg: () => `<g transform="translate(0 -5)"><path d="M18 19 Q50 28 82 19 Q80 25 50 27 Q20 25 18 19 Z" fill="#c9b07a" stroke="#7a6436" stroke-width="1.1"/><path d="M30 20 Q29 0 50 -3 Q71 0 70 20 Q50 24 30 20 Z" fill="#dcc590" stroke="#7a6436" stroke-width="1.1"/>
+<path d="M30.4 14 Q50 18.6 69.6 14 L69.8 18.6 Q50 23 30.2 18.6 Z" fill="#6e5428"/><circle cx="50" cy="-2.2" r="1.6" fill="#7a6436"/><path d="M38 2 Q42 -1 46 -1.6" stroke="#fff" stroke-width="1.3" opacity=".4" fill="none" stroke-linecap="round"/>
+<g stroke="#7a6436" stroke-width=".5" opacity=".6"><path d="M40 0 Q41 10 40 18 M60 0 Q59 10 60 18"/></g></g>` },
     { id: 'kiwifruta', name: 'Kiwi', slot: 'hand', rare: true, box: '72 50 34 32',
       // meio kiwi na mão: casca marrom peludinha, polpa verde com sementinhas pretas em volta do miolo claro
       svg: () => {
@@ -1936,10 +1999,12 @@ ${vest}<g transform="translate(100 0) scale(-1 1)">${vest}</g>
   const flies = o => !!o && Object.values(o).some(id => BY[id] && BY[id].fly);     // mochila a jato: o sapo flutua
   /* Personagens: o sapo e os amigos que chegam ao abrir certos pântanos. Cada lugar (o seu e o do sapinho vermelho)
      escolhe o seu personagem no guarda-roupa. */
-  const CHARS = [{ id: 'sapo', name: 'Sapo' }, { id: 'johnny', name: 'Johnny Chicken', at: 'montemor' }, { id: 'lollipop', name: 'Loripop', at: 'praia' },
-    { id: 'corujao', name: 'Corujão', at: 'nebuloso' }, { id: 'caramelo', name: 'Caramelo', at: 'carnaval' }, { id: 'porco', name: 'Porco', at: 'festa' }, { id: 'tatu', name: 'Tatu', at: 'skatepark' },
-    { id: 'topogigio', name: 'Topogígio', at: 'esgoto' }, { id: 'baurets', name: 'Baurets', at: 'espaco' },
-    { id: 'kiwi', name: 'Kiwi', gift: true }];      // gift: presente do desafio do dia (ver Daily, KIWI)
+  // kit: itens que chegam junto com o amigo (o Tatu ainda não tem)
+  const CHARS = [{ id: 'sapo', name: 'Sapo' }, { id: 'johnny', name: 'Johnny Chicken', at: 'montemor', kit: ['prancha'] }, { id: 'lollipop', name: 'Loripop', at: 'praia', kit: ['ninja'] },
+    { id: 'corujao', name: 'Corujão', at: 'nebuloso', kit: ['violao'] }, { id: 'caramelo', name: 'Caramelo', at: 'carnaval', kit: ['osso', 'colarprata'] }, { id: 'porco', name: 'Porco', at: 'festa', kit: ['copofesta'] },
+    { id: 'tatu', name: 'Tatu', at: 'skatepark' }, { id: 'topogigio', name: 'Topogígio', at: 'esgoto', kit: ['queijo'] }, { id: 'roger', name: 'Roger', at: 'avancado', kit: ['pastel'] },
+    { id: 'jare', name: 'Jaré', at: 'expert' }, { id: 'baurets', name: 'Baurets', at: 'espaco', kit: ['capacete'] },
+    { id: 'kiwi', name: 'Kiwi', gift: true, kit: ['kiwifruta'] }];      // gift: presente do desafio do dia (ver Daily, KIWI)      // gift: presente do desafio do dia (ver Daily, KIWI)
   let char = Store.get('char', 'sapo'), charRed = Store.get('charRed', 'sapo');
   if (char === charRed && char !== 'sapo') { charRed = 'sapo'; Store.set('charRed', charRed); }     // verde e vermelho não podem ser o mesmo personagem (só o sapo)
   const big = o => flies(o) || !!(o && o.ride);       // ocupa mais espaço em volta do sapo (chama, caixa)
@@ -1974,6 +2039,8 @@ ${vest}<g transform="translate(100 0) scale(-1 1)">${vest}</g>
     pruneChars(have) { if (!have.includes(char)) this.setChar('sapo', false); if (!have.includes(charRed)) this.setChar('sapo', true); },
     // veste/tira (red: no sapinho vermelho)
     wear(id, red) { const it = BY[id], o = red ? wornRed : worn; if (!it) return; if (o[it.slot] === id) delete o[it.slot]; else o[it.slot] = id; Store.set(red ? 'outfitRed' : 'outfit', o); },
+    // veste de uma vez (kit do amigo novo), trocando o que estiver em cada lugar
+    put(ids) { ids.forEach(id => { const it = BY[id]; if (it) worn[it.slot] = id; }); Store.set('outfit', worn); },
     isWorn: (id, red) => BY[id] && (red ? wornRed : worn)[BY[id].slot] === id,
     // tira o que o jogador não ganhou (ex.: progresso zerado)
     prune(owned) { for (const [o, k] of [[worn, 'outfit'], [wornRed, 'outfitRed']]) { let ch = false; for (const s in o) if (!owned.includes(o[s])) { delete o[s]; ch = true; } if (ch) Store.set(k, o); } },
@@ -3293,8 +3360,8 @@ const Career = (() => {
      O Pântano Tranquilo pede as 9 do tutorial.
      Fechar um pântano inteiro com 3★ (do Tranquilo em diante) dá um prêmio raro. */
   const START = []; REGIONS.reduce((a, R, r) => (START[r] = a, a + R.count), 0);
-  const RARE = { iniciante: 'medalha', montemor: 'guitarra', praia: 'prancha', nebuloso: 'asas', carnaval: 'manto', festa: 'caixasom', skatepark: 'corrente',
-    esgoto: 'ninja', avancado: 'capa', expert: 'capacete', espaco: 'foguete' };    // pântano todo com 3★
+  const RARE = { iniciante: 'medalha', montemor: 'guitarra', praia: 'coco', nebuloso: 'asas', carnaval: 'manto', festa: 'caixasom', skatepark: 'corrente',
+    avancado: 'capa', expert: 'safari', espaco: 'foguete' };    // pântano todo com 3★ (o Esgoto não tem; prancha, faixa ninja e capacete vêm com os amigos)
   let stars = Store.get('stars', null), opened = Store.get('opened', null), rare = Store.get('rare', []);
   if (!Array.isArray(stars)) {        // quem já jogava antes das estrelas: fases feitas valem 1★ e os pântanos já alcançados seguem abertos
     stars = Array.from({ length: ALL }, (_, i) => i < done ? 1 : 0);
@@ -3373,7 +3440,8 @@ const Career = (() => {
   const canUnlock = r => r > 0 && !isOpen(r) && done >= START[r] && regionStars(r - 1) >= need(r);
   const playable = i => i <= done && isOpen(regionOf(i));
   const totalStars = () => stars.reduce((a, b) => a + (b || 0), 0);
-  const owned = () => Object.keys(PRIZE).filter(i => +i < done).flatMap(i => PRIZE[i]).concat(rare);
+  const kits = () => chars().flatMap(id => (Outfit.CHARS.find(c => c.id === id) || {}).kit || []);      // itens que vieram com os amigos
+  const owned = () => Object.keys(PRIZE).filter(i => +i < done).flatMap(i => PRIZE[i]).concat(rare, kits());
   // quem já fechou pântanos inteiros com 3★ (inclusive na passagem para a trilha nova) recebe o premium deles
   REGIONS.forEach((R, r) => { const g = RARE[R.id]; if (g && done >= START[r] + R.count && stars.slice(START[r], START[r] + R.count).every(v => v === 3) && !rare.includes(g)) { rare.push(g); Store.set('rare', rare); } });
   // desafio do dia com 3★: conta mais uma vez e entrega o que a coleção já liberou (devolve os itens novos ou null)
@@ -3384,7 +3452,8 @@ const Career = (() => {
     return got.length ? got : null;
   }
   // ordem em que os apetrechos saem (trilha, 3★ de cada pântano, coleção do desafio): organiza o guarda-roupa
-  const ORDER = REGIONS.flatMap((R, r) => Object.keys(PRIZE).filter(i => +i >= START[r] && +i < START[r] + R.count).sort((a, b) => a - b).flatMap(i => PRIZE[i]).concat(RARE[R.id] || []))
+  const ORDER = REGIONS.flatMap((R, r) => Object.keys(PRIZE).filter(i => +i >= START[r] && +i < START[r] + R.count).sort((a, b) => a - b).flatMap(i => PRIZE[i])
+    .concat(RARE[R.id] || [], (Outfit.CHARS.find(c => c.at === R.id) || {}).kit || []))
     .concat(DAILY.map(([, id]) => id), 'kiwifruta');
   let list = null, built = null, nodes = [], finalPos = null, portalPos = null, starPos = null, lastW = 0, avatar = null;
   const map = $('cmap'), inner = $('cmapInner');
@@ -3756,12 +3825,14 @@ ${portalPos ? `<path d="M${finalPos.x} ${finalPos.y} L${portalPos.x} ${portalPos
   // personagem novo chegou com o pântano: apresenta e oferece usar na hora
   function friendPop(c) {
     const ov = document.createElement('div'); ov.className = 'overlay show'; ov.setAttribute('role', 'dialog'); ov.setAttribute('aria-modal', 'true');
-    ov.innerHTML = `<div class="panel result win"><div class="res-art">${Art.creature(c.id, { cls: 'rfrog' })}</div><div class="res-text"><h3>${c.name}</h3><p class="wmin">Novo amigo desbloqueado!</p>
+    const kit = c.kit || [];
+    ov.innerHTML = `<div class="panel result win"><div class="res-art">${Art.creature(c.id, { cls: 'rfrog', outfit: Object.fromEntries(kit.map(id => [Outfit.BY[id].slot, id])) })}</div><div class="res-text"><h3>${c.name}</h3><p class="wmin">Novo amigo desbloqueado!</p>
+${kit.length ? `<p class="wmin">Vem com: <b>${kit.map(id => Outfit.BY[id].name).join(' e ')}</b></p>` : ''}
 <div class="row win-row"><button type="button" class="btn blue" data-k="0">Depois</button><button type="button" class="btn green grow" data-k="1">Usar agora</button></div></div></div>`;
     $('ovWin').parentNode.appendChild(ov); Base.dim(true); Sound.sparkle();
     ov.addEventListener('click', e => {
       const b = e.target.closest('button'); if (!b) return;
-      if (b.dataset.k === '1') { Outfit.setChar(c.id, false); render(); placeAvatar(done); }
+      if (b.dataset.k === '1') { Outfit.setChar(c.id, false); Outfit.put(kit); render(); placeAvatar(done); }     // usa o amigo já com o kit
       Sound.click(); ov.remove(); Base.dim(false); if (window.wardNew) wardNew();
     });
   }
@@ -4393,6 +4464,8 @@ ${stageFrog(false, 0)}${stageFrog(true, 104, .5)}</svg></div>`;
     if (i != null) { const r = at(+i); return `Encontre ${r.na} ${nm(r)}`; }
     const r = R.find(x => Career.RARE[x.id] === id);
     if (r) return `Encontre com ⭐⭐⭐ ${r.na} ${nm(r)}`;
+    const k = Outfit.CHARS.find(x => (x.kit || []).includes(id));
+    if (k && !k.gift) return `Vem com ${k.at === 'espaco' && !Career.bonusOpen ? '???' : k.name}`;     // kit de amigo
     return 'Encontre no Desafio do dia';
   }
   grid.addEventListener('click', e => {
@@ -4529,8 +4602,8 @@ const Tests = {
     t('prêmios da trilha: tutorial 1-3, Vans logo no 3º mapa, chapéu/boné na última fase de cada pântano; 35 apetrechos sem repetir',
       at(0, 1)[0] === 'cardigan' && at(1, 3)[0] === 'oldskool' && Career.REGIONS.slice(1).every((R, r) => Outfit.BY[last(r + 1)[0]].slot === 'head') && last(10).join() === 'coroa,trofeu'
       && at(2, 7)[0] === 'woody' && at(7, 7)[0] === 'skate' && new Set(Object.values(P).flat()).size === 35 && Object.values(P).flat().every(id => Outfit.BY[id] && !Outfit.BY[id].rare));
-    t('prêmios fora da trilha (marcados rare): 11 de pântano com 3★ + 5 da coleção do desafio + kiwi; ninguém fica sem jeito de ganhar',
-      Outfit.ITEMS.filter(i => i.rare).length === 17 && Object.values(Career.RARE).concat(Career.DAILY.map(d => d[1])).every(id => Outfit.BY[id] && Outfit.BY[id].rare)
+    t('prêmios fora da trilha (marcados rare): 10 de pântano com 3★ + 5 da coleção do desafio + kiwi + kits dos amigos; ninguém fica sem jeito de ganhar',
+      Outfit.ITEMS.filter(i => i.rare).length === 25 && Object.values(Career.RARE).concat(Career.DAILY.map(d => d[1])).every(id => Outfit.BY[id] && Outfit.BY[id].rare)
       && Outfit.ITEMS.every(it => Career.ORDER.includes(it.id)) && Career.ORDER.length === Outfit.ITEMS.length);
     t('estrelas: 3 no mínimo, 2 com +1, 1 acima', starsFor(5, 5) === 3 && starsFor(6, 5) === 2 && starsFor(7, 5) === 1 && starsFor(10, 5) === 1);
     t('tutorial com 1, 2 e 3 sapos verdes', [0, 1, 2].every(i => Rules.greens(CL[i].start) === i + 1));
@@ -4568,7 +4641,7 @@ const Tests = {
     const far = Daily.message({ date: '2026-10-21', moves: [5, 4, 69, 7, 4], mins: [5, 4, 7, 7, 4] }).split('\n')[2];
     t('desafio do dia: nota pela soma dos pulos (um mapa ruim derruba o total)', far === 'Total: 89 pulos ⭐⚪⚪', far);
     t('personagens: sapo + 6 amigos, cada um chega com um pântano e desenha com qualquer apetrecho',
-      Outfit.CHARS.length === 10 && Outfit.CHARS.slice(1).every(c => (c.gift || Career.REGIONS.some(R => R.id === c.at)) && Art.creature(c.id, { outfit: { head: 'bolovo', eyes: 'oculos', torso: 'traje' } }).startsWith('<svg')));
+      Outfit.CHARS.length === 12 && Outfit.CHARS.slice(1).every(c => (c.gift || Career.REGIONS.some(R => R.id === c.at)) && Art.creature(c.id, { outfit: { head: 'bolovo', eyes: 'oculos', torso: 'traje' } }).startsWith('<svg')));
     // 11. áudio
     t('áudio não é criado antes de um gesto', window.__frogGesture ? true : Sound.ctx === null, window.__frogGesture ? 'houve gesto antes do teste' : 'sem gesto: sem AudioContext');
     return { out, fails };
