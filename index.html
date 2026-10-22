@@ -826,6 +826,7 @@ canvas.bigbang{position:absolute;inset:0;width:100%;height:100%;z-index:400;poin
 
 <script>
 'use strict';
+const BUILD = '2026-10-22.1315';      // versão publicada: trocada pela data e hora a cada publicação (ver Update, no fim); 'dev' não confere
 /* =====================================================================
    FROGGO — jogo de sapos saltadores (peg-solitaire), arquivo único e offline.
    Módulos (todos neste arquivo): Store · Geo · Rules · Solver · Gen ·
@@ -4502,6 +4503,33 @@ const Tests = {
   $('cmap').addEventListener('scroll', poke, { passive: true }); $('wGrid').addEventListener('scroll', poke, { passive: true });
   poke();
   Install.boot();
+  /* Versão nova: o app da tela inicial não recarrega ao voltar para ele (o celular só "acorda" a página antiga). Ao abrir
+     e sempre que o app volta para a frente, confere a versão no servidor (sem cache); se mudou, recarrega assim que
+     estiver na tela inicial, sem janela aberta (nunca no meio de uma fase). O progresso fica (localStorage).
+     Se a página nova ainda vier do cache, não tenta de novo por 15 min (sem recarregar em looping). */
+  (() => {
+    let next = null, last = 0;
+    const safe = () => $('home').classList.contains('active') && !document.querySelector('.overlay.show, .loading');
+    function go() {
+      if (!next || !safe()) return;
+      const t = Store.get('updTry', null); if (t && t.to === next && Date.now() - t.at < 15 * 60e3) return;
+      Store.set('updTry', { to: next, at: Date.now() });
+      location.replace(location.pathname + '?v=' + encodeURIComponent(next));
+    }
+    async function check() {
+      if (BUILD === 'dev' || location.protocol === 'file:' || Date.now() - last < 30e3) return;
+      last = Date.now();
+      try {
+        const r = await fetch(location.pathname + '?check=' + Date.now(), { cache: 'no-store' });
+        const m = r.ok && (await r.text()).match(/const BUILD = '([^']+)'/);
+        if (m && m[1] !== BUILD) { next = m[1]; go(); }
+      } catch (e) { /* sem internet: segue com a versão que tem */ }
+    }
+    document.addEventListener('visibilitychange', () => { if (!document.hidden) check(); });
+    window.addEventListener('pageshow', e => { if (e.persisted) check(); });
+    setTimeout(check, 3000);
+    setInterval(go, 2000);      // achou versão nova durante uma fase: atualiza quando voltar à tela inicial
+  })();
   window.__frog = { Geo, Rules, Solver, Gen, Game, Board, UI, Tests, Sound, Career, Outfit, Wardrobe, Daily };
 })();
 </script>
