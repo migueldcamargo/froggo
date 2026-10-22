@@ -3092,13 +3092,13 @@ ${tw.join('')}<div class="cbanner${canUnlock(REGIONS.indexOf(R)) ? ' can' : ''}"
     UI.startGame(cardFor(i));
   });
   $('btnCareerHome').addEventListener('click', () => { Sound.click(); UI.show('home'); });
-  // mapa do dia: um desenho de Iniciante ou Médio escolhido pelo número do dia (mesmo para todo mundo)
+  // mapa do dia: um desenho do Iniciante escolhido pelo número do dia (mesmo para todo mundo)
   let dailyClasses = null;
   const dailyOrder = {};
   function dailyPick(h, only, k) {
     if (!dailyClasses) {
       const pools = Gen.ensurePools(), seen = new Set(); dailyClasses = [];
-      for (const id of ['iniciante', 'medio']) for (const k of pools[id]) { const c = canon(Rules.fromKey(k)); if (!seen.has(c)) { seen.add(c); dailyClasses.push({ c, id }); } }
+      for (const id of ['iniciante']) for (const k of pools[id]) { const c = canon(Rules.fromKey(k)); if (!seen.has(c)) { seen.add(c); dailyClasses.push({ c, id }); } }
       dailyClasses.sort((a, b) => a.c - b.c);
     }
     const list = only ? dailyClasses.filter(x => x.id === only) : dailyClasses;
@@ -3112,20 +3112,20 @@ ${tw.join('')}<div class="cbanner${canUnlock(REGIONS.indexOf(R)) ? ' can' : ''}"
   }
   // prêmio fora da trilha (ex.: desafio do dia perfeito); devolve true se for novo
   function grant(id) { if (rare.includes(id)) return false; rare.push(id); Store.set('rare', rare); return true; }
-  return { open, complete, relayout, ensureBuilt, syncBase, dailyPick, grant, get stars() { return stars.slice(); }, totalStars, playable, get dailyCount() { dailyPick(0); return { iniciante: dailyClasses.filter(x => x.id === 'iniciante').length, medio: dailyClasses.filter(x => x.id === 'medio').length }; }, seeded, cardFor, owned, openBonus, bigBang, REGIONS, TOTAL, ALL, PRIZE, BONUS, get bonusOpen() { return bonusOpen; }, set bonusOpen(v) { bonusOpen = v; }, get list() { return list; }, get done() { return done; }, set done(v) { done = v; } };
+  return { open, complete, relayout, ensureBuilt, syncBase, dailyPick, grant, get stars() { return stars.slice(); }, totalStars, playable, get dailyCount() { dailyPick(0); return { iniciante: dailyClasses.length }; }, seeded, cardFor, owned, openBonus, bigBang, REGIONS, TOTAL, ALL, PRIZE, BONUS, get bonusOpen() { return bonusOpen; }, set bonusOpen(v) { bonusOpen = v; }, get list() { return list; }, get done() { return done; }, set done(v) { done = v; } };
 })();
 
 /* ---------------------------------------------------------------------
    Daily — mapa do dia. Vale de 00h00 a 23h59 (horário de Brasília) e muda
    à meia-noite. O desenho vem da data: todo mundo com esta versão do jogo
-   recebe o mesmo mapa no mesmo dia (sempre de Iniciante ou Médio, com
+   recebe o mesmo mapa no mesmo dia (sempre do Iniciante, com
    solução garantida). Cronômetro (pausa com o app em segundo plano) e
    movimentos (cada salto e cada "desfazer" contam). Resultado guardado no
    aparelho; compartilhamento pronto para o WhatsApp.
    --------------------------------------------------------------------- */
 const Daily = (() => {
   const LINK = 'migueldcamargo.github.io/froggo';   // sem https:// e sem barra final: o WhatsApp ainda reconhece o link
-  const N = 5;                                      // fases do desafio: 3 Médio + 2 Iniciante (em posições sorteadas pela data)
+  const N = 5;                                      // fases do desafio: 5 do Iniciante
   const pad = n => String(n).padStart(2, '0');
   // o dia vira à meia-noite de Brasília, em qualquer aparelho (fallback: UTC−3, sem horário de verão)
   const today = () => {
@@ -3147,9 +3147,14 @@ const Daily = (() => {
   let run = null, afterWin = false, shown = null;   // run: { date, phase, moves[5] }; shown = data aberta no painel
   // partida salva: ao sair do desafio ou do app, o mapa, o tabuleiro e os movimentos ficam guardados
   const saved = () => { const v = Store.get('dailyRun', null); return v && v.v === 2 && v.date === today() ? v : null; };
-  if (Store.get('dailyReset', null) !== 'cinco-mapas') { ['daily', 'dailyRun', 'dailyInvite'].forEach(k => Store.set(k, null)); Store.set('dailyReset', 'cinco-mapas'); }
-  // troca para 3 Médio + 2 Iniciante: o desafio de hoje mudou, então a partida e o resultado de hoje recomeçam
-  if (Store.get('dailyReset', null) !== 'tres-medio') { ['daily', 'dailyRun'].forEach(k => { const v = Store.get(k, null); if (v && v.date === today()) Store.set(k, null); }); Store.set('dailyReset', 'tres-medio'); }
+  /* Recomeços do desafio, cada um uma vez só: dailyReset guarda o último aplicado.
+     - de antes do desafio de 5 mapas: zera tudo do desafio;
+     - a cada troca de níveis (3 Médio + 2 Iniciante, depois 5 do Iniciante): o desafio de hoje mudou, a partida e o resultado de hoje recomeçam. */
+  {
+    const r = Store.get('dailyReset', null);
+    if (!['cinco-mapas', 'tres-medio', 'cinco-iniciante'].includes(r)) ['daily', 'dailyRun', 'dailyInvite'].forEach(k => Store.set(k, null));
+    if (r !== 'cinco-iniciante') { ['daily', 'dailyRun'].forEach(k => { const v = Store.get(k, null); if (v && v.date === today()) Store.set(k, null); }); Store.set('dailyReset', 'cinco-iniciante'); }
+  }
   const result = () => { const r = Store.get('daily', null); return r && r.date === today() ? r : null; };
   const multi = r => Array.isArray(r.moves);       // resultado do desafio de 5 fases (o antigo tinha 1 mapa só)
   function message(r) {
@@ -3199,15 +3204,10 @@ const Daily = (() => {
     if (android) a.removeAttribute('target'); else a.target = '_blank';
   }
   function closePanel() { $('ovDaily').classList.remove('show'); Base.dim(false); if (afterWin) { afterWin = false; UI.show('home'); } }
-  /* As 5 fases do dia, sempre 3×3: 3 de Médio e 2 de Iniciante, em posições sorteadas pela data.
-     Cada nível segue uma ordem embaralhada fixa, sem repetir desenho até esgotar: por dia andam 3 do Médio e 2 do Iniciante.
-     Cada fase gira/espelha o desenho de um jeito, também pela data. Mesmo desafio para todo mundo. */
+  /* As 5 fases do dia, sempre 3×3 e do Iniciante. Seguem uma ordem embaralhada fixa, sem repetir desenho até esgotar
+     (5 por dia). Cada fase gira/espelha o desenho de um jeito, também pela data. Mesmo desafio para todo mundo. */
   const dayIndex = iso => { const [y, m, d] = iso.split('-').map(Number); return Math.round((Date.UTC(y, m - 1, d) - Date.UTC(2026, 9, 21)) / 864e5); };
-  const easyAt = iso => { const h = hash('froggo-easy-' + iso), a = h % N; return [a, (a + 1 + Math.floor(h / N) % (N - 1)) % N]; };
-  const kindOf = (iso, k) => {
-    const d = dayIndex(iso), e = easyAt(iso), i = e.indexOf(k);
-    return i >= 0 ? ['iniciante', 3, 2 * d + (e[i] === Math.min(...e) ? 0 : 1)] : ['medio', 3, 3 * d + k - e.filter(x => x < k).length];
-  };
+  const kindOf = (iso, k) => ['iniciante', 3, N * dayIndex(iso) + k];
   async function card(iso = today(), k = 0) {
     await Solver.precompute();
     const h = hash(`froggo-daily-${iso}-${k}`), [lvl, size, idx] = kindOf(iso, k);
@@ -3480,13 +3480,13 @@ const Tests = {
     const again = Career.dailyPick(Daily.hash('froggo-daily-2026-10-21'));
     t('mapa do dia: mesma data dá o mesmo mapa; datas diferentes, mapas diferentes', Rules.toStr(again.start) === Rules.toStr(picks[0].start) && new Set(picks.map(q => Rules.toStr(q.start))).size === days.length);
     let dailyOk = true;
-    for (let k = 0; k < 120; k++) { const q = Career.dailyPick(Daily.hash('froggo-daily-x' + k)), n = Rules.greens(q.start); if (!(q.levelId in LEVELS) || n < LEVELS[q.levelId].min || n > LEVELS[q.levelId].max || !['iniciante', 'medio'].includes(q.levelId) || !Solver.solve(q.start)) dailyOk = false; }
-    t('mapa do dia: sempre Iniciante ou Médio e sempre com solução (120 dias testados)', dailyOk);
-    // desafio do dia: 5 fases, 3 Médio + 2 Iniciante, sem repetir desenho
+    for (let k = 0; k < 120; k++) { const q = Career.dailyPick(Daily.hash('froggo-daily-x' + k)), n = Rules.greens(q.start); if (!(q.levelId in LEVELS) || n < LEVELS[q.levelId].min || n > LEVELS[q.levelId].max || q.levelId !== 'iniciante' || !Solver.solve(q.start)) dailyOk = false; }
+    t('mapa do dia: sempre do Iniciante e sempre com solução (120 dias testados)', dailyOk);
+    // desafio do dia: 5 fases do Iniciante, sem repetir desenho
     let mix = true;
-    for (let d = 21; d <= 31; d++) { const iso = '2026-10-' + d, k = [0, 1, 2, 3, 4].map(i => Daily.kindOf(iso, i)[0]); if (k.filter(x => x === 'iniciante').length !== 2 || k.filter(x => x === 'medio').length !== 3) mix = false; }
-    t('desafio do dia: 5 fases 3×3, 3 de Médio e 2 de Iniciante', mix);
-    const seen = { iniciante: new Set(), medio: new Set() }, span = Math.min(120, Math.floor(Career.dailyCount.iniciante / 2)); let norep = true;   // o Iniciante tem menos desenhos: a fila dá a volta antes
+    for (let d = 21; d <= 31; d++) { const iso = '2026-10-' + d, k = [0, 1, 2, 3, 4].map(i => Daily.kindOf(iso, i)[0]); if (!k.every(x => x === 'iniciante')) mix = false; }
+    t('desafio do dia: 5 fases 3×3, todas do Iniciante', mix);
+    const seen = { iniciante: new Set() }, span = Math.floor(Career.dailyCount.iniciante / 5); let norep = true;   // até a fila de desenhos dar a volta
     for (let i = 0; i < span; i++) {
       const dt = new Date(2026, 9, 21 + i), iso = `${dt.getFullYear()}-${String(dt.getMonth() + 1).padStart(2, '0')}-${String(dt.getDate()).padStart(2, '0')}`;
       for (let f = 0; f < 5; f++) { const [lvl, , k] = Daily.kindOf(iso, f), q = Career.dailyPick(Daily.hash(`froggo-daily-${iso}-${f}`), lvl, k); if (seen[lvl].has(q.cls) || q.levelId !== lvl) norep = false; seen[lvl].add(q.cls); }
