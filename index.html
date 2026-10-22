@@ -141,6 +141,20 @@ svg{display:block}
 @keyframes heroHop{0%,62%,100%{transform:translateY(0) scale(1,1)}68%{transform:translateY(0) scale(1.06,.92)}78%{transform:translateY(-4%) scale(.97,1.03)}88%{transform:translateY(0) scale(1.04,.95)}}
 .hero-mini{animation:miniBob 2.4s ease-in-out infinite;transform-origin:50% 100%;will-change:transform}
 @keyframes miniBob{50%{transform:translateY(-4%) rotate(-3deg)}}
+/* mochila a jato: o sapo flutua com uns impulsos, a chama treme e solta fumaça */
+.hero-frog.fly,.hero-mini.fly{animation:none}
+.hero-frog{touch-action:none}
+.hero-frog.zoomed{overflow:hidden;animation:none;border-radius:1.2rem}
+.hero-frog>svg{transition:transform .12s ease-out}
+svg.fly .fbody{transform:translateY(-10px);animation:jetFly 2.6s ease-in-out infinite}     /* parado (repouso/economia), continua no ar */
+svg.fly .fshadow{transform-box:fill-box;transform-origin:50% 50%;transform:scale(.75);opacity:.7;animation:jetShadow 2.6s ease-in-out infinite}
+@keyframes jetFly{0%,100%{transform:translateY(-9px)}30%{transform:translateY(-13px)}42%{transform:translateY(-10px)}55%{transform:translateY(-17px)}80%{transform:translateY(-11px)}}
+@keyframes jetShadow{0%,100%{transform:scale(.78);opacity:.75}55%{transform:scale(.62);opacity:.5}}
+.jflame{transform-box:fill-box;transform-origin:50% 0;animation:jetFlick .13s ease-in-out infinite alternate}
+@keyframes jetFlick{from{transform:scale(.9,.8)}to{transform:scale(1.05,1.12)}}
+.jsmoke{transform-box:fill-box;transform-origin:50% 50%;opacity:0;animation:jetSmoke 1.3s ease-out infinite}
+.jsmoke.s2{animation-delay:-.65s}
+@keyframes jetSmoke{0%{opacity:.6;transform:translateY(-4px) scale(.4)}100%{opacity:0;transform:translateY(9px) scale(1.7)}}
 .cta{grid-area:cta;display:flex;justify-content:center;align-items:center;gap:.6rem}
 .cta #btnCareer{flex:1 1 auto;width:auto;max-width:22rem;min-width:0;color:#fff;text-shadow:0 1px 0 rgba(120,40,0,.5);
   background:linear-gradient(180deg,#ffc24d 0%,#ff9a1f 45%,#f06a00 100%);box-shadow:0 .28rem 0 #a84700,0 .5rem 1rem rgba(0,30,70,.3),inset 0 2px 0 rgba(255,255,255,.6)}
@@ -281,10 +295,10 @@ svg{display:block}
   background:linear-gradient(180deg,rgba(4,30,70,0) 0,rgba(4,30,70,.55) calc(var(--sat) + 5rem));backdrop-filter:blur(3px)}
 .overlay.show{display:flex;animation:fadeIn .2s ease-out}
 /* repouso: sem toques por alguns segundos, as animações de enfeite param e a tela fica totalmente parada (economia de bateria) */
-.app.idle .bubble,.app.idle .title,.app.idle .hero-frog,.app.idle .hero-mini,.app.idle .frog .fi,.app.idle .cavatar svg,.app.idle .cnode.cur::before,
+.app.idle .bubble,.app.idle .title,.app.idle .hero-frog,.app.idle .hero-mini,.app.idle svg.fly .fbody,.app.idle svg.fly .fshadow,.app.idle .jflame,.app.idle .jsmoke,.app.idle .frog .fi,.app.idle .cavatar svg,.app.idle .cnode.cur::before,
 .app.idle .cnode .prize,.app.idle .cnode.portal,.app.idle .pspin,.app.idle .tw,.app.idle .win .res-art svg.rfrog,.app.idle .win .star,
 /* economia de bateria (Android avisa bateria fraca e sem carregar): enfeites sempre parados */
-.app.lite .bubble,.app.lite .title,.app.lite .hero-frog,.app.lite .hero-mini,.app.lite .frog .fi,.app.lite .cavatar svg,.app.lite .cnode.cur::before,.app.lite .cnode .prize,.app.lite .cnode.portal,.app.lite .pspin,.app.lite .tw,.app.lite .win .res-art svg.rfrog,.app.lite .win .star{animation:none!important}
+.app.lite .bubble,.app.lite .title,.app.lite .hero-frog,.app.lite .hero-mini,.app.lite svg.fly .fbody,.app.lite svg.fly .fshadow,.app.lite .jflame,.app.lite .jsmoke,.app.lite .frog .fi,.app.lite .cavatar svg,.app.lite .cnode.cur::before,.app.lite .cnode .prize,.app.lite .cnode.portal,.app.lite .pspin,.app.lite .tw,.app.lite .win .res-art svg.rfrog,.app.lite .win .star{animation:none!important}
 .app.idle .win .star,.app.lite .win .star{opacity:1}
 .app.lite #bubbles{display:none}
 .app.ov::before,.app.ov .bubble,.app.ov .title,.app.ov .hero-frog,.app.ov .hero-mini,.app.ov .frog .fi{animation-play-state:paused}
@@ -364,7 +378,9 @@ canvas.confetti{position:absolute;inset:0;width:100%;height:100%;pointer-events:
 #wardrobe{grid-template-rows:auto minmax(0,.85fr) minmax(0,1.15fr);grid-template-columns:minmax(0,1fr);gap:.5rem;grid-template-areas:"top" "stage" "grid"}
 .ctitle .hg{color:#fff}
 .wstage{grid-area:stage;position:relative;min-height:0}
-.wstage>svg{position:absolute;inset:0;width:100%;height:100%}
+.wzoom{position:absolute;inset:0;overflow:hidden;touch-action:none;border-radius:1rem}
+.wzoom>svg{width:100%;height:100%;transition:transform .12s ease-out}
+.wfrog{cursor:pointer}
 .wgrid{grid-area:grid;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;touch-action:pan-y;overscroll-behavior:contain;
   display:grid;grid-template-columns:repeat(auto-fill,minmax(6.4rem,1fr));gap:.5rem;align-content:start;padding:.6rem;border-radius:1.2rem;background:rgba(4,40,90,.25);box-shadow:inset 0 0 0 2px rgba(255,255,255,.35)}
 .witem{position:relative;display:flex;flex-direction:column;align-items:center;gap:.25rem;padding:.5rem .4rem .55rem;border-radius:1rem;background:#fffdf4;color:var(--ink);box-shadow:0 .2rem 0 rgba(0,0,0,.15)}
@@ -374,11 +390,12 @@ canvas.confetti{position:absolute;inset:0;width:100%;height:100%;pointer-events:
 .witem b{font-size:.8rem;font-weight:900;line-height:1.1;text-align:center}
 .witem.worn{box-shadow:0 0 0 3px #2fbf3a,0 .2rem 0 rgba(0,0,0,.15)}
 .witem.worn{background:#eaffdf}
+.witem.locked{background:#e6ebf1;box-shadow:0 .2rem 0 rgba(0,0,0,.1)}
+.witem.locked .pv{background:radial-gradient(circle at 50% 55%, #d3dbe5 0 45%, transparent 46%)}
+.witem.locked .pv svg{filter:brightness(0) opacity(.25) blur(3.5px)}     /* só um borrão: dá uma pista, sem entregar o formato */
+.witem.locked b{letter-spacing:.18em;color:#8a96a8}
 .wsec{grid-column:1/-1;font-size:.85rem;font-weight:900;letter-spacing:.06em;text-transform:uppercase;color:#fff;text-shadow:0 1px 0 rgba(0,40,90,.4);margin-top:.2rem}
 .wsec:first-child{margin-top:0}
-.wempty{grid-column:1/-1;display:flex;flex-direction:column;align-items:center;gap:.35rem;padding:1.4rem .8rem;text-align:center;font-weight:800;font-size:.9rem}
-.wempty svg{width:2.6rem;height:2.6rem;color:#ffd23f}
-.wempty b{font-size:1.05rem}
 .witem:active{transform:scale(.96)}
 .app.land #wardrobe{grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);grid-template-rows:auto minmax(0,1fr);grid-template-areas:"top top" "stage grid";column-gap:1rem}
 .prize-won{display:flex;align-items:center;gap:.5rem;padding:.4rem .8rem;border-radius:1rem;background:#fff4c2;box-shadow:inset 0 0 0 2px #ffd23f;font-weight:900;font-size:.92rem}
@@ -507,7 +524,7 @@ canvas.bigbang{position:absolute;inset:0;width:100%;height:100%;z-index:400;poin
 .cavatar svg{animation:breathe 2.6s ease-in-out infinite;transform-origin:50% 92%;will-change:transform}
 
 @media (prefers-reduced-motion: reduce){
-  .app::before,.bubble,.title,.tw,.pspin,.cnode.portal,.cnode.cur::before,.cnode .prize,.cavatar svg,.hero-frog,.hero-mini,.frog .fi,.lids.b ellipse,.loading .lfrog,.win .res-art svg.rfrog{animation:none!important}
+  .app::before,.bubble,.title,.tw,.pspin,.cnode.portal,.cnode.cur::before,.cnode .prize,.cavatar svg,.hero-frog,svg.fly .fbody,svg.fly .fshadow,.jflame,.jsmoke,.hero-mini,.frog .fi,.lids.b ellipse,.loading .lfrog,.win .res-art svg.rfrog{animation:none!important}
   .win .star{animation:none!important;opacity:1}
   .overlay.show,.panel{animation:none}
 }
@@ -1067,8 +1084,9 @@ const Art = {
     const L = opts.outfit ? Outfit.layers(opts.outfit, red) : { back: '', head: '', under: '', front: '', eyes: '', hand: '', top: '' };
     // pintinhas: marca o vermelho também para quem não distingue as cores
     const spots = red ? '<g fill="#7a0a0a" opacity=".42"><circle cx="50" cy="31" r="2.6"/><circle cx="43.5" cy="35.5" r="1.7"/><circle cx="56.5" cy="35.5" r="1.7"/></g>' : '';
-    return `<svg viewBox="0 0 100 100" overflow="visible" aria-hidden="true"${opts.cls ? ` class="${opts.cls}"` : ''}${opts.attrs ? ' ' + opts.attrs : ''}>
-<ellipse cx="50" cy="92" rx="31" ry="6" fill="rgba(0,20,50,.3)"/>
+    const cls = [opts.cls, opts.outfit && Outfit.flies(opts.outfit) ? 'fly' : ''].filter(Boolean).join(' ');   // fly: flutuando (mochila a jato, foguete)
+    return `<svg viewBox="0 0 100 100" overflow="visible" aria-hidden="true"${cls ? ` class="${cls}"` : ''}${opts.attrs ? ' ' + opts.attrs : ''}>
+<ellipse class="fshadow" cx="50" cy="92" rx="31" ry="6" fill="rgba(0,20,50,.3)"/>
 <g class="fbody" style="animation-delay:${d}s">${L.back}
 <ellipse cx="20" cy="77" rx="15" ry="11" fill="url(#${D})"/><ellipse cx="80" cy="77" rx="15" ry="11" fill="url(#${D})"/>
 <ellipse cx="50" cy="66" rx="31" ry="24" fill="url(#${B})"/>
@@ -1186,7 +1204,7 @@ ${dim ? '' : `<path d="M${x - r * .32} ${y - r * .42} q${r * .12} -${r * .14} ${
 <ellipse cx="170" cy="104" rx="20" ry="6" fill="url(#lily)" stroke="#155f1a" stroke-width="1"/>
 <ellipse cx="26" cy="110" rx="16" ry="5" fill="url(#lily)" stroke="#155f1a" stroke-width="1"/>
 <g fill="#fff" opacity=".85"><path d="M20 30l2 5 5 2-5 2-2 5-2-5-5-2 5-2z"/><path d="M178 26l1.5 4 4 1.5-4 1.5-1.5 4-1.5-4-4-1.5 4-1.5z"/><path d="M160 52l1 2.6 2.6 1-2.6 1-1 2.6-1-2.6-2.6-1 2.6-1z"/></g>
-</svg><div class="hero-frog">${Art.frog('green', { outfit: Outfit.worn })}</div><div class="hero-mini">${Art.frog('red')}</div></div>`;
+</svg><div class="hero-frog${Outfit.flies(Outfit.worn) ? ' fly' : ''}">${Art.frog('green', { outfit: Outfit.worn })}</div><div class="hero-mini${Outfit.flies(Outfit.wornRed) ? ' fly' : ''}">${Art.frog('red', { outfit: Outfit.wornRed })}</div></div>`;
   },
   star(fill = '#ffd23f') {
     return `<svg viewBox="0 0 24 24"><path d="M12 1.8l3.1 6.4 7 1-5.1 4.9 1.2 7L12 17.8l-6.2 3.3 1.2-7L1.9 9.2l7-1z" fill="${fill}" stroke="#c98a00" stroke-width="1.2" stroke-linejoin="round"/><path d="M9 7.5l1.5-3" stroke="#fff" stroke-width="1.4" stroke-linecap="round" opacity=".8"/></svg>`;
@@ -1305,7 +1323,7 @@ const Outfit = (() => {
 <path d="M17.6 19.8 L43.2 19.5 L41.1 30 Q40.6 31.8 38.7 31.8 L22.9 31.8 Q20.7 31.8 20.2 30 Z" fill="#26352c"/><path d="M22 21.5 L27 29.5" stroke="#9fd8c0" stroke-width="1.8" opacity=".4" stroke-linecap="round"/><circle cx="16.4" cy="18.6" r=".8" fill="#d6dade"/>`;
         return `${lens}<g transform="translate(100 0) scale(-1 1)">${lens}</g><path d="M46 20 Q50 17.4 54 20" stroke="#101010" stroke-width="2.8" fill="none"/>`;
       } },
-    { id: 'gravata', name: 'Gravata-borboleta', slot: 'neck', rare: true, box: '34 61 32 22',
+    { id: 'gravata', name: 'Gravata-borboleta', slot: 'neck', box: '34 61 32 22',
       svg: () => `<g transform="translate(0 9)"><path d="M50 63 L37 55.5 Q35 63 37 70.5 Z" fill="#e53b6b" stroke="#a8173f" stroke-width="1"/><path d="M50 63 L63 55.5 Q65 63 63 70.5 Z" fill="#e53b6b" stroke="#a8173f" stroke-width="1"/>
 <rect x="46.5" y="59.5" width="7" height="7" rx="2.2" fill="#c21f4f"/><g fill="#fff" opacity=".85"><circle cx="40.5" cy="60" r="1.2"/><circle cx="41" cy="66.5" r="1.2"/><circle cx="59.5" cy="60" r="1.2"/><circle cx="59" cy="66.5" r="1.2"/></g></g>` },
     { id: 'pirata', name: 'Chapéu de pirata', slot: 'head', box: '20 -4 60 30',
@@ -1315,11 +1333,11 @@ const Outfit = (() => {
     { id: 'capa', name: 'Capa de herói', slot: 'back', rare: true, box: '2 40 96 54',
       svg: () => `<path d="M26 44 Q50 52 74 44 L96 84 Q86 90 76 86 Q64 92 50 88 Q36 92 24 86 Q14 90 4 84 Z" fill="#2f6bff" stroke="#1d47b8" stroke-width="1.5" stroke-linejoin="round"/><path d="M26 44 L9 82 M74 44 L91 82" stroke="#6f98ff" stroke-width="1.6" opacity=".7"/>`,
       front: () => `<circle cx="30" cy="67" r="2.8" fill="#ffd23f" stroke="#b07a00" stroke-width=".8"/><circle cx="70" cy="67" r="2.8" fill="#ffd23f" stroke="#b07a00" stroke-width=".8"/>` },
-    { id: 'medalha', name: 'Medalha de ouro', slot: 'chest', box: '38 64 24 30',
+    { id: 'medalha', name: 'Medalha de ouro', slot: 'chest', rare: true, box: '38 64 24 30',
       // a fita nasce no pescoço (o queixo do sapo fica em y≈69) e a medalha pende sobre a barriga
       svg: () => `<g transform="translate(0 2.5)"><path d="M42.5 66.5 L50 77 L57.5 66.5" fill="none" stroke="#2b7de9" stroke-width="4.2" stroke-linejoin="round"/><path d="M44.5 67.5 L50 75" stroke="#ff4b3a" stroke-width="1.4"/>
 <circle cx="50" cy="81" r="6.6" fill="url(#crown)" stroke="#a86a00" stroke-width="1.2"/><path d="M50 76.8 l1.3 2.7 3 .45 -2.2 2.1 .5 3 -2.6 -1.4 -2.6 1.4 .5 -3 -2.2 -2.1 3 -.45z" fill="#fff8c0"/></g>` },
-    { id: 'manto', name: 'Manto real', slot: 'back', box: '0 44 100 62',
+    { id: 'manto', name: 'Manto real', slot: 'back', rare: true, box: '0 44 100 62',
       svg: () => {
         let tufts = ''; for (let i = 0; i < 9; i++) tufts += `<path d="M${10 + i * 10} ${97 + Math.sin(i) * .6} l1.2 3 l1.2 -3" fill="#111"/>`;
         return `<path d="M24 45 Q50 54 76 45 L97 97 Q50 106 3 97 Z" fill="#c4122f" stroke="#7a0a1c" stroke-width="1.5" stroke-linejoin="round"/><path d="M3 97 Q50 106 97 97 L96 91 Q50 100 4 91 Z" fill="#fff" stroke="#d8d8d8" stroke-width=".8"/>${tufts}`;
@@ -1338,13 +1356,88 @@ const Outfit = (() => {
     { id: 'antenas', name: 'Antenas de ET', slot: 'head', space: true, box: '22 -14 56 38',
       svg: () => `<path d="M33 21 Q50 9 67 21" stroke="#7b3fe4" stroke-width="3.4" fill="none" stroke-linecap="round"/><path d="M40 15 Q35 3 29 -5" stroke="#4f9a2a" stroke-width="2.2" fill="none" stroke-linecap="round"/><path d="M60 15 Q65 3 71 -5" stroke="#4f9a2a" stroke-width="2.2" fill="none" stroke-linecap="round"/>
 <circle cx="29" cy="-6" r="4.4" fill="#9dff6a" stroke="#4f9a2a" stroke-width="1"/><circle cx="71" cy="-6" r="4.4" fill="#9dff6a" stroke="#4f9a2a" stroke-width="1"/><circle cx="27.6" cy="-7.4" r="1.3" fill="#fff"/><circle cx="69.6" cy="-7.4" r="1.3" fill="#fff"/>` },
-    { id: 'capacete', name: 'Capacete de astronauta', slot: 'head', layer: 'top', space: true, box: '6 -10 88 88',
+    { id: 'capacete', name: 'Capacete de astronauta', slot: 'head', rare: true, layer: 'top', space: true, box: '6 -10 88 88',
       svg: () => `<path d="M17 62 Q50 80 83 62 L81 70 Q50 88 19 70 Z" fill="#d7dde8" stroke="#8a95ab" stroke-width="1"/><circle cx="50" cy="32" r="40" fill="#bfefff" fill-opacity=".2" stroke="#eefbff" stroke-width="2.6"/>
 <path d="M20 16 A36 36 0 0 1 42 -3" stroke="#fff" stroke-width="3.4" opacity=".75" fill="none" stroke-linecap="round"/><path d="M78 46 A30 30 0 0 1 70 58" stroke="#fff" stroke-width="2" opacity=".5" fill="none" stroke-linecap="round"/>` },
-    { id: 'jetpack', name: 'Mochila a jato', slot: 'back', space: true, box: '4 34 92 64',
-      svg: () => `<rect x="9" y="38" width="15" height="36" rx="7" fill="url(#ufoBody)" stroke="#5b6884" stroke-width="1.2"/><rect x="76" y="38" width="15" height="36" rx="7" fill="url(#ufoBody)" stroke="#5b6884" stroke-width="1.2"/>
-<rect x="9" y="46" width="15" height="4" fill="#ff4b3a"/><rect x="76" y="46" width="15" height="4" fill="#ff4b3a"/><path d="M11 74 Q16.5 94 22 74 Z" fill="#ffb800"/><path d="M13.5 74 Q16.5 86 19.5 74 Z" fill="#fff27a"/><path d="M78 74 Q83.5 94 89 74 Z" fill="#ffb800"/><path d="M80.5 74 Q83.5 86 86.5 74 Z" fill="#fff27a"/>` },
-    // prêmios raros: um pântano inteiro com 3 estrelas
+    { id: 'jetpack', name: 'Mochila a jato', slot: 'back', fly: true, space: true, box: '2 30 96 92',
+      // dois cilindros nas costas com bocais; as chamas tremem e soltam fumaça, e o sapo fica flutuando (fly)
+      svg: () => [9, 76].map(x => `<rect x="${x}" y="38" width="15" height="34" rx="7" fill="url(#ufoBody)" stroke="#5b6884" stroke-width="1.2"/><rect x="${x}" y="45" width="15" height="4" fill="#ff4b3a"/>`).join(''),
+      // bocais, chama e fumaça na frente das pernas, para aparecerem
+      front: () => {
+        const tank = x => `<path d="M${x + 2} 72 H${x + 13} L${x + 11.5} 77 H${x + 3.5} Z" fill="#5b6884"/>
+<g class="jflame"><path d="M${x + 2.6} 77 Q${x + 7.5} 104 ${x + 12.4} 77 Z" fill="#ff7a00"/><path d="M${x + 4.4} 77 Q${x + 7.5} 96 ${x + 10.6} 77 Z" fill="#ffd23f"/><path d="M${x + 6} 77 Q${x + 7.5} 87 ${x + 9} 77 Z" fill="#fffbe0"/></g>
+<circle class="jsmoke" cx="${x + 7.5}" cy="106" r="5" fill="#dfe6f0"/><circle class="jsmoke s2" cx="${x + 4}" cy="110" r="4" fill="#cfd7e4"/>`;
+        return tank(9) + tank(76);
+      } },
+    // caixa de brinquedo espacial: o sapo vai dentro, como boneco na embalagem (fundo e moldura atrás, plástico e rótulo na frente)
+    { id: 'foguete', name: 'Caixa espacial', slot: 'ride', rare: true, box: '-6 -34 112 148',
+      svg: () => {
+        let stars = ''; [[14, 30], [86, 26], [22, 62], [80, 58], [30, 8], [70, 6], [10, 84], [90, 82], [50, -8]].forEach(([x, y], i) => { stars += `<circle cx="${x}" cy="${y}" r="${i % 3 ? .9 : 1.4}" fill="#fff" opacity="${i % 2 ? .6 : .9}"/>`; });
+        return `<path d="M-4 106 V16 L16 -16 Q50 -34 84 -16 L104 16 V106 Z" fill="#7b3fe4" stroke="#3d1a8a" stroke-width="1.6" stroke-linejoin="round"/>
+<path d="M-4 30 H4 V100 H-4 Z M104 30 H96 V100 H104 Z" fill="#3ccf4e"/>
+<path d="M4 96 V20 L21 -7 Q50 -22 79 -7 L96 20 V96 Z" fill="#1b2466"/>${stars}
+<circle cx="78" cy="10" r="6" fill="#ff8a3d"/><ellipse cx="78" cy="10" rx="10" ry="2.2" fill="none" stroke="#ffd23f" stroke-width="1.2" transform="rotate(-18 78 10)"/>
+<path d="M30 -24 Q50 -31 70 -24" stroke="#c9a8ff" stroke-width="1.4" fill="none" stroke-linecap="round"/>`;
+      },
+      front: () => `<path d="M4 96 V20 L21 -7 Q50 -22 79 -7 L96 20 V96 Z" fill="#d6f3ff" fill-opacity=".16" stroke="#eafcff" stroke-width="1.6" stroke-linejoin="round"/>
+<path d="M14 6 L30 -10 M12 30 L40 -8" stroke="#fff" stroke-width="2.6" opacity=".35" stroke-linecap="round"/><path d="M82 70 L92 58" stroke="#fff" stroke-width="2" opacity=".3" stroke-linecap="round"/>
+<path d="M-4 90 H104 V108 Q50 113 -4 108 Z" fill="#3ccf4e" stroke="#3d1a8a" stroke-width="1.6" stroke-linejoin="round"/>
+<text x="50" y="102.6" text-anchor="middle" font-family="Arial Black,Arial,Helvetica,sans-serif" font-weight="900" font-size="9" letter-spacing=".6" fill="#fff" stroke="#3d1a8a" stroke-width="1.6" paint-order="stroke">SPACE FROG</text>
+<path d="M8 93 l1.4 2.8 3 .4 -2.2 2.1 .5 3 -2.7 -1.4 -2.7 1.4 .5 -3 -2.2 -2.1 3 -.4z M92 93 l1.4 2.8 3 .4 -2.2 2.1 .5 3 -2.7 -1.4 -2.7 1.4 .5 -3 -2.2 -2.1 3 -.4z" fill="#ffd23f"/>` },
+    { id: 'botas', name: 'Botas lunares', slot: 'feet', space: true, box: '16 62 68 40',
+      // de frente: bota fofa prateada estilo moon boot, cano acolchoado, cadarço vermelho cruzado, bico redondo e sola grossa
+      svg: () => {
+        const boot = x => `<path d="M${x - 8} 67 Q${x - 9} 76 ${x - 11.4} 82 Q${x - 13.6} 87 ${x - 13} 91 H${x + 13} Q${x + 13.6} 87 ${x + 11.4} 82 Q${x + 9} 76 ${x + 8} 67 Z" fill="url(#ufoBody)" stroke="#5b6884" stroke-width=".8" stroke-linejoin="round"/>
+<path d="M${x - 8.6} 72 Q${x} 74.6 ${x + 8.6} 72 L${x + 8.9} 74.6 Q${x} 77.2 ${x - 8.9} 74.6 Z" fill="#e53935"/>
+<path d="M${x - 2.6} 77.4 L${x + 2.6} 79.4 M${x + 2.6} 77.4 L${x - 2.6} 79.4 M${x - 3} 80.6 L${x + 3} 82.8 M${x + 3} 80.6 L${x - 3} 82.8" stroke="#2a2a33" stroke-width="1" stroke-linecap="round"/>
+<ellipse cx="${x}" cy="90.4" rx="13.6" ry="6.4" fill="#eef2f8" stroke="#5b6884" stroke-width=".8"/>
+<path d="M${x - 13.4} 92.4 Q${x} 99.6 ${x + 13.4} 92.4 L${x + 13.6} 94.6 Q${x} 101.6 ${x - 13.6} 94.6 Z" fill="#3a4252"/>
+<ellipse cx="${x}" cy="67" rx="8.2" ry="2.4" fill="#f4f6fa" stroke="#5b6884" stroke-width=".8"/><path d="M${x - 9} 89 Q${x - 4} 86 ${x + 1} 86.4" stroke="#fff" stroke-width="1.3" opacity=".8" fill="none" stroke-linecap="round"/>
+<path d="M${x - 5.6} 70 Q${x - 6.4} 76 ${x - 8.6} 82" stroke="#fff" stroke-width="1" opacity=".55" fill="none" stroke-linecap="round"/>`;
+        return boot(33) + boot(67);
+      } },
+    { id: 'coracao', name: 'Óculos de coração', slot: 'eyes', rare: true, box: '12 8 76 36',
+      svg: () => {
+        const heart = x => `<g transform="translate(${x} 27.5) scale(1.25)"><path d="M0 8 C-15 -1 -12 -12 -5.5 -12 C-2.4 -12 0 -9.8 0 -8 C0 -9.8 2.4 -12 5.5 -12 C12 -12 15 -1 0 8 Z" fill="#ff3d7f" fill-opacity=".82" stroke="#b0144f" stroke-width="1.3" stroke-linejoin="round"/>
+<path d="M-8 -7 Q-6 -10 -3 -9.6" stroke="#fff" stroke-width="1.3" opacity=".75" fill="none" stroke-linecap="round"/></g>`;
+        return `<path d="M40.6 22.6 Q50 17.6 59.4 22.6" stroke="#b0144f" stroke-width="2" fill="none" stroke-linecap="round"/>${heart(31)}${heart(69)}`;
+      } },
+    { id: 'bandana', name: 'Marlon', slot: 'head', rare: true, box: '12 26 76 22',
+      // bandana dobrada como faixa na testa (estilo Tupac), com o nó na frente; passa logo abaixo dos olhos
+      svg: () => `<path d="M14.6 36 Q50 30 85.4 36 L85.6 43.4 Q50 37.6 14.4 43.4 Z" fill="#d32f2f" stroke="#7a0f0f" stroke-width="1" stroke-linejoin="round"/>
+<path d="M16 39.6 Q50 34 84 39.6" stroke="#ff6b5f" stroke-width=".7" fill="none" opacity=".8"/><g fill="#fff" opacity=".8"><circle cx="22" cy="38.6" r=".8"/><circle cx="30" cy="37.6" r=".8"/><circle cx="70" cy="37.6" r=".8"/><circle cx="78" cy="38.6" r=".8"/><circle cx="26" cy="41.4" r=".6"/><circle cx="74" cy="41.4" r=".6"/></g>
+<path d="M45.6 37 Q41 31.4 43.4 28.6 Q47.6 31.6 49 35.6 Z M54.4 37 Q59 31.4 56.6 28.6 Q52.4 31.6 51 35.6 Z" fill="#d32f2f" stroke="#7a0f0f" stroke-width=".9" stroke-linejoin="round"/>
+<ellipse cx="50" cy="37.6" rx="3.6" ry="3" fill="#b71c1c" stroke="#7a0f0f" stroke-width=".9"/>` },
+    { id: 'fone', name: 'Fone de ouvido', slot: 'head', layer: 'top', rare: true, box: '4 -8 92 50',
+      // arco por cima dos olhos e conchas grandes dos lados
+      svg: () => `<path d="M14.4 30 Q13 -6 50 -6 Q87 -6 85.6 30" stroke="#2a2a33" stroke-width="3.6" fill="none" stroke-linecap="round"/><path d="M22 6 Q34 -3 48 -3.4" stroke="#6b6b7a" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+<rect x="5" y="20" width="12" height="20" rx="5.6" fill="#ff4b3a" stroke="#8a1414" stroke-width="1.1"/><rect x="83" y="20" width="12" height="20" rx="5.6" fill="#ff4b3a" stroke="#8a1414" stroke-width="1.1"/>
+<rect x="14" y="22.4" width="4.6" height="15.2" rx="2.3" fill="#2a2a33"/><rect x="81.4" y="22.4" width="4.6" height="15.2" rx="2.3" fill="#2a2a33"/>
+<path d="M7.6 24 V35 M85.6 24 V35" stroke="#fff" stroke-width="1.2" opacity=".45" stroke-linecap="round"/>` },
+    { id: 'pochete', name: 'Pochete', slot: 'strap', rare: true, box: '16 68 68 30',
+      // pochete colorida na cintura: alça branca, corpo azul, bolso de cima verde, bolso da frente vermelho com borda amarela escrito RAPINA
+      svg: () => `<path d="M19 78 Q50 88.6 81 78" stroke="#f4f4f4" stroke-width="3.2" fill="none" stroke-linecap="round"/><path d="M19 78 Q50 88.6 81 78" stroke="#c9c9c9" stroke-width=".5" fill="none" stroke-dasharray="1.4 1"/>
+<path d="M31.6 80.6 Q50 75 68.4 80.6 Q72.4 88.4 67 94 Q50 97 33 94 Q27.6 88.4 31.6 80.6 Z" fill="#2557c9" stroke="#163a8c" stroke-width="1" stroke-linejoin="round"/>
+<path d="M32.4 80.4 Q50 75 67.6 80.4 Q66.8 83.4 65.4 84 Q50 79.6 34.6 84 Q33.2 83.4 32.4 80.4 Z" fill="#1f9a4a"/><path d="M34.6 84 Q50 79.6 65.4 84" stroke="#fff" stroke-width="1" fill="none"/>
+<rect x="34.4" y="85.6" width="1.8" height="4" rx=".3" fill="#111"/>
+<path d="M40.6 85.6 Q51 83.4 61.4 85.6 V93.4 Q51 95.2 40.6 93.4 Z" fill="#e53935" stroke="#ffd23f" stroke-width="1.6" stroke-linejoin="round"/><path d="M41.4 86.6 Q51 84.6 60.6 86.6" stroke="#fff" stroke-width=".8" fill="none"/>
+<text x="51" y="91.4" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-weight="700" font-size="2.5" letter-spacing=".25" fill="#fff">RAPINA</text>
+<circle cx="66.4" cy="81.6" r=".9" fill="#c9c9c9" stroke="#777" stroke-width=".3"/>` },
+    { id: 'picole', name: 'Pistachio', slot: 'hand', rare: true, box: '74 36 32 56',
+      // picolé de pistache, verde claro com pedacinhos de pistache e uma mordida, na mão direita
+      svg: () => `<g transform="rotate(12 89 74)"><rect x="87.2" y="68" width="3.6" height="18" rx="1.6" fill="#e8c38a" stroke="#a8844a" stroke-width=".6"/>
+<path d="M80 70 V50 Q80 41 89 41 Q98 41 98 50 V70 Q89 73.4 80 70 Z" fill="#b9d98a" stroke="#6f8f3c" stroke-width="1"/>
+<path d="M98 46 Q94.6 44.4 95.2 48.4 Q92.6 47.6 93.6 51.2 Q96 51.6 98 50.4 Z" fill="#dff0c4"/>
+<g fill="#6f9f2e"><path d="M84 47 l1.6 -.6 .4 1.4 -1.4 .6z"/><path d="M90 52 l1.6 .2 -.2 1.5 -1.5 -.3z"/><path d="M85 58 l1.4 -.8 .7 1.3 -1.4 .7z"/><path d="M93 62 l1.5 .3 -.3 1.4 -1.5 -.3z"/><path d="M87 65 l1.4 -.5 .5 1.3 -1.4 .5z"/></g>
+<g fill="#a4c25a"><circle cx="91" cy="45" r=".7"/><circle cx="82.6" cy="53" r=".7"/><circle cx="94.4" cy="57" r=".7"/><circle cx="83.6" cy="64" r=".7"/></g>
+<path d="M82.6 50 V60" stroke="#fff" stroke-width="1.6" opacity=".45" stroke-linecap="round"/></g>` },
+    { id: 'skate', name: 'Skate Flip', slot: 'hand', rare: true, box: '74 34 34 64',
+      // shape laranja da Flip em pé ao lado do sapo, com FLIP escrito ao longo do shape, trucks e rodinhas
+      svg: () => `<g transform="rotate(-10 90 66)"><rect x="83.4" y="38" width="13.2" height="56" rx="6.6" fill="#ff6a13" stroke="#8a3200" stroke-width="1.1"/>
+<path d="M85 46 Q90 44.6 95 46 M85 86 Q90 87.4 95 86" stroke="#ffb27a" stroke-width=".8" fill="none"/>
+<text x="90" y="66" text-anchor="middle" dominant-baseline="middle" transform="rotate(-90 90 66)" font-family="Arial Black,Arial,Helvetica,sans-serif" font-weight="900" font-size="7.6" letter-spacing=".4" fill="#111">FLIP</text>
+<rect x="80.6" y="47" width="18.8" height="2.6" rx="1" fill="#9aa6bd"/><rect x="80.6" y="82.4" width="18.8" height="2.6" rx="1" fill="#9aa6bd"/>
+<g fill="#f4f1e6" stroke="#9a937a" stroke-width=".6"><circle cx="80.4" cy="48.3" r="2.5"/><circle cx="99.6" cy="48.3" r="2.5"/><circle cx="80.4" cy="83.7" r="2.5"/><circle cx="99.6" cy="83.7" r="2.5"/></g></g>` },
     { id: 'zerezes', name: 'Zerezes', slot: 'eyes', box: '12 10 76 32',
       // só a frente: lentes octogonais; metade de cima em acetato tartaruga translúcido (ponte "buraco de fechadura"), metade de baixo em fio prateado
       svg: () => {
@@ -1393,7 +1486,7 @@ const Outfit = (() => {
 <path d="M12.4 -3.4 L14.8 -1.8 M14.6 -3.9 L17 -2.2 M16.8 -3.6 L19.2 -1.6 M18.8 -2.7 L21 -.8" stroke="#fff" stroke-width=".85" stroke-linecap="round"/>`;
         return `<g transform="translate(44 82.6) scale(-.9 .9)">${shoe}</g><g transform="translate(56 82.6) scale(.9)">${shoe}</g>`;
       } },
-    { id: 'guitarra', name: 'Les Paul', slot: 'hand', box: '74 14 36 82',
+    { id: 'guitarra', name: 'Les Paul', slot: 'hand', rare: true, box: '74 14 36 82',
       // Gibson Les Paul em pé, apoiada ao lado do sapo: um só recorte (lado agudo), tampo sunburst tabaco com filete creme,
       // escudo creme, dois humbuckers cromados com moldura creme, ponte e cordal, 4 botões dourados, chave seletora,
       // braço de jacarandá com filete e marcações trapezoidais, mão "livro aberto" preta com 3+3 tarraxas
@@ -1429,7 +1522,7 @@ const Outfit = (() => {
 <path d="M42 3.4 Q40.6 12 41.2 22 M58 3.4 Q59.4 12 58.8 22" stroke="#22361f" stroke-width=".7" fill="none" opacity=".75"/><circle cx="50" cy="2.3" r="1.6" fill="#3f5a3a" stroke="#22361f" stroke-width=".6"/>
 <g font-family="Georgia,'Times New Roman',serif" font-size="6.6" font-weight="700" fill="#efe6c8" text-anchor="middle"><text x="46.6" y="12.6">B</text><text x="50" y="15.4">L</text><text x="53.4" y="18.2">V</text></g>
 <path d="M33 21 Q50 31 67 21 L65.4 18.6 Q50 26.6 34.6 18.6 Z" fill="#c9b48f" stroke="#8f7a55" stroke-width=".8"/><path d="M36 21.6 Q50 28.6 64 21.6" stroke="#e8dcc0" stroke-width=".5" fill="none" stroke-dasharray="1 .8"/></g>` },
-    { id: 'bellato', name: '5Panel Bellato', slot: 'head', rare: true, layer: 'top', box: '27 -8 46 38',
+    { id: 'bellato', name: '5Panel Bellato', slot: 'head', layer: 'top', box: '27 -8 46 38',
       // 5 panel oncinha rosado: painel da frente e aba em oncinha, laterais rosadas em cima e tela cinza embaixo com faixa
       // refletiva, patch redondo com a cabeça de um tucano e "ALICE"; desenhado por cima dos olhos para a aba aparecer
       svg: () => `<defs><pattern id="leoPrint" width="4.6" height="4.6" patternUnits="userSpaceOnUse"><rect width="4.6" height="4.6" fill="#ecc9bd"/><ellipse cx="1.3" cy="1.3" rx=".62" ry=".5" fill="#a5643c"/><path d="M0.4 1.1 q.3 -.9 1.2 -.75 M2.25 1.0 q.35 .8 -.25 1.15 M0.55 1.85 q.6 .5 1.2 .25" stroke="#2e1f1a" stroke-width=".5" fill="none" stroke-linecap="round"/><ellipse cx="3.6" cy="3.5" rx=".62" ry=".5" fill="#a5643c"/><path d="M2.7 3.3 q.3 -.9 1.2 -.75 M4.55 3.2 q.35 .8 -.25 1.15 M2.85 4.05 q.6 .5 1.2 .25" stroke="#2e1f1a" stroke-width=".5" fill="none" stroke-linecap="round"/><path d="M3.4 .8 q.4 -.3 .7 .1 M.7 3.7 q.4 .3 .7 -.1" stroke="#2e1f1a" stroke-width=".45" fill="none" stroke-linecap="round"/></pattern>
@@ -1447,19 +1540,22 @@ const Outfit = (() => {
 <path d="M49.7 13.4 Q51.8 12.9 53.6 13.6" stroke="#6d6a70" stroke-width=".2" fill="none"/><circle cx="48.7" cy="13.1" r=".5" fill="#e9c8bd"/><circle cx="48.75" cy="13.1" r=".22" fill="#6d6a70"/>
 <path d="M30.5 21.2 Q50 34 69.5 21.2 Q50 31.4 30.5 21.2 Z" fill="#3a2620" opacity=".28"/>
 <path d="M30 19.6 Q50 32.4 70 19.6 L67.8 17 Q50 27.4 32.2 17 Z" fill="url(#leoPrint)" stroke="#c98f80" stroke-width="1.3" stroke-linejoin="round"/><path d="M32.6 17.6 Q50 27.8 67.4 17.6" stroke="#7a5f58" stroke-width=".7" fill="none" opacity=".7"/></g>` },
-    { id: 'oculos3d', name: 'Óculos de estrela', slot: 'eyes', rare: true, space: true, box: '14 8 72 38',
+    { id: 'oculos3d', name: 'Óculos de estrela', slot: 'eyes', space: true, box: '14 8 72 38',
       svg: () => {
         const star = (x, y) => `<path transform="translate(${x} ${y}) scale(1.25)" d="M0 -11 l3.2 6.6 7.3 1 -5.3 5.1 1.3 7.2 -6.5 -3.4 -6.5 3.4 1.3 -7.2 -5.3 -5.1 7.3 -1z" fill="#ff6ad5" fill-opacity=".55" stroke="#ffd23f" stroke-width="2.2" stroke-linejoin="round"/>`;
         return `${star(31, 26)}${star(69, 26)}<path d="M44 24 Q50 20 56 24" stroke="#ffd23f" stroke-width="2.2" fill="none"/>`;
       } }
   ];
-  // grupos do guarda-roupa: cabeça (chapéus, óculos, antenas…), corpo e o que ele segura
-  const GROUP = { head: 'cabeca', eyes: 'cabeca', torso: 'corpo', neck: 'corpo', chest: 'corpo', strap: 'corpo', feet: 'corpo', back: 'corpo', hand: 'mao' };
+  // categorias do guarda-roupa
+  const GROUP = { head: 'cabeca', eyes: 'oculos', torso: 'corpo', back: 'corpo', ride: 'corpo', feet: 'pes', neck: 'acess', chest: 'acess', strap: 'acess', hand: 'acess' };
   // ordem de desenho na frente do corpo (de baixo para cima)
   const FRONT = ['feet', 'torso', 'back', 'neck', 'chest', 'strap'];
   const BY = Object.fromEntries(ITEMS.map(i => [i.id, i]));
-  let worn = Store.get('outfit', {});
+  let worn = Store.get('outfit', {}), wornRed = Store.get('outfitRed', {});    // roupa do sapo verde (o jogador) e do vermelho
   if (!worn || typeof worn !== 'object') worn = {};
+  if (!wornRed || typeof wornRed !== 'object') wornRed = {};
+  const flies = o => !!o && Object.values(o).some(id => BY[id] && BY[id].fly);     // mochila a jato: o sapo flutua
+  const big = o => flies(o) || !!(o && o.ride);       // ocupa mais espaço em volta do sapo (chama, caixa)
   function layers(o, red) {
     const L = { back: '', head: '', under: '', front: '', eyes: '', hand: '', top: '' };
     const get = slot => BY[o[slot]];
@@ -1474,17 +1570,21 @@ const Outfit = (() => {
       if (it.sole) L.under += it.sole();     // sandália: sola por baixo dos pés
       if (slot === 'back') { if (it.front) L[k] += it.front(); } else L[k] += it.svg(red);
     }
+    const ride = get('ride');      // caixa de brinquedo: fundo atrás do sapo, plástico e rótulo por cima de tudo do corpo
+    if (ride) { L.back = ride.svg(red) + L.back; L.front += ride.front(); }
     L.shoes = !!get('feet') && !get('feet').open;     // de sapato: sem dedinhos (sandália aberta mostra os dedos)
     return L;
   }
   function preview(id) { const it = BY[id]; return `<svg viewBox="${it.box}" overflow="visible" aria-hidden="true">${it.sole ? it.sole() : ''}${it.svg(false)}${it.front ? it.front() : ''}</svg>`; }
   return {
-    ITEMS, BY, GROUP, layers, preview,
+    ITEMS, BY, GROUP, layers, preview, flies, big,
     get worn() { return { ...worn }; },
-    wear(id) { const it = BY[id]; if (!it) return; if (worn[it.slot] === id) delete worn[it.slot]; else worn[it.slot] = id; Store.set('outfit', worn); },
-    isWorn: id => BY[id] && worn[BY[id].slot] === id,
-    // removes items the player has not earned (e.g. progress reset)
-    prune(owned) { let ch = false; for (const k in worn) if (!owned.includes(worn[k])) { delete worn[k]; ch = true; } if (ch) Store.set('outfit', worn); },
+    get wornRed() { return { ...wornRed }; },
+    // veste/tira (red: no sapinho vermelho)
+    wear(id, red) { const it = BY[id], o = red ? wornRed : worn; if (!it) return; if (o[it.slot] === id) delete o[it.slot]; else o[it.slot] = id; Store.set(red ? 'outfitRed' : 'outfit', o); },
+    isWorn: (id, red) => BY[id] && (red ? wornRed : worn)[BY[id].slot] === id,
+    // tira o que o jogador não ganhou (ex.: progresso zerado)
+    prune(owned) { for (const [o, k] of [[worn, 'outfit'], [wornRed, 'outfitRed']]) { let ch = false; for (const s in o) if (!owned.includes(o[s])) { delete o[s]; ch = true; } if (ch) Store.set(k, o); } },
     // botão "Usar agora" do prêmio novo: veste; tocar de novo em "Usando" desfaz e volta à roupa de antes
     toggleUse(b) {
       if (b.classList.contains('on')) { worn = { ...b._prev }; b.textContent = 'Usar agora'; }
@@ -2044,7 +2144,7 @@ const UI = (() => {
 
   // ---- telas ----
   function show(id) {
-    if (id === 'home') { const k = JSON.stringify(Outfit.worn); if (k !== heroKey) { heroKey = k; $('heroArt').innerHTML = Art.heroScene(); } }   // só redesenha se a roupa mudou
+    if (id === 'home') { const k = JSON.stringify([Outfit.worn, Outfit.wornRed]); if (k !== heroKey) { heroKey = k; $('heroArt').innerHTML = Art.heroScene(); if (window.heroZoom) heroZoom.reset(); } }   // só redesenha se a roupa mudou
     document.querySelectorAll('.screen').forEach(s => s.classList.toggle('active', s.id === id));
     app.scrollTop = 0;                               // o foco num botão de painel pode ter rolado o contêiner
     $('bubbles').hidden = id === 'career' || id === 'wardrobe';   // telas que cobrem o fundo: bolhas desligadas
@@ -2608,26 +2708,29 @@ const Career = (() => {
   const TOTAL = MAIN.reduce((a, r) => a + r.count, 0);            // 50 fases da carreira
   const ALL = TOTAL + REGIONS.find(r => r.bonus).count;           // + 10 do bônus
   let bonusOpen = !!Store.get('bonus', false);
-  // apetrechos ganhos ao concluir certas fases, do mais simples ao mais nobre
-  // Prêmios: um em cada fase do tutorial; depois, um a cada 5 fases; a última fase dá coroa e troféu;
-  // no pântano espacial, um a cada 5 fases. Do mais simples ao mais nobre.
+  /* Prêmios da trilha: um em cada fase do tutorial; em cada pântano, dois no meio (óculos, calçados, acessórios),
+     um boné/chapéu na última fase e um premium para quem fizer o pântano todo com 3★ (RARE, mais abaixo).
+     O Expert já dá pistas do espaço (óculos de estrela, mochila a jato e, com 3★, o capacete). */
   const PRIZE = {};               // índice da fase → itens
   {
-    const tut = REGIONS[0].count;
-    ['cardigan', 'loafer', 'celular'].forEach((id, i) => { PRIZE[i] = [id]; });
-    const every5 = ['bolovo', 'zerezes', 'cachecol', 'oculos', 'linus', 'pirata', 'medalha', 'guitarra', 'manto'];
-    for (let k = 0, i = tut + 4; i < TOTAL - 1 && k < every5.length; i += 5, k++) PRIZE[i] = [every5[k]];
-    PRIZE[tut + 11] = ['oldskool'];       // Iniciante 12
-    PRIZE[TOTAL - 1] = ['coroa', 'trofeu'];
-    PRIZE[TOTAL + 4] = ['antenas']; PRIZE[ALL - 1] = ['capacete', 'jetpack'];
+    const S = []; REGIONS.reduce((a, R, r) => (S[r] = a, a + R.count), 0);
+    const at = (r, n, ...ids) => { PRIZE[S[r] + n - 1] = ids; };      // pântano r, mapa n
+    at(0, 1, 'cardigan'); at(0, 2, 'loafer'); at(0, 3, 'celular');
+    at(1, 5, 'oldskool'); at(1, 10, 'oculos'); at(1, 13, 'bolovo');
+    at(2, 4, 'zerezes'); at(2, 8, 'linus'); at(2, 12, 'bellato');
+    at(3, 4, 'cachecol'); at(3, 8, 'gravata'); at(3, 12, 'pirata');
+    at(4, 3, 'oculos3d'); at(4, 7, 'jetpack'); at(4, 10, 'coroa', 'trofeu');
+    at(5, 5, 'botas'); at(5, 10, 'antenas');
   }
+  // desafio do dia com nota 3★ (na 1ª tentativa do dia): coleção, um item a cada tantas vezes
+  const DAILY = [[1, 'bone'], [2, 'cartola'], [3, 'manto'], [5, 'asas'], [10, 'coracao'], [15, 'bandana'], [20, 'fone'], [25, 'pochete'], [30, 'picole'], [40, 'skate']];
   let done = Math.max(0, Math.min(bonusOpen ? ALL : TOTAL, +Store.get('career', 0) || 0));
   /* Estrelas (1 a 3 por fase, vale a melhor; no tutorial sempre 3). Um pântano só abre com 2×fases + metade das fases
      (arredondada para baixo) em estrelas no pântano anterior: ex. Iniciante (13) → 32 = 6 fases com 3★ e 7 com 2★.
      O Iniciante pede as 9 do tutorial.
      Fechar um pântano inteiro com 3★ (do Iniciante em diante) dá um prêmio raro. */
   const START = []; REGIONS.reduce((a, R, r) => (START[r] = a, a + R.count), 0);
-  const RARE = { iniciante: 'bellato', medio: 'gravata', avancado: 'capa', expert: 'asas', espaco: 'oculos3d' };
+  const RARE = { iniciante: 'medalha', medio: 'guitarra', avancado: 'capa', expert: 'capacete', espaco: 'foguete' };    // pântano todo com 3★
   let stars = Store.get('stars', null), opened = Store.get('opened', null), rare = Store.get('rare', []);
   if (!Array.isArray(stars)) {        // quem já jogava antes das estrelas: fases feitas valem 1★ e os pântanos já alcançados seguem abertos
     stars = Array.from({ length: ALL }, (_, i) => i < done ? 1 : 0);
@@ -2661,6 +2764,27 @@ const Career = (() => {
     REGIONS.forEach((R, r) => { const g = RARE[R.id]; if (g && done >= START[r] + R.count && stars.slice(START[r], START[r] + R.count).every(v => v === 3) && !rare.includes(g)) rare.push(g); });
     Store.set('rare', rare); Store.set('prizeSwap2', true);
   }
+  /* Ordem por categoria (bonés no fim dos pântanos, premium com 3★, coleção no desafio do dia): de novo ninguém perde o
+     que tinha, quem já fechou pântano com 3★ ganha o premium novo, e a coleção do desafio continua de onde a pessoa está. */
+  if (!Store.get('prizeSwap3', false)) {
+    const OLD = [[7, 'bolovo'], [12, 'zerezes'], [14, 'oldskool'], [17, 'cachecol'], [22, 'oculos'], [27, 'linus'], [32, 'pirata'], [37, 'medalha'], [42, 'guitarra'],
+      [47, 'manto'], [49, 'coroa'], [49, 'trofeu'], [54, 'antenas'], [59, 'capacete'], [59, 'jetpack']];
+    const have = owned();
+    for (const [i, id] of OLD) if (done > i && !have.includes(id) && !rare.includes(id)) rare.push(id);
+    REGIONS.forEach((R, r) => { const g = RARE[R.id]; if (g && done >= START[r] + R.count && stars.slice(START[r], START[r] + R.count).every(v => v === 3) && !rare.includes(g)) rare.push(g); });
+    const mine = owned(); Store.set('daily3', DAILY.reduce((n, [k, id]) => mine.includes(id) ? Math.max(n, k) : n, 0));
+    Store.set('rare', rare); Store.set('prizeSwap3', true);
+  }
+  // desafio do dia com 3★: conta mais uma vez e entrega o que a coleção já liberou (devolve os itens novos ou null)
+  function dailyWin() {
+    const n = (+Store.get('daily3', 0) || 0) + 1, mine = owned(); Store.set('daily3', n);
+    const got = DAILY.filter(([k, id]) => k <= n && !mine.includes(id)).map(([, id]) => id);
+    if (got.length) { rare.push(...got); Store.set('rare', rare); }
+    return got.length ? got : null;
+  }
+  // ordem em que os apetrechos saem (trilha, 3★ de cada pântano, coleção do desafio): organiza o guarda-roupa
+  const ORDER = REGIONS.flatMap((R, r) => Object.keys(PRIZE).filter(i => +i >= START[r] && +i < START[r] + R.count).sort((a, b) => a - b).flatMap(i => PRIZE[i]).concat(RARE[R.id] || []))
+    .concat(DAILY.map(([, id]) => id));
   let list = null, built = null, nodes = [], finalPos = null, portalPos = null, starPos = null, lastW = 0, avatar = null;
   const map = $('cmap'), inner = $('cmapInner');
   let baseRects = [], mapKey = '';
@@ -3124,7 +3248,7 @@ ${tw.join('')}<div class="cbanner${canUnlock(REGIONS.indexOf(R)) ? ' can' : ''}"
   }
   // prêmio fora da trilha (ex.: desafio do dia perfeito); devolve true se for novo
   function grant(id) { if (rare.includes(id)) return false; rare.push(id); Store.set('rare', rare); return true; }
-  return { open, complete, relayout, ensureBuilt, syncBase, dailyPick, grant, get stars() { return stars.slice(); }, totalStars, playable, get dailyCount() { dailyPick(0); return { iniciante: dailyClasses.filter(x => x.id === 'iniciante').length, medio: dailyClasses.filter(x => x.id === 'medio').length }; }, seeded, cardFor, owned, openBonus, bigBang, REGIONS, TOTAL, ALL, PRIZE, BONUS, get bonusOpen() { return bonusOpen; }, set bonusOpen(v) { bonusOpen = v; }, get list() { return list; }, get done() { return done; }, set done(v) { done = v; } };
+  return { open, complete, relayout, ensureBuilt, syncBase, dailyPick, grant, dailyWin, ORDER, DAILY, RARE, get stars() { return stars.slice(); }, totalStars, playable, get dailyCount() { dailyPick(0); return { iniciante: dailyClasses.filter(x => x.id === 'iniciante').length, medio: dailyClasses.filter(x => x.id === 'medio').length }; }, seeded, cardFor, owned, openBonus, bigBang, REGIONS, TOTAL, ALL, PRIZE, BONUS, get bonusOpen() { return bonusOpen; }, set bonusOpen(v) { bonusOpen = v; }, get list() { return list; }, get done() { return done; }, set done(v) { done = v; } };
 })();
 
 /* ---------------------------------------------------------------------
@@ -3157,7 +3281,8 @@ const Daily = (() => {
     return moves.map((mv, i) => { const t = mv >= 2 * mins[i] ? 'x' : starsFor(mv, mins[i]), n = seen[t] = (seen[t] || 0) + 1; return MOODS[t][(off + n - 1) % 3]; });
   }
   const sum = a => a.reduce((x, y) => x + y, 0);
-  const grade = r => starsFor(sum(r.moves) / r.moves.length, sum(r.mins) / r.mins.length);   // nota do desafio = média de pulos por mapa contra a média dos mínimos
+  // nota do desafio pela soma dos pulos: 3★ até 2 acima da soma dos mínimos; 2★ até 4 a mais por mapa (em média); 1★ acima disso
+  const grade = r => { const over = sum(r.moves) - sum(r.mins); return over <= 2 ? 3 : over <= 4 * r.mins.length ? 2 : 1; };
   let run = null, afterWin = false, shown = null, tick = 0;   // run: { date, phase, t0, acc, moves[5] }; shown = data aberta no painel
   // partida salva: ao sair do desafio ou do app, o mapa, o tabuleiro e os movimentos ficam guardados
   const saved = () => { const v = Store.get('dailyRun', null); return v && v.v === 2 && v.date === today() ? v : null; };
@@ -3190,7 +3315,7 @@ const Daily = (() => {
   function openPanel(justWon, just, prize) {
     afterWin = !!justWon;
     $('dPrize').hidden = !prize;
-    if (prize) $('dPrize').innerHTML = Outfit.preview(prize) + `<span>Você ganhou: ${Outfit.BY[prize].name}!</span><button type="button" class="use-now" data-ids="${prize}">Usar agora</button>`;
+    if (prize) $('dPrize').innerHTML = prize.map(id => Outfit.preview(id)).join('') + `<span>Você ganhou: ${prize.map(id => Outfit.BY[id].name).join(' e ')}!</span><button type="button" class="use-now" data-ids="${prize.join(',')}">Usar agora</button>`;
     const r = just || result(), d = just ? just.date : today();
     $('dCalDay').textContent = String(+d.slice(8));
     $('dDate').textContent = dateBR(d, true);
@@ -3331,9 +3456,8 @@ const Daily = (() => {
     const mins = []; for (let i = 0; i < N; i++) mins.push(i === k ? Rules.greens(c.start) : Rules.greens((await card(run.date, i)).start));
     const r = { date: run.date, time: Math.round(run.acc), moves: run.moves.slice(), mins }, first = !result();
     if (first) Store.set('daily', r);
-    // todos os mapas no mínimo de movimentos, na tentativa que vale: 1º desafio perfeito dá o boné de hélice, o 2º a cartola
-    const perfect = first && r.moves.every((mv, i) => mv === mins[i]);
-    const prize = !perfect ? null : Career.grant('bone') ? 'bone' : Career.grant('cartola') ? 'cartola' : null;
+    // nota 3★ na tentativa que vale (a 1ª do dia): mais um na coleção do desafio
+    const prize = first && grade(r) === 3 ? Career.dailyWin() : null;
     stop(); paintButton(); openPanel(true, r, prize);   // mostra o resultado mesmo se o desafio virou a meia-noite
   }
   document.addEventListener('visibilitychange', () => {
@@ -3360,37 +3484,102 @@ const Daily = (() => {
 /* ---------------------------------------------------------------------
    Wardrobe — guarda-roupa: vestir os apetrechos ganhos na carreira
    --------------------------------------------------------------------- */
+/* Zoom só no sapo (guarda-roupa e tela inicial): pinça para aproximar (até 3×), arrastar para ver de perto e
+   toque duplo para aproximar/voltar. O resto da tela não muda; a página em si continua sem zoom. */
+function zoomable(host, area, pick) {
+  let s = 1, x = 0, y = 0, lastTap = 0;
+  const pts = new Map(); let g = null;
+  const el = () => host.querySelector(pick);
+  function apply() {
+    const t = el(); if (!t) return;
+    const box = t.getBoundingClientRect(), w = box.width / s || 1, h = box.height / s || 1;
+    const mx = (s - 1) * w / 2, my = (s - 1) * h / 2; x = Math.max(-mx, Math.min(mx, x)); y = Math.max(-my, Math.min(my, y));
+    t.style.transformOrigin = '50% 50%'; t.style.transform = s > 1.01 ? `translate(${x}px,${y}px) scale(${s})` : '';
+    const a = host.querySelector(area); if (a) a.classList.toggle('zoomed', s > 1.01);
+  }
+  function reset() { s = 1; x = 0; y = 0; apply(); }
+  const dist = () => { const [a, b] = [...pts.values()]; return Math.hypot(a.x - b.x, a.y - b.y); };
+  host.addEventListener('pointerdown', e => {
+    if (!e.target.closest(area)) return;
+    pts.set(e.pointerId, { x: e.clientX, y: e.clientY });
+    g = pts.size === 2 ? { d: dist(), s } : { px: e.clientX, py: e.clientY, x, y, moved: false };
+  });
+  host.addEventListener('pointermove', e => {
+    if (!pts.has(e.pointerId) || !g) return;
+    pts.set(e.pointerId, { x: e.clientX, y: e.clientY });
+    if (pts.size === 2 && g.d) { s = Math.max(1, Math.min(3, g.s * dist() / g.d)); if (s === 1) { x = 0; y = 0; } apply(); }
+    else if (pts.size === 1 && g.px != null) {
+      const dx = e.clientX - g.px, dy = e.clientY - g.py; if (Math.abs(dx) + Math.abs(dy) > 6) g.moved = true;
+      if (s > 1) { x = g.x + dx; y = g.y + dy; apply(); }
+    }
+  });
+  const up = e => {
+    if (!pts.has(e.pointerId)) return;
+    const single = pts.size === 1 && g && g.px != null && !g.moved;
+    pts.delete(e.pointerId); g = pts.size === 1 ? { px: [...pts.values()][0].x, py: [...pts.values()][0].y, x, y, moved: true } : null;
+    if (!single || e.type !== 'pointerup') return;
+    const now = performance.now();
+    if (now - lastTap < 320) {      // toque duplo: aproxima no ponto tocado (ou volta)
+      lastTap = 0; if (s > 1) { reset(); return; }
+      const t = el(); if (!t) return; const r = t.getBoundingClientRect();
+      s = 2.2; x = (r.left + r.width / 2 - e.clientX) * (s - 1); y = (r.top + r.height / 2 - e.clientY) * (s - 1); apply();
+    } else lastTap = now;
+  };
+  host.addEventListener('pointerup', up); host.addEventListener('pointercancel', up);
+  host.addEventListener('wheel', e => { if (!e.target.closest(area)) return; e.preventDefault(); s = Math.max(1, Math.min(3, s * (e.deltaY < 0 ? 1.12 : 1 / 1.12))); if (s === 1) { x = 0; y = 0; } apply(); }, { passive: false });
+  return { reset, apply };
+}
+
+/* ---------------------------------------------------------------------
+   Guarda-roupa: veste o sapo verde (o jogador) ou o sapinho vermelho com o que já foi ganho.
+   Todos os apetrechos aparecem, por categoria e na ordem em que saem; os que faltam ficam só
+   na silhueta cinza, com "???" no lugar do nome, para dar vontade de ir atrás.
+   --------------------------------------------------------------------- */
+window.heroZoom = zoomable($('heroArt'), '.hero-frog', '.hero-frog > svg');     // zoom no sapo da tela inicial
 const Wardrobe = (() => {
   const grid = $('wGrid');
-  const SECTIONS = [['cabeca', 'Cabeça'], ['corpo', 'Corpo'], ['mao', 'Para segurar']];
-  // Só aparece o que já foi ganho na trilha; nada de prévia do que ainda falta.
+  const SECTIONS = [['cabeca', 'Cabeça'], ['oculos', 'Óculos'], ['corpo', 'Corpo'], ['pes', 'Calçados'], ['acess', 'Acessórios']];
+  const rank = id => { const i = Career.ORDER.indexOf(id); return i < 0 ? 999 : i; };
+  let red = false;          // vestindo o sapinho vermelho
+  const zoom = zoomable($('wStage'), '.wzoom', '.wzoom > svg');
+  // os dois sapos lado a lado; o escolhido (toque nele) tem a vitória-régia em destaque
+  function stageFrog(isRed, dx) {
+    const o = isRed ? Outfit.wornRed : Outfit.worn, sel = isRed === red;
+    return `<g class="wfrog${sel ? ' sel' : ''}" data-red="${isRed ? 1 : 0}" transform="translate(${dx} 0)" role="button" aria-label="Vestir o sapo ${isRed ? 'vermelho' : 'verde'}">
+<ellipse cx="50" cy="97" rx="50" ry="12" fill="#063f78" opacity=".25"/>
+<path d="M4 94 A46 11 0 1 0 96 94 A46 11 0 0 0 56 83 L50 94 L45 83 A46 11 0 0 0 4 94Z" fill="url(#lily)" stroke="${sel ? '#ffd23f' : '#155f1a'}" stroke-width="${sel ? 3 : 1}"/>
+${Art.frog(isRed ? 'red' : 'green', { outfit: o, attrs: 'x="0" y="5" width="100" height="100"' })}
+<rect x="22" y="${sel ? 113 : 114}" width="56" height="13" rx="6.5" fill="${sel ? '#fffdf4' : 'rgba(255,255,255,.45)'}" stroke="${sel ? '#2fbf3a' : 'none'}" stroke-width="2"/>
+<text x="50" y="${sel ? 122.4 : 123.4}" text-anchor="middle" font-family="Nunito,system-ui,sans-serif" font-weight="900" font-size="8" fill="#123">${isRed ? 'Vermelho' : 'Verde'}</text></g>`;
+  }
   function render() {
     const owned = Career.owned();
     Outfit.prune(owned);
-    $('wStage').innerHTML = `<svg viewBox="-12 -22 124 132" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
-<ellipse cx="50" cy="97" rx="50" ry="12" fill="#063f78" opacity=".25"/>
-<path d="M4 94 A46 11 0 1 0 96 94 A46 11 0 0 0 56 83 L50 94 L45 83 A46 11 0 0 0 4 94Z" fill="url(#lily)" stroke="#155f1a" stroke-width="1"/>
-${Art.frog('green', { outfit: Outfit.worn, attrs: 'x="0" y="5" width="100" height="100"' })}</svg>`;
-    const mine = Outfit.ITEMS.filter(it => owned.includes(it.id));
-    if (!mine.length) {
-      grid.innerHTML = `<div class="wempty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4h10v5a5 5 0 0 1-10 0z"/><path d="M17 5h3v2a4 4 0 0 1-3.6 4M7 5H4v2a4 4 0 0 0 3.6 4"/><path d="M12 14v3M8.5 20h7M9.5 17h5v3h-5z"/></svg><b>Seu guarda-roupa está vazio</b></div>`;
-      return;
-    }
+    const big = Outfit.big(Outfit.worn) || Outfit.big(Outfit.wornRed);
+    $('wStage').innerHTML = `<div class="wzoom"><svg viewBox="${big ? '-14 -40 248 170' : '-10 -20 240 150'}" preserveAspectRatio="xMidYMid meet" aria-hidden="false">
+${stageFrog(false, 0)}${stageFrog(true, 120)}</svg></div>`;
+    zoom.apply();
     grid.innerHTML = SECTIONS.map(([g, title]) => {
-      const items = mine.filter(it => Outfit.GROUP[it.slot] === g);
-      if (!items.length) return '';
+      const items = Outfit.ITEMS.filter(it => Outfit.GROUP[it.slot] === g).sort((a, b) => rank(a.id) - rank(b.id));
       return `<h4 class="wsec">${title}</h4>` + items.map(it => {
-        const on = Outfit.isWorn(it.id);
+        if (!owned.includes(it.id)) return `<button type="button" class="witem locked" data-id="${it.id}" aria-label="Apetrecho ainda não ganho"><span class="pv">${Outfit.preview(it.id)}</span><b>???</b></button>`;
+        const on = Outfit.isWorn(it.id, red);
         return `<button type="button" class="witem${on ? ' worn' : ''}" data-id="${it.id}" aria-pressed="${on}"><span class="pv">${Outfit.preview(it.id)}</span><b>${it.name}</b></button>`;
       }).join('');
     }).join('');
   }
   grid.addEventListener('click', e => {
     const b = e.target.closest('.witem'); if (!b) return;
-    Outfit.wear(b.dataset.id); Sound.pick(); render();
+    if (b.classList.contains('locked')) { Sound.click(); animate(b, [0, -5, 5, -3, 3, 0].map(v => ({ transform: `translateX(${v}px)` })), { duration: 300 }); return; }
+    Outfit.wear(b.dataset.id, red); Sound.pick(); render();
+  });
+  $('wStage').addEventListener('click', e => {
+    const f = e.target.closest('.wfrog'); if (!f) return;
+    const r = f.dataset.red === '1'; if (r === red) return;
+    red = r; Sound.click(); render();
   });
   $('btnWardHome').addEventListener('click', () => { Sound.click(); UI.show('home'); });
-  function open() { UI.hideOverlays(); UI.show('wardrobe'); render(); }
+  function open() { UI.hideOverlays(); UI.show('wardrobe'); red = false; zoom.reset(); render(); }
   return { open, render };
 })();
 
@@ -3495,8 +3684,13 @@ const Tests = {
     const CL = Career.list;
     const RC = Career.REGIONS.map(r => r.count);
     t('carreira: 50 fases; expert 10, avançado 12, iniciante ≥ médio ≥ avançado > expert', Career.TOTAL === 50 && CL.length === 60 && RC[4] === 10 && RC[3] === 12 && RC[1] >= RC[2] && RC[2] >= RC[3], RC.slice(0, 5).join(' + ') + ' (+10 bônus)');
-    t('prêmios: 1 por fase do tutorial, depois 1 a cada 5 fases (+ Vans no Iniciante 12); 18 apetrechos sem repetir', [0, 1, 2].every(i => Career.PRIZE[i]) && Career.PRIZE[14][0] === 'oldskool' && Career.PRIZE[12][0] === 'zerezes' && Career.PRIZE[27][0] === 'linus' && Career.PRIZE[42][0] === 'guitarra' && [7, 12, 17, 22, 27, 32, 37, 42, 47, 49, 54, 59].every(i => Career.PRIZE[i]) && Object.keys(Career.PRIZE).length === 16 && new Set(Object.values(Career.PRIZE).flat()).size === 18 && Outfit.ITEMS.filter(i => !i.rare).length === 18);
-    t('prêmios raros: 5 por pântano inteiro com 3★ (Bellato, Gravata, Capa, Asas, Óculos de estrela) + boné de hélice e cartola do desafio perfeito', Outfit.ITEMS.filter(i => i.rare).length === 7 && ['bellato', 'gravata', 'capa', 'asas', 'oculos3d', 'bone', 'cartola'].every(id => Outfit.BY[id].rare) && Career.PRIZE[7][0] === 'bolovo' && Outfit.ITEMS.filter(i => i.rare).every(i => !Object.values(Career.PRIZE).flat().includes(i.id)));
+    const P = Career.PRIZE, at = (r, n) => P[Career.REGIONS.slice(0, r).reduce((a, R) => a + R.count, 0) + n - 1] || [];
+    t('prêmios da trilha: tutorial 1-3, dois no meio de cada pântano, boné/chapéu na última fase; 18 apetrechos sem repetir',
+      at(0, 1)[0] === 'cardigan' && at(1, 5)[0] === 'oldskool' && at(1, 10)[0] === 'oculos' && at(1, 13)[0] === 'bolovo' && at(2, 12)[0] === 'bellato' && at(3, 12)[0] === 'pirata' && at(4, 10).join() === 'coroa,trofeu' && at(5, 10)[0] === 'antenas'
+      && new Set(Object.values(P).flat()).size === 18 && Object.values(P).flat().every(id => Outfit.BY[id] && !Outfit.BY[id].rare));
+    t('prêmios fora da trilha (marcados rare): 5 de pântano com 3★ + 10 da coleção do desafio; ninguém fica sem jeito de ganhar',
+      Outfit.ITEMS.filter(i => i.rare).length === 15 && Object.values(Career.RARE).concat(Career.DAILY.map(d => d[1])).every(id => Outfit.BY[id] && Outfit.BY[id].rare)
+      && Outfit.ITEMS.every(it => Career.ORDER.includes(it.id)) && Career.ORDER.length === Outfit.ITEMS.length);
     t('estrelas: 3 no mínimo, 2 até +4, 1 acima', starsFor(5, 5) === 3 && starsFor(6, 5) === 2 && starsFor(9, 5) === 2 && starsFor(10, 5) === 1);
     t('tutorial com 1, 2 e 3 sapos verdes', [0, 1, 2].every(i => Rules.greens(CL[i].start) === i + 1));
     t('todas as fases da carreira têm solução', CL.filter(l => !Career.REGIONS[l.region].bonus).every(l => !!Solver.solve(l.start)));
@@ -3555,7 +3749,7 @@ const Tests = {
   if (icon) { $('touchIcon').href = icon; $('insIcon').src = icon; } else $('insIcon').classList.add('hidden');
   try { $('favIcon').href = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(Art.appIconSVG()); } catch (e) {}
   Art.appIconPNG(180).then(png => { if (png) { $('touchIcon').href = png; $('insIcon').src = png; $('insIcon').classList.remove('hidden'); } });
-  $('heroArt').innerHTML = Art.heroScene();
+  $('heroArt').innerHTML = Art.heroScene(); heroZoom.reset();
   app.classList.toggle('is-muted', Sound.muted);
   // bolhas decorativas
   if (!reduceMotion()) {
