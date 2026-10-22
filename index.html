@@ -3215,11 +3215,16 @@ const Daily = (() => {
     if (android) a.removeAttribute('target'); else a.target = '_blank';
   }
   function closePanel() { $('ovDaily').classList.remove('show'); Base.dim(false); if (afterWin) { afterWin = false; UI.show('home'); } }
-  /* As 5 fases do dia, sempre 3×3: 3 do Iniciante e 2 do Médio, em posições sorteadas pela data.
+  /* As 5 fases do dia, sempre 3×3: 3 do Iniciante e 2 do Médio. Os 2 primeiros mapas são sempre do Iniciante;
+     os 2 do Médio ficam entre os 3 últimos, em posições sorteadas pela data (até 22/10 podiam cair em qualquer posição).
      Cada nível segue uma ordem embaralhada fixa, sem repetir desenho até esgotar: por dia andam 3 do Iniciante e 2 do Médio.
      Cada fase gira/espelha o desenho de um jeito, também pela data. Mesmo desafio para todo mundo. */
   const dayIndex = iso => { const [y, m, d] = iso.split('-').map(Number); return Math.round((Date.UTC(y, m - 1, d) - Date.UTC(2026, 9, 21)) / 864e5); };
-  const hardAt = iso => { const h = hash('froggo-easy-' + iso), a = h % N; return [a, (a + 1 + Math.floor(h / N) % (N - 1)) % N].sort((x, y) => x - y); };
+  const hardAt = iso => {
+    const h = hash('froggo-easy-' + iso);
+    if (iso < '2026-10-23') { const a = h % N; return [a, (a + 1 + Math.floor(h / N) % (N - 1)) % N].sort((x, y) => x - y); }   // não muda o desafio já em andamento
+    const skip = 2 + h % 3; return [2, 3, 4].filter(x => x !== skip);
+  };
   const kindOf = (iso, k) => {
     const d = dayIndex(iso), m = hardAt(iso), i = m.indexOf(k);
     return i >= 0 ? ['medio', 3, 2 * d + i] : ['iniciante', 3, 3 * d + k - m.filter(x => x < k).length];
@@ -3500,8 +3505,8 @@ const Tests = {
     t('mapa do dia: sempre do Iniciante ou do Médio e sempre com solução (120 dias testados)', dailyOk);
     // desafio do dia: 5 fases, 3 do Iniciante + 2 do Médio, sem repetir desenho
     let mix = true;
-    for (let d = 21; d <= 31; d++) { const iso = '2026-10-' + d, k = [0, 1, 2, 3, 4].map(i => Daily.kindOf(iso, i)[0]); if (k.filter(x => x === 'iniciante').length !== 3 || k.filter(x => x === 'medio').length !== 2) mix = false; }
-    t('desafio do dia: 5 fases 3×3, 3 do Iniciante e 2 do Médio', mix);
+    for (let d = 21; d <= 31; d++) { const iso = '2026-10-' + d, k = [0, 1, 2, 3, 4].map(i => Daily.kindOf(iso, i)[0]); if (k.filter(x => x === 'iniciante').length !== 3 || k.filter(x => x === 'medio').length !== 2 || (d >= 23 && (k[0] !== 'iniciante' || k[1] !== 'iniciante'))) mix = false; }
+    t('desafio do dia: 5 fases 3×3, 3 do Iniciante e 2 do Médio, os 2 primeiros sempre do Iniciante', mix);
     const seen = { iniciante: new Set(), medio: new Set() }, span = Math.min(120, Math.floor(Career.dailyCount.iniciante / 3)); let norep = true;   // até a fila do Iniciante dar a volta
     for (let i = 0; i < span; i++) {
       const dt = new Date(2026, 9, 21 + i), iso = `${dt.getFullYear()}-${String(dt.getMonth() + 1).padStart(2, '0')}-${String(dt.getDate()).padStart(2, '0')}`;
