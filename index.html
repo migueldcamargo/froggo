@@ -390,7 +390,8 @@ canvas.confetti{position:absolute;inset:0;width:100%;height:100%;pointer-events:
 .hidden{display:none!important}
 
 /* ---------- Guarda-roupa ---------- */
-#wardrobe{grid-template-rows:auto minmax(0,.85fr) minmax(0,1.15fr);grid-template-columns:minmax(0,1fr);gap:.5rem;grid-template-areas:"top" "stage" "grid"}
+#wardrobe{grid-template-rows:auto minmax(0,.85fr) auto minmax(0,1.15fr);grid-template-columns:minmax(0,1fr);gap:.5rem;grid-template-areas:"top" "stage" "tools" "grid"}
+.wtools{grid-area:tools;display:flex;justify-content:flex-end}      /* fora da lista: o botão fica sempre à mão */
 .ctitle .hg{color:#fff}
 .wstage{grid-area:stage;position:relative;min-height:0}
 .wzoom{position:absolute;inset:0;overflow:hidden;touch-action:none;border-radius:1rem}
@@ -417,11 +418,10 @@ canvas.confetti{position:absolute;inset:0;width:100%;height:100%;pointer-events:
 .wsec .ar{display:inline-block;transition:transform .15s ease}
 .wsec.shut .ar{transform:rotate(-90deg)}
 .wsec:focus-visible,.wall:focus-visible{outline:3px solid #ffd23f;outline-offset:2px}
-.wtop{grid-column:1/-1;display:flex;justify-content:flex-end}
 .wall{padding:.45rem 1rem;border-radius:999px;background:#fffdf4;color:#0b2545;font-weight:900;font-size:.95rem;box-shadow:0 .15rem 0 rgba(0,0,0,.15)}
 .witem.wnone .pv svg{width:2.4rem;height:2.4rem}
 .witem:active{transform:scale(.96)}
-.app.land #wardrobe{grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);grid-template-rows:auto minmax(0,1fr);grid-template-areas:"top top" "stage grid";column-gap:1rem}
+.app.land #wardrobe{grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);grid-template-rows:auto auto minmax(0,1fr);grid-template-areas:"top top" "stage tools" "stage grid";column-gap:1rem}
 .prize-won{display:flex;align-items:center;gap:.5rem;padding:.4rem .8rem;border-radius:1rem;background:#fff4c2;box-shadow:inset 0 0 0 2px #ffd23f;font-weight:900;font-size:.92rem}
 .prize-won svg{width:2.4rem;height:2.4rem;flex:none}
 .prize-won{flex-wrap:wrap;justify-content:center}
@@ -706,6 +706,7 @@ canvas.bigbang{position:absolute;inset:0;width:100%;height:100%;z-index:400;poin
       <button class="icon-btn snd" aria-label="Som ligado/desligado"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9h4l5-4v14l-5-4H4z" fill="currentColor"/><g class="sound-waves"><path d="M16 9a4 4 0 0 1 0 6"/><path d="M18.5 6.5a7.5 7.5 0 0 1 0 11"/></g><g class="muted-x"><path d="M16.5 9.5l5 5M21.5 9.5l-5 5"/></g></svg></button>
     </div>
     <div class="wstage" id="wStage"></div>
+    <div class="wtools"><button type="button" class="wall" id="wAll">Abrir tudo</button></div>
     <div class="wgrid" id="wGrid"></div>
   </section>
 
@@ -854,7 +855,7 @@ canvas.bigbang{position:absolute;inset:0;width:100%;height:100%;z-index:400;poin
 
 <script>
 'use strict';
-const BUILD = '2026-10-22.1838';      // versão publicada: trocada pela data e hora a cada publicação (ver Update, no fim); 'dev' não confere
+const BUILD = '2026-10-22.1848';      // versão publicada: trocada pela data e hora a cada publicação (ver Update, no fim); 'dev' não confere
 /* =====================================================================
    FROGGO — jogo de sapos saltadores (peg-solitaire), arquivo único e offline.
    Módulos (todos neste arquivo): Store · Geo · Rules · Solver · Gen ·
@@ -4421,8 +4422,9 @@ const Wardrobe = (() => {
   const grid = $('wGrid');
   // seções e, dentro delas, a ordem das partes; os ganhos vêm primeiro (nessa ordem) e depois os que faltam (na mesma ordem)
   const SECTIONS = [['topo', 'Topo', ['cabeca', 'oculos', 'rosto']], ['corpo', 'Corpo', ['pescoco', 'corpo', 'costas', 'mao']], ['pes', 'Calçados', ['pes']]];
-  // seções que abrem e fecham (lembradas); "Fechar tudo" / "Abrir tudo" no topo
-  let closed = Store.get('wardClosed', []); if (!Array.isArray(closed)) closed = [];
+  // seções que abrem e fecham; todas começam fechadas ao entrar. "Abrir tudo" / "Fechar tudo" fica fora da lista
+  const ALLSEC = () => ['amigos'].concat(SECTIONS.map(x => x[0]));
+  let closed = [];
   // título com quantos a pessoa já tem, sem dizer o total: "Amigos (6)"
   const head = (key, title, n) => `<button type="button" class="wsec${closed.includes(key) ? ' shut' : ''}" data-sec="${key}" aria-expanded="${!closed.includes(key)}"><span class="ar">▾</span>${title} <small>(${n})</small></button>`;
   const NONE = '<svg viewBox="0 0 24 24" fill="none" stroke="#8a96a8" stroke-width="2.4" stroke-linecap="round"><circle cx="12" cy="12" r="8.5"/><path d="M6 18L18 6"/></svg>';
@@ -4452,9 +4454,9 @@ ${Art.frog(isRed ? 'red' : 'green', { outfit: o, char: ch, attrs: 'x="0" y="5" w
     $('wStage').innerHTML = `<div class="wzoom"><svg viewBox="${big ? '-20 -40 196 172' : '-12 -20 182 150'}" preserveAspectRatio="xMidYMid meet" aria-hidden="false">
 ${stageFrog(false, 0)}${stageFrog(true, 104, .5)}</svg></div>`;
     zoom.apply();
-    const cur = red ? Outfit.charRed : Outfit.char, all = ['amigos'].concat(SECTIONS.map(x => x[0])), allShut = all.every(k => closed.includes(k));
-    grid.innerHTML = `<div class="wtop"><button type="button" class="wall" data-all="${allShut ? 'open' : 'close'}">${allShut ? 'Abrir tudo' : 'Fechar tudo'}</button></div>`
-      + head('amigos', 'Amigos', have.length) + (closed.includes('amigos') ? '' : Outfit.CHARS.map(c => {
+    const cur = red ? Outfit.charRed : Outfit.char, allShut = ALLSEC().every(k => closed.includes(k));
+    $('wAll').textContent = allShut ? 'Abrir tudo' : 'Fechar tudo'; $('wAll').dataset.all = allShut ? 'open' : 'close';
+    grid.innerHTML = head('amigos', 'Amigos', have.length) + (closed.includes('amigos') ? '' : Outfit.CHARS.map(c => {
       const pv = `<span class="pv">${c.id === 'sapo' ? Art.frog(red ? 'red' : 'green', { still: true }) : Art.creature(c.id)}</span>`;
       if (!have.includes(c.id)) return `<button type="button" class="witem wchar locked" data-char="${c.id}" aria-label="Personagem ainda não liberado">${pv}<b>???</b></button>`;
       return `<button type="button" class="witem wchar${c.id === cur ? ' worn' : ''}${fresh.includes('char:' + c.id) ? ' new' : ''}" data-char="${c.id}" aria-pressed="${c.id === cur}">${pv}<b>${c.id === 'sapo' && red ? 'Sapo vermelho' : c.name}</b></button>`;
@@ -4488,9 +4490,7 @@ ${stageFrog(false, 0)}${stageFrog(true, 104, .5)}</svg></div>`;
   }
   grid.addEventListener('click', e => {
     const sec = e.target.closest('.wsec');
-    if (sec) { const k = sec.dataset.sec; closed = closed.includes(k) ? closed.filter(x => x !== k) : closed.concat(k); Store.set('wardClosed', closed); Sound.click(); render(); return; }
-    const allB = e.target.closest('.wall');
-    if (allB) { closed = allB.dataset.all === 'close' ? ['amigos'].concat(SECTIONS.map(x => x[0])) : []; Store.set('wardClosed', closed); Sound.click(); render(); return; }
+    if (sec) { const k = sec.dataset.sec; closed = closed.includes(k) ? closed.filter(x => x !== k) : closed.concat(k); Sound.click(); render(); return; }
     const b = e.target.closest('.witem'); if (!b) return;
     if (b.dataset.none) { const parts = SECTIONS.find(x => x[0] === b.dataset.none)[2]; Outfit.clear(Object.keys(Outfit.GROUP).filter(sl => parts.includes(Outfit.GROUP[sl])), red); Sound.click(); render(); return; }
     if (b.classList.contains('locked')) {
@@ -4505,6 +4505,7 @@ ${stageFrog(false, 0)}${stageFrog(true, 104, .5)}</svg></div>`;
     }
     Outfit.wear(b.dataset.id, red); Sound.pick(); render();
   });
+  $('wAll').addEventListener('click', () => { closed = $('wAll').dataset.all === 'close' ? ALLSEC() : []; grid.scrollTop = 0; Sound.click(); render(); });
   $('wStage').addEventListener('click', e => {
     const f = e.target.closest('.wfrog'); if (!f) return;
     const r = f.dataset.red === '1'; if (r === red) return;
@@ -4514,7 +4515,7 @@ ${stageFrog(false, 0)}${stageFrog(true, 104, .5)}</svg></div>`;
   function open() {
     const owned = mine(); fresh = owned.filter(id => !seen.includes(id));     // os novos ficam com bolinha até sair do guarda-roupa
     seen = [...new Set(seen.concat(owned))]; Store.set('seen', seen);
-    UI.hideOverlays(); UI.show('wardrobe'); red = false; zoom.reset(); render();
+    UI.hideOverlays(); UI.show('wardrobe'); red = false; closed = ALLSEC(); grid.scrollTop = 0; zoom.reset(); render();
   }
   return { open, render };
 })();
