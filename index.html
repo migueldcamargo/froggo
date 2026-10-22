@@ -385,7 +385,7 @@ canvas.confetti{position:absolute;inset:0;width:100%;height:100%;pointer-events:
 .prize-won svg{width:2.4rem;height:2.4rem;flex:none}
 .prize-won{flex-wrap:wrap;justify-content:center}
 .use-now{flex:none;padding:.3rem .8rem;border-radius:999px;background:#2fbf3a;color:#fff;font-weight:900;font-size:.85rem;box-shadow:0 .15rem 0 #13701a}
-.use-now:disabled{background:#8fd99a;box-shadow:none}
+.use-now.on{background:#8fd99a;box-shadow:none}
 
 /* ---------- Mapa do dia ---------- */
 .home-right{display:flex;align-items:center;gap:.5rem;margin-left:auto}   /* fica à direita mesmo sem o botão Instalar (app instalado) */
@@ -1482,7 +1482,13 @@ const Outfit = (() => {
     wear(id) { const it = BY[id]; if (!it) return; if (worn[it.slot] === id) delete worn[it.slot]; else worn[it.slot] = id; Store.set('outfit', worn); },
     isWorn: id => BY[id] && worn[BY[id].slot] === id,
     // removes items the player has not earned (e.g. progress reset)
-    prune(owned) { let ch = false; for (const k in worn) if (!owned.includes(worn[k])) { delete worn[k]; ch = true; } if (ch) Store.set('outfit', worn); }
+    prune(owned) { let ch = false; for (const k in worn) if (!owned.includes(worn[k])) { delete worn[k]; ch = true; } if (ch) Store.set('outfit', worn); },
+    // botão "Usar agora" do prêmio novo: veste; tocar de novo em "Usando" desfaz e volta à roupa de antes
+    toggleUse(b) {
+      if (b.classList.contains('on')) { worn = { ...b._prev }; b.textContent = 'Usar agora'; }
+      else { b._prev = { ...worn }; b.dataset.ids.split(',').forEach(id => { const it = BY[id]; if (it) worn[it.slot] = id; }); b.textContent = 'Usando ✓'; }
+      Store.set('outfit', worn); b.classList.toggle('on');
+    }
   };
 })();
 
@@ -2423,11 +2429,10 @@ const UI = (() => {
   }
   function restoreDraw() { Deck.stack(false); $('levels').classList.remove('hidden'); $('btnSwap').classList.remove('hidden'); drawing = false; if (reviewing) setReview(false); }
   $('btnAgain').addEventListener('click', () => { hideOverlays(); startGame(); });
-  // prêmio novo: veste na hora, sem passar pelo guarda-roupa
+  // prêmio novo: veste na hora, sem passar pelo guarda-roupa (tocar em "Usando" desfaz)
   $('winPrize').addEventListener('click', e => {
-    const b = e.target.closest('.use-now'); if (!b || b.disabled) return;
-    b.dataset.ids.split(',').forEach(id => { if (!Outfit.isWorn(id)) Outfit.wear(id); });
-    Sound.pick(); b.textContent = 'Usando ✓'; b.disabled = true;
+    const b = e.target.closest('.use-now'); if (!b) return;
+    Outfit.toggleUse(b); b.classList.contains('on') ? Sound.pick() : Sound.click();
     const old = $('winArt').querySelector('svg.rfrog');           // o sapo da vitória troca de roupa na hora (ex.: loafer → Vans)
     if (old) { old.insertAdjacentHTML('afterend', Art.frog('green', { cls: 'rfrog', outfit: Outfit.worn })); old.remove();
       if (!reduceMotion()) animate($('winArt').querySelector('svg.rfrog'), [{ transform: 'scale(.85)' }, { transform: 'scale(1.12)' }, { transform: 'scale(1)' }], { duration: 380, easing: 'ease-out', composite: 'add' }); }
@@ -3312,9 +3317,8 @@ const Daily = (() => {
   $('btnTutClose').addEventListener('click', () => { Sound.click(); UI.hideOverlays(); UI.show('home'); });
   $('btnDailyClose').addEventListener('click', () => { Sound.click(); closePanel(); });
   $('dPrize').addEventListener('click', e => {
-    const b = e.target.closest('.use-now'); if (!b || b.disabled) return;
-    if (!Outfit.isWorn(b.dataset.ids)) Outfit.wear(b.dataset.ids);
-    Sound.pick(); b.textContent = 'Usando ✓'; b.disabled = true;
+    const b = e.target.closest('.use-now'); if (!b) return;
+    Outfit.toggleUse(b); b.classList.contains('on') ? Sound.pick() : Sound.click();
   });
   paintButton();
   setInterval(paintButton, 60000);     // vira o dia sozinho se o app ficar aberto à meia-noite
