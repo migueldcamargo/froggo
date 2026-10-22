@@ -20,6 +20,9 @@
 <link id="favIcon" rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%230b7bd6'/%3E%3Cellipse cx='50' cy='62' rx='34' ry='24' fill='%233fbf34'/%3E%3Ccircle cx='32' cy='38' r='14' fill='%233fbf34'/%3E%3Ccircle cx='68' cy='38' r='14' fill='%233fbf34'/%3E%3Ccircle cx='32' cy='37' r='9' fill='%23fff'/%3E%3Ccircle cx='68' cy='37' r='9' fill='%23fff'/%3E%3Ccircle cx='34' cy='38' r='4.5' fill='%23102030'/%3E%3Ccircle cx='66' cy='38' r='4.5' fill='%23102030'/%3E%3Cpath d='M36 64 Q50 74 64 64' stroke='%23103d12' stroke-width='4' fill='none' stroke-linecap='round'/%3E%3C/svg%3E">
 <link id="touchIcon" rel="apple-touch-icon" href="">
 <title>Froggo</title>
+<!-- Contador de aberturas e de progresso (GoatCounter: sem cookies, sem dados pessoais); painel em froggo.goatcounter.com -->
+<script>window.goatcounter = { path: function () { return location.pathname; } };      /* sem o ?v= da atualização */</script>
+<script data-goatcounter="https://froggo.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
 <style>
 /* =====================================================================
    FROGGO — arquivo único, offline. Estilos.
@@ -845,7 +848,7 @@ canvas.bigbang{position:absolute;inset:0;width:100%;height:100%;z-index:400;poin
 
 <script>
 'use strict';
-const BUILD = '2026-10-22.1458';      // versão publicada: trocada pela data e hora a cada publicação (ver Update, no fim); 'dev' não confere
+const BUILD = '2026-10-22.1530';      // versão publicada: trocada pela data e hora a cada publicação (ver Update, no fim); 'dev' não confere
 /* =====================================================================
    FROGGO — jogo de sapos saltadores (peg-solitaire), arquivo único e offline.
    Módulos (todos neste arquivo): Store · Geo · Rules · Solver · Gen ·
@@ -856,6 +859,17 @@ const BUILD = '2026-10-22.1458';      // versão publicada: trocada pela data e 
    Store — preferências simples em localStorage (falhas são ignoradas;
    o jogo nunca depende disso).
    --------------------------------------------------------------------- */
+/* Contador (GoatCounter): marcos do jogo como eventos (fase passada pela 1ª vez, pântano aberto, desafio, Zap),
+   sem dados pessoais. Só na versão publicada; sem internet ou com o contador bloqueado, nada acontece. */
+const Track = (() => {
+  const q = []; let t = 0;
+  const send = () => { while (q.length && window.goatcounter && goatcounter.count) { const [path, title] = q.shift(); try { goatcounter.count({ path, title, event: true }); } catch (e) { /* segue */ } } };
+  return (path, title) => {
+    if (BUILD === 'dev') return;
+    q.push([path, title || path]); send();
+    if (q.length && !t) t = setInterval(() => { send(); if (!q.length) { clearInterval(t); t = 0; } }, 3000);     // o contador ainda está carregando
+  };
+})();
 const Store = {
   get(k, d) { try { const v = localStorage.getItem('frog.' + k); return v === null ? d : JSON.parse(v); } catch (e) { return d; } },
   set(k, v) { try { localStorage.setItem('frog.' + k, JSON.stringify(v)); } catch (e) { /* sem storage: segue o jogo */ } }
@@ -3712,6 +3726,7 @@ ${portalPos ? `<path d="M${finalPos.x} ${finalPos.y} L${portalPos.x} ${portalPos
     await wait(250);
     await hop(done - 1, done);
     unlocking = false;
+    Track(`pantano-${REGIONS[r].id}`, `Abriu ${REGIONS[r].name}`);
     const c = Outfit.CHARS.find(x => x.at === REGIONS[r].id); if (c) friendPop(c);
   }
   // personagem novo chegou com o pântano: apresenta e oferece usar na hora
@@ -3753,6 +3768,7 @@ ${portalPos ? `<path d="M${finalPos.x} ${finalPos.y} L${portalPos.x} ${portalPos
     if (gift && !rare.includes(gift) && stars.slice(START[r], START[r] + R.count).every(v => v === 3)) { rare.push(gift); Store.set('rare', rare); prize = [gift]; }
     if (i === done && done < limit() && playable(i)) {
       done++; Store.set('career', done);
+      Track(`fase-${String(i + 1).padStart(3, '0')}`, `Fase ${i + 1} · ${R.name}`);     // passou a fase pela 1ª vez
       return { advanced: true, finished: done === TOTAL, bonusFinished: done === ALL, prize: (PRIZE[i] || []).concat(prize || []).length ? (PRIZE[i] || []).concat(prize || []) : null };
     }
     return { advanced: false, finished: false, bonusFinished: false, prize };
@@ -3851,6 +3867,7 @@ ${portalPos ? `<path d="M${finalPos.x} ${finalPos.y} L${portalPos.x} ${portalPos
       { duration: 900, easing: 'cubic-bezier(.35,.1,.4,1)' });
     Sound.land();
     opening = false;
+    Track('pantano-espaco', 'Abriu o Espaço');
     const c = Outfit.CHARS.find(x => x.at === 'espaco'); if (c) friendPop(c);     // o ET chega junto com o Espaço
   }
   function placeAvatarAt(p) { const s = avatar.getBoundingClientRect().width || 56; avatar.style.left = (p.x - s / 2) + 'px'; avatar.style.top = (p.y - s * .82) + 'px'; }
@@ -4136,6 +4153,7 @@ const Daily = (() => {
     }
     // nota 3★ na tentativa que vale (a 1ª do dia): mais um na coleção do desafio
     const prize = first && grade(r) === 3 ? Career.dailyWin() : null;
+    if (first) { Track('desafio-feito', 'Desafio do dia concluído'); if (grade(r) === 3) Track('desafio-3-estrelas', 'Desafio do dia com ⭐⭐⭐'); }
     stop(); paintButton(); openPanel(true, r, prize);   // mostra o resultado mesmo se o desafio virou a meia-noite
   }
   document.addEventListener('visibilitychange', () => {
@@ -4595,6 +4613,9 @@ const Tests = {
   $('cmap').addEventListener('scroll', poke, { passive: true }); $('wGrid').addEventListener('scroll', poke, { passive: true });
   poke();
   Install.boot();
+  const standalone = navigator.standalone || (window.matchMedia && matchMedia('(display-mode: standalone)').matches);
+  Track(standalone ? 'abriu-app' : 'abriu-navegador', standalone ? 'Abriu pelo app da tela inicial' : 'Abriu pelo navegador');
+  $('btnDailyShare').addEventListener('click', () => Track('zap', 'Mandou o desafio no Zap'));
   /* Versão nova: o app da tela inicial não recarrega ao voltar para ele (o celular só "acorda" a página antiga). Ao abrir
      e sempre que o app volta para a frente, confere a versão no servidor (sem cache); se mudou, recarrega assim que
      estiver na tela inicial, sem janela aberta (nunca no meio de uma fase). O progresso fica (localStorage).
