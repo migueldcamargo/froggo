@@ -429,6 +429,7 @@ canvas.confetti{position:absolute;inset:0;width:100%;height:100%;pointer-events:
 .dstats b{font-size:1.4rem;font-weight:900;font-variant-numeric:tabular-nums;color:var(--ink)}
 .dstats small{font-size:.75rem;font-weight:800;opacity:.65;text-transform:uppercase;letter-spacing:.05em}
 .panel .row .btn.wa{flex:1 1 100%}
+.btn.career{flex:1 1 100%;color:#fff;text-shadow:0 1px 0 rgba(120,40,0,.5);background:linear-gradient(180deg,#ffc24d 0%,#ff9a1f 45%,#f06a00 100%);box-shadow:0 .28rem 0 #a84700,0 .5rem 1rem rgba(0,30,70,.3),inset 0 2px 0 rgba(255,255,255,.6)}
 .panel .row .btn.dreview{flex:1 1 100%}
 .btn.wa{color:#fff;text-decoration:none;text-shadow:0 1px 0 rgba(0,60,20,.4);background:linear-gradient(180deg,#5ef08f,#25d366 50%,#18a74c);box-shadow:0 .28rem 0 #0f7a36,0 .5rem 1rem rgba(0,30,70,.3),inset 0 2px 0 rgba(255,255,255,.5);flex:1 1 100%}
 .btn.wa svg{width:1.4em;height:1.4em}
@@ -694,6 +695,8 @@ canvas.bigbang{position:absolute;inset:0;width:100%;height:100%;z-index:400;poin
       <div class="row">
         <button class="btn green big" id="btnDailyPlay">Jogar</button>
         <button class="btn blue dreview" id="btnDailyReview" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2.5"/><path d="M9 9.5h6M9 13h6M9 16.5h3.5" stroke-linecap="round"/></svg>Rever mapas</button>
+
+        <button class="btn career" id="btnDailyCareer" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4h10v5a5 5 0 0 1-10 0z" fill="currentColor" fill-opacity=".25"/><path d="M17 5h3v2a4 4 0 0 1-3.6 4M7 5H4v2a4 4 0 0 0 3.6 4"/><path d="M12 14v3M8.5 20h7M9.5 17h5v3h-5z"/></svg>Ir para o modo carreira</button>
 
         <a class="btn wa" id="btnDailyShare" target="_blank" rel="noopener" hidden><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.5a9.5 9.5 0 0 0-8.2 14.3L2.5 21.5l4.9-1.3A9.5 9.5 0 1 0 12 2.5zm0 2a7.5 7.5 0 1 1-3.8 14l-.3-.2-2.9.8.8-2.8-.2-.3A7.5 7.5 0 0 1 12 4.5zm-3.1 3.6c-.2 0-.5.1-.7.3-.3.3-.9.9-.9 2.1s.9 2.4 1 2.6c.1.2 1.8 2.8 4.4 3.9 2.2.9 2.6.7 3.1.7s1.5-.6 1.7-1.2c.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.6-.3l-1.6-.8c-.2-.1-.4-.1-.6.1l-.7.9c-.1.2-.3.2-.5.1-.3-.1-1-.4-1.9-1.2-.7-.6-1.2-1.4-1.3-1.6-.1-.3 0-.4.1-.5l.4-.5.3-.4c.1-.2 0-.3 0-.5l-.7-1.8c-.2-.4-.4-.4-.6-.4h-.5z"/></svg>Mandar no Zap</a>
       </div>
@@ -1384,14 +1387,9 @@ const Outfit = (() => {
 <path d="M-4 90 H104 V108 Q50 113 -4 108 Z" fill="#3ccf4e" stroke="#3d1a8a" stroke-width="1.6" stroke-linejoin="round"/>
 <text x="50" y="102.6" text-anchor="middle" font-family="Arial Black,Arial,Helvetica,sans-serif" font-weight="900" font-size="9" letter-spacing=".6" fill="#fff" stroke="#3d1a8a" stroke-width="1.6" paint-order="stroke">SPACE FROG</text>
 <path d="M8 93 l1.4 2.8 3 .4 -2.2 2.1 .5 3 -2.7 -1.4 -2.7 1.4 .5 -3 -2.2 -2.1 3 -.4z M92 93 l1.4 2.8 3 .4 -2.2 2.1 .5 3 -2.7 -1.4 -2.7 1.4 .5 -3 -2.2 -2.1 3 -.4z" fill="#ffd23f"/>` },
-    { id: 'traje', name: 'Traje espacial', slot: 'torso', over: true, space: true, box: '-10 46 120 56',
+    { id: 'traje', name: 'Traje espacial', slot: 'torso', over: true, space: true, box: '2 56 96 44',
       // macacão de patrulheiro espacial (referência ao Buzz): branco com peitoral verde-limão de botões coloridos,
-      // gola roxa, faixas roxas e verdes nas pernas, botas brancas de sola roxa; asinhas brancas de ponta vermelha nas costas (behind)
-      behind: () => {
-        const wing = `<path d="M0 0 L-24 -6 Q-29 -6 -28 -1.6 L-26 4 Q-25 7 -21 6.4 L0 6 Z" fill="#f6f8fb" stroke="#8e98ad" stroke-width="1" stroke-linejoin="round"/>
-<path d="M-28 -1.6 L-26 4 Q-25 7 -21 6.4 L-20.4 -4.6 L-24 -6 Q-29 -6 -28 -1.6 Z" fill="#e53935"/><path d="M-4 1.2 L-18 -1.4 M-4 3.6 L-17 2.8" stroke="#9fe03c" stroke-width="1.2" stroke-linecap="round"/>`;
-        return `<g transform="translate(20 58) rotate(-14)">${wing}</g><g transform="translate(80 58) scale(-1 1) rotate(-14)">${wing}</g>`;
-      },
+      // gola roxa, faixas roxas e verdes nas pernas, botas brancas de sola roxa
       svg: () => {
         const boot = x => `<ellipse cx="${x}" cy="87" rx="10.4" ry="5.8" fill="#f6f8fb" stroke="#8e98ad" stroke-width="1"/><path d="M${x - 10.6} 88.6 Q${x} 95.4 ${x + 10.6} 88.6 L${x + 10.2} 91 Q${x} 97.4 ${x - 10.2} 91 Z" fill="#7b3fe4"/>
 <path d="M${x - 6} 84 Q${x} 82 ${x + 6} 84" stroke="#9fe03c" stroke-width="1.6" fill="none" stroke-linecap="round"/>`;
@@ -1587,7 +1585,6 @@ M39 2.6 V1.2 Q37.6 0 34.6 0 Q30.2 0 30.2 4.5 Q30.2 9 34.6 9 Q39 9 39 5.6 V3.8 H3
       const it = get(slot); if (!it) continue;
       const k = slot === 'feet' || it.over ? 'front' : 'under';      // over: roupa inteira que cobre também os pés (traje)
       if (it.sole) L.under += it.sole();     // sandália: sola por baixo dos pés
-      if (it.behind) L.back += it.behind();  // parte que fica atrás do sapo (asinhas do traje)
       if (slot === 'back') { if (it.front) L[k] += it.front(); } else L[k] += it.svg(red);
     }
     const ride = get('ride');      // caixa de brinquedo: fundo atrás do sapo, plástico e rótulo por cima de tudo do corpo
@@ -1595,7 +1592,7 @@ M39 2.6 V1.2 Q37.6 0 34.6 0 Q30.2 0 30.2 4.5 Q30.2 9 34.6 9 Q39 9 39 5.6 V3.8 H3
     L.shoes = !!get('feet') && !get('feet').open || !!(get('torso') && get('torso').over);     // de sapato: sem dedinhos (sandália aberta mostra os dedos)
     return L;
   }
-  function preview(id) { const it = BY[id]; return `<svg viewBox="${it.box}" overflow="visible" aria-hidden="true">${it.behind ? it.behind() : ''}${it.sole ? it.sole() : ''}${it.svg(false)}${it.front ? it.front() : ''}</svg>`; }
+  function preview(id) { const it = BY[id]; return `<svg viewBox="${it.box}" overflow="visible" aria-hidden="true">${it.sole ? it.sole() : ''}${it.svg(false)}${it.front ? it.front() : ''}</svg>`; }
   return {
     ITEMS, BY, GROUP, layers, preview, flies, big,
     get worn() { return { ...worn }; },
@@ -3340,7 +3337,7 @@ const Daily = (() => {
     $('dCalDay').textContent = String(+d.slice(8));
     $('dDate').textContent = dateBR(d, true);
     $('dTitle').textContent = justWon ? 'Desafio do dia completo!' : r ? 'Você já jogou hoje' : 'Desafio do dia';
-    $('dStats').hidden = !r; $('btnDailyPlay').hidden = !!r; $('btnDailyShare').hidden = !r; $('btnDailyReview').hidden = !r; shown = d;
+    $('dStats').hidden = !r; $('btnDailyPlay').hidden = !!r; $('btnDailyShare').hidden = !r; $('btnDailyReview').hidden = !r; $('btnDailyCareer').hidden = !r; shown = d;
     const sv = !r && saved();
     $('btnDailyPlay').textContent = sv ? `Continuar (mapa ${sv.phase + 1} de ${N})` : 'Jogar';
     $('dMin').hidden = true; $('dPhases').hidden = true; $('dStars').innerHTML = '';
@@ -3492,6 +3489,8 @@ const Daily = (() => {
   $('btnTutGo').addEventListener('click', () => { Sound.click(); UI.hideOverlays(); practiceNext(); });
   $('btnTutClose').addEventListener('click', () => { Sound.click(); UI.hideOverlays(); UI.show('home'); });
   $('btnDailyClose').addEventListener('click', () => { Sound.click(); closePanel(); });
+  // terminou o desafio: convida a seguir jogando na trilha
+  $('btnDailyCareer').addEventListener('click', () => { Sound.click(); afterWin = false; $('ovDaily').classList.remove('show'); Base.dim(false); Career.open(); });
   $('dPrize').addEventListener('click', e => {
     const b = e.target.closest('.use-now'); if (!b) return;
     Outfit.toggleUse(b); b.classList.contains('on') ? Sound.pick() : Sound.click();
