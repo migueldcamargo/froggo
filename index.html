@@ -402,7 +402,8 @@ canvas.confetti{position:absolute;inset:0;width:100%;height:100%;pointer-events:
 .dcal svg{width:100%;height:100%}
 .dcal b{position:absolute;left:0;right:0;top:50%;text-align:center;font-size:1.25rem;font-weight:900;color:#9a1810}
 .ddate{font-weight:900!important;opacity:.75!important;margin-top:-.3rem}
-.dstats{display:grid;grid-template-columns:1fr;gap:.5rem;width:min(100%,12rem)}
+.dstats{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;width:100%}
+.dstats.notime{grid-template-columns:1fr;width:min(100%,12rem)}
 .dst{font-size:.95rem;letter-spacing:.05em;line-height:1;margin-top:.15rem}
 .st-on{color:#f2b400}.st-off{color:rgba(0,30,60,.2)}
 .dphases{font-size:1rem!important;font-weight:900!important;letter-spacing:.02em;opacity:1!important;margin-top:-.1rem}
@@ -667,6 +668,7 @@ canvas.bigbang{position:absolute;inset:0;width:100%;height:100%;z-index:400;poin
       <h3 id="dTitle">Desafio do dia</h3>
       <p class="ddate" id="dDate"></p>
       <div class="dstats" id="dStats" hidden>
+        <div id="dTimeBox"><b id="dTime">0s</b><small>tempo</small></div>
         <div><b id="dMoves">0</b><small>movimentos</small><span class="dst" id="dStars"></span></div>
       </div>
       <p class="dphases" id="dPhases" hidden></p>
@@ -2176,7 +2178,7 @@ const UI = (() => {
   }
   // ---- HUD ----
   function hud() {
-    $('hudMoves').textContent = 'Movimentos: ' + (Game.card && Game.card.daily && Daily.running ? Daily.moves : Game.count);
+    $('hudMoves').textContent = Game.card && Game.card.daily && Daily.running ? `${Daily.clock(Daily.elapsed())} · ${Daily.moves} mov.` : 'Movimentos: ' + Game.count;
     $('btnUndo').disabled = Game.moves === 0;
   }
   // "Como jogar": vermelho come verde, verde come verde, verde não come vermelho e o objetivo
@@ -3144,6 +3146,8 @@ const Daily = (() => {
   };
   const dayNum = () => String(+today().slice(8));
   const hash = str => { let h = 2166136261; for (let i = 0; i < str.length; i++) { h ^= str.charCodeAt(i); h = Math.imul(h, 16777619); } return h >>> 0; };
+  const fmtTime = ms => { const t = Math.max(1, Math.round(ms / 1000)), m = Math.floor(t / 60), s = t % 60; return m ? `${m}min ${pad(s)}s` : `${s}s`; };
+  const clock = ms => { const t = Math.floor(ms / 1000); return `${Math.floor(t / 60)}:${pad(t % 60)}`; };
   const dateBR = (iso, long) => { const [y, m, d] = iso.split('-').map(Number), dt = new Date(y, m - 1, d); if (!long) return `${pad(d)}/${pad(m)}/${y}`; const t = dt.toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long' }); return t.charAt(0).toUpperCase() + t.slice(1); };
   /* desempenho de cada mapa, com 3 emojis por faixa para variar: no mínimo, até +4, acima disso e o dobro do mínimo ou mais.
      Quando a faixa se repete no mesmo desafio, usa o próximo da fila; a fila começa num ponto diferente a cada dia. */
@@ -3154,7 +3158,7 @@ const Daily = (() => {
   }
   const sum = a => a.reduce((x, y) => x + y, 0);
   const grade = r => starsFor(sum(r.moves) / r.moves.length, sum(r.mins) / r.mins.length);   // nota do desafio = média de pulos por mapa contra a média dos mínimos
-  let run = null, afterWin = false, shown = null;   // run: { date, phase, moves[5] }; shown = data aberta no painel
+  let run = null, afterWin = false, shown = null, tick = 0;   // run: { date, phase, t0, acc, moves[5] }; shown = data aberta no painel
   // partida salva: ao sair do desafio ou do app, o mapa, o tabuleiro e os movimentos ficam guardados
   const saved = () => { const v = Store.get('dailyRun', null); return v && v.v === 2 && v.date === today() ? v : null; };
   /* Recomeços do desafio, cada um uma vez só: dailyReset guarda o último aplicado.
@@ -3170,12 +3174,14 @@ const Daily = (() => {
   const multi = r => Array.isArray(r.moves);       // resultado do desafio de 5 fases (o antigo tinha 1 mapa só)
   function message(r) {
     const [, m, d] = r.date.split('-').map(Number);
+    // tempo compacto (ex.: 1min29s, 45s); resultado de antes da volta do cronômetro não tem tempo
+    const sec = r.time ? Math.max(1, Math.round(r.time / 1000)) : 0, mi = Math.floor(sec / 60), se = sec % 60, tempo = !sec ? '' : (mi ? mi + 'min' + (se ? pad(se) + 's' : '') : se + 's') + '\n';
     const mes = ['janeiro', 'fevereiro', 'março', 'abril', 'maio', 'junho', 'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro'][m - 1];
     const nota = n => '⭐'.repeat(n) + '⚪'.repeat(3 - n);    // ⚪ = estrela que faltou
     // só "Froggo" em negrito (*…*); o resto sem
     if (!multi(r)) return `🐸 *Froggo* · ${d} de ${mes}\n${r.moves} ${r.moves === 1 ? 'movimento' : 'movimentos'}${r.min ? ' ' + nota(starsFor(r.moves, r.min)) : ''}\n${LINK}`;
     const em = moods(r.date, r.moves, r.mins);
-    return `🐸 *Froggo* · ${d} de ${mes}\n${r.moves.map((mv, i) => mv + em[i]).join(' ')}\nTotal: ${sum(r.moves)} pulos ${nota(grade(r))}\n${LINK}`;
+    return `🐸 *Froggo* · ${d} de ${mes}\n${r.moves.map((mv, i) => mv + em[i]).join(' ')}\nTotal: ${sum(r.moves)} pulos ${nota(grade(r))}\n${tempo}${LINK}`;
   }
   function paintButton() {
     $('dailyNum').textContent = dayNum();
@@ -3195,6 +3201,7 @@ const Daily = (() => {
     $('dMin').hidden = true; $('dPhases').hidden = true; $('dStars').innerHTML = '';
     if (r) {
       shareLink(message(r));
+      $('dTimeBox').hidden = !r.time; $('dStats').classList.toggle('notime', !r.time); if (r.time) $('dTime').textContent = fmtTime(r.time);
       if (multi(r)) {
         $('dMoves').textContent = String(sum(r.moves)); $('dStars').innerHTML = starHTML(grade(r));
         const em = moods(r.date, r.moves, r.mins);
@@ -3286,27 +3293,30 @@ const Daily = (() => {
     const tags = em.length ? r.moves.map((mv, i) => `${mv} ${em[i]}`) : [];
     await UI.dailyReview(cards, tags, 'Desafio do dia · ' + dateBR(d));
   }
-  // partida em andamento: mapa atual e movimentos de cada mapa
+  // partida em andamento: mapa atual e movimentos de cada mapa; cronômetro único para os 5 mapas (o tempo é a soma)
   function begin(c) {
     if (!run || run.date !== c.daily) {
       const sv = saved();
-      run = { date: c.daily, phase: c.phase, moves: sv ? sv.moves.slice() : new Array(N).fill(0) };
+      run = { date: c.daily, phase: c.phase, t0: 0, acc: sv ? sv.acc || 0 : 0, moves: sv ? sv.moves.slice() : new Array(N).fill(0) };
       if (sv && sv.phase === c.phase && sv.map === Rules.toStr(c.start)) for (const [f, t] of sv.hist) if (!Game.play(f, t)) break;   // refaz a posição salva
     }
-    run.phase = c.phase;
+    run.phase = c.phase; run.t0 = document.hidden ? 0 : performance.now();
+    clearInterval(tick); tick = setInterval(() => UI.hud(), 1000);
   }
+  function elapsed() { return run ? run.acc + (run.t0 ? performance.now() - run.t0 : 0) : 0; }
   function save(next) {
     if (!run) return;
     const fresh = next != null;
     if (!fresh && (!Game.card || Game.card.daily !== run.date)) return;
-    Store.set('dailyRun', { v: 2, date: run.date, phase: fresh ? next : run.phase, map: fresh ? '' : Rules.toStr(Game.card.start), moves: run.moves, hist: fresh ? [] : Game.history.map(h => [h.jump.from, h.jump.to]) });
+    Store.set('dailyRun', { v: 2, date: run.date, phase: fresh ? next : run.phase, map: fresh ? '' : Rules.toStr(Game.card.start), acc: Math.round(elapsed()), moves: run.moves, hist: fresh ? [] : Game.history.map(h => [h.jump.from, h.jump.to]) });
   }
   function move() { if (run) { run.moves[run.phase]++; save(); } }
-  function pause() { if (!run) return; save(); run = null; }   // sair: guarda onde parou
-  function stop() { run = null; }
-  // venceu um mapa: mostra como foi e já abre o próximo; no último, o resultado
+  function pause() { if (!run) return; save(); clearInterval(tick); tick = 0; run = null; }   // sair: guarda onde parou e trava o tempo
+  function stop() { clearInterval(tick); tick = 0; run = null; }
+  // venceu um mapa: pausa o tempo, mostra como foi e já abre o próximo; no último, o resultado
   async function phaseWon() {
     if (!run) return;
+    if (run.t0) { run.acc += performance.now() - run.t0; run.t0 = 0; }
     const k = run.phase, c = Game.card, mv = run.moves[k];
     if (k < N - 1) {
       save(k + 1);
@@ -3319,7 +3329,7 @@ const Daily = (() => {
     }
     Store.set('dailyRun', null);
     const mins = []; for (let i = 0; i < N; i++) mins.push(i === k ? Rules.greens(c.start) : Rules.greens((await card(run.date, i)).start));
-    const r = { date: run.date, moves: run.moves.slice(), mins }, first = !result();
+    const r = { date: run.date, time: Math.round(run.acc), moves: run.moves.slice(), mins }, first = !result();
     if (first) Store.set('daily', r);
     // todos os mapas no mínimo de movimentos, na tentativa que vale: 1º desafio perfeito dá o boné de hélice, o 2º a cartola
     const perfect = first && r.moves.every((mv, i) => mv === mins[i]);
@@ -3328,7 +3338,8 @@ const Daily = (() => {
   }
   document.addEventListener('visibilitychange', () => {
     if (!document.hidden) setTimeout(invite, 300);     // voltou ao app num dia novo
-    if (run && document.hidden) save();
+    if (!run) return;
+    if (document.hidden) { if (run.t0) run.acc += performance.now() - run.t0; run.t0 = 0; save(); } else if (Game.active) run.t0 = performance.now();
   });
   window.addEventListener('pagehide', () => save());
   $('btnDaily').addEventListener('click', () => { Sound.click(); paintButton(); openPanel(false); });
@@ -3343,7 +3354,7 @@ const Daily = (() => {
   });
   paintButton();
   setInterval(paintButton, 60000);     // vira o dia sozinho se o app ficar aberto à meia-noite
-  return { N, card, kindOf, begin, move, save, pause, phaseWon, invite, practiced, replayWon, reopen, redo, message, today, hash, closePanel, moods, get running() { return !!run; }, get moves() { return run ? run.moves[run.phase] : 0; } };
+  return { N, card, kindOf, begin, move, save, pause, phaseWon, invite, practiced, replayWon, reopen, redo, elapsed, clock, fmtTime, message, today, hash, closePanel, moods, get running() { return !!run; }, get moves() { return run ? run.moves[run.phase] : 0; } };
 })();
 
 /* ---------------------------------------------------------------------
@@ -3515,8 +3526,8 @@ const Tests = {
     t(`desafio do dia: nenhum desenho se repete nos primeiros ${span} dias`, norep);
     const cA = await Daily.card('2026-11-03', 2), cB = await Daily.card('2026-11-03', 2);
     t('desafio do dia: fase com solução conferida e igual para a mesma data', Rules.toStr(cA.start) === Rules.toStr(cB.start) && !cA.start.n && cA.solution && cA.solution.length === Rules.greens(cA.start));
-    const msg = Daily.message({ date: '2026-10-21', moves: [5, 7, 12, 6, 14], mins: [5, 6, 6, 6, 7] }).split('\n');
-    t('desafio do dia: mensagem do Zap com os 5 mapas (emojis variando), total e nota (sem tempo)', msg.length === 4 && msg[1].split(' ').length === 5 && msg[1].split(' ')[0].replace(/^\d+/, '') !== msg[1].split(' ')[3].replace(/^\d+/, '') && msg[2] === 'Total: 44 pulos ⭐⭐⚪', msg.join(' | '));
+    const msg = Daily.message({ date: '2026-10-21', time: 192000, moves: [5, 7, 12, 6, 14], mins: [5, 6, 6, 6, 7] }).split('\n');
+    t('desafio do dia: mensagem do Zap com os 5 mapas (emojis variando), total, nota e tempo', msg.length === 5 && msg[3] === '3min12s' && msg[1].split(' ').length === 5 && msg[1].split(' ')[0].replace(/^\d+/, '') !== msg[1].split(' ')[3].replace(/^\d+/, '') && msg[2] === 'Total: 44 pulos ⭐⭐⚪', msg.join(' | '));
     const far = Daily.message({ date: '2026-10-21', moves: [5, 4, 69, 7, 4], mins: [5, 4, 7, 7, 4] }).split('\n')[2];
     t('desafio do dia: nota pela soma dos pulos (um mapa ruim derruba o total)', far === 'Total: 89 pulos ⭐⚪⚪', far);
     // 11. áudio
