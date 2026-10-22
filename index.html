@@ -3527,7 +3527,7 @@ ${tw.join('')}<div class="cbanner${canUnlock(REGIONS.indexOf(R)) ? ' can' : ''}"
   // personagem novo chegou com o pântano: apresenta e oferece usar na hora
   function friendPop(c) {
     const ov = document.createElement('div'); ov.className = 'overlay show'; ov.setAttribute('role', 'dialog'); ov.setAttribute('aria-modal', 'true');
-    ov.innerHTML = `<div class="panel result win"><div class="res-art">${Art.creature(c.id, { cls: 'rfrog' })}</div><div class="res-text"><h3>Novo amigo!</h3><p class="wmin"><b>${c.name}</b> chegou para pular com você</p>
+    ov.innerHTML = `<div class="panel result win"><div class="res-art">${Art.creature(c.id, { cls: 'rfrog' })}</div><div class="res-text"><h3>${c.name}</h3><p class="wmin">Novo amigo desbloqueado!</p>
 <div class="row win-row"><button type="button" class="btn blue" data-k="0">Depois</button><button type="button" class="btn green grow" data-k="1">Usar agora</button></div></div></div>`;
     $('ovWin').parentNode.appendChild(ov); Base.dim(true); Sound.sparkle();
     ov.addEventListener('click', e => {
