@@ -2999,37 +2999,50 @@ const Career = (() => {
   }
   if (!Array.isArray(opened)) opened = [];
   if (!Array.isArray(rare)) rare = [];
-  /* Trilha nova (10 pântanos, 93 fases): quem já jogava continua no mesmo ponto de dificuldade. Cada pântano antigo vira
-     um trecho da trilha nova (Iniciante → Tranquilo até Nebuloso; Médio → Carnaval até Skatepark; Avançado → Brejo;
-     Expert → Jacaroso; Bônus → Bônus); as fases novas antes desse ponto contam como feitas, com as estrelas da fase
-     antiga equivalente. Ninguém perde apetrecho: o que a pessoa tinha pela tabela de prêmios da versão em que estava
-     continua dela. Uma vez só. */
-  if (!Store.get('trilha2', false) && (done > 0 || stars.some(v => v))) {
-    const SPANS = [[0, 3, 0, 3], [3, 16, 3, 41], [16, 28, 41, 71], [28, 40, 71, 83], [40, 50, 83, 93], [50, 60, 93, 103]];   // antigo [a,b) → novo [c,d)
-    const five = (list, extra) => { const t = { 0: ['cardigan'], 1: ['loafer'], 2: ['celular'], 49: ['coroa', 'trofeu'] }; list.forEach((id, k) => { t[7 + 5 * k] = [id]; }); return Object.assign(t, extra); };
-    const ERA = !Store.get('prizeSwap', false) ? five(['bone', 'cartola', 'oculos', 'cachecol', 'gravata', 'pirata', 'capa', 'medalha', 'manto'], { 54: ['antenas'], 59: ['capacete', 'jetpack'] })
-      : !Store.get('prizeSwap2', false) ? five(['bolovo', 'bellato', 'oculos', 'cachecol', 'gravata', 'pirata', 'capa', 'medalha', 'manto'], { 14: ['linus'], 54: ['antenas'], 59: ['capacete', 'jetpack'] })
-      : !Store.get('prizeSwap3', false) ? five(['bolovo', 'zerezes', 'cachecol', 'oculos', 'linus', 'pirata', 'medalha', 'guitarra', 'manto'], { 14: ['oldskool'], 54: ['antenas'], 59: ['capacete', 'jetpack'] })
-      : { 0: ['cardigan'], 1: ['loafer'], 2: ['celular'], 7: ['oldskool'], 12: ['oculos'], 15: ['bolovo'], 19: ['zerezes'], 23: ['linus'], 27: ['bellato'], 31: ['cachecol'], 35: ['gravata'],
-        39: ['pirata'], 42: ['oculos3d'], 46: ['jetpack'], 49: ['coroa', 'trofeu'], 54: ['traje'], 59: ['antenas'] };
-    const keep = Object.keys(ERA).filter(i => +i < done).flatMap(i => ERA[i]);
-    const oldDone = done, oldStars = stars.slice(), span = SPANS.findIndex(([a, b]) => oldDone >= a && oldDone < b);
-    const [a, b, c, d] = SPANS.find(([a, b]) => oldDone >= a && oldDone <= b) || SPANS[SPANS.length - 1];
-    done = Math.min(ALL, c + Math.round((oldDone - a) * (d - c) / (b - a)));
+  /* Trilha nova (10 pântanos, 93 fases): cada pântano antigo vira o pântano na mesma posição da trilha nova
+     (Iniciante → Tranquilo, Médio → Monte Mor, Avançado → Praia, Expert → Nebuloso, Bônus → Bônus) e, dentro dele, a
+     pessoa fica na mesma proporção de mapas feitos; as fases antes desse ponto contam como feitas, com as estrelas da
+     fase antiga equivalente. Ninguém perde apetrecho: o que a pessoa tinha continua dela. Quem já tinha passado pela
+     primeira versão desta mudança (trilha2, que levava o Médio para a Festa Universitária) volta ao progresso antigo
+     e é reposicionado do mesmo jeito, ficando com tudo o que ganhou. Uma vez só. */
+  if (!Store.get('trilha3', false) && (done > 0 || stars.some(v => v))) {
+    const OLD = [[0, 3], [3, 16], [16, 28], [28, 40], [40, 50], [50, 60]];             // pântanos antigos [a,b)
+    const NEW = [[0, 3], [3, 11], [11, 21], [21, 31], [31, 41], [93, 103]];           // mesma posição na trilha nova
+    const V2 = [[0, 3], [3, 41], [41, 71], [71, 83], [83, 93], [93, 103]];            // como a trilha2 tinha distribuído
+    const fwd = (o, from, to) => { const k = from.findIndex(([a, b]) => o >= a && o <= b); if (k < 0) return to[to.length - 1][1]; const [a, b] = from[k], [c, d] = to[k]; return c + Math.round((o - a) * (d - c) / (b - a)); };
+    let oldDone, oldStars, keep, was;
+    if (Store.get('trilha2', false)) {           // desfaz a distribuição da trilha2 (aproximada fase a fase)
+      keep = Object.keys(PRIZE).filter(i => +i < done).flatMap(i => PRIZE[i]);
+      was = opened.includes(REGIONS.findIndex((R, r) => done >= START[r] && done < START[r] + R.count));
+      oldDone = fwd(done, V2, OLD);
+      oldStars = Array.from({ length: 60 }, (_, o) => { const k = OLD.findIndex(([a, b]) => o >= a && o < b), [a, b] = OLD[k], [c, d] = V2[k]; return stars[c + Math.floor((o - a) * (d - c) / (b - a))] || 0; });
+    } else {
+      const five = (list, extra) => { const t = { 0: ['cardigan'], 1: ['loafer'], 2: ['celular'], 49: ['coroa', 'trofeu'] }; list.forEach((id, k) => { t[7 + 5 * k] = [id]; }); return Object.assign(t, extra); };
+      const ERA = !Store.get('prizeSwap', false) ? five(['bone', 'cartola', 'oculos', 'cachecol', 'gravata', 'pirata', 'capa', 'medalha', 'manto'], { 54: ['antenas'], 59: ['capacete', 'jetpack'] })
+        : !Store.get('prizeSwap2', false) ? five(['bolovo', 'bellato', 'oculos', 'cachecol', 'gravata', 'pirata', 'capa', 'medalha', 'manto'], { 14: ['linus'], 54: ['antenas'], 59: ['capacete', 'jetpack'] })
+        : !Store.get('prizeSwap3', false) ? five(['bolovo', 'zerezes', 'cachecol', 'oculos', 'linus', 'pirata', 'medalha', 'guitarra', 'manto'], { 14: ['oldskool'], 54: ['antenas'], 59: ['capacete', 'jetpack'] })
+        : { 0: ['cardigan'], 1: ['loafer'], 2: ['celular'], 7: ['oldskool'], 12: ['oculos'], 15: ['bolovo'], 19: ['zerezes'], 23: ['linus'], 27: ['bellato'], 31: ['cachecol'], 35: ['gravata'],
+          39: ['pirata'], 42: ['oculos3d'], 46: ['jetpack'], 49: ['coroa', 'trofeu'], 54: ['traje'], 59: ['antenas'] };
+      keep = Object.keys(ERA).filter(i => +i < done).flatMap(i => ERA[i]);
+      was = opened.includes(OLD.findIndex(([a, b]) => done >= a && done < b));
+      oldDone = done; oldStars = stars.slice();
+    }
+    // no bônus (só depois de terminar a carreira antiga): continua no bônus; senão, mesma posição no pântano equivalente
+    done = Math.min(ALL, bonusOpen && oldDone >= 50 ? TOTAL + (oldDone - 50) : fwd(oldDone, OLD.slice(0, 5), NEW.slice(0, 5)));
     stars = Array.from({ length: ALL }, (_, j) => {
       if (j >= done) return 0;
-      const [a, b, c, d] = SPANS.find(([, , c, d]) => j >= c && j < d);
+      const k = NEW.findIndex(([c, d]) => j >= c && j < d);
+      if (k < 0) return 3;                         // pântanos novos que um jogador do bônus já deixou para trás
+      const [a, b] = OLD[k], [c, d] = NEW[k];
       return Math.max(1, oldStars[a + Math.floor((j - c) * (b - a) / (d - c))] || 1);
     });
-    // pântanos já percorridos ficam abertos; o pântano onde a pessoa está fica aberto se o antigo equivalente estava
     const regNew = i => { let r = 0; while (r < REGIONS.length - 1 && i >= START[r + 1]) r++; return r; };
-    const was = span >= 0 && opened.includes(span);
     opened = REGIONS.map((R, r) => r).filter(r => r > 0 && (START[r] < done || (was && r === regNew(done))));
     const mine = Object.keys(PRIZE).filter(i => +i < done).flatMap(i => PRIZE[i]).concat(rare);
     keep.forEach(id => { if (!mine.includes(id) && !rare.includes(id)) rare.push(id); });
     Store.set('career', done); Store.set('stars', stars); Store.set('opened', opened); Store.set('rare', rare);
   }
-  if (!Store.get('trilha2', false)) { ['prizeSwap', 'prizeSwap2', 'prizeSwap3'].forEach(k => Store.set(k, true)); Store.set('trilha2', true); }
+  if (!Store.get('trilha3', false)) { ['prizeSwap', 'prizeSwap2', 'prizeSwap3', 'trilha2'].forEach(k => Store.set(k, true)); Store.set('trilha3', true); }
   if (stars.length < ALL) stars = stars.concat(new Array(ALL - stars.length).fill(0));
   // quem já tinha entrado num pântano (fases feitas nele) continua com ele aberto
   REGIONS.forEach((R, r) => { if (r > 0 && START[r] < done && !opened.includes(r)) { opened.push(r); Store.set('opened', opened); } });
