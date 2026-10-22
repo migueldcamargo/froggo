@@ -1285,13 +1285,13 @@ const Outfit = (() => {
     { id: 'cachecol', name: 'Cachecol listrado', slot: 'neck', box: '20 58 60 30',
       svg: () => `<path d="M23.5 61.5 Q50 77 76.5 61.5 L77.5 68 Q50 84 22.5 68 Z" fill="#e53935"/><path d="M31 66 L32.4 72.4 M40 69.2 L41 75.4 M50 70.4 V76.8 M60 69.2 L59 75.4 M69 66 L67.6 72.4" stroke="#fff" stroke-width="2.6"/>
 <path d="M57 71 L60 84 L67 82.6 L64 70 Z" fill="#e53935"/><path d="M58.2 76 L65.2 74.6 M59.4 80.6 L66.4 79.2" stroke="#fff" stroke-width="2.4"/><path d="M60.6 84 l-.6 2.6 M63.2 83.5 l0 2.7 M65.8 83 l.6 2.6" stroke="#e53935" stroke-width="1.2"/>` },
-    { id: 'bone', name: 'Boné de hélice', slot: 'head', box: '30 -14 40 38',
+    { id: 'bone', name: 'Boné de hélice', slot: 'head', rare: true, box: '30 -14 40 38',
       // boné colorido de gomos com hélice no topo
       svg: () => `<g transform="translate(0 -3.5)"><path d="M50 3 Q33 4 33 22 L41.5 22 Z" fill="#e53935"/><path d="M50 3 L41.5 22 L50 22 Z" fill="#ffd23f"/><path d="M50 3 L50 22 L58.5 22 Z" fill="#2b7de9"/><path d="M50 3 L58.5 22 L67 22 Q67 4 50 3 Z" fill="#2fbf3a"/>
 <path d="M33 22 Q33 3 50 3 Q67 3 67 22 Z" fill="none" stroke="#1d2a44" stroke-width="1.1" stroke-linejoin="round"/><path d="M38 12 Q41 7 46 5.6" stroke="#fff" stroke-width="1.6" opacity=".5" fill="none" stroke-linecap="round"/>
 <path d="M36 21.5 Q50 28.5 64 21.5 L62.4 20 Q50 25.4 37.6 20 Z" fill="#ffd23f" stroke="#a87a00" stroke-width=".8"/>
 <rect x="49.2" y="-2.6" width="1.6" height="6" fill="#555"/><ellipse cx="43.2" cy="-3.4" rx="6.6" ry="1.9" fill="#e53935" stroke="#8a1414" stroke-width=".6" transform="rotate(-8 43.2 -3.4)"/><ellipse cx="56.8" cy="-2.4" rx="6.6" ry="1.9" fill="#2b7de9" stroke="#164a96" stroke-width=".6" transform="rotate(-8 56.8 -2.4)"/><circle cx="50" cy="-2.8" r="1.7" fill="#ffd23f" stroke="#a87a00" stroke-width=".6"/></g>` },
-    { id: 'cartola', name: 'Cartola', slot: 'head', box: '27 -22 46 42',
+    { id: 'cartola', name: 'Cartola', slot: 'head', rare: true, box: '27 -22 46 42',
       // aba larga e copa alta, acima dos olhos (que são desenhados por cima da camada da cabeça)
       svg: () => `<g transform="translate(0 -5)"><ellipse cx="50" cy="18" rx="21" ry="4.6" fill="#151515"/><path d="M30 17 Q50 22.2 70 17" stroke="#3a3a3a" stroke-width="1.1" fill="none"/>
 <rect x="38.5" y="-11.5" width="23" height="29.5" rx="2.5" fill="#262626"/><rect x="38.5" y="8.6" width="23" height="5.2" fill="#d9262c"/>
@@ -1402,7 +1402,7 @@ const Outfit = (() => {
 <path d="M-4 -2 C-12 -14 -24 -23 -38 -25" stroke="#eef4ff" stroke-width="2.2" fill="none" stroke-linecap="round" opacity=".9"/>`;
         return `<g transform="translate(30 56)">${wing}</g><g transform="translate(70 56) scale(-1 1)">${wing}</g>`;
       } },
-    { id: 'bolovo', name: '5Panel BLV', slot: 'head', rare: true, box: '28 -8 44 36',
+    { id: 'bolovo', name: '5Panel BLV', slot: 'head', box: '28 -8 44 36',
       // 5 panel xadrez verde com aba bege e o B, L, V bordados em escadinha descendo (prêmio do desafio do dia perfeito)
       svg: () => `<defs><pattern id="blvPlaid" width="7" height="7" patternUnits="userSpaceOnUse"><rect width="7" height="7" fill="#3f5a3a"/><rect width="7" height="2.2" fill="#56724b" opacity=".9"/><rect width="2.2" height="7" fill="#56724b" opacity=".9"/>
 <rect y="4.4" width="7" height=".35" fill="#e6dcbc" opacity=".75"/><rect x="4.4" width=".35" height="7" fill="#e6dcbc" opacity=".75"/><rect y="1" width="7" height=".35" fill="#22361f"/><rect x="1" width=".35" height="7" fill="#22361f"/></pattern></defs>
@@ -1410,7 +1410,7 @@ const Outfit = (() => {
 <path d="M42 3.4 Q40.6 12 41.2 22 M58 3.4 Q59.4 12 58.8 22" stroke="#22361f" stroke-width=".7" fill="none" opacity=".75"/><circle cx="50" cy="2.3" r="1.6" fill="#3f5a3a" stroke="#22361f" stroke-width=".6"/>
 <g font-family="Georgia,'Times New Roman',serif" font-size="6.6" font-weight="700" fill="#efe6c8" text-anchor="middle"><text x="46.6" y="12.6">B</text><text x="50" y="15.4">L</text><text x="53.4" y="18.2">V</text></g>
 <path d="M33 21 Q50 31 67 21 L65.4 18.6 Q50 26.6 34.6 18.6 Z" fill="#c9b48f" stroke="#8f7a55" stroke-width=".8"/><path d="M36 21.6 Q50 28.6 64 21.6" stroke="#e8dcc0" stroke-width=".5" fill="none" stroke-dasharray="1 .8"/></g>` },
-    { id: 'bellato', name: '5Panel Bellato', slot: 'head', layer: 'top', rare: true, box: '27 -8 46 38',
+    { id: 'bellato', name: '5Panel Bellato', slot: 'head', layer: 'top', box: '27 -8 46 38',
       // 5 panel oncinha rosado: painel da frente e aba em oncinha, laterais rosadas em cima e tela cinza embaixo com faixa
       // refletiva, patch redondo com a cabeça de um tucano e "ALICE"; desenhado por cima dos olhos para a aba aparecer
       svg: () => `<defs><pattern id="leoPrint" width="4.6" height="4.6" patternUnits="userSpaceOnUse"><rect width="4.6" height="4.6" fill="#ecc9bd"/><ellipse cx="1.3" cy="1.3" rx=".62" ry=".5" fill="#a5643c"/><path d="M0.4 1.1 q.3 -.9 1.2 -.75 M2.25 1.0 q.35 .8 -.25 1.15 M0.55 1.85 q.6 .5 1.2 .25" stroke="#2e1f1a" stroke-width=".5" fill="none" stroke-linecap="round"/><ellipse cx="3.6" cy="3.5" rx=".62" ry=".5" fill="#a5643c"/><path d="M2.7 3.3 q.3 -.9 1.2 -.75 M4.55 3.2 q.35 .8 -.25 1.15 M2.85 4.05 q.6 .5 1.2 .25" stroke="#2e1f1a" stroke-width=".5" fill="none" stroke-linecap="round"/><path d="M3.4 .8 q.4 -.3 .7 .1 M.7 3.7 q.4 .3 .7 -.1" stroke="#2e1f1a" stroke-width=".45" fill="none" stroke-linecap="round"/></pattern>
@@ -2590,7 +2590,7 @@ const Career = (() => {
   {
     const tut = REGIONS[0].count;
     ['cardigan', 'loafer', 'celular'].forEach((id, i) => { PRIZE[i] = [id]; });
-    const every5 = ['bone', 'cartola', 'oculos', 'cachecol', 'gravata', 'pirata', 'capa', 'medalha', 'manto'];
+    const every5 = ['bolovo', 'bellato', 'oculos', 'cachecol', 'gravata', 'pirata', 'capa', 'medalha', 'manto'];
     for (let k = 0, i = tut + 4; i < TOTAL - 1 && k < every5.length; i += 5, k++) PRIZE[i] = [every5[k]];
     PRIZE[TOTAL - 1] = ['coroa', 'trofeu'];
     PRIZE[TOTAL + 4] = ['antenas']; PRIZE[ALL - 1] = ['capacete', 'jetpack'];
@@ -2613,6 +2613,9 @@ const Career = (() => {
   REGIONS.forEach((R, r) => { if (r > 0 && START[r] < done && !opened.includes(r)) { opened.push(r); Store.set('opened', opened); } });
   for (let i = 0; i < REGIONS[0].count; i++) if (i < done && stars[i] !== 3) { stars[i] = 3; Store.set('stars', stars); }   // tutorial feito vale 3★
   if (!Array.isArray(rare)) rare = [];
+  // Iniciante 5 e 10 passaram a dar os 5Panel (antes: boné de hélice e cartola, que viraram prêmio do desafio perfeito);
+  // quem já tinha passado dessas fases continua com o boné e a cartola
+  if (!Store.get('prizeSwap', false)) { [[7, 'bone'], [12, 'cartola']].forEach(([i, id]) => { if (done > i && !rare.includes(id)) rare.push(id); }); Store.set('rare', rare); Store.set('prizeSwap', true); }
   const regionOf = i => { let r = 0; while (r < REGIONS.length - 1 && i >= START[r + 1]) r++; return r; };
   const regionStars = r => stars.slice(START[r], START[r] + REGIONS[r].count).reduce((a, b) => a + (b || 0), 0);
   const need = r => { const n = REGIONS[r - 1].count; return r === 1 ? 3 * n : 2 * n + Math.floor(n / 2); };   // tutorial: todas com 3★ (sempre dá 3)
@@ -3273,9 +3276,9 @@ const Daily = (() => {
     const mins = []; for (let i = 0; i < N; i++) mins.push(i === k ? Rules.greens(c.start) : Rules.greens((await card(run.date, i)).start));
     const r = { date: run.date, moves: run.moves.slice(), mins }, first = !result();
     if (first) Store.set('daily', r);
-    // todos os mapas no mínimo de movimentos, na tentativa que vale: 1º desafio perfeito dá o 5Panel BLV, o 2º o 5Panel Bellato
+    // todos os mapas no mínimo de movimentos, na tentativa que vale: 1º desafio perfeito dá o boné de hélice, o 2º a cartola
     const perfect = first && r.moves.every((mv, i) => mv === mins[i]);
-    const prize = !perfect ? null : Career.grant('bolovo') ? 'bolovo' : Career.grant('bellato') ? 'bellato' : null;
+    const prize = !perfect ? null : Career.grant('bone') ? 'bone' : Career.grant('cartola') ? 'cartola' : null;
     stop(); paintButton(); openPanel(true, r, prize);   // mostra o resultado mesmo se o desafio virou a meia-noite
   }
   document.addEventListener('visibilitychange', () => {
@@ -3438,7 +3441,7 @@ const Tests = {
     const RC = Career.REGIONS.map(r => r.count);
     t('carreira: 50 fases; expert 10, avançado 12, iniciante ≥ médio ≥ avançado > expert', Career.TOTAL === 50 && CL.length === 60 && RC[4] === 10 && RC[3] === 12 && RC[1] >= RC[2] && RC[2] >= RC[3], RC.slice(0, 5).join(' + ') + ' (+10 bônus)');
     t('prêmios: 1 por fase do tutorial, depois 1 a cada 5 fases; 17 apetrechos sem repetir', [0, 1, 2].every(i => Career.PRIZE[i]) && [7, 12, 17, 22, 27, 32, 37, 42, 47, 49, 54, 59].every(i => Career.PRIZE[i]) && Object.keys(Career.PRIZE).length === 15 && new Set(Object.values(Career.PRIZE).flat()).size === 17 && Outfit.ITEMS.filter(i => !i.rare).length === 17);
-    t('prêmios raros: 5 por pântano inteiro com 3★ + os 5Panel do desafio perfeito', Outfit.ITEMS.filter(i => i.rare).length === 7 && !!Outfit.BY.bolovo && !!Outfit.BY.bellato && Outfit.ITEMS.filter(i => i.rare).every(i => !Object.values(Career.PRIZE).flat().includes(i.id)));
+    t('prêmios raros: 5 por pântano inteiro com 3★ + boné de hélice e cartola do desafio perfeito; 5Panel BLV e Bellato no Iniciante 5 e 10', Outfit.ITEMS.filter(i => i.rare).length === 7 && Outfit.BY.bone.rare && Outfit.BY.cartola.rare && Career.PRIZE[7][0] === 'bolovo' && Career.PRIZE[12][0] === 'bellato' && Outfit.ITEMS.filter(i => i.rare).every(i => !Object.values(Career.PRIZE).flat().includes(i.id)));
     t('estrelas: 3 no mínimo, 2 até +4, 1 acima', starsFor(5, 5) === 3 && starsFor(6, 5) === 2 && starsFor(9, 5) === 2 && starsFor(10, 5) === 1);
     t('tutorial com 1, 2 e 3 sapos verdes', [0, 1, 2].every(i => Rules.greens(CL[i].start) === i + 1));
     t('todas as fases da carreira têm solução', CL.filter(l => !Career.REGIONS[l.region].bonus).every(l => !!Solver.solve(l.start)));
