@@ -1384,17 +1384,27 @@ const Outfit = (() => {
 <path d="M-4 90 H104 V108 Q50 113 -4 108 Z" fill="#3ccf4e" stroke="#3d1a8a" stroke-width="1.6" stroke-linejoin="round"/>
 <text x="50" y="102.6" text-anchor="middle" font-family="Arial Black,Arial,Helvetica,sans-serif" font-weight="900" font-size="9" letter-spacing=".6" fill="#fff" stroke="#3d1a8a" stroke-width="1.6" paint-order="stroke">SPACE FROG</text>
 <path d="M8 93 l1.4 2.8 3 .4 -2.2 2.1 .5 3 -2.7 -1.4 -2.7 1.4 .5 -3 -2.2 -2.1 3 -.4z M92 93 l1.4 2.8 3 .4 -2.2 2.1 .5 3 -2.7 -1.4 -2.7 1.4 .5 -3 -2.2 -2.1 3 -.4z" fill="#ffd23f"/>` },
-    { id: 'botas', name: 'Botas lunares', slot: 'feet', space: true, box: '16 62 68 40',
-      // de frente: bota fofa prateada estilo moon boot, cano acolchoado, cadarço vermelho cruzado, bico redondo e sola grossa
+    { id: 'traje', name: 'Traje espacial', slot: 'torso', over: true, space: true, box: '-10 46 120 56',
+      // macacão de patrulheiro espacial (referência ao Buzz): branco com peitoral verde-limão de botões coloridos,
+      // gola roxa, faixas roxas e verdes nas pernas, botas brancas de sola roxa; asinhas brancas de ponta vermelha nas costas (behind)
+      behind: () => {
+        const wing = `<path d="M0 0 L-24 -6 Q-29 -6 -28 -1.6 L-26 4 Q-25 7 -21 6.4 L0 6 Z" fill="#f6f8fb" stroke="#8e98ad" stroke-width="1" stroke-linejoin="round"/>
+<path d="M-28 -1.6 L-26 4 Q-25 7 -21 6.4 L-20.4 -4.6 L-24 -6 Q-29 -6 -28 -1.6 Z" fill="#e53935"/><path d="M-4 1.2 L-18 -1.4 M-4 3.6 L-17 2.8" stroke="#9fe03c" stroke-width="1.2" stroke-linecap="round"/>`;
+        return `<g transform="translate(20 58) rotate(-14)">${wing}</g><g transform="translate(80 58) scale(-1 1) rotate(-14)">${wing}</g>`;
+      },
       svg: () => {
-        const boot = x => `<path d="M${x - 8} 67 Q${x - 9} 76 ${x - 11.4} 82 Q${x - 13.6} 87 ${x - 13} 91 H${x + 13} Q${x + 13.6} 87 ${x + 11.4} 82 Q${x + 9} 76 ${x + 8} 67 Z" fill="url(#ufoBody)" stroke="#5b6884" stroke-width=".8" stroke-linejoin="round"/>
-<path d="M${x - 8.6} 72 Q${x} 74.6 ${x + 8.6} 72 L${x + 8.9} 74.6 Q${x} 77.2 ${x - 8.9} 74.6 Z" fill="#e53935"/>
-<path d="M${x - 2.6} 77.4 L${x + 2.6} 79.4 M${x + 2.6} 77.4 L${x - 2.6} 79.4 M${x - 3} 80.6 L${x + 3} 82.8 M${x + 3} 80.6 L${x - 3} 82.8" stroke="#2a2a33" stroke-width="1" stroke-linecap="round"/>
-<ellipse cx="${x}" cy="90.4" rx="13.6" ry="6.4" fill="#eef2f8" stroke="#5b6884" stroke-width=".8"/>
-<path d="M${x - 13.4} 92.4 Q${x} 99.6 ${x + 13.4} 92.4 L${x + 13.6} 94.6 Q${x} 101.6 ${x - 13.6} 94.6 Z" fill="#3a4252"/>
-<ellipse cx="${x}" cy="67" rx="8.2" ry="2.4" fill="#f4f6fa" stroke="#5b6884" stroke-width=".8"/><path d="M${x - 9} 89 Q${x - 4} 86 ${x + 1} 86.4" stroke="#fff" stroke-width="1.3" opacity=".8" fill="none" stroke-linecap="round"/>
-<path d="M${x - 5.6} 70 Q${x - 6.4} 76 ${x - 8.6} 82" stroke="#fff" stroke-width="1" opacity=".55" fill="none" stroke-linecap="round"/>`;
-        return boot(33) + boot(67);
+        const boot = x => `<ellipse cx="${x}" cy="87" rx="10.4" ry="5.8" fill="#f6f8fb" stroke="#8e98ad" stroke-width="1"/><path d="M${x - 10.6} 88.6 Q${x} 95.4 ${x + 10.6} 88.6 L${x + 10.2} 91 Q${x} 97.4 ${x - 10.2} 91 Z" fill="#7b3fe4"/>
+<path d="M${x - 6} 84 Q${x} 82 ${x + 6} 84" stroke="#9fe03c" stroke-width="1.6" fill="none" stroke-linecap="round"/>`;
+        return `<ellipse cx="20" cy="77" rx="15.6" ry="11.6" fill="#f6f8fb" stroke="#8e98ad" stroke-width="1"/><ellipse cx="80" cy="77" rx="15.6" ry="11.6" fill="#f6f8fb" stroke="#8e98ad" stroke-width="1"/>
+<path d="M8.6 70 Q11 79 18.6 83.4 M91.4 70 Q89 79 81.4 83.4" stroke="#9fe03c" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M12.4 68.4 Q14.4 76.6 21 80.4 M87.6 68.4 Q85.6 76.6 79 80.4" stroke="#7b3fe4" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+<path d="M21.4 64 Q19 80 26 88.6 Q50 96.6 74 88.6 Q81 80 78.6 64 Q50 73 21.4 64 Z" fill="#f6f8fb" stroke="#8e98ad" stroke-width="1.1" stroke-linejoin="round"/>
+<path d="M23.6 64.6 Q50 73.6 76.4 64.6 L75.8 68.8 Q50 77.8 24.2 68.8 Z" fill="#7b3fe4" stroke="#3d1a8a" stroke-width=".6"/>
+<path d="M33 71.8 Q50 77 67 71.8 L65.6 84.6 Q50 89.4 34.4 84.6 Z" fill="#9fe03c" stroke="#4f8a1a" stroke-width=".9" stroke-linejoin="round"/>
+<rect x="43.6" y="76.6" width="12.8" height="6.4" rx="1.4" fill="#f6f8fb" stroke="#8e98ad" stroke-width=".6"/>
+<circle cx="46.6" cy="79.8" r="1.4" fill="#e53935"/><circle cx="50" cy="79.8" r="1.4" fill="#2fbf3a"/><circle cx="53.4" cy="79.8" r="1.4" fill="#2b7de9"/>
+<circle cx="38.4" cy="78.4" r="2.6" fill="#7b3fe4" stroke="#fff" stroke-width=".6"/><path d="M38.4 76.6 l.6 1.2 1.3 .2 -1 .9 .3 1.3 -1.2 -.6 -1.2 .6 .3 -1.3 -1 -.9 1.3 -.2z" fill="#9fe03c"/>
+<rect x="59.4" y="76" width="4.8" height="1.6" rx=".5" fill="#e53935"/><rect x="59.4" y="78.6" width="4.8" height="1.6" rx=".5" fill="#2b7de9"/>
+${boot(33)}${boot(67)}`;
       } },
     { id: 'coracao', name: 'Óculos de coração', slot: 'eyes', rare: true, box: '12 8 76 36',
       svg: () => {
@@ -1414,7 +1424,7 @@ const Outfit = (() => {
 <rect x="5" y="20" width="12" height="20" rx="5.6" fill="#ff4b3a" stroke="#8a1414" stroke-width="1.1"/><rect x="83" y="20" width="12" height="20" rx="5.6" fill="#ff4b3a" stroke="#8a1414" stroke-width="1.1"/>
 <rect x="14" y="22.4" width="4.6" height="15.2" rx="2.3" fill="#2a2a33"/><rect x="81.4" y="22.4" width="4.6" height="15.2" rx="2.3" fill="#2a2a33"/>
 <path d="M7.6 24 V35 M85.6 24 V35" stroke="#fff" stroke-width="1.2" opacity=".45" stroke-linecap="round"/>` },
-    { id: 'pochete', name: 'Pochete', slot: 'strap', rare: true, box: '16 54 70 34',
+    { id: 'pochete', name: 'Bag', slot: 'strap', rare: true, box: '16 54 70 34',
       // pochete colorida atravessada (crossbody): alça branca da cintura até o ombro, bolsa na barriga inclinada,
       // corpo azul, bolso de cima verde, bolso da frente vermelho com borda amarela escrito RAPINA
       svg: () => `<path d="M19.4 79.6 Q26 77 33 75.6" stroke="#f4f4f4" stroke-width="3" fill="none" stroke-linecap="round"/>
@@ -1436,10 +1446,10 @@ const Outfit = (() => {
 <g fill="#a4c25a"><circle cx="91" cy="45" r=".7"/><circle cx="82.6" cy="53" r=".7"/><circle cx="94.4" cy="57" r=".7"/><circle cx="83.6" cy="64" r=".7"/></g>
 <path d="M82.6 50 V60" stroke="#fff" stroke-width="1.6" opacity=".45" stroke-linecap="round"/></g>` },
     { id: 'skate', name: 'Flip', slot: 'hand', rare: true, box: '72 32 38 68',
-      // shape vermelho no estilo da Flip, em pé ao lado do sapo: FROG em letras grossas ao longo do shape,
+      // shape laranja no estilo da Flip, em pé ao lado do sapo: FROG em letras grossas ao longo do shape,
       // o O como a bolinha branca do logo; trucks e rodinhas
-      svg: () => `<g transform="rotate(-10 90 66)"><rect x="82.4" y="36" width="15.2" height="60" rx="7.6" fill="#b3202c" stroke="#5e0c12" stroke-width="1.1"/>
-<path d="M86 42 Q90 40.6 94 42" stroke="#e05561" stroke-width=".8" fill="none" opacity=".7" stroke-linecap="round"/>
+      svg: () => `<g transform="rotate(-10 90 66)"><rect x="82.4" y="36" width="15.2" height="60" rx="7.6" fill="#ff6a13" stroke="#8a3200" stroke-width="1.1"/>
+<path d="M86 42 Q90 40.6 94 42" stroke="#ffb27a" stroke-width=".8" fill="none" opacity=".8" stroke-linecap="round"/>
 <g transform="translate(90 66) rotate(90) scale(1.04 1.26) translate(-19.5 -4.5)"><path fill-rule="evenodd" fill="#2e2a2b" d="M0 .6 Q0 0 .6 0 H7 V2.6 H2.6 V3.4 H6 V5.8 H2.6 V9 H0 Z
 M9 0 H13.6 Q16.8 0 16.8 3 Q16.8 5.2 15 5.8 L17 9 H14 L12.4 6 H11.6 V9 H9 Z M11.6 2.4 V3.8 H13.4 Q14.2 3.8 14.2 3.1 Q14.2 2.4 13.4 2.4 Z
 M39 2.6 V1.2 Q37.6 0 34.6 0 Q30.2 0 30.2 4.5 Q30.2 9 34.6 9 Q39 9 39 5.6 V3.8 H34.6 V5.8 H36.2 Q35.8 6.6 34.6 6.6 Q32.8 6.6 32.8 4.5 Q32.8 2.4 34.6 2.4 Q36 2.4 36.4 2.6 Z"/>
@@ -1577,6 +1587,7 @@ M39 2.6 V1.2 Q37.6 0 34.6 0 Q30.2 0 30.2 4.5 Q30.2 9 34.6 9 Q39 9 39 5.6 V3.8 H3
       const it = get(slot); if (!it) continue;
       const k = slot === 'feet' || it.over ? 'front' : 'under';      // over: roupa inteira que cobre também os pés (traje)
       if (it.sole) L.under += it.sole();     // sandália: sola por baixo dos pés
+      if (it.behind) L.back += it.behind();  // parte que fica atrás do sapo (asinhas do traje)
       if (slot === 'back') { if (it.front) L[k] += it.front(); } else L[k] += it.svg(red);
     }
     const ride = get('ride');      // caixa de brinquedo: fundo atrás do sapo, plástico e rótulo por cima de tudo do corpo
@@ -1584,7 +1595,7 @@ M39 2.6 V1.2 Q37.6 0 34.6 0 Q30.2 0 30.2 4.5 Q30.2 9 34.6 9 Q39 9 39 5.6 V3.8 H3
     L.shoes = !!get('feet') && !get('feet').open || !!(get('torso') && get('torso').over);     // de sapato: sem dedinhos (sandália aberta mostra os dedos)
     return L;
   }
-  function preview(id) { const it = BY[id]; return `<svg viewBox="${it.box}" overflow="visible" aria-hidden="true">${it.sole ? it.sole() : ''}${it.svg(false)}${it.front ? it.front() : ''}</svg>`; }
+  function preview(id) { const it = BY[id]; return `<svg viewBox="${it.box}" overflow="visible" aria-hidden="true">${it.behind ? it.behind() : ''}${it.sole ? it.sole() : ''}${it.svg(false)}${it.front ? it.front() : ''}</svg>`; }
   return {
     ITEMS, BY, GROUP, layers, preview, flies, big,
     get worn() { return { ...worn }; },
@@ -2729,7 +2740,7 @@ const Career = (() => {
     at(2, 4, 'zerezes'); at(2, 8, 'linus'); at(2, 12, 'bellato');
     at(3, 4, 'cachecol'); at(3, 8, 'gravata'); at(3, 12, 'pirata');
     at(4, 3, 'oculos3d'); at(4, 7, 'jetpack'); at(4, 10, 'coroa', 'trofeu');
-    at(5, 5, 'botas'); at(5, 10, 'antenas');
+    at(5, 5, 'traje'); at(5, 10, 'antenas');
   }
   // desafio do dia com nota 3★ (na 1ª tentativa do dia): coleção, um item a cada tantas vezes
   const DAILY = [[1, 'bone'], [2, 'cartola'], [3, 'manto'], [5, 'asas'], [10, 'coracao'], [15, 'bandana'], [20, 'fone'], [25, 'pochete'], [30, 'picole'], [40, 'skate']];
