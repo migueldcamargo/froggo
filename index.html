@@ -845,7 +845,7 @@ canvas.bigbang{position:absolute;inset:0;width:100%;height:100%;z-index:400;poin
 
 <script>
 'use strict';
-const BUILD = '2026-10-22.1336';      // versão publicada: trocada pela data e hora a cada publicação (ver Update, no fim); 'dev' não confere
+const BUILD = '2026-10-22.1340';      // versão publicada: trocada pela data e hora a cada publicação (ver Update, no fim); 'dev' não confere
 /* =====================================================================
    FROGGO — jogo de sapos saltadores (peg-solitaire), arquivo único e offline.
    Módulos (todos neste arquivo): Store · Geo · Rules · Solver · Gen ·
@@ -1262,6 +1262,17 @@ const Art = {
   <g stroke="#3a2a1e" stroke-width=".9" stroke-linecap="round" opacity=".8"><path d="M38 45 L20 41 M38 48 L19 49 M38 51 L22 56 M62 45 L80 41 M62 48 L81 49 M62 51 L78 56"/></g>
   <path d="M58 30 q4 -2 6 1" stroke="#4f4840" stroke-width="1.4" fill="none" stroke-linecap="round"/><ellipse cx="24" cy="45" rx="5" ry="3" fill="#ff9ab6" opacity=".45"/><ellipse cx="76" cy="45" rx="5" ry="3" fill="#ff9ab6" opacity=".45"/>${shine}`;
         feet = '<g fill="#f2a6b8" stroke="#c97f92" stroke-width=".8"><ellipse cx="33" cy="88" rx="8" ry="4.6"/><ellipse cx="67" cy="88" rx="8" ry="4.6"/></g><path d="M29 90 v2.6 M33 91 v2.6 M37 90 v2.6 M63 90 v2.6 M67 91 v2.6 M71 90 v2.6" stroke="#c97f92" stroke-width="1" stroke-linecap="round"/>';
+      },
+      baurets() {      // ET clássico (chega com o Espaço): verde-limão, cabeção, antenas com bolinhas e olhões pretos brilhantes
+        defs = g('btB', '#d4ff8a', '#8fe04a', '#4fa82a');
+        back = '<path d="M38 18 Q34 6 28 0 M62 18 Q66 6 72 0" stroke="#4fa82a" stroke-width="2.6" fill="none" stroke-linecap="round"/><circle cx="28" cy="0" r="4.6" fill="#ff6ad5" stroke="#b8338f" stroke-width="1"/><circle cx="72" cy="0" r="4.6" fill="#ff6ad5" stroke="#b8338f" stroke-width="1"/>';
+        body = `<ellipse cx="22" cy="78" rx="11" ry="8.6" fill="url(#btB)"/><ellipse cx="78" cy="78" rx="11" ry="8.6" fill="url(#btB)"/>
+  <ellipse cx="50" cy="69" rx="24" ry="21" fill="url(#btB)"/><ellipse cx="50" cy="74" rx="14" ry="12" fill="#e8ffc4"/>
+  <ellipse cx="50" cy="36" rx="38" ry="28" fill="url(#btB)"/>`;
+        face = `<ellipse cx="31" cy="27" rx="12.6" ry="9.6" fill="#101418" transform="rotate(18 31 27)"/><ellipse cx="69" cy="27" rx="12.6" ry="9.6" fill="#101418" transform="rotate(-18 69 27)"/>
+  <ellipse cx="27" cy="23" rx="3.6" ry="2.4" fill="#fff" opacity=".9"/><ellipse cx="65" cy="23" rx="3.6" ry="2.4" fill="#fff" opacity=".9"/><circle cx="34" cy="31" r="1.4" fill="#fff" opacity=".6"/><circle cx="72" cy="31" r="1.4" fill="#fff" opacity=".6"/>
+  <path d="M42 50 Q50 55 58 50" stroke="#2f6a1a" stroke-width="2.4" fill="none" stroke-linecap="round"/><ellipse cx="24" cy="46" rx="5" ry="3" fill="#ff9ab6" opacity=".45"/><ellipse cx="76" cy="46" rx="5" ry="3" fill="#ff9ab6" opacity=".45"/>${shine}`;
+        feet = '<g fill="#6fc23a"><ellipse cx="36" cy="88" rx="8" ry="4.6"/><ellipse cx="64" cy="88" rx="8" ry="4.6"/></g>';
       },
       caramelo() {     // vira-lata caramelo: orelhas caídas, focinho clarinho, peito branco, língua de fora
         defs = g('dgB', '#f2c27a', '#d9963f', '#a8691f');
@@ -1894,7 +1905,7 @@ ${vest}<g transform="translate(100 0) scale(-1 1)">${vest}</g>
      escolhe o seu personagem no guarda-roupa. */
   const CHARS = [{ id: 'sapo', name: 'Sapo' }, { id: 'johnny', name: 'Johnny Chicken', at: 'montemor' }, { id: 'lollipop', name: 'Loripop', at: 'praia' },
     { id: 'corujao', name: 'Corujão', at: 'nebuloso' }, { id: 'caramelo', name: 'Caramelo', at: 'carnaval' }, { id: 'porco', name: 'Porco', at: 'festa' }, { id: 'tatu', name: 'Tatu', at: 'skatepark' },
-    { id: 'topogigio', name: 'Topogígio', at: 'esgoto' }];
+    { id: 'topogigio', name: 'Topogígio', at: 'esgoto' }, { id: 'baurets', name: 'Baurets', at: 'espaco' }];
   let char = Store.get('char', 'sapo'), charRed = Store.get('charRed', 'sapo');
   const big = o => flies(o) || !!(o && o.ride);       // ocupa mais espaço em volta do sapo (chama, caixa)
   function layers(o, red) {
@@ -3830,6 +3841,7 @@ ${portalPos ? `<path d="M${finalPos.x} ${finalPos.y} L${portalPos.x} ${portalPos
       { duration: 900, easing: 'cubic-bezier(.35,.1,.4,1)' });
     Sound.land();
     opening = false;
+    const c = Outfit.CHARS.find(x => x.at === 'espaco'); if (c) friendPop(c);     // o ET chega junto com o Espaço
   }
   function placeAvatarAt(p) { const s = avatar.getBoundingClientRect().width || 56; avatar.style.left = (p.x - s / 2) + 'px'; avatar.style.top = (p.y - s * .82) + 'px'; }
   function scrollToY(y, smooth) {
@@ -3889,7 +3901,7 @@ ${portalPos ? `<path d="M${finalPos.x} ${finalPos.y} L${portalPos.x} ${portalPos
   }
   // prêmio fora da trilha (ex.: desafio do dia perfeito); devolve true se for novo
   function grant(id) { if (rare.includes(id)) return false; rare.push(id); Store.set('rare', rare); return true; }
-  const chars = () => Outfit.CHARS.filter(c => !c.at || isOpen(REGIONS.findIndex(R => R.id === c.at))).map(c => c.id);
+  const chars = () => Outfit.CHARS.filter(c => { const k = REGIONS.findIndex(R => R.id === c.at); return !c.at || (REGIONS[k].bonus ? bonusOpen : isOpen(k)); }).map(c => c.id);
   return { open, complete, rewind, relayout, ensureBuilt, syncBase, dailyPick, grant, dailyWin, ORDER, DAILY, RARE, chars, get stars() { return stars.slice(); }, totalStars, playable, get dailyCount() { dailyPick(0); return { iniciante: dailyClasses.filter(x => x.id === 'iniciante').length, medio: dailyClasses.filter(x => x.id === 'medio').length }; }, seeded, cardFor, owned, openBonus, bigBang, REGIONS, TOTAL, ALL, PRIZE, BONUS, get bonusOpen() { return bonusOpen; }, set bonusOpen(v) { bonusOpen = v; }, get list() { return list; }, get done() { return done; }, set done(v) { done = v; } };
 })();
 
@@ -4314,13 +4326,14 @@ ${stageFrog(false, 0)}${stageFrog(true, 104, .5)}</svg></div>`;
   }
   // onde o apetrecho sai: pântano da fase, pântano com 3★ ou desafio do dia
   function where(id) {
+    const nm = r => r.bonus && !Career.bonusOpen ? '???' : r.name;      // o Espaço é segredo até ser aberto
     const c = Outfit.CHARS.find(x => x.id === id);
-    if (c) { const r = Career.REGIONS.find(x => x.id === c.at); return `Chega ao abrir ${r.na === 'na' ? 'a' : 'o'} ${r.name}`; }
+    if (c) { const r = Career.REGIONS.find(x => x.id === c.at); return `Chega ao abrir ${r.na === 'na' ? 'a' : 'o'} ${nm(r)}`; }
     const R = Career.REGIONS, at = i => { let r = 0, st = 0; R.forEach((x, k) => { if (i >= st) r = k; st += x.count; }); return R[r]; };
     const i = Object.keys(Career.PRIZE).find(k => Career.PRIZE[k].includes(id));
-    if (i != null) { const r = at(+i); return `Encontre ${r.na} ${r.name}`; }
+    if (i != null) { const r = at(+i); return `Encontre ${r.na} ${nm(r)}`; }
     const r = R.find(x => Career.RARE[x.id] === id);
-    if (r) return `Encontre com ⭐⭐⭐ ${r.na} ${r.name}`;
+    if (r) return `Encontre com ⭐⭐⭐ ${r.na} ${nm(r)}`;
     return 'Encontre no Desafio do dia';
   }
   grid.addEventListener('click', e => {
@@ -4493,7 +4506,7 @@ const Tests = {
     const far = Daily.message({ date: '2026-10-21', moves: [5, 4, 69, 7, 4], mins: [5, 4, 7, 7, 4] }).split('\n')[2];
     t('desafio do dia: nota pela soma dos pulos (um mapa ruim derruba o total)', far === 'Total: 89 pulos ⭐⚪⚪', far);
     t('personagens: sapo + 6 amigos, cada um chega com um pântano e desenha com qualquer apetrecho',
-      Outfit.CHARS.length === 8 && Outfit.CHARS.slice(1).every(c => Career.REGIONS.some(R => R.id === c.at) && Art.creature(c.id, { outfit: { head: 'bolovo', eyes: 'oculos', torso: 'traje' } }).startsWith('<svg')));
+      Outfit.CHARS.length === 9 && Outfit.CHARS.slice(1).every(c => Career.REGIONS.some(R => R.id === c.at) && Art.creature(c.id, { outfit: { head: 'bolovo', eyes: 'oculos', torso: 'traje' } }).startsWith('<svg')));
     // 11. áudio
     t('áudio não é criado antes de um gesto', window.__frogGesture ? true : Sound.ctx === null, window.__frogGesture ? 'houve gesto antes do teste' : 'sem gesto: sem AudioContext');
     return { out, fails };
