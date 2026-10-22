@@ -845,7 +845,7 @@ canvas.bigbang{position:absolute;inset:0;width:100%;height:100%;z-index:400;poin
 
 <script>
 'use strict';
-const BUILD = '2026-10-22.1349';      // versão publicada: trocada pela data e hora a cada publicação (ver Update, no fim); 'dev' não confere
+const BUILD = '2026-10-22.1354';      // versão publicada: trocada pela data e hora a cada publicação (ver Update, no fim); 'dev' não confere
 /* =====================================================================
    FROGGO — jogo de sapos saltadores (peg-solitaire), arquivo único e offline.
    Módulos (todos neste arquivo): Store · Geo · Rules · Solver · Gen ·
@@ -2199,15 +2199,19 @@ const Board = (() => {
         if (pop && !reduceMotion()) animate(f, [{ transform: 'scale(0)', opacity: 0 }, { transform: 'scale(1.15)', opacity: 1, offset: .7 }, { transform: 'scale(1)' }], { duration: 320, delay: k++ * 35, easing: 'ease-out', fill: 'backwards' });
       }
     }
-    // um sapo verde ao acaso veste a roupa do jogador, para ele ver no jogo o que está usando; se esse sapo for
-    // capturado, a roupa passa para outro verde
-    const o = Outfit.worn, fs = Object.values(frogs);
-    if (Object.keys(o).length && !fs.some(f => f.classList.contains('dressed'))) {
-      const gs = fs.filter(f => f.dataset.color === 'green');
-      if (gs.length) { const f = gs[Math.floor(Math.random() * gs.length)]; f.classList.add('dressed'); f.firstChild.innerHTML = Art.frog('green', { outfit: o, char: Outfit.char }); }
+    // no começo da fase, um verde ao acaso veste a roupa do jogador, para ele ver no jogo o que está usando; se esse
+    // for capturado, some de vez (nenhum outro passa a vestir); desfazendo a captura, ele volta vestido
+    if (dressNext) {
+      const gs = Object.values(frogs).filter(f => f.dataset.color === 'green');
+      if (gs.length) { dress(gs[Math.floor(Math.random() * gs.length)]); dressNext = false; }
     }
   }
-  function reset() { for (const c in frogs) frogs[c].remove(); frogs = {}; clearSel(); cancelDrag(); sync(true); }
+  let dressNext = false, dressLost = null;
+  function dress(f) {
+    const o = Outfit.worn; if (!f || !Object.keys(o).length) return;
+    f.classList.add('dressed'); f.firstChild.innerHTML = Art.frog('green', { outfit: o, char: Outfit.char });
+  }
+  function reset() { for (const c in frogs) frogs[c].remove(); frogs = {}; clearSel(); cancelDrag(); dressNext = true; dressLost = null; sync(true); }
   function clearMarks() { marks.forEach(m => m.classList.remove('origin')); }
   function clearSel() { if (selected >= 0 && frogs[selected]) frogs[selected].classList.remove('sel'); selected = -1; clearMarks(); if (Game.active) UI.hud(); }
   function select(i) {
@@ -2258,6 +2262,7 @@ const Board = (() => {
     if (Game.card && Game.card.daily) Daily.move();
     Game.busy = true; clearSel();
     const cap = frogs[j.over];
+    if (cap && cap.classList.contains('dressed')) dressLost = Game.history.length;     // o vestido foi comido nesta jogada
     delete frogs[from]; delete frogs[j.over]; frogs[to] = f;
     UI.hud();
     const [vx, vy] = cellVec(from, to);
@@ -2304,6 +2309,7 @@ const Board = (() => {
       await animate(f, reduceMotion() ? [{ opacity: .3 }, { opacity: 1 }] : [{ transform: `translate(${vx}px,${vy}px)` }, { transform: `translate(${vx * .5}px,${vy * .5 - size() * .08}px)`, offset: .5 }, { transform: 'translate(0,0)' }], { duration: 260, easing: 'ease-in-out' });
     }
     sync(true);
+    if (dressLost != null && Game.history.length < dressLost) { dress(frogs[j.over]); dressLost = null; }   // desfez a captura do vestido
     Game.busy = false;
   }
   function snapBack(f, dx, dy) {
