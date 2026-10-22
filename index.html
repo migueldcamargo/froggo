@@ -148,9 +148,9 @@ svg{display:block}
 @keyframes miniBob{50%{transform:translateY(-4%) rotate(-3deg)}}
 /* mochila a jato: o sapo flutua com uns impulsos, a chama treme e solta fumaça */
 .hero-frog.fly,.hero-mini.fly{animation:none}
-.hero-frog{touch-action:none}
-.hero-frog.zoomed{overflow:hidden;animation:none;border-radius:1.2rem}
-.hero-frog>svg{transition:transform .12s ease-out}
+.hero-stage{touch-action:none}
+.hero-zoom{position:absolute;inset:0;transition:transform .12s ease-out}
+.hero-art.zoomed{overflow:hidden;border-radius:1.2rem}      /* aproximado: o conjunto não passa por cima do título nem dos botões */
 svg.fly .fbody{transform:translateY(-10px);animation:jetFly 2.6s ease-in-out infinite}     /* parado (repouso/economia), continua no ar */
 svg.fly .fshadow{transform-box:fill-box;transform-origin:50% 50%;transform:scale(.75);opacity:.7;animation:jetShadow 2.6s ease-in-out infinite}
 @keyframes jetFly{0%,100%{transform:translateY(-9px)}30%{transform:translateY(-13px)}42%{transform:translateY(-10px)}55%{transform:translateY(-17px)}80%{transform:translateY(-11px)}}
@@ -424,6 +424,8 @@ canvas.confetti{position:absolute;inset:0;width:100%;height:100%;pointer-events:
   background:linear-gradient(180deg,#ff8a7a 0%,#f2402f 45%,#cf1f16 100%);box-shadow:0 .28rem 0 #8e120c,0 .5rem 1rem rgba(0,30,70,.3),inset 0 2px 0 rgba(255,255,255,.55)}
 .btn.nudge{animation:nudge 1s ease-in-out infinite}
 @keyframes nudge{50%{transform:scale(1.14);box-shadow:0 0 0 .35rem rgba(255,210,63,.75),0 .28rem 0 #0b4f8f}}
+.btn.green.nudge{animation:nudgeG 1.1s ease-in-out infinite}      /* Próxima fase chamando o toque */
+@keyframes nudgeG{50%{transform:scale(1.07);box-shadow:0 0 0 .3rem rgba(255,243,107,.8),0 .28rem 0 #13701a,0 .5rem 1rem rgba(0,30,70,.3)}}
 .wmin.near{color:#c25a00;font-weight:900}
 .streak{position:absolute;right:-.55rem;bottom:-.45rem;padding:0 .3rem;border-radius:999px;background:#fff;color:#e8590c;font:900 .72rem/1.15rem Nunito,system-ui,sans-serif;white-space:nowrap;box-shadow:0 .1rem .3rem rgba(0,0,0,.3)}
 .dstreak{font-weight:900;color:#e8590c;margin:-.2rem 0 0}
@@ -460,6 +462,12 @@ canvas.confetti{position:absolute;inset:0;width:100%;height:100%;pointer-events:
 .dclose{position:absolute;top:.75rem;right:.75rem;width:2.2rem;height:2.2rem;border-radius:.55rem;display:grid;place-items:center;color:#fff;
   background:linear-gradient(180deg,#ff5a4e,#e81123);box-shadow:0 .15rem 0 #a10a14,0 .25rem .5rem rgba(0,20,60,.25);z-index:2}
 .dclose svg{width:1.05rem;height:1.05rem}
+.bkregs{display:flex;flex-wrap:wrap;gap:.35rem;justify-content:center;margin:.7rem 0 .5rem}
+.bkregs button{padding:.35rem .65rem;border-radius:999px;background:#e8f1f8;color:#0b2545;font:800 .82rem/1.2 Nunito,system-ui,sans-serif}
+.bkregs button.on{background:#0b6fc9;color:#fff}
+.bkfases{width:100%;display:grid;grid-template-columns:repeat(5,1fr);gap:.4rem;max-height:calc(var(--H) * .4);overflow-y:auto}
+.bkfases button{height:2.6rem;border-radius:.7rem;background:#fff;color:#0b2545;font:900 1rem Nunito,system-ui,sans-serif;box-shadow:0 .18rem 0 #b7c7d6,inset 0 0 0 2px #d6e2ec}
+.bkfases button:active{transform:translateY(.12rem);box-shadow:0 .05rem 0 #b7c7d6,inset 0 0 0 2px #d6e2ec}
 .dclose:active{transform:translateY(.12rem);box-shadow:0 .03rem 0 #a10a14}
 
 /* ---------- Carreira ---------- */
@@ -496,7 +504,6 @@ canvas.confetti{position:absolute;inset:0;width:100%;height:100%;pointer-events:
 .cbanner em.unlock{background:#2fbf3a;box-shadow:0 2px 0 #13701a;font-size:.85rem;padding:.2rem .7rem}
 .cbanner .lk{display:inline-block}
 .ckey{position:absolute;z-index:6;font-size:30px;line-height:1;pointer-events:none}
-.cbanner small{display:block;font-size:12px;font-weight:800;opacity:.9}
 .cbanner i{position:absolute;top:-14px;width:6px;height:16px;background:#6e3d17;border-radius:3px}
 .ctrail{position:absolute;left:0;top:0;pointer-events:none}
 .cnode{position:absolute;z-index:3;border-radius:50%;padding:0;touch-action:manipulation}
@@ -529,6 +536,8 @@ canvas.confetti{position:absolute;inset:0;width:100%;height:100%;pointer-events:
 .tw{position:absolute;border-radius:50%;pointer-events:none;will-change:opacity;animation:ffly 2.4s ease-in-out infinite}
 .tw.ff{width:14px;height:14px;margin:-7px 0 0 -7px;background:radial-gradient(circle,#fffbc0 0 16%,rgba(255,243,107,.35) 30%,rgba(255,243,107,0) 70%)}
 .tw.st{width:4px;height:4px;margin:-2px 0 0 -2px;background:#fff;box-shadow:0 0 6px 1px rgba(255,255,255,.8)}
+.tw.run{left:-44px;width:40px;height:20px;border-radius:0;will-change:transform;animation:ratrun 9s linear infinite}      /* rato passando no Esgoto */
+@keyframes ratrun{0%,8%{transform:translateX(0)}60%,100%{transform:translateX(calc(var(--w) + 90px))}}
 @keyframes ffly{50%{opacity:.25}}
 .creg.zz .tw{animation:none}          /* pântano fora da tela: vaga-lumes parados */
 .cnode.portal{filter:drop-shadow(0 0 16px rgba(201,182,255,.9));animation:portalPulse 1.6s ease-in-out infinite}
@@ -742,6 +751,16 @@ canvas.bigbang{position:absolute;inset:0;width:100%;height:100%;z-index:400;poin
     </div>
   </div>
 
+  <!-- Voltar na carreira (10 toques no personagem da tela inicial): só para trás -->
+  <div class="overlay" id="ovBack" role="dialog" aria-modal="true" aria-labelledby="bkTitle">
+    <div class="panel daily-panel">
+      <button class="dclose" id="btnBackClose" type="button" aria-label="Fechar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+      <h3 id="bkTitle">Voltar na carreira</h3>
+      <p>Escolha o pântano e a fase</p>
+      <div class="bkregs" id="bkRegs"></div>
+      <div class="bkfases" id="bkFases"></div>
+    </div>
+  </div>
   <!-- Confirmação -->
   <!-- Como jogar: regras animadas antes do 1º treino -->
   <div class="overlay" id="ovRules" role="dialog" aria-modal="true" aria-labelledby="rlTitle">
@@ -1209,6 +1228,21 @@ const Art = {
   <ellipse cx="27" cy="45" rx="5" ry="3" fill="#ff9ab6" opacity=".55"/><ellipse cx="73" cy="45" rx="5" ry="3" fill="#ff9ab6" opacity=".55"/>${shine}`;
         feet = '<g fill="#cfa27c"><ellipse cx="33" cy="88" rx="8" ry="4.6"/><ellipse cx="67" cy="88" rx="8" ry="4.6"/></g><g stroke="#5a3a1e" stroke-width="1.2" stroke-linecap="round"><path d="M28 90 v3 M33 91 v3 M38 90 v3 M62 90 v3 M67 91 v3 M72 90 v3"/></g>';
       },
+      topogigio() {      // rato de esgoto cinza-amarronzado: orelhonas, pelo arrepiado, orelha mordida e rabo comprido
+        defs = g('rtB', '#a39a8c', '#7a7064', '#4f4840') + g('rtE', '#ffc6d2', '#f59ab0', '#d9708c');
+        back = `<path d="M74 82 Q98 84 96 64 Q94 46 80 48 Q70 50 76 40 Q82 30 92 32" stroke="#e7a3b2" stroke-width="3.4" fill="none" stroke-linecap="round"/>
+  <path d="M74 82 Q98 84 96 64 Q94 46 80 48 Q70 50 76 40 Q82 30 92 32" stroke="#c97f92" stroke-width="1" fill="none" stroke-dasharray="1.4 2.6" stroke-linecap="round"/>`;
+        body = `<ellipse cx="21" cy="78" rx="12" ry="9" fill="url(#rtB)"/><ellipse cx="79" cy="78" rx="12" ry="9" fill="url(#rtB)"/>
+  <ellipse cx="50" cy="67" rx="29" ry="23" fill="url(#rtB)"/><ellipse cx="50" cy="73" rx="17" ry="14" fill="#cfc6b8"/>
+  <circle cx="19" cy="15" r="14" fill="url(#rtB)"/><circle cx="81" cy="15" r="14" fill="url(#rtB)"/><circle cx="20" cy="16" r="9" fill="url(#rtE)"/><circle cx="80" cy="16" r="9" fill="url(#rtE)"/><path d="M89 5 l-4 5 5 2 Z" fill="#2a2620"/>
+  <path d="M40 17 L43 8 L47 15 L50 5 L53 15 L57 8 L60 17 Z" fill="#7a7064"/><ellipse cx="50" cy="38" rx="32" ry="24" fill="url(#rtB)"/>`;
+        face = `${eyes('#120c08')}<ellipse cx="50" cy="47" rx="13" ry="9" fill="#cfc6b8"/>
+  <ellipse cx="50" cy="42.4" rx="4.6" ry="3.4" fill="#ff7f9c" stroke="#c94a6a" stroke-width=".8"/><circle cx="48.6" cy="41.6" r="1" fill="#fff" opacity=".8"/>
+  <path d="M50 45.8 V49 M44 50 Q50 54 56 50" stroke="#4a2a20" stroke-width="1.6" fill="none" stroke-linecap="round"/><path d="M47.6 51.6 h4.8 v4.4 h-4.8 Z M50 51.6 V56" fill="#fffef4" stroke="#b8b0a0" stroke-width=".7"/>
+  <g stroke="#3a2a1e" stroke-width=".9" stroke-linecap="round" opacity=".8"><path d="M38 45 L20 41 M38 48 L19 49 M38 51 L22 56 M62 45 L80 41 M62 48 L81 49 M62 51 L78 56"/></g>
+  <path d="M58 30 q4 -2 6 1" stroke="#4f4840" stroke-width="1.4" fill="none" stroke-linecap="round"/><ellipse cx="24" cy="45" rx="5" ry="3" fill="#ff9ab6" opacity=".45"/><ellipse cx="76" cy="45" rx="5" ry="3" fill="#ff9ab6" opacity=".45"/>${shine}`;
+        feet = '<g fill="#f2a6b8" stroke="#c97f92" stroke-width=".8"><ellipse cx="33" cy="88" rx="8" ry="4.6"/><ellipse cx="67" cy="88" rx="8" ry="4.6"/></g><path d="M29 90 v2.6 M33 91 v2.6 M37 90 v2.6 M63 90 v2.6 M67 91 v2.6 M71 90 v2.6" stroke="#c97f92" stroke-width="1" stroke-linecap="round"/>';
+      },
       caramelo() {     // vira-lata caramelo: orelhas caídas, focinho clarinho, peito branco, língua de fora
         defs = g('dgB', '#f2c27a', '#d9963f', '#a8691f');
         back = '<path d="M78 76 Q94 70 90 56" stroke="#c9842f" stroke-width="6" fill="none" stroke-linecap="round"/>';
@@ -1350,7 +1384,7 @@ ${dim ? '' : `<path d="M${x - r * .32} ${y - r * .42} q${r * .12} -${r * .14} ${
   },
   // tela inicial: desenho fixo (vitórias-régias, brilhos) + os dois sapos em camadas próprias que pulam
   heroScene() {
-    return `<div class="hero-stage"><svg class="hero-bg" viewBox="0 0 200 130" aria-hidden="true">
+    return `<div class="hero-stage"><div class="hero-zoom"><svg class="hero-bg" viewBox="0 0 200 130" aria-hidden="true">
 <ellipse cx="100" cy="112" rx="88" ry="15" fill="rgba(255,255,255,.18)"/>
 <ellipse cx="100" cy="110" rx="62" ry="13" fill="#145e17" opacity=".5"/>
 <path d="M40 106 A60 14 0 1 0 160 106 A60 14 0 0 0 108 93 L100 106 L94 93 A60 14 0 0 0 40 106Z" fill="url(#lily)" stroke="#155f1a" stroke-width="1.2"/>
@@ -1358,7 +1392,7 @@ ${dim ? '' : `<path d="M${x - r * .32} ${y - r * .42} q${r * .12} -${r * .14} ${
 <ellipse cx="170" cy="104" rx="20" ry="6" fill="url(#lily)" stroke="#155f1a" stroke-width="1"/>
 <ellipse cx="26" cy="110" rx="16" ry="5" fill="url(#lily)" stroke="#155f1a" stroke-width="1"/>
 <g fill="#fff" opacity=".85"><path d="M20 30l2 5 5 2-5 2-2 5-2-5-5-2 5-2z"/><path d="M178 26l1.5 4 4 1.5-4 1.5-1.5 4-1.5-4-4-1.5 4-1.5z"/><path d="M160 52l1 2.6 2.6 1-2.6 1-1 2.6-1-2.6-2.6-1 2.6-1z"/></g>
-</svg><div class="hero-frog${Outfit.flies(Outfit.worn) ? ' fly' : ''}">${Art.frog('green', { outfit: Outfit.worn, char: Outfit.char })}</div><div class="hero-mini${Outfit.flies(Outfit.wornRed) ? ' fly' : ''}">${Art.frog('red', { outfit: Outfit.wornRed, char: Outfit.charRed })}</div></div>`;
+</svg><div class="hero-frog${Outfit.flies(Outfit.worn) ? ' fly' : ''}">${Art.frog('green', { outfit: Outfit.worn, char: Outfit.char })}</div><div class="hero-mini${Outfit.flies(Outfit.wornRed) ? ' fly' : ''}">${Art.frog('red', { outfit: Outfit.wornRed, char: Outfit.charRed })}</div></div></div>`;
   },
   star(fill = '#ffd23f') {
     return `<svg viewBox="0 0 24 24"><path d="M12 1.8l3.1 6.4 7 1-5.1 4.9 1.2 7L12 17.8l-6.2 3.3 1.2-7L1.9 9.2l7-1z" fill="${fill}" stroke="#c98a00" stroke-width="1.2" stroke-linejoin="round"/><path d="M9 7.5l1.5-3" stroke="#fff" stroke-width="1.4" stroke-linecap="round" opacity=".8"/></svg>`;
@@ -1766,7 +1800,7 @@ ${vest}<g transform="translate(100 0) scale(-1 1)">${vest}</g>
 <path d="M-4 -2 C-12 -14 -24 -23 -38 -25" stroke="#eef4ff" stroke-width="2.2" fill="none" stroke-linecap="round" opacity=".9"/>`;
         return `<g transform="translate(30 56)">${wing}</g><g transform="translate(70 56) scale(-1 1)">${wing}</g>`;
       } },
-    { id: 'bolovo', name: 'RPN', slot: 'head', box: '28 -8 44 36',
+    { id: 'bolovo', name: 'RPN', slot: 'head', layer: 'top', box: '28 -8 44 36',
       // 5 panel xadrez verde com aba bege e o B, L, V bordados em escadinha descendo (prêmio do desafio do dia perfeito)
       svg: () => `<defs><pattern id="blvPlaid" width="7" height="7" patternUnits="userSpaceOnUse"><rect width="7" height="7" fill="#3f5a3a"/><rect width="7" height="2.2" fill="#56724b" opacity=".9"/><rect width="2.2" height="7" fill="#56724b" opacity=".9"/>
 <rect y="4.4" width="7" height=".35" fill="#e6dcbc" opacity=".75"/><rect x="4.4" width=".35" height="7" fill="#e6dcbc" opacity=".75"/><rect y="1" width="7" height=".35" fill="#22361f"/><rect x="1" width=".35" height="7" fill="#22361f"/></pattern></defs>
@@ -1792,6 +1826,35 @@ ${vest}<g transform="translate(100 0) scale(-1 1)">${vest}</g>
 <path d="M49.7 13.4 Q51.8 12.9 53.6 13.6" stroke="#6d6a70" stroke-width=".2" fill="none"/><circle cx="48.7" cy="13.1" r=".5" fill="#e9c8bd"/><circle cx="48.75" cy="13.1" r=".22" fill="#6d6a70"/>
 <path d="M30.5 21.2 Q50 34 69.5 21.2 Q50 31.4 30.5 21.2 Z" fill="#3a2620" opacity=".28"/>
 <path d="M30 19.6 Q50 32.4 70 19.6 L67.8 17 Q50 27.4 32.2 17 Z" fill="url(#leoPrint)" stroke="#c98f80" stroke-width="1.3" stroke-linejoin="round"/><path d="M32.6 17.6 Q50 27.8 67.4 17.6" stroke="#7a5f58" stroke-width=".7" fill="none" opacity=".7"/></g>` },
+    { id: 'galocha', name: 'Galocha amarela', slot: 'feet', box: '6 62 88 36',
+      // galocha de borracha amarela, cano alto e sola escura (Esgoto)
+      svg: () => { const b = `<path d="M-3 11 V-15 Q-3 -17 -1 -17 H10 Q12 -17 12 -15 V-1 Q22 -2 27 2 Q30.5 4 30.5 8 V11 Z" fill="#ffcf1f" stroke="#a87a00" stroke-width="1"/>
+<rect x="-4.2" y="-19" width="17.4" height="4.4" rx="1.4" fill="#f0b400" stroke="#a87a00" stroke-width="1"/><rect x="-3.6" y="9" width="35" height="4.4" rx="1.6" fill="#3a3a3a"/>
+<path d="M0 -12 V6" stroke="#fff" stroke-width="1.6" opacity=".45" stroke-linecap="round"/><path d="M14 1 Q22 0 26 4" stroke="#fff" stroke-width="1.2" opacity=".4" fill="none" stroke-linecap="round"/>`;
+        return `<g transform="translate(45 82) scale(-.82 .82)">${b}</g><g transform="translate(55 82) scale(.82)">${b}</g>`; } },
+    { id: 'mascara', name: 'Máscara de gás', slot: 'face', box: '10 34 80 28',
+      // máscara de gás cinza com filtro redondo na frente e tiras para trás (Esgoto)
+      svg: () => `<path d="M36 46 Q24 44 14 38 M64 46 Q76 44 86 38" stroke="#22262a" stroke-width="3" fill="none" stroke-linecap="round"/>
+<ellipse cx="50" cy="48.6" rx="15.6" ry="10.4" fill="#5f676e" stroke="#2c3236" stroke-width="1.1"/><ellipse cx="45" cy="44.6" rx="6" ry="2.4" fill="#fff" opacity=".22"/>
+<circle cx="37.6" cy="51" r="3.2" fill="#3a4045" stroke="#22262a" stroke-width=".8"/><circle cx="62.4" cy="51" r="3.2" fill="#3a4045" stroke="#22262a" stroke-width=".8"/>
+<circle cx="50" cy="54" r="7" fill="#3a4045" stroke="#1c2024" stroke-width="1"/><circle cx="50" cy="54" r="4.6" fill="#2a2f33"/><path d="M46.4 52.4 H53.6 M46 54 H54 M46.4 55.6 H53.6" stroke="#6b747b" stroke-width=".8"/><rect x="47.6" y="45.6" width="4.8" height="2.6" rx="1" fill="#7ee03a"/>` },
+    { id: 'macacao', name: 'Macacão laranja', slot: 'torso', box: '2 56 96 42',
+      // macacão de limpeza laranja com faixa refletiva, zíper e bolsinho (Esgoto)
+      svg: () => `<ellipse cx="20" cy="77" rx="15.6" ry="11.6" fill="#ff7a1a" stroke="#b44a00" stroke-width="1"/><ellipse cx="80" cy="77" rx="15.6" ry="11.6" fill="#ff7a1a" stroke="#b44a00" stroke-width="1"/>
+<path d="M8 76 Q14 80 20 80 M92 76 Q86 80 80 80" stroke="#e8f0f2" stroke-width="2.4" fill="none"/>
+<path d="M21.4 64 Q19 80 26 88.6 Q50 96.6 74 88.6 Q81 80 78.6 64 Q50 73 21.4 64 Z" fill="#ff8a2a" stroke="#b44a00" stroke-width="1"/>
+<path d="M22.2 78 Q50 85 77.8 78 L77.4 82.6 Q50 89.6 22.6 82.6 Z" fill="#e8f0f2" stroke="#9aa6ad" stroke-width=".6"/><path d="M50 70 V93" stroke="#b44a00" stroke-width="1" stroke-dasharray="1.2 .8"/>
+<rect x="56" y="70" width="9" height="6.4" rx="1" fill="none" stroke="#b44a00" stroke-width=".9"/><path d="M30 68.4 Q50 74.6 70 68.4" stroke="#b44a00" stroke-width="2" fill="none"/>` },
+    { id: 'capacetelanterna', name: 'Capacete com lanterna', slot: 'head', layer: 'top', box: '14 -14 72 36',
+      // capacete de obra amarelo com lanterna acesa na testa (Esgoto, última fase)
+      svg: () => `<circle cx="50" cy="5" r="11" fill="#fff6b0" opacity=".35"/><path d="M27 15 Q27 -7 50 -8 Q73 -7 73 15 Z" fill="#ffc21f" stroke="#a87a00" stroke-width="1.2"/>
+<path d="M46 -7.6 Q50 -9 54 -7.6 L54 14 H46 Z" fill="#f0a800"/><ellipse cx="50" cy="15" rx="27" ry="4.2" fill="#f0b400" stroke="#a87a00" stroke-width="1.1"/>
+<rect x="43.6" y="1" width="12.8" height="9" rx="2.4" fill="#2b2f33" stroke="#15181a" stroke-width=".8"/><circle cx="50" cy="5.5" r="3.4" fill="#fff6b0"/><circle cx="49" cy="4.6" r="1.1" fill="#fff"/>
+<path d="M32 5 Q34 -4 42 -6" stroke="#fff" stroke-width="1.6" opacity=".45" fill="none" stroke-linecap="round"/>` },
+    { id: 'ninja', name: 'Faixa ninja', slot: 'eyes', rare: true, box: '10 12 92 30',
+      // faixa azul nos olhos com nó e pontas soltas, como as tartarugas que moram no esgoto (Esgoto com 3★)
+      svg: () => `<path fill-rule="evenodd" d="M14 21 Q50 13 86 21 L86.6 33 Q50 25 13.4 33 Z M31 21 m-8 6 a8 6.6 0 1 0 16 0 a8 6.6 0 1 0 -16 0 Z M69 21 m-8 6 a8 6.6 0 1 0 16 0 a8 6.6 0 1 0 -16 0 Z" fill="#2b7de9" stroke="#174a8f" stroke-width="1"/>
+<path d="M86 26 Q94 30 98 38 Q92 36 88 30 M86 26 Q95 24 100 18 Q93 20 87 24" fill="#2b7de9" stroke="#174a8f" stroke-width="1" stroke-linejoin="round"/><circle cx="87" cy="26.4" r="2.6" fill="#2b7de9" stroke="#174a8f" stroke-width="1"/>` },
     { id: 'oculos3d', name: 'Óculos de estrela', slot: 'eyes', space: true, box: '14 8 72 38',
       svg: () => {
         const star = (x, y) => `<path transform="translate(${x} ${y}) scale(1.25)" d="M0 -11 l3.2 6.6 7.3 1 -5.3 5.1 1.3 7.2 -6.5 -3.4 -6.5 3.4 1.3 -7.2 -5.3 -5.1 7.3 -1z" fill="#ff6ad5" fill-opacity=".55" stroke="#ffd23f" stroke-width="2.2" stroke-linejoin="round"/>`;
@@ -1810,7 +1873,8 @@ ${vest}<g transform="translate(100 0) scale(-1 1)">${vest}</g>
   /* Personagens: o sapo e os amigos que chegam ao abrir certos pântanos. Cada lugar (o seu e o do sapinho vermelho)
      escolhe o seu personagem no guarda-roupa. */
   const CHARS = [{ id: 'sapo', name: 'Sapo' }, { id: 'johnny', name: 'Johnny Chicken', at: 'montemor' }, { id: 'lollipop', name: 'Loripop', at: 'praia' },
-    { id: 'porco', name: 'Porco', at: 'nebuloso' }, { id: 'caramelo', name: 'Caramelo', at: 'carnaval' }, { id: 'corujao', name: 'Corujão', at: 'festa' }, { id: 'tatu', name: 'Tatu', at: 'skatepark' }];
+    { id: 'corujao', name: 'Corujão', at: 'nebuloso' }, { id: 'caramelo', name: 'Caramelo', at: 'carnaval' }, { id: 'porco', name: 'Porco', at: 'festa' }, { id: 'tatu', name: 'Tatu', at: 'skatepark' },
+    { id: 'topogigio', name: 'Topogígio', at: 'esgoto' }];
   let char = Store.get('char', 'sapo'), charRed = Store.get('charRed', 'sapo');
   const big = o => flies(o) || !!(o && o.ride);       // ocupa mais espaço em volta do sapo (chama, caixa)
   function layers(o, red) {
@@ -2591,7 +2655,7 @@ const UI = (() => {
     else if (st === 'stuck') { Game.over = true; setTimeout(showStuck, 450); }
   }
   // ---- overlays ----
-  function hideOverlays() { $('rDemo').innerHTML = ''; ['ovWin', 'ovStuck', 'ovConfirm', 'ovDaily', 'ovTut', 'ovRules'].forEach(id => $(id).classList.remove('show')); stopConfetti(); Base.dim(false); }
+  function hideOverlays() { $('rDemo').innerHTML = ''; ['ovWin', 'ovStuck', 'ovConfirm', 'ovDaily', 'ovTut', 'ovRules', 'ovBack'].forEach(id => $(id).classList.remove('show')); stopConfetti(); Base.dim(false); }
   let winToMap = false;      // a vitória leva de volta à trilha (troféu, estrela do bônus) em vez de seguir para o próximo mapa
   function showWin() {
     if (!Game.over || !Rules.isWin(Game.state)) return;
@@ -2609,7 +2673,7 @@ const UI = (() => {
         .map(([x, y, c, d]) => `<div class="star" style="left:${x}%;top:${y}%;animation-delay:${d}s,${d + .6}s">${Art.star(c)}</div>`).join('');
     const c = Game.card;
     let title = 'Você venceu!', next = 'Próxima carta', prize = null, stars = '', got = 0;
-    winToMap = false; $('btnAgain').classList.remove('nudge');
+    winToMap = false; $('btnNewWin').classList.remove('nudge');
     if (c.career != null) {
       if (c.career === LESSONS.length - 1) Daily.practiced();     // terminou o tutorial da trilha: o mapa do dia não repete o treino
       const min = Rules.greens(c.start), st = c.levelId === 'tutorial' ? 3 : starsFor(Game.count, min);
@@ -2617,9 +2681,9 @@ const UI = (() => {
       got = st;
       stars = `<div class="wstars" aria-label="${st} de 3 estrelas">${[0, 1, 2].map(() => `<span class="ws"><span class="e">${Art.star('#cfd8e3')}</span><span class="f">${Art.star('#ffd23f')}</span></span>`).join('')}</div>${st < 3 ? (Game.count - min <= 2 ? `<p class="wmin near">-${Game.count - min} para <span class="st-on">★★★</span></p>` : `<p class="wmin"><span class="st-on">★★★</span> ${min} movimentos</p>`) : ''}`;
       next = 'Próxima fase';
-      if (st < 3 && Game.count - min <= 2) $('btnAgain').classList.add('nudge');     // quase 3★: o "jogar de novo" chama atenção
+      $('btnNewWin').classList.add('nudge');     // o que chama atenção é seguir para a próxima fase
       if (res.finished) { title = 'Carreira concluída!'; next = 'Ver troféu'; winToMap = true; }
-      if (res.bonusFinished) { title = 'Bônus concluído!'; next = 'Ver estrela'; winToMap = true; }
+      if (res.bonusFinished) { title = 'Espaço concluído!'; next = 'Ver estrela'; winToMap = true; }
       prize = res.prize;
       // uma vez só: ao terminar um pântano sem todas as 3★, conta que existe o presente
       if (res.advanced && !Store.get('tip3', false)) {
@@ -2826,7 +2890,7 @@ const UI = (() => {
   $('btnStuckHome').addEventListener('click', () => { hideOverlays(); Sound.click(); show('home'); });
   document.querySelectorAll('.snd').forEach(b => b.addEventListener('click', () => { Sound.unlock(); Sound.setMuted(!Sound.muted); }));
 
-  return { show, hud, checkEnd, guide, draw, startGame, hideOverlays, dailyIntro, dailyReview, phasePop, get card() { return card; }, get levels() { return levels; } };
+  return { show, hud, checkEnd, guide, draw, startGame, hideOverlays, confirm, dailyIntro, dailyReview, phasePop, get card() { return card; }, get levels() { return levels; } };
 })();
 
 /* ---------------------------------------------------------------------
@@ -3001,6 +3065,28 @@ ${moss ? '<path d="M18 -48 v12 M22 -52 v9 M-16 -61 v13 M-19 -64 v8" stroke="#6f8
   skateboard(x, y, k, rot) {
     return `<g transform="translate(${x} ${y}) rotate(${rot}) scale(${k})"><rect x="-16" y="-3.4" width="32" height="6.8" rx="3.4" fill="#ff6a13" stroke="#8a3200" stroke-width="1"/><circle cx="-9" cy="5" r="2.2" fill="#fff4cf"/><circle cx="9" cy="5" r="2.2" fill="#fff4cf"/></g>`;
   },
+  // Esgoto: cano escorrendo gosma verde, poça, bueiro, rato e barata
+  pipe(x, y, k, flip) {
+    return `<g transform="translate(${x} ${y}) scale(${flip ? -k : k} ${k})"><ellipse cx="4" cy="15" rx="15" ry="4" fill="#7ee03a" opacity=".85"/><ellipse cx="0" cy="14" rx="5" ry="1.4" fill="#d6ff9a" opacity=".7"/>
+<rect x="-30" y="-16" width="26" height="18" rx="2" fill="#8d9488" stroke="#4a5048" stroke-width="1.2"/><rect x="-30" y="-16" width="26" height="5" fill="#fff" opacity=".18"/><rect x="-12" y="-18" width="4" height="22" rx="1.4" fill="#6b7268" stroke="#4a5048" stroke-width="1"/>
+<ellipse cx="-4" cy="-7" rx="5" ry="10" fill="#6b7268" stroke="#4a5048" stroke-width="1.2"/><ellipse cx="-3" cy="-7" rx="3.4" ry="7.6" fill="#1c221c"/>
+<path d="M-2 -1 Q3 -1 3 5 Q3 11 6 14 L1 14 Q-1 10 -1 5 Z" fill="#7ee03a"/><circle cx="2" cy="6" r="1" fill="#d6ff9a"/></g>`;
+  },
+  slime(x, y, k) {
+    return `<g transform="translate(${x} ${y}) scale(${k})"><path d="M-16 0 Q-14 -6 -4 -5 Q2 -9 10 -5 Q18 -4 16 2 Q12 7 0 6 Q-14 7 -16 0 Z" fill="#6fd02a" opacity=".9"/><ellipse cx="-4" cy="-1" rx="6" ry="1.6" fill="#d6ff9a" opacity=".6"/><circle cx="7" cy="-1" r="2" fill="none" stroke="#d6ff9a" stroke-width=".9"/><circle cx="11" cy="2" r="1.2" fill="none" stroke="#d6ff9a" stroke-width=".8"/></g>`;
+  },
+  grate(x, y, k) {
+    return `<g transform="translate(${x} ${y}) scale(${k})"><rect x="-15" y="-9" width="30" height="18" rx="3" fill="#3a3f38" stroke="#6b7268" stroke-width="2"/><path d="M-9 -6 V6 M-3 -6 V6 M3 -6 V6 M9 -6 V6" stroke="#1a1e1a" stroke-width="3" stroke-linecap="round"/></g>`;
+  },
+  rat(x, y, k, flip) {
+    return `<g transform="translate(${x} ${y}) scale(${flip ? -k : k} ${k})"><ellipse cx="0" cy="5" rx="12" ry="2.4" fill="#000" opacity=".2"/><path d="M-10 1 Q-22 2 -24 -6 Q-25 -11 -20 -12" stroke="#e7a3b2" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+<ellipse cx="-1" cy="-2" rx="11" ry="6.4" fill="#7a7064"/><path d="M6 -6 Q16 -4 15 0 Q12 2 6 2 Z" fill="#8d8476"/><circle cx="15" cy="-.6" r="1.3" fill="#ff7f9c"/><circle cx="6" cy="-8" r="3.6" fill="#8d8476"/><circle cx="6" cy="-8" r="2" fill="#f59ab0"/><circle cx="10" cy="-3.4" r="1.1" fill="#120c08"/>
+<path d="M-6 3 v2 M4 3 v2" stroke="#f2a6b8" stroke-width="1.6" stroke-linecap="round"/></g>`;
+  },
+  roach(x, y, k, rot) {
+    return `<g transform="translate(${x} ${y}) rotate(${rot}) scale(${k})"><g stroke="#3a1e0c" stroke-width="1" stroke-linecap="round" fill="none"><path d="M-3 -3 l-5 -3 M-3 0 l-6 0 M-3 3 l-5 3 M3 -3 l5 -3 M3 0 l6 0 M3 3 l5 3"/><path d="M-1 -8 Q-4 -14 -8 -15 M1 -8 Q4 -14 8 -15" stroke-width=".8"/></g>
+<ellipse cx="0" cy="1" rx="4.4" ry="7" fill="#7a3e14"/><path d="M0 -5 V8" stroke="#4a2408" stroke-width=".8"/><ellipse cx="0" cy="-6.6" rx="2.6" ry="2" fill="#4a2408"/><ellipse cx="-1.4" cy="-1" rx="1" ry="3" fill="#fff" opacity=".25"/></g>`;
+  },
   star: (x, y, k) => `<circle cx="${x}" cy="${y}" r="${1.4 * k}" fill="#fff" opacity=".85"/>`,
   nebula: (x, y, k, c) => `<ellipse cx="${x}" cy="${y}" rx="${80 * k}" ry="${30 * k}" fill="${c}" opacity=".1"/><ellipse cx="${x + 20 * k}" cy="${y - 8 * k}" rx="${46 * k}" ry="${18 * k}" fill="${c}" opacity=".1"/>`,
   planet(x, y, k, c, ring) {
@@ -3052,18 +3138,19 @@ const Career = (() => {
   /* Pântanos em ordem. g: quantos sapos verdes tem cada mapa (a dificuldade sobe devagar, em serrote: depois de um
      mapa mais difícil vem um mais leve). Os ids 'iniciante', 'avancado' e 'expert' ficaram dos pântanos antigos. */
   const REGIONS = [
-    { id: 'tutorial', na: 'no', name: 'Tutorial', sub: 'Primeiros pulos', color: '#12a6c4', count: 3, top: '#d4f6ff', bot: '#8fdfee', bank: null },
-    { id: 'iniciante', na: 'no', name: 'Pântano Tranquilo', sub: 'Lagoa calminha', color: '#2fbf3a', g: [3, 3, 3, 3, 3, 3, 3, 3], top: '#8fdfee', bot: '#3fbfa6', bank: '#86cf62' },
-    { id: 'montemor', na: 'no', name: 'Monte Mor', sub: 'Roça, boiada e charrete', color: '#8a5a2b', g: [3, 3, 4, 3, 4, 4, 3, 4, 4, 4], top: '#a6dc6e', bot: '#6cbb48', bank: '#c9a25a' },     // pasto (grama)
-    { id: 'praia', na: 'na', name: 'Praia', sub: 'Sol, areia e água de coco', color: '#ff9a1f', g: [4, 4, 4, 4, 4, 4, 4, 4, 4, 4], top: '#7fe6f0', bot: '#25c2cf', bank: '#f2d79a' },
-    { id: 'nebuloso', na: 'no', name: 'Pântano Nebuloso', sub: 'Pulando nas nuvens', color: '#7f8fb8', g: [4, 4, 5, 4, 5, 5, 4, 5, 5, 5], top: '#cfdcf2', bot: '#93a6cf', bank: null },
-    { id: 'carnaval', na: 'no', name: 'Carnaval', sub: 'Bloco do sapo', color: '#d63aa0', g: [5, 5, 5, 5, 5, 5, 5, 5, 5, 5], top: '#c86bff', bot: '#ff5c9a', bank: null },
-    { id: 'festa', na: 'na', name: 'Festa Universitária', sub: 'Calourada no brejo', color: '#6a4cff', g: [5, 5, 6, 5, 6, 6, 5, 6, 6, 6], top: '#5a3fc0', bot: '#24124f', bank: null },
-    { id: 'skatepark', na: 'no', name: 'Skatepark', sub: 'Manobra radical', color: '#6b7685', g: [6, 6, 7, 6, 7, 7, 6, 7, 7, 7], top: '#b9c3cf', bot: '#7b8696', bank: '#9aa4b0' },
-    { id: 'avancado', na: 'no', name: 'Brejo', sub: 'Vaga-lumes e cogumelos', color: LEVELS.avancado.color, g: [8, 8, 8, 8, 9, 8, 9, 9, 9, 10, 10, 10], top: '#3d6f78', bot: '#2b3a6e', bank: '#3c5a36' },   // entardecer azul-violeta
-    { id: 'expert', na: 'no', name: 'Pântano Jacaroso', sub: 'Cuidado com os jacarés', color: LEVELS.expert.color, g: [11, 11, 11, 11, 11, 11, 11, 11, 11, 11], top: '#4a4422', bot: '#1d1a0c', bank: '#6b4f2a' },   // lamaçal oliva-marrom
+    { id: 'tutorial', na: 'no', name: 'Tutorial', color: '#12a6c4', count: 3, top: '#d4f6ff', bot: '#8fdfee', bank: null },
+    { id: 'iniciante', na: 'no', name: 'Pântano Tranquilo', color: '#2fbf3a', g: [3, 3, 3, 3, 3, 3, 3, 3], top: '#8fdfee', bot: '#3fbfa6', bank: '#86cf62' },
+    { id: 'montemor', na: 'no', name: 'Monte Mor', color: '#8a5a2b', g: [3, 3, 4, 3, 4, 4, 3, 4, 4, 4], top: '#a6dc6e', bot: '#6cbb48', bank: '#c9a25a' },     // pasto (grama)
+    { id: 'praia', na: 'na', name: 'Praia', color: '#ff9a1f', g: [4, 4, 4, 4, 4, 4, 4, 4, 4, 4], top: '#7fe6f0', bot: '#25c2cf', bank: '#f2d79a' },
+    { id: 'nebuloso', na: 'no', name: 'Pântano Nebuloso', color: '#7f8fb8', g: [4, 4, 5, 4, 5, 5, 4, 5, 5, 5], top: '#cfdcf2', bot: '#93a6cf', bank: null },
+    { id: 'carnaval', na: 'no', name: 'Carnaval', color: '#d63aa0', g: [5, 5, 5, 5, 5, 5, 5, 5, 5, 5], top: '#c86bff', bot: '#ff5c9a', bank: null },
+    { id: 'festa', na: 'na', name: 'Porradinha', color: '#6a4cff', g: [5, 5, 6, 5, 6, 6, 5, 6, 6, 6], top: '#5a3fc0', bot: '#24124f', bank: null },
+    { id: 'skatepark', na: 'no', name: 'Skatepark', color: '#6b7685', g: [6, 6, 7, 6, 7, 7, 6, 7, 7, 7], top: '#b9c3cf', bot: '#7b8696', bank: '#9aa4b0' },
+    { id: 'esgoto', na: 'no', name: 'Esgoto', color: '#6fae2e', g: [7, 7, 8, 7, 8, 8, 8], top: '#5b6650', bot: '#323b2e', bank: '#6b6a5e' },   // cano, rato e barata
+    { id: 'avancado', na: 'no', name: 'Brejo', color: LEVELS.avancado.color, g: [8, 8, 8, 8, 9, 8, 9, 9, 9, 10, 10, 10], top: '#3d6f78', bot: '#2b3a6e', bank: '#3c5a36' },   // entardecer azul-violeta
+    { id: 'expert', na: 'no', name: 'Pântano Jacaroso', color: LEVELS.expert.color, g: [11, 11, 11, 11, 11, 11, 11, 11, 11, 11], top: '#4a4422', bot: '#1d1a0c', bank: '#6b4f2a' },   // lamaçal oliva-marrom
     // pântano secreto: só aparece depois de concluir a carreira e tocar no portal (Big Bang)
-    { id: 'espaco', na: 'no', name: 'Bônus', sub: 'Pântano espacial', color: '#8a5cff', count: 10, bonus: true, bg: 'linear-gradient(180deg,#1d1a0c 0,#1d1450 140px,#120a35 55%,#05030f)', bank: null }
+    { id: 'espaco', na: 'no', name: 'Espaço', color: '#8a5cff', count: 10, bonus: true, bg: 'linear-gradient(180deg,#1d1a0c 0,#1d1450 140px,#120a35 55%,#05030f)', bank: null }
   ];
   REGIONS.forEach(R => { if (R.g) R.count = R.g.length; });
   /* Fases bônus em tabuleiros maiores (4×4 nas 5 primeiras, 5×5 nas 5 últimas).
@@ -3086,8 +3173,8 @@ const Career = (() => {
   ];
   const TUTORIAL = LESSONS;
   const MAIN = REGIONS.filter(r => !r.bonus);
-  const TOTAL = MAIN.reduce((a, r) => a + r.count, 0);            // fases da carreira (93)
-  const ALL = TOTAL + REGIONS.find(r => r.bonus).count;           // + 10 do bônus
+  const TOTAL = MAIN.reduce((a, r) => a + r.count, 0);            // fases da carreira (100)
+  const ALL = TOTAL + REGIONS.find(r => r.bonus).count;           // + 10 do Espaço (bônus)
   let bonusOpen = !!Store.get('bonus', false);
   /* Prêmios da trilha, ligados ao tema de cada pântano: um em cada fase do tutorial; no começo, prêmio a cada 3 ou 4
      mapas (depois vão se espaçando); um boné/chapéu na última fase e um premium para quem fizer o pântano todo com 3★
@@ -3102,11 +3189,12 @@ const Career = (() => {
     at(3, 4, 'havaianas'); at(3, 7, 'picole'); at(3, 10, 'bellato');                   // Praia
     at(4, 5, 'zerezes'); at(4, 10, 'cartola');                                         // Nebuloso
     at(5, 5, 'coracao'); at(5, 10, 'pirata');                                          // Carnaval
-    at(6, 4, 'pochete'); at(6, 7, 'bandana'); at(6, 10, 'coque');                      // Festa Universitária
+    at(6, 4, 'pochete'); at(6, 7, 'bandana'); at(6, 10, 'coque');                      // Porradinha
     at(7, 4, 'fone'); at(7, 7, 'skate'); at(7, 10, 'gorro');                           // Skatepark
-    at(8, 4, 'cachecol'); at(8, 8, 'gravata'); at(8, 12, 'bone');                      // Brejo
-    at(9, 3, 'oculos3d'); at(9, 7, 'jetpack'); at(9, 10, 'coroa', 'trofeu');           // Jacaroso
-    at(10, 5, 'traje'); at(10, 10, 'antenas');                                         // Bônus
+    at(8, 1, 'galocha'); at(8, 3, 'mascara'); at(8, 5, 'macacao'); at(8, 7, 'capacetelanterna');   // Esgoto
+    at(9, 4, 'cachecol'); at(9, 8, 'gravata'); at(9, 12, 'bone');                      // Brejo
+    at(10, 3, 'oculos3d'); at(10, 7, 'jetpack'); at(10, 10, 'coroa', 'trofeu');        // Jacaroso
+    at(11, 5, 'traje'); at(11, 10, 'antenas');                                         // Espaço
   }
   // desafio do dia com nota 3★ (na 1ª tentativa do dia): coleção, um item a cada tantas vezes
   const DAILY = [[1, 'aniversario'], [3, 'bigode'], [5, 'pipoca'], [10, 'polaroid'], [20, 'guardachuva']];
@@ -3117,7 +3205,7 @@ const Career = (() => {
      Fechar um pântano inteiro com 3★ (do Tranquilo em diante) dá um prêmio raro. */
   const START = []; REGIONS.reduce((a, R, r) => (START[r] = a, a + R.count), 0);
   const RARE = { iniciante: 'medalha', montemor: 'guitarra', praia: 'prancha', nebuloso: 'asas', carnaval: 'manto', festa: 'caixasom', skatepark: 'corrente',
-    avancado: 'capa', expert: 'capacete', espaco: 'foguete' };    // pântano todo com 3★
+    esgoto: 'ninja', avancado: 'capa', expert: 'capacete', espaco: 'foguete' };    // pântano todo com 3★
   let stars = Store.get('stars', null), opened = Store.get('opened', null), rare = Store.get('rare', []);
   if (!Array.isArray(stars)) {        // quem já jogava antes das estrelas: fases feitas valem 1★ e os pântanos já alcançados seguem abertos
     stars = Array.from({ length: ALL }, (_, i) => i < done ? 1 : 0);
@@ -3132,15 +3220,25 @@ const Career = (() => {
      fase antiga equivalente. Ninguém perde apetrecho: o que a pessoa tinha continua dela. Quem já tinha passado pela
      primeira versão desta mudança (trilha2, que levava o Médio para a Festa Universitária) volta ao progresso antigo
      e é reposicionado do mesmo jeito, ficando com tudo o que ganhou. Uma vez só. */
-  if (!Store.get('trilha3', false) && (done > 0 || stars.some(v => v))) {
+  /* Esgoto (7 fases entre o Skatepark e o Brejo): a trilha3 abaixo ainda conta na trilha de 93 fases (S93 e R93) e o
+     resultado é levado para a trilha de 100 por up93: fases do Brejo em diante andam 7 casas e, para quem já passou do
+     Skatepark, as fases do Esgoto contam como feitas com 3★ (o Esgoto e o Brejo seguem abertos). */
+  const S93 = [0, 3, 11, 21, 31, 41, 51, 61, 71, 83, 93], E = START[REGIONS.findIndex(R => R.id === 'esgoto')], EN = REGIONS.find(R => R.id === 'esgoto').count;
+  const R93 = i => { let r = 0; while (r < S93.length - 1 && i >= S93[r + 1]) r++; return r; };
+  const up93 = (d, st, op) => ({
+    done: d > E ? d + EN : d,
+    stars: st.slice(0, E).concat(new Array(EN).fill(d > E ? 3 : 0), st.slice(E)),
+    opened: op.map(r => r < 8 ? r : r === 8 && d <= E ? 8 : r + 1).concat(d > E ? [8] : [])
+  });
+  if (!Store.get('trilha3', false) && !Store.get('trilha4', false) && (done > 0 || stars.some(v => v))) {
     const OLD = [[0, 3], [3, 16], [16, 28], [28, 40], [40, 50], [50, 60]];             // pântanos antigos [a,b)
     const NEW = [[0, 3], [3, 11], [11, 21], [21, 31], [31, 41], [93, 103]];           // mesma posição na trilha nova
     const V2 = [[0, 3], [3, 41], [41, 71], [71, 83], [83, 93], [93, 103]];            // como a trilha2 tinha distribuído
     const fwd = (o, from, to) => { const k = from.findIndex(([a, b]) => o >= a && o <= b); if (k < 0) return to[to.length - 1][1]; const [a, b] = from[k], [c, d] = to[k]; return c + Math.round((o - a) * (d - c) / (b - a)); };
     let oldDone, oldStars, keep, was;
     if (Store.get('trilha2', false)) {           // desfaz a distribuição da trilha2 (aproximada fase a fase)
-      keep = Object.keys(PRIZE).filter(i => +i < done).flatMap(i => PRIZE[i]);
-      was = opened.includes(REGIONS.findIndex((R, r) => done >= START[r] && done < START[r] + R.count));
+      keep = Object.keys(PRIZE).filter(i => +i < up93(done, [], []).done).flatMap(i => PRIZE[i]);
+      was = opened.includes(R93(done));
       oldDone = fwd(done, V2, OLD);
       oldStars = Array.from({ length: 60 }, (_, o) => { const k = OLD.findIndex(([a, b]) => o >= a && o < b), [a, b] = OLD[k], [c, d] = V2[k]; return stars[c + Math.floor((o - a) * (d - c) / (b - a))] || 0; });
     } else {
@@ -3155,21 +3253,25 @@ const Career = (() => {
       oldDone = done; oldStars = stars.slice();
     }
     // no bônus (só depois de terminar a carreira antiga): continua no bônus; senão, mesma posição no pântano equivalente
-    done = Math.min(ALL, bonusOpen && oldDone >= 50 ? TOTAL + (oldDone - 50) : fwd(oldDone, OLD.slice(0, 5), NEW.slice(0, 5)));
-    stars = Array.from({ length: ALL }, (_, j) => {
+    done = Math.min(103, bonusOpen && oldDone >= 50 ? 93 + (oldDone - 50) : fwd(oldDone, OLD.slice(0, 5), NEW.slice(0, 5)));
+    stars = Array.from({ length: 103 }, (_, j) => {
       if (j >= done) return 0;
       const k = NEW.findIndex(([c, d]) => j >= c && j < d);
       if (k < 0) return 3;                         // pântanos novos que um jogador do bônus já deixou para trás
       const [a, b] = OLD[k], [c, d] = NEW[k];
       return Math.max(1, oldStars[a + Math.floor((j - c) * (b - a) / (d - c))] || 1);
     });
-    const regNew = i => { let r = 0; while (r < REGIONS.length - 1 && i >= START[r + 1]) r++; return r; };
-    opened = REGIONS.map((R, r) => r).filter(r => r > 0 && (START[r] < done || (was && r === regNew(done))));
+    opened = S93.map((a, r) => r).filter(r => r > 0 && (S93[r] < done || (was && r === R93(done))));
+    ({ done, stars, opened } = up93(done, stars, opened));
     const mine = Object.keys(PRIZE).filter(i => +i < done).flatMap(i => PRIZE[i]).concat(rare);
     keep.forEach(id => { if (!mine.includes(id) && !rare.includes(id)) rare.push(id); });
     Store.set('career', done); Store.set('stars', stars); Store.set('opened', opened); Store.set('rare', rare);
   }
-  if (!Store.get('trilha3', false)) { ['prizeSwap', 'prizeSwap2', 'prizeSwap3', 'trilha2'].forEach(k => Store.set(k, true)); Store.set('trilha3', true); }
+  else if (!Store.get('trilha4', false) && Store.get('trilha3', false)) {       // já estava na trilha de 93: abre espaço para o Esgoto
+    ({ done, stars, opened } = up93(done, stars, opened));
+    Store.set('career', done); Store.set('stars', stars); Store.set('opened', opened);
+  }
+  if (!Store.get('trilha4', false)) { ['prizeSwap', 'prizeSwap2', 'prizeSwap3', 'trilha2', 'trilha3'].forEach(k => Store.set(k, true)); Store.set('trilha4', true); }
   if (stars.length < ALL) stars = stars.concat(new Array(ALL - stars.length).fill(0));
   // quem já tinha entrado num pântano (fases feitas nele) continua com ele aberto
   REGIONS.forEach((R, r) => { if (r > 0 && START[r] < done && !opened.includes(r)) { opened.push(r); Store.set('opened', opened); } });
@@ -3255,7 +3357,7 @@ const Career = (() => {
     const L = list[i], R = REGIONS[L.region];
     const level = { name: R.name, color: R.color };
     const start = { ...L.start }, greens = Rules.greens(start);
-    return { career: i, level, levelId: R.id, label: `${R.name} ${L.n}/${R.count}`, start, greens, jumps: greens,
+    return { career: i, level, levelId: R.id, label: `Fase ${i + 1} · ${R.name}`, start, greens, jumps: greens,
       solution: R.bonus ? L.solution : Solver.solve(start), tip: L.tip || '', guide: L.guide, intro: L.intro, theme: R.bonus ? 'space' : '', code: 'C-' + (i + 1) };
   }
   // só animam os enfeites do pântano que está na tela
@@ -3330,12 +3432,12 @@ ${portalPos ? `<path d="M${finalPos.x} ${finalPos.y} L${portalPos.x} ${portalPos
     const ring = np == null ? 0 : (done - (pp == null ? -1 : pp) - 1) / (np - (pp == null ? -1 : pp));
     nodes.forEach((p, i) => {
       const st = i < done ? 'done' : i === done && playable(i) ? 'cur' : 'locked', L = list[i];
-      html += `<button class="cnode ${st}${st === 'done' && stars[i] === 3 ? ' perfect' : ''}" data-i="${i}" style="left:${p.x - ns / 2}px;top:${p.y - ns / 2}px;width:${ns}px;height:${ns}px" aria-label="${REGIONS[L.region].name} fase ${L.n}${st === 'locked' ? ' (bloqueada)' : ''}">
-<svg viewBox="-12 -12 24 24">${REGIONS[L.region].bonus ? Art.saucer(0, 0, 10.5) : Art.lily(0, 0, 10.5, (i * 47) % 360, true)}</svg><span class="num">${L.n}</span>${st === 'locked' ? `<span class="lock">${lock}</span>` : st === 'done' ? `<span class="ok">${stars[i] === 3 ? okStar : ok}</span>` : ''}${stars[i] ? `<span class="cst">${starHTML(stars[i])}</span>` : ''}${PRIZE[i] && i >= done ? `<span class="prize mystery${i === np ? ' next' : ''}" title="Prêmio surpresa"${i === np ? ` style="--p:${ring.toFixed(3)}"` : ''}>?</span>` : ''}</button>`;
+      html += `<button class="cnode ${st}${st === 'done' && stars[i] === 3 ? ' perfect' : ''}" data-i="${i}" style="left:${p.x - ns / 2}px;top:${p.y - ns / 2}px;width:${ns}px;height:${ns}px" aria-label="Fase ${i + 1}, ${REGIONS[L.region].name}${st === 'locked' ? ' (bloqueada)' : ''}">
+<svg viewBox="-12 -12 24 24">${REGIONS[L.region].bonus ? Art.saucer(0, 0, 10.5) : Art.lily(0, 0, 10.5, (i * 47) % 360, true)}</svg><span class="num">${i + 1}</span>${st === 'locked' ? `<span class="lock">${lock}</span>` : st === 'done' ? `<span class="ok">${stars[i] === 3 ? okStar : ok}</span>` : ''}${stars[i] ? `<span class="cst">${starHTML(stars[i])}</span>` : ''}${PRIZE[i] && i >= done ? `<span class="prize mystery${i === np ? ' next' : ''}" title="Prêmio surpresa"${i === np ? ` style="--p:${ring.toFixed(3)}"` : ''}>?</span>` : ''}</button>`;
     });
     const fs = ns * 1.3;
     html += `<button class="cnode final${done === TOTAL && !bonusOpen ? ' cur' : ''}" data-i="T" style="left:${finalPos.x - fs / 2}px;top:${finalPos.y - fs / 2}px;width:${fs}px;height:${fs}px" aria-label="Troféu final">${Deco.trophy()}</button>`;
-    if (portalPos) html += `<button class="cnode portal" data-i="P" style="left:${portalPos.x - fs / 2}px;top:${portalPos.y - fs / 2}px;width:${fs}px;height:${fs}px" aria-label="Fase extra secreta">${Deco.portal()}<span class="num">Bônus</span></button>`;
+    if (portalPos) html += `<button class="cnode portal" data-i="P" style="left:${portalPos.x - fs / 2}px;top:${portalPos.y - fs / 2}px;width:${fs}px;height:${fs}px" aria-label="Fase extra secreta">${Deco.portal()}<span class="num">Espaço</span></button>`;
     if (starPos) html += `<button class="cnode final star${done >= ALL ? ' cur' : ''}" data-i="S" style="left:${starPos.x - fs / 2}px;top:${starPos.y - fs / 2}px;width:${fs}px;height:${fs}px" aria-label="Estrela final">${Deco.bigStar()}</button>`;
     html += `<div class="cavatar" id="cavatar" style="width:${ns * .95}px;height:${ns * .95}px">${Art.frog('green', { outfit: Outfit.worn, char: Outfit.char })}</div>`;
     inner.innerHTML = html;
@@ -3412,6 +3514,13 @@ ${portalPos ? `<path d="M${finalPos.x} ${finalPos.y} L${portalPos.x} ${portalPos
       place(4, 18, (x, y, q) => Deco.skateboard(x, y, k, q() * 60 - 30));
       place(Math.round(area * .25), 14, (x, y, q) => Deco.lily(x, y, k * .8, q() * 360));
       place(Math.round(area * .3), 18, (x, y) => Deco.ripple(x, y, k));
+    } else if (R.id === 'esgoto') {
+      place(4, 48, (x, y, q) => Deco.pipe(x, y, k * 1.5, x > W / 2));
+      place(Math.round(area * .35), 18, (x, y) => Deco.slime(x, y, k));
+      place(3, 18, (x, y) => Deco.grate(x, y, k));
+      place(4, 22, (x, y, q) => Deco.rat(x, y, k, q() < .5));
+      place(7, 10, (x, y, q) => Deco.roach(x, y, k, q() * 360));
+      for (let ry = 240; ry < H - 80; ry += 420) tw.push(`<i class="tw run" style="top:${ry}px;--w:${W}px;animation-delay:-${(ry % 7).toFixed(0)}s">${Deco.rat(18, 12, 1, false).replace('<g ', '<svg viewBox="0 0 40 20" width="40" height="20"><g ').replace(/<\/g>$/, '</g></svg>')}</i>`);
     } else if (R.id === 'avancado') {
       place(Math.round(area * .25), 60, (x, y) => Deco.fog(x, y, k));
       place(Math.round(area * .25), 14, (x, y, q) => Deco.lily(x, y, k * .8, q() * 360));
@@ -3444,9 +3553,12 @@ ${portalPos ? `<path d="M${finalPos.x} ${finalPos.y} L${portalPos.x} ${portalPos
   function regionHTML(R, r, rc, W, ns) {
     const H = rc.h, ri = REGIONS.indexOf(R), first = REGIONS.findIndex((x, k) => k > 0 && !x.bonus && !isOpen(k)), open = isOpen(ri);
     decoQ[r] = open || ri === first ? () => regionDeco(R, r, rc, W, ns) : null;
-    return `<div class="creg${R.bonus ? ' space' : ''}${open ? '' : ri === first ? ' veil' : ' far'}" data-q="${r}" style="top:${rc.top}px;height:${H}px;background:${R.bg || `linear-gradient(180deg,${R.top},${R.bot})`}">
-<svg class="cdeco" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" aria-hidden="true">${R.bank ? Deco.bank(W, R.bank) : ''}</svg>
-<div class="cbanner${canUnlock(REGIONS.indexOf(R)) ? ' can' : ''}" data-r="${REGIONS.indexOf(R)}"><i style="left:22%"></i><i style="right:22%"></i><b>${R.name}</b><small>${R.sub}</small>${bannerStars(R)}</div></div>`;
+    // o fundo começa na cor em que o pântano de cima termina e vai mudando aos poucos (sem corte seco entre pântanos);
+    // a margem com tufos só aparece nos pântanos já abertos
+    const prev = REGIONS[ri - 1], bg = R.bg || `linear-gradient(180deg,${prev ? prev.bot : R.top} 0,${R.top} ${Math.min(260, H * .35).toFixed(0)}px,${R.bot})`;
+    return `<div class="creg${R.bonus ? ' space' : ''}${open ? '' : ri === first ? ' veil' : ' far'}" data-q="${r}" style="top:${rc.top}px;height:${H}px;background:${bg}">
+<svg class="cdeco" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" aria-hidden="true">${R.bank && open ? Deco.bank(W, R.bank) : ''}</svg>
+<div class="cbanner${canUnlock(REGIONS.indexOf(R)) ? ' can' : ''}" data-r="${REGIONS.indexOf(R)}"><i style="left:22%"></i><i style="right:22%"></i><b>${R.name}</b>${bannerStars(R)}</div></div>`;
   }
   // placa do pântano: estrelas juntadas nele / possíveis; fechado: quantas estrelas (no pântano anterior) abrem
   function bannerStars(R) {
@@ -3730,10 +3842,25 @@ ${portalPos ? `<path d="M${finalPos.x} ${finalPos.y} L${portalPos.x} ${portalPos
     }
     return { start: xform(Rules.fromKey(pick.c), MAPS[Math.floor(h / 7) % 8]), levelId: pick.id, cls: pick.c };
   }
+  /* volta a carreira para a fase i (escolhida na janela dos 10 toques; nunca avança): fases, estrelas e pântanos
+     abertos dali em diante, os apetrechos da trilha e os presentes de 3★ desses pântanos voltam a ser ganhos jogando.
+     A coleção do desafio do dia fica. */
+  function rewind(i) {
+    if (!(i >= 0 && i < done)) return false;
+    done = i; Store.set('career', done);
+    for (let j = i; j < stars.length; j++) stars[j] = 0;
+    Store.set('stars', stars);
+    opened = opened.filter(r => START[r] <= i); Store.set('opened', opened);
+    if (i < TOTAL) { bonusOpen = false; Store.set('bonus', false); }
+    const later = Object.keys(PRIZE).filter(k => +k >= i).flatMap(k => PRIZE[k]).concat(REGIONS.filter((R, r) => START[r] + R.count > i).map(R => RARE[R.id]));
+    rare = rare.filter(id => !later.includes(id)); Store.set('rare', rare);
+    mapKey = ''; near = null;
+    return true;
+  }
   // prêmio fora da trilha (ex.: desafio do dia perfeito); devolve true se for novo
   function grant(id) { if (rare.includes(id)) return false; rare.push(id); Store.set('rare', rare); return true; }
   const chars = () => Outfit.CHARS.filter(c => !c.at || isOpen(REGIONS.findIndex(R => R.id === c.at))).map(c => c.id);
-  return { open, complete, relayout, ensureBuilt, syncBase, dailyPick, grant, dailyWin, ORDER, DAILY, RARE, chars, get stars() { return stars.slice(); }, totalStars, playable, get dailyCount() { dailyPick(0); return { iniciante: dailyClasses.filter(x => x.id === 'iniciante').length, medio: dailyClasses.filter(x => x.id === 'medio').length }; }, seeded, cardFor, owned, openBonus, bigBang, REGIONS, TOTAL, ALL, PRIZE, BONUS, get bonusOpen() { return bonusOpen; }, set bonusOpen(v) { bonusOpen = v; }, get list() { return list; }, get done() { return done; }, set done(v) { done = v; } };
+  return { open, complete, rewind, relayout, ensureBuilt, syncBase, dailyPick, grant, dailyWin, ORDER, DAILY, RARE, chars, get stars() { return stars.slice(); }, totalStars, playable, get dailyCount() { dailyPick(0); return { iniciante: dailyClasses.filter(x => x.id === 'iniciante').length, medio: dailyClasses.filter(x => x.id === 'medio').length }; }, seeded, cardFor, owned, openBonus, bigBang, REGIONS, TOTAL, ALL, PRIZE, BONUS, get bonusOpen() { return bonusOpen; }, set bonusOpen(v) { bonusOpen = v; }, get list() { return list; }, get done() { return done; }, set done(v) { done = v; } };
 })();
 
 /* ---------------------------------------------------------------------
@@ -3985,9 +4112,10 @@ const Daily = (() => {
 /* ---------------------------------------------------------------------
    Wardrobe — guarda-roupa: vestir os apetrechos ganhos na carreira
    --------------------------------------------------------------------- */
-/* Zoom só no sapo (guarda-roupa e tela inicial): pinça para aproximar (até 3×), arrastar para ver de perto e
-   toque duplo para aproximar/voltar. O resto da tela não muda; a página em si continua sem zoom. */
-function zoomable(host, area, pick) {
+/* Zoom no sapo do guarda-roupa e no conjunto da tela inicial (sapo, sapinho, vitória-régia e estrelinhas): pinça para
+   aproximar (até 3×), arrastar para ver de perto e, no guarda-roupa, toque duplo para aproximar/voltar (na tela inicial
+   os toques no personagem ficam para os 10 toques). O resto da tela não muda; a página em si continua sem zoom. */
+function zoomable(host, area, pick, dbl = true) {
   let s = 1, x = 0, y = 0, lastTap = 0;
   const pts = new Map(); let g = null;
   const el = () => host.querySelector(pick);
@@ -3997,6 +4125,7 @@ function zoomable(host, area, pick) {
     const mx = (s - 1) * w / 2, my = (s - 1) * h / 2; x = Math.max(-mx, Math.min(mx, x)); y = Math.max(-my, Math.min(my, y));
     t.style.transformOrigin = '50% 50%'; t.style.transform = s > 1.01 ? `translate(${x}px,${y}px) scale(${s})` : '';
     const a = host.querySelector(area); if (a) a.classList.toggle('zoomed', s > 1.01);
+    host.classList.toggle('zoomed', s > 1.01);
   }
   function reset() { s = 1; x = 0; y = 0; apply(); }
   const dist = () => { const [a, b] = [...pts.values()]; return Math.hypot(a.x - b.x, a.y - b.y); };
@@ -4018,7 +4147,7 @@ function zoomable(host, area, pick) {
     if (!pts.has(e.pointerId)) return;
     const single = pts.size === 1 && g && g.px != null && !g.moved;
     pts.delete(e.pointerId); g = pts.size === 1 ? { px: [...pts.values()][0].x, py: [...pts.values()][0].y, x, y, moved: true } : null;
-    if (!single || e.type !== 'pointerup') return;
+    if (!single || e.type !== 'pointerup' || !dbl) return;
     const now = performance.now();
     if (now - lastTap < 320) {      // toque duplo: aproxima no ponto tocado (ou volta)
       lastTap = 0; if (s > 1) { reset(); return; }
@@ -4036,7 +4165,42 @@ function zoomable(host, area, pick) {
    Todos os apetrechos aparecem, por categoria e na ordem em que saem; os que faltam ficam só
    na silhueta cinza, com "???" no lugar do nome, para dar vontade de ir atrás.
    --------------------------------------------------------------------- */
-window.heroZoom = zoomable($('heroArt'), '.hero-frog', '.hero-frog > svg');     // zoom no sapo da tela inicial
+window.heroZoom = zoomable($('heroArt'), '.hero-stage', '.hero-zoom', false);     // zoom no conjunto da tela inicial
+/* 10 toques seguidos no personagem da tela inicial: janela para voltar a uma fase anterior da carreira (nunca avançar) */
+(() => {
+  let n = 0, t = 0, reg = 0;
+  const regs = () => Career.REGIONS.map((R, r, A) => ({ R, r, a: A.slice(0, r).reduce((s, x) => s + x.count, 0) })).filter(x => x.a < Career.done && (!x.R.bonus || Career.bonusOpen));
+  function fases() {
+    const x = regs().find(g => g.r === reg) || regs().pop();
+    $('bkRegs').querySelectorAll('button').forEach(b => b.classList.toggle('on', +b.dataset.r === x.r));
+    const top = Math.min(Career.done, x.a + x.R.count);
+    $('bkFases').innerHTML = Array.from({ length: top - x.a }, (_, k) => `<button type="button" data-i="${x.a + k}">${x.a + k + 1}</button>`).join('');
+  }
+  function open() {
+    const list = regs();
+    if (!list.length) { toast('Ainda não há fase para voltar'); return; }
+    reg = list[list.length - 1].r;
+    $('bkRegs').innerHTML = list.map(x => `<button type="button" data-r="${x.r}">${x.R.name}</button>`).join('');
+    fases(); heroZoom.reset();
+    $('ovBack').classList.add('show'); Base.dim(true);
+  }
+  $('heroArt').addEventListener('click', e => {
+    if (!e.target.closest('.hero-frog')) { n = 0; return; }
+    const now = Date.now(); n = now - t < 700 ? n + 1 : 1; t = now;
+    if (n >= 10) { n = 0; open(); }
+  });
+  $('bkRegs').addEventListener('click', e => { const b = e.target.closest('button'); if (b) { reg = +b.dataset.r; fases(); Sound.click(); } });
+  $('bkFases').addEventListener('click', e => {
+    const b = e.target.closest('button'); if (!b) return;
+    const i = +b.dataset.i;
+    $('ovBack').classList.remove('show');
+    UI.confirm(`Voltar para a fase ${i + 1}?`, 'Tudo o que foi ganho na carreira a partir dela volta a ser ganho jogando.', 'Voltar', () => {
+      Career.rewind(i); Outfit.prune(Career.owned()); Outfit.pruneChars(Career.chars());
+      $('heroArt').innerHTML = Art.heroScene(); heroZoom.reset(); toast(`Você está na fase ${i + 1}`);
+    });
+  });
+  $('btnBackClose').addEventListener('click', () => { $('ovBack').classList.remove('show'); Base.dim(false); });
+})();
 const Wardrobe = (() => {
   const grid = $('wGrid');
   const SECTIONS = [['cabeca', 'Cabeça'], ['oculos', 'Óculos'], ['corpo', 'Corpo'], ['pes', 'Calçados'], ['acess', 'Acessórios']];
@@ -4087,10 +4251,10 @@ ${stageFrog(false, 0)}${stageFrog(true, 104, .5)}</svg></div>`;
     if (c) { const r = Career.REGIONS.find(x => x.id === c.at); return `Chega ao abrir ${r.na === 'na' ? 'a' : 'o'} ${r.name}`; }
     const R = Career.REGIONS, at = i => { let r = 0, st = 0; R.forEach((x, k) => { if (i >= st) r = k; st += x.count; }); return R[r]; };
     const i = Object.keys(Career.PRIZE).find(k => Career.PRIZE[k].includes(id));
-    if (i != null) { const r = at(+i); return `Desbloqueado ${r.na} ${r.name}`; }
+    if (i != null) { const r = at(+i); return `Encontre ${r.na} ${r.name}`; }
     const r = R.find(x => Career.RARE[x.id] === id);
-    if (r) return `Desbloqueado com ⭐⭐⭐ ${r.na} ${r.name}`;
-    return 'Desbloqueado no Desafio do dia';
+    if (r) return `Encontre com ⭐⭐⭐ ${r.na} ${r.name}`;
+    return 'Encontre no Desafio do dia';
   }
   grid.addEventListener('click', e => {
     const b = e.target.closest('.witem'); if (!b) return;
@@ -4217,14 +4381,14 @@ const Tests = {
     await Career.ensureBuilt();
     const CL = Career.list;
     const RC = Career.REGIONS.map(r => r.count);
-    t('carreira: 10 pântanos e 93 fases (+10 bônus); começa com um pântano curto', Career.TOTAL === 93 && CL.length === 103 && RC.length === 11 && RC[1] === 8 && RC[10] === 10, RC.join(' + '));
+    t('carreira: 11 pântanos e 100 fases (+10 do Espaço); começa com um pântano curto', Career.TOTAL === 100 && CL.length === 110 && RC.length === 12 && RC[1] === 8 && RC[8] === 7 && RC[11] === 10, RC.join(' + '));
     const P = Career.PRIZE, at = (r, n) => P[Career.REGIONS.slice(0, r).reduce((a, R) => a + R.count, 0) + n - 1] || [];
     const last = r => at(r, Career.REGIONS[r].count);
-    t('prêmios da trilha: tutorial 1-3, Vans logo no 3º mapa, chapéu/boné na última fase de cada pântano; 31 apetrechos sem repetir',
-      at(0, 1)[0] === 'cardigan' && at(1, 3)[0] === 'oldskool' && Career.REGIONS.slice(1).every((R, r) => Outfit.BY[last(r + 1)[0]].slot === 'head') && last(9).join() === 'coroa,trofeu'
-      && at(2, 7)[0] === 'woody' && at(7, 7)[0] === 'skate' && new Set(Object.values(P).flat()).size === 31 && Object.values(P).flat().every(id => Outfit.BY[id] && !Outfit.BY[id].rare));
-    t('prêmios fora da trilha (marcados rare): 10 de pântano com 3★ + 5 da coleção do desafio; ninguém fica sem jeito de ganhar',
-      Outfit.ITEMS.filter(i => i.rare).length === 15 && Object.values(Career.RARE).concat(Career.DAILY.map(d => d[1])).every(id => Outfit.BY[id] && Outfit.BY[id].rare)
+    t('prêmios da trilha: tutorial 1-3, Vans logo no 3º mapa, chapéu/boné na última fase de cada pântano; 35 apetrechos sem repetir',
+      at(0, 1)[0] === 'cardigan' && at(1, 3)[0] === 'oldskool' && Career.REGIONS.slice(1).every((R, r) => Outfit.BY[last(r + 1)[0]].slot === 'head') && last(10).join() === 'coroa,trofeu'
+      && at(2, 7)[0] === 'woody' && at(7, 7)[0] === 'skate' && new Set(Object.values(P).flat()).size === 35 && Object.values(P).flat().every(id => Outfit.BY[id] && !Outfit.BY[id].rare));
+    t('prêmios fora da trilha (marcados rare): 11 de pântano com 3★ + 5 da coleção do desafio; ninguém fica sem jeito de ganhar',
+      Outfit.ITEMS.filter(i => i.rare).length === 16 && Object.values(Career.RARE).concat(Career.DAILY.map(d => d[1])).every(id => Outfit.BY[id] && Outfit.BY[id].rare)
       && Outfit.ITEMS.every(it => Career.ORDER.includes(it.id)) && Career.ORDER.length === Outfit.ITEMS.length);
     t('estrelas: 3 no mínimo, 2 até +4, 1 acima', starsFor(5, 5) === 3 && starsFor(6, 5) === 2 && starsFor(9, 5) === 2 && starsFor(10, 5) === 1);
     t('tutorial com 1, 2 e 3 sapos verdes', [0, 1, 2].every(i => Rules.greens(CL[i].start) === i + 1));
@@ -4262,7 +4426,7 @@ const Tests = {
     const far = Daily.message({ date: '2026-10-21', moves: [5, 4, 69, 7, 4], mins: [5, 4, 7, 7, 4] }).split('\n')[2];
     t('desafio do dia: nota pela soma dos pulos (um mapa ruim derruba o total)', far === 'Total: 89 pulos ⭐⚪⚪', far);
     t('personagens: sapo + 6 amigos, cada um chega com um pântano e desenha com qualquer apetrecho',
-      Outfit.CHARS.length === 7 && Outfit.CHARS.slice(1).every(c => Career.REGIONS.some(R => R.id === c.at) && Art.creature(c.id, { outfit: { head: 'bolovo', eyes: 'oculos', torso: 'traje' } }).startsWith('<svg')));
+      Outfit.CHARS.length === 8 && Outfit.CHARS.slice(1).every(c => Career.REGIONS.some(R => R.id === c.at) && Art.creature(c.id, { outfit: { head: 'bolovo', eyes: 'oculos', torso: 'traje' } }).startsWith('<svg')));
     // 11. áudio
     t('áudio não é criado antes de um gesto', window.__frogGesture ? true : Sound.ctx === null, window.__frogGesture ? 'houve gesto antes do teste' : 'sem gesto: sem AudioContext');
     return { out, fails };
