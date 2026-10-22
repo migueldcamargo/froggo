@@ -3260,11 +3260,18 @@ const Career = (() => {
   }
   // só animam os enfeites do pântano que está na tela
   let regIO = null;
+  function fillDeco(el) {
+    const q = +el.dataset.q, f = decoQ[q]; if (!f) return; decoQ[q] = null;
+    const d = f(); el.querySelector('svg.cdeco').insertAdjacentHTML('beforeend', d.s); if (d.tw) el.querySelector('.cbanner').insertAdjacentHTML('beforebegin', d.tw);
+  }
+  let decoIO = null;
   function watchRegions() {
-    if (!('IntersectionObserver' in window)) return;
+    if (!('IntersectionObserver' in window)) { inner.querySelectorAll('.creg').forEach(fillDeco); return; }
     if (regIO) regIO.disconnect();
+    if (decoIO) decoIO.disconnect();
     regIO = new IntersectionObserver(es => es.forEach(e => e.target.classList.toggle('zz', !e.isIntersecting)), { root: map, rootMargin: '80px 0px' });
-    inner.querySelectorAll('.creg').forEach(r => { r.classList.add('zz'); regIO.observe(r); });
+    decoIO = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { fillDeco(e.target); decoIO.unobserve(e.target); } }), { root: map, rootMargin: '700px 0px' });
+    inner.querySelectorAll('.creg').forEach(r => { r.classList.add('zz'); regIO.observe(r); if (decoQ[+r.dataset.q]) decoIO.observe(r); });
   }
   const limit = () => bonusOpen ? ALL : TOTAL;
   const posOf = i => i < TOTAL ? nodes[i] : !bonusOpen ? (i === TOTAL ? finalPos : null) : i < ALL ? nodes[i] : starPos;
@@ -3295,6 +3302,7 @@ const Career = (() => {
     const totalH = y;
     baseRects = rects;
     inner.style.height = totalH + 'px';
+    decoQ = [];
     rects.forEach((rc, r) => { html += regionHTML(shown[r], r, rc, W, ns); });
     // trilha
     const pts = [...nodes.slice(0, TOTAL), finalPos, ...(bonusOpen ? [...nodes.slice(TOTAL), starPos] : [])];
@@ -3338,7 +3346,8 @@ ${portalPos ? `<path d="M${finalPos.x} ${finalPos.y} L${portalPos.x} ${portalPos
     placeAvatar(spot());
     syncBase();
   }
-  function regionHTML(R, r, rc, W, ns) {
+  // enfeites do pântano (gerados só quando ele chega perto da tela; ver regionHTML/fillDeco)
+  function regionDeco(R, r, rc, W, ns) {
     const H = rc.h, rnd = seeded(1000 + r * 77 + Math.round(W));
     const k = Math.max(.85, Math.min(1.35, W / 390));
     const items = [];
@@ -3426,9 +3435,18 @@ ${portalPos ? `<path d="M${finalPos.x} ${finalPos.y} L${portalPos.x} ${portalPos
       place(Math.round(area * .4), 6, (x, y) => Deco.bubble(x, y, k));
     }
     items.sort((a, b) => a.y - b.y);
-    return `<div class="creg${R.bonus ? ' space' : ''}${isOpen(REGIONS.indexOf(R)) ? '' : ' veil'}" style="top:${rc.top}px;height:${H}px;background:${R.bg || `linear-gradient(180deg,${R.top},${R.bot})`}">
-<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" aria-hidden="true">${R.bank ? Deco.bank(W, R.bank) : ''}${items.map(i => i.s).join('')}</svg>
-${tw.join('')}<div class="cbanner${canUnlock(REGIONS.indexOf(R)) ? ' can' : ''}" data-r="${REGIONS.indexOf(R)}"><i style="left:22%"></i><i style="right:22%"></i><b>${R.name}</b><small>${R.sub}</small>${bannerStars(R)}</div></div>`;
+    return { s: items.map(i => i.s).join(''), tw: tw.join('') };
+  }
+  /* Casca do pântano (fundo, margem e placa). Os enfeites entram depois, só quando o pântano chega perto da tela
+     (trilha leve: são milhares de desenhos). Pântanos trancados além do próximo ficam só com o fundo e a placa;
+     o próximo trancado mostra o cenário borrado, como prévia. */
+  let decoQ = [];
+  function regionHTML(R, r, rc, W, ns) {
+    const H = rc.h, ri = REGIONS.indexOf(R), first = REGIONS.findIndex((x, k) => k > 0 && !x.bonus && !isOpen(k)), open = isOpen(ri);
+    decoQ[r] = open || ri === first ? () => regionDeco(R, r, rc, W, ns) : null;
+    return `<div class="creg${R.bonus ? ' space' : ''}${open ? '' : ri === first ? ' veil' : ' far'}" data-q="${r}" style="top:${rc.top}px;height:${H}px;background:${R.bg || `linear-gradient(180deg,${R.top},${R.bot})`}">
+<svg class="cdeco" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" aria-hidden="true">${R.bank ? Deco.bank(W, R.bank) : ''}</svg>
+<div class="cbanner${canUnlock(REGIONS.indexOf(R)) ? ' can' : ''}" data-r="${REGIONS.indexOf(R)}"><i style="left:22%"></i><i style="right:22%"></i><b>${R.name}</b><small>${R.sub}</small>${bannerStars(R)}</div></div>`;
   }
   // placa do pântano: estrelas juntadas nele / possíveis; fechado: quantas estrelas (no pântano anterior) abrem
   function bannerStars(R) {
