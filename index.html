@@ -463,14 +463,17 @@ canvas.confetti{position:absolute;inset:0;width:100%;height:100%;pointer-events:
 .dclose{position:absolute;top:.75rem;right:.75rem;width:2.2rem;height:2.2rem;border-radius:.55rem;display:grid;place-items:center;color:#fff;
   background:linear-gradient(180deg,#ff5a4e,#e81123);box-shadow:0 .15rem 0 #a10a14,0 .25rem .5rem rgba(0,20,60,.25);z-index:2}
 .dclose svg{width:1.05rem;height:1.05rem}
-#ovSync .panel{display:flex;flex-direction:column;align-items:stretch;gap:.6rem;text-align:center}
+#bkBack{width:100%}
+#ovBack .panel{max-height:calc(var(--H) - 1.5rem);overflow-y:auto}
+.sybox{width:100%;display:flex;flex-direction:column;align-items:stretch;gap:.5rem;margin-top:.9rem;padding-top:.8rem;border-top:2px dashed #d6e2ec;text-align:center}
+.sybox h4{font-size:1.1rem;font-weight:900;color:#0b2545}
 .sywhere{font-weight:900!important;opacity:1!important;color:#0b2545}
-.syhint{font-size:.82rem!important;margin-top:.3rem}
+.syhint{font-size:.8rem!important}
 #sySrc{width:100%;border-radius:.8rem;border:2px solid #c9d8e4;padding:.5rem .6rem;font:600 .8rem/1.25 ui-monospace,monospace;color:#0b2545;background:#fff;resize:none;user-select:text;-webkit-user-select:text}
 .bkregs{display:flex;flex-wrap:wrap;gap:.35rem;justify-content:center;margin:.7rem 0 .5rem}
 .bkregs button{padding:.35rem .65rem;border-radius:999px;background:#e8f1f8;color:#0b2545;font:800 .82rem/1.2 Nunito,system-ui,sans-serif}
 .bkregs button.on{background:#0b6fc9;color:#fff}
-.bkfases{width:100%;display:grid;grid-template-columns:repeat(5,1fr);gap:.4rem;max-height:calc(var(--H) * .4);overflow-y:auto}
+.bkfases{width:100%;display:grid;grid-template-columns:repeat(5,1fr);gap:.4rem;max-height:calc(var(--H) * .28);overflow-y:auto}
 .bkfases button{height:2.6rem;border-radius:.7rem;background:#fff;color:#0b2545;font:900 1rem Nunito,system-ui,sans-serif;box-shadow:0 .18rem 0 #b7c7d6,inset 0 0 0 2px #d6e2ec}
 .bkfases button:active{transform:translateY(.12rem);box-shadow:0 .05rem 0 #b7c7d6,inset 0 0 0 2px #d6e2ec}
 .dclose:active{transform:translateY(.12rem);box-shadow:0 .03rem 0 #a10a14}
@@ -756,26 +759,24 @@ canvas.bigbang{position:absolute;inset:0;width:100%;height:100%;z-index:400;poin
     </div>
   </div>
 
-  <!-- Voltar na carreira (10 toques no personagem da tela inicial): só para trás -->
+  <!-- 10 toques no personagem da tela inicial: voltar na carreira (só para trás) e transferir progresso -->
   <div class="overlay" id="ovBack" role="dialog" aria-modal="true" aria-labelledby="bkTitle">
     <div class="panel daily-panel">
       <button class="dclose" id="btnBackClose" type="button" aria-label="Fechar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
-      <h3 id="bkTitle">Voltar na carreira</h3>
-      <p>Escolha o pântano e a fase</p>
-      <div class="bkregs" id="bkRegs"></div>
-      <div class="bkfases" id="bkFases"></div>
-    </div>
-  </div>
-  <!-- Transferir progresso (3 toques no personagem da tela inicial): navegador ↔ app da tela inicial -->
-  <div class="overlay" id="ovSync" role="dialog" aria-modal="true" aria-labelledby="syTitle">
-    <div class="panel daily-panel">
-      <button class="dclose" id="btnSyncClose" type="button" aria-label="Fechar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
-      <h3 id="syTitle">Transferir progresso</h3>
-      <p class="sywhere" id="syHere"></p>
-      <button class="btn blue" id="btnSyncCopy" type="button">Copiar progresso</button>
-      <p class="syhint">No outro lugar (navegador ou app), toque 3 vezes no sapo e cole o código abaixo</p>
-      <textarea id="sySrc" rows="3" placeholder="Cole aqui o código" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
-      <button class="btn green" id="btnSyncUse" type="button">Usar este progresso</button>
+      <h3 id="bkTitle">Seu progresso</h3>
+      <div id="bkBack">
+        <p>Voltar para uma fase anterior</p>
+        <div class="bkregs" id="bkRegs"></div>
+        <div class="bkfases" id="bkFases"></div>
+      </div>
+      <div class="sybox">
+        <h4>Transferir progresso</h4>
+        <p class="sywhere" id="syHere"></p>
+        <button class="btn blue" id="btnSyncCopy" type="button">Copiar progresso</button>
+        <p class="syhint">No outro lugar (navegador ou app), toque 10 vezes no sapo e cole o código abaixo</p>
+        <textarea id="sySrc" rows="2" placeholder="Cole aqui o código" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
+        <button class="btn green" id="btnSyncUse" type="button">Colar progresso</button>
+      </div>
     </div>
   </div>
   <!-- Confirmação -->
@@ -843,7 +844,7 @@ canvas.bigbang{position:absolute;inset:0;width:100%;height:100%;z-index:400;poin
 
 <script>
 'use strict';
-const BUILD = '2026-10-22.1318';      // versão publicada: trocada pela data e hora a cada publicação (ver Update, no fim); 'dev' não confere
+const BUILD = '2026-10-22.1320';      // versão publicada: trocada pela data e hora a cada publicação (ver Update, no fim); 'dev' não confere
 /* =====================================================================
    FROGGO — jogo de sapos saltadores (peg-solitaire), arquivo único e offline.
    Módulos (todos neste arquivo): Store · Geo · Rules · Solver · Gen ·
@@ -2673,7 +2674,7 @@ const UI = (() => {
     else if (st === 'stuck') { Game.over = true; setTimeout(showStuck, 450); }
   }
   // ---- overlays ----
-  function hideOverlays() { $('rDemo').innerHTML = ''; ['ovWin', 'ovStuck', 'ovConfirm', 'ovDaily', 'ovTut', 'ovRules', 'ovBack', 'ovSync'].forEach(id => $(id).classList.remove('show')); stopConfetti(); Base.dim(false); }
+  function hideOverlays() { $('rDemo').innerHTML = ''; ['ovWin', 'ovStuck', 'ovConfirm', 'ovDaily', 'ovTut', 'ovRules', 'ovBack'].forEach(id => $(id).classList.remove('show')); stopConfetti(); Base.dim(false); }
   let winToMap = false;      // a vitória leva de volta à trilha (troféu, estrela do bônus) em vez de seguir para o próximo mapa
   function showWin() {
     if (!Game.over || !Rules.isWin(Game.state)) return;
@@ -4184,8 +4185,8 @@ function zoomable(host, area, pick, dbl = true) {
    na silhueta cinza, com "???" no lugar do nome, para dar vontade de ir atrás.
    --------------------------------------------------------------------- */
 window.heroZoom = zoomable($('heroArt'), '.hero-stage', '.hero-zoom', false);     // zoom no conjunto da tela inicial
-/* Transferir progresso: o app da tela inicial (iPhone) e o navegador guardam dados separados. Num deles, "Copiar
-   progresso" gera um código com tudo o que o jogo guarda (fases, estrelas, itens, amigos, roupas, desafio do dia);
+/* Transferir progresso (na janela dos 10 toques): o app da tela inicial (iPhone) e o navegador guardam dados separados.
+   Num deles, "Copiar progresso" gera um código com tudo o que o jogo guarda (fases, estrelas, itens, amigos, roupas, desafio do dia);
    no outro, colar o código troca o progresso de lá por esse, depois de mostrar os dois lados para comparar. */
 const Sync = (() => {
   const TAG = 'FROGGO1:', SKIP = ['frog.updTry'];
@@ -4198,10 +4199,7 @@ const Sync = (() => {
   const num = (d, k, v) => { try { return JSON.parse(d['frog.' + k]); } catch (e) { return v; } };
   const sum = d => { const st = num(d, 'stars', []); return `fase ${(+num(d, 'career', 0) || 0) + 1} · ⭐ ${Array.isArray(st) ? st.reduce((a, b) => a + (b || 0), 0) : 0}`; };
   const here = () => Object.fromEntries(keys().map(k => [k, localStorage.getItem(k)]));
-  function open() {
-    $('syHere').textContent = `Aqui: ${sum(here())}`; $('sySrc').value = ''; $('btnSyncCopy').textContent = 'Copiar progresso';
-    heroZoom.reset(); $('ovSync').classList.add('show'); Base.dim(true);
-  }
+  function reset() { $('syHere').textContent = `Aqui: ${sum(here())}`; $('sySrc').value = ''; $('btnSyncCopy').textContent = 'Copiar progresso'; }
   $('btnSyncCopy').addEventListener('click', async () => {
     const code = pack();
     try { await navigator.clipboard.writeText(code); $('btnSyncCopy').textContent = 'Copiado ✓'; }
@@ -4210,17 +4208,17 @@ const Sync = (() => {
   $('btnSyncUse').addEventListener('click', () => {
     const d = unpack($('sySrc').value);
     if (!d) { toast('Código inválido'); return; }
-    $('ovSync').classList.remove('show');
+    $('ovBack').classList.remove('show');
     UI.confirm('Trocar o progresso?', `Código: ${sum(d)}\nAqui agora: ${sum(here())}\nO progresso daqui será substituído pelo do código.`, 'Trocar', () => {
       try { keys().forEach(k => localStorage.removeItem(k)); Object.entries(d).forEach(([k, v]) => { if (k.startsWith('frog.') && typeof v === 'string') localStorage.setItem(k, v); }); }
       catch (e) { toast('Não deu para salvar aqui'); return; }
       location.reload();
     });
   });
-  $('btnSyncClose').addEventListener('click', () => { $('ovSync').classList.remove('show'); Base.dim(false); });
-  return { open, pack, unpack };
+  return { reset, pack, unpack };
 })();
-/* 10 toques seguidos no personagem da tela inicial: janela para voltar a uma fase anterior da carreira (nunca avançar) */
+/* 10 toques seguidos no personagem da tela inicial: janela para voltar a uma fase anterior da carreira (nunca avançar)
+   e para transferir o progresso */
 (() => {
   let n = 0, t = 0, reg = 0;
   const regs = () => Career.REGIONS.map((R, r, A) => ({ R, r, a: A.slice(0, r).reduce((s, x) => s + x.count, 0) })).filter(x => x.a < Career.done && (!x.R.bonus || Career.bonusOpen));
@@ -4232,20 +4230,19 @@ const Sync = (() => {
   }
   function open() {
     const list = regs();
-    if (!list.length) { toast('Ainda não há fase para voltar'); return; }
-    reg = list[list.length - 1].r;
-    $('bkRegs').innerHTML = list.map(x => `<button type="button" data-r="${x.r}">${x.R.name}</button>`).join('');
-    fases(); heroZoom.reset();
+    $('bkBack').hidden = !list.length;            // ainda sem fase para voltar: só a transferência
+    if (list.length) {
+      reg = list[list.length - 1].r;
+      $('bkRegs').innerHTML = list.map(x => `<button type="button" data-r="${x.r}">${x.R.name}</button>`).join('');
+      fases();
+    }
+    Sync.reset(); heroZoom.reset();
     $('ovBack').classList.add('show'); Base.dim(true);
   }
-  // toques seguidos no personagem: 3 (e parou) abre a transferência de progresso; 10 abre a volta de fase
-  let wait3 = 0;
   $('heroArt').addEventListener('click', e => {
-    clearTimeout(wait3);
     if (!e.target.closest('.hero-frog')) { n = 0; return; }
     const now = Date.now(); n = now - t < 700 ? n + 1 : 1; t = now;
     if (n >= 10) { n = 0; open(); }
-    else if (n === 3) wait3 = setTimeout(() => { if (n === 3) { n = 0; Sync.open(); } }, 720);
   });
   $('bkRegs').addEventListener('click', e => { const b = e.target.closest('button'); if (b) { reg = +b.dataset.r; fases(); Sound.click(); } });
   $('bkFases').addEventListener('click', e => {
