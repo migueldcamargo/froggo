@@ -417,7 +417,8 @@ canvas.confetti{position:absolute;inset:0;width:100%;height:100%;pointer-events:
 .prize-won svg{width:2.4rem;height:2.4rem;flex:none}
 .prize-won{flex-wrap:wrap;justify-content:center}
 .use-now{flex:none;padding:.3rem .8rem;border-radius:999px;background:#2fbf3a;color:#fff;font-weight:900;font-size:.85rem;box-shadow:0 .15rem 0 #13701a}
-.use-now.on{background:#8fd99a;box-shadow:none}
+.use-now.on{background:#e8f1f8;color:#0b2545;box-shadow:0 .15rem 0 #b7c7d6}
+.go-ward{flex:none;padding:.3rem .8rem;border-radius:999px;background:#0b6fc9;color:#fff;font-weight:900;font-size:.85rem;box-shadow:0 .15rem 0 #0b4f8f}
 
 /* ---------- Mapa do dia ---------- */
 .home-right{display:flex;align-items:center;gap:.5rem;margin-left:auto}   /* fica à direita mesmo sem o botão Instalar (app instalado) */
@@ -844,7 +845,7 @@ canvas.bigbang{position:absolute;inset:0;width:100%;height:100%;z-index:400;poin
 
 <script>
 'use strict';
-const BUILD = '2026-10-22.1320';      // versão publicada: trocada pela data e hora a cada publicação (ver Update, no fim); 'dev' não confere
+const BUILD = '2026-10-22.1336';      // versão publicada: trocada pela data e hora a cada publicação (ver Update, no fim); 'dev' não confere
 /* =====================================================================
    FROGGO — jogo de sapos saltadores (peg-solitaire), arquivo único e offline.
    Módulos (todos neste arquivo): Store · Geo · Rules · Solver · Gen ·
@@ -1929,10 +1930,10 @@ ${vest}<g transform="translate(100 0) scale(-1 1)">${vest}</g>
     isWorn: (id, red) => BY[id] && (red ? wornRed : worn)[BY[id].slot] === id,
     // tira o que o jogador não ganhou (ex.: progresso zerado)
     prune(owned) { for (const [o, k] of [[worn, 'outfit'], [wornRed, 'outfitRed']]) { let ch = false; for (const s in o) if (!owned.includes(o[s])) { delete o[s]; ch = true; } if (ch) Store.set(k, o); } },
-    // botão "Usar agora" do prêmio novo: veste; tocar de novo em "Usando" desfaz e volta à roupa de antes
+    // botão "Usar agora" do prêmio novo: veste; tocar em "Remover" desfaz e volta à roupa de antes
     toggleUse(b) {
       if (b.classList.contains('on')) { worn = { ...b._prev }; b.textContent = 'Usar agora'; }
-      else { b._prev = { ...worn }; b.dataset.ids.split(',').forEach(id => { const it = BY[id]; if (it) worn[it.slot] = id; }); b.textContent = 'Usando ✓'; }
+      else { b._prev = { ...worn }; b.dataset.ids.split(',').forEach(id => { const it = BY[id]; if (it) worn[it.slot] = id; }); b.textContent = 'Remover'; }
       Store.set('outfit', worn); b.classList.toggle('on');
     }
   };
@@ -2163,7 +2164,9 @@ const Board = (() => {
   function makeFrog(color, cell) {
     const f = document.createElement('div');
     f.className = 'frog'; f.dataset.color = color;
-    f.innerHTML = `<div class="fi" style="animation-delay:-${(Math.random() * 2.6).toFixed(2)}s">${Art.frog(color)}</div>`;
+    // o vermelho é exatamente o do guarda-roupa (personagem e roupa escolhidos para o sapinho vermelho)
+    const art = color === 'red' ? Art.frog('red', { outfit: Outfit.wornRed, char: Outfit.charRed }) : Art.frog(color);
+    f.innerHTML = `<div class="fi" style="animation-delay:-${(Math.random() * 2.6).toFixed(2)}s">${art}</div>`;
     place(f, cell); el.appendChild(f); return f;
   }
   function place(f, cell) { f.style.left = G.PX[cell] + '%'; f.style.top = G.PY[cell] + '%'; f.dataset.cell = cell; }
@@ -2181,6 +2184,13 @@ const Board = (() => {
         const f = makeFrog(want, i); frogs[i] = f;
         if (pop && !reduceMotion()) animate(f, [{ transform: 'scale(0)', opacity: 0 }, { transform: 'scale(1.15)', opacity: 1, offset: .7 }, { transform: 'scale(1)' }], { duration: 320, delay: k++ * 35, easing: 'ease-out', fill: 'backwards' });
       }
+    }
+    // um sapo verde ao acaso veste a roupa do jogador, para ele ver no jogo o que está usando; se esse sapo for
+    // capturado, a roupa passa para outro verde
+    const o = Outfit.worn, fs = Object.values(frogs);
+    if (Object.keys(o).length && !fs.some(f => f.classList.contains('dressed'))) {
+      const gs = fs.filter(f => f.dataset.color === 'green');
+      if (gs.length) { const f = gs[Math.floor(Math.random() * gs.length)]; f.classList.add('dressed'); f.firstChild.innerHTML = Art.frog('green', { outfit: o }); }
     }
   }
   function reset() { for (const c in frogs) frogs[c].remove(); frogs = {}; clearSel(); cancelDrag(); sync(true); }
@@ -2583,7 +2593,7 @@ const UI = (() => {
   function loadingScreen() {
     return new Promise(resolve => {
       const L = document.createElement('div'); L.className = 'loading'; L.setAttribute('role', 'status');
-      L.innerHTML = `<div class="lfrog">${Art.frog('green')}</div><div class="lt">Greenfrog University</div><div class="bar"><div class="fill"></div></div><div class="ls">Loading...</div>`;
+      L.innerHTML = `<div class="lfrog">${Art.frog('green', { outfit: Outfit.worn, char: Outfit.char })}</div><div class="lt">Greenfrog University</div><div class="bar"><div class="fill"></div></div><div class="ls">Loading...</div>`;
       app.appendChild(L); Base.set('#0b6a3a');
       const fill = L.querySelector('.fill'), t0 = performance.now(), DUR = 1000;
       const tick = now => {
@@ -2708,13 +2718,13 @@ const UI = (() => {
       if (res.advanced && !Store.get('tip3', false)) {
         let s0 = 0; const R = Career.REGIONS.find(x => { const hit = c.career >= s0 && c.career < s0 + x.count; if (!hit) s0 += x.count; return hit; });
         if (R && Career.RARE[R.id] && c.career === s0 + R.count - 1 && !Career.stars.slice(s0, s0 + R.count).every(v => v === 3)) {
-          stars += '<p class="wmin near">🎁 Todas as fases do pântano com ⭐⭐⭐ dão um presente</p>'; Store.set('tip3', true);
+          stars += '<p class="wmin near">Pântano todo com ⭐⭐⭐ vale presente 🎁</p>'; Store.set('tip3', true);
         }
       }
     }
     $('winTitle').textContent = title; $('btnNewWin').textContent = next; $('winStars').innerHTML = stars;
     $('winPrize').classList.toggle('hidden', !prize);
-    if (prize) $('winPrize').innerHTML = prize.map(id => Outfit.preview(id)).join('') + `<span>Você ganhou: ${prize.map(id => Outfit.BY[id].name).join(' e ')}!</span><button type="button" class="use-now" data-ids="${prize.join(',')}">Usar agora</button>`;
+    if (prize) $('winPrize').innerHTML = prize.map(id => Outfit.preview(id)).join('') + `<span>Você ganhou: ${prize.map(id => Outfit.BY[id].name).join(' e ')}!</span><button type="button" class="use-now" data-ids="${prize.join(',')}">Usar agora</button><button type="button" class="go-ward">Guarda-roupa</button>`;
     $('ovWin').classList.add('show'); Base.dim(true);
     Sound.win(); confetti();
     if (got) dropStars(got);
@@ -2886,8 +2896,9 @@ const UI = (() => {
   }
   function restoreDraw() { Deck.stack(false); $('levels').classList.remove('hidden'); $('btnSwap').classList.remove('hidden'); drawing = false; if (reviewing) setReview(false); }
   $('btnAgain').addEventListener('click', () => { hideOverlays(); startGame(); });
-  // prêmio novo: veste na hora, sem passar pelo guarda-roupa (tocar em "Usando" desfaz)
+  // prêmio novo: veste na hora, sem passar pelo guarda-roupa (tocar em "Remover" desfaz); "Guarda-roupa" vai direto para lá
   $('winPrize').addEventListener('click', e => {
+    if (e.target.closest('.go-ward')) { Sound.click(); Wardrobe.open(); return; }
     const b = e.target.closest('.use-now'); if (!b) return;
     Outfit.toggleUse(b); b.classList.contains('on') ? Sound.pick() : Sound.click();
     const old = $('winArt').querySelector('svg.rfrog');           // o sapo da vitória troca de roupa na hora (ex.: loafer → Vans)
@@ -3950,7 +3961,7 @@ const Daily = (() => {
   function openPanel(justWon, just, prize) {
     afterWin = !!justWon;
     $('dPrize').hidden = !prize;
-    if (prize) $('dPrize').innerHTML = prize.map(id => Outfit.preview(id)).join('') + `<span>Você ganhou: ${prize.map(id => Outfit.BY[id].name).join(' e ')}!</span><button type="button" class="use-now" data-ids="${prize.join(',')}">Usar agora</button>`;
+    if (prize) $('dPrize').innerHTML = prize.map(id => Outfit.preview(id)).join('') + `<span>Você ganhou: ${prize.map(id => Outfit.BY[id].name).join(' e ')}!</span><button type="button" class="use-now" data-ids="${prize.join(',')}">Usar agora</button><button type="button" class="go-ward">Guarda-roupa</button>`;
     const r = just || result(), d = just ? just.date : today();
     $('dCalDay').textContent = String(+d.slice(8));
     $('dDate').textContent = dateBR(d, true);
@@ -4120,6 +4131,7 @@ const Daily = (() => {
   // terminou o desafio: convida a seguir jogando na trilha
   $('btnDailyCareer').addEventListener('click', () => { Sound.click(); afterWin = false; $('ovDaily').classList.remove('show'); Base.dim(false); Career.open(); });
   $('dPrize').addEventListener('click', e => {
+    if (e.target.closest('.go-ward')) { Sound.click(); Wardrobe.open(); return; }
     const b = e.target.closest('.use-now'); if (!b) return;
     Outfit.toggleUse(b); b.classList.contains('on') ? Sound.pick() : Sound.click();
   });
