@@ -404,7 +404,8 @@ canvas.confetti{position:absolute;inset:0;width:100%;height:100%;pointer-events:
 .witem.worn{background:#eaffdf}
 .witem.locked{background:#e6ebf1;box-shadow:0 .2rem 0 rgba(0,0,0,.1)}
 .witem.locked .pv{background:radial-gradient(circle at 50% 55%, #d3dbe5 0 45%, transparent 46%)}
-.witem.locked .pv svg{filter:brightness(0) opacity(.25) blur(3.5px)}     /* só um borrão: dá uma pista, sem entregar o formato */
+.witem.locked .pv svg{filter:brightness(0) opacity(.25) blur(3.5px)}
+.witem.wchar .pv svg{width:100%;height:3.2rem;overflow:visible}     /* só um borrão: dá uma pista, sem entregar o formato */
 .witem.locked b{letter-spacing:.18em;color:#8a96a8}
 .witem.locked.hint b{letter-spacing:0;color:#4a5668;font-size:.72rem}
 .wsec{grid-column:1/-1;font-size:.85rem;font-weight:900;letter-spacing:.06em;text-transform:uppercase;color:#fff;text-shadow:0 1px 0 rgba(0,40,90,.4);margin-top:.2rem}
@@ -487,6 +488,9 @@ canvas.confetti{position:absolute;inset:0;width:100%;height:100%;pointer-events:
 .cnode .cst{position:absolute;left:50%;bottom:-24px;transform:translateX(-50%);font-size:.8rem;letter-spacing:.02em;line-height:1;white-space:nowrap;text-shadow:0 1px 0 rgba(0,0,0,.35);pointer-events:none}
 .cnode .cst .st-off{color:rgba(255,255,255,.45)}
 .cbanner em{display:block;font-style:normal;font-size:.72rem;font-weight:800;margin-top:.15rem;opacity:.95}
+.cgift{display:inline-block;vertical-align:middle;font-size:1rem;line-height:1}
+.cgift.got{width:1.6rem;height:1.1rem;background:#fffdf4;border-radius:.4rem;padding:.05rem .15rem}
+.cgift.got svg{width:100%;height:100%}
 .cbanner em.gate{background:rgba(0,0,0,.35);border-radius:999px;padding:.1rem .55rem;display:inline-block}
 .cbanner.can{cursor:pointer}
 .cbanner em.unlock{background:#2fbf3a;box-shadow:0 2px 0 #13701a;font-size:.85rem;padding:.2rem .7rem}
@@ -1127,7 +1131,94 @@ const Gen = (() => {
    ser distinguível também por quem não diferencia cores.
    --------------------------------------------------------------------- */
 const Art = {
+  /* Outros personagens (destravados ao abrir certos pântanos). Mesmo molde do sapo — cabeça em (50,45), olhos em
+     (31,26)/(69,26), corpo em (50,66), pés em y≈86 — para todos os apetrechos servirem em todos. */
+  creature(kind, opts = {}) {
+    const o = opts.outfit || {};
+    const L = Outfit.layers(o, false);
+    const g = (id, a, b, c) => `<radialGradient id="${id}" cx="40%" cy="32%" r="75%"><stop offset="0" stop-color="${a}"/><stop offset=".6" stop-color="${b}"/><stop offset="1" stop-color="${c}"/></radialGradient>`;
+    const eyes = (iris = '#0d1b26', lid = null, ring = null) => `${ring ? `<circle cx="31" cy="27" r="14" fill="${ring}"/><circle cx="69" cy="27" r="14" fill="${ring}"/>` : ''}
+  <circle cx="31" cy="26" r="11" fill="url(#eyeW)"/><circle cx="69" cy="26" r="11" fill="url(#eyeW)"/>
+  <circle cx="33" cy="27.5" r="6" fill="${iris}"/><circle cx="67" cy="27.5" r="6" fill="${iris}"/><circle cx="35.2" cy="24.6" r="2.3" fill="#fff"/><circle cx="69.2" cy="24.6" r="2.3" fill="#fff"/>
+  ${lid ? `<path d="M19.6 25 A11.4 11.4 0 0 1 42.4 25 Z" fill="${lid}"/><path d="M57.6 25 A11.4 11.4 0 0 1 80.4 25 Z" fill="${lid}"/><path d="M19.6 25 H42.4 M57.6 25 H80.4" stroke="rgba(0,0,0,.35)" stroke-width="1.2"/>` : ''}`;
+    const smile = c => `<path d="M38 52 Q50 60 62 52" stroke="${c}" stroke-width="2.6" fill="none" stroke-linecap="round"/>`;
+    const shine = '<ellipse cx="37" cy="36" rx="11" ry="4.5" fill="#fff" opacity=".3" transform="rotate(-14 37 36)"/>';
+    let defs = '', back = '', body = '', face = '', feet = '';
+    const K = {
+      corujao() {
+        defs = g('cjB', '#c79a6a', '#8a5a33', '#5a3a1e') + g('cjF', '#fff4dc', '#f2dcb4', '#d8b98a');
+        back = '<path d="M14 10 L22 -4 L30 12 Z M86 10 L78 -4 L70 12 Z" fill="#6e4520"/>';
+        body = `<ellipse cx="18" cy="68" rx="11" ry="20" fill="#6e4520" transform="rotate(14 18 68)"/><ellipse cx="82" cy="68" rx="11" ry="20" fill="#6e4520" transform="rotate(-14 82 68)"/>
+  <ellipse cx="50" cy="66" rx="31" ry="25" fill="url(#cjB)"/><ellipse cx="50" cy="72" rx="19" ry="15" fill="url(#cjF)"/>
+  <path d="M40 66 l3 3 3 -3 M48 70 l3 3 3 -3 M56 66 l3 3 3 -3 M44 76 l3 3 3 -3 M52 78 l3 3 3 -3" stroke="#b8925e" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+  <ellipse cx="50" cy="38" rx="35" ry="27" fill="url(#cjB)"/>`;
+        face = `${eyes('#3a2208', null, 'url(#cjF)')}<path d="M45.6 38 L54.4 38 L50 47 Z" fill="#ffb02e" stroke="#b86e00" stroke-width="1" stroke-linejoin="round"/>
+  <path d="M22 13 Q31 9 40 15 M78 13 Q69 9 60 15" stroke="#4a2c12" stroke-width="2.2" fill="none" stroke-linecap="round"/>${shine}`;
+        feet = '<g fill="#ffb02e" stroke="#b86e00" stroke-width=".8"><path d="M26 88 l3 6 3 -6 3 6 3 -6 Z"/><path d="M60 88 l3 6 3 -6 3 6 3 -6 Z"/></g>';
+      },
+      porco() {
+        defs = g('pgB', '#ffd3dd', '#ffa9bd', '#e5809a');
+        back = '<path d="M80 82 q10 -2 8 -9 q-2 -5 -6 -2 q-3 3 1 5" stroke="#e5809a" stroke-width="2" fill="none" stroke-linecap="round"/>';
+        body = `<ellipse cx="20" cy="77" rx="15" ry="11" fill="url(#pgB)"/><ellipse cx="80" cy="77" rx="15" ry="11" fill="url(#pgB)"/>
+  <ellipse cx="50" cy="66" rx="31" ry="24" fill="url(#pgB)"/><ellipse cx="50" cy="73" rx="19" ry="14" fill="#ffc6d3"/>
+  <path d="M18 22 L14 2 L34 12 Z M82 22 L86 2 L66 12 Z" fill="#ff98b0" stroke="#e5809a" stroke-width="1.2" stroke-linejoin="round"/><path d="M19 17 L17 7 L27 12 Z M81 17 L83 7 L73 12 Z" fill="#ffd3dd"/>
+  <ellipse cx="50" cy="40" rx="35" ry="26" fill="url(#pgB)"/>`;
+        face = `${eyes('#2a1418')}<ellipse cx="50" cy="44" rx="11" ry="7.6" fill="#ff98b0" stroke="#e5809a" stroke-width="1.2"/><ellipse cx="46" cy="44" rx="2" ry="3" fill="#b8506a"/><ellipse cx="54" cy="44" rx="2" ry="3" fill="#b8506a"/>
+  ${smile('#b8506a').replace('M38 52 Q50 60 62 52', 'M40 55 Q50 61 60 55')}<ellipse cx="22.5" cy="50" rx="6" ry="3.6" fill="#ff7aa8" opacity=".5"/><ellipse cx="77.5" cy="50" rx="6" ry="3.6" fill="#ff7aa8" opacity=".5"/>${shine}`;
+        feet = '<g fill="#e5809a"><ellipse cx="33" cy="87" rx="9" ry="5"/><ellipse cx="67" cy="87" rx="9" ry="5"/></g><path d="M33 83 V91 M67 83 V91" stroke="#b8506a" stroke-width="1.2"/>';
+      },
+      lollipop() {
+        defs = g('ttB', '#d8f0a0', '#a8d468', '#6f9a3a') + g('ttS', '#9c7a3e', '#6e5224', '#4a3614');
+        back = `<ellipse cx="50" cy="60" rx="44" ry="34" fill="url(#ttS)" stroke="#3a2a10" stroke-width="1.6"/>
+  <g fill="none" stroke="#c9a25a" stroke-width="1.6" opacity=".8"><path d="M38 34 L50 28 L62 34 L62 46 L50 52 L38 46 Z"/><path d="M14 52 L26 46 L38 52 L38 64 L26 70 L14 64 Z"/><path d="M62 52 L74 46 L86 52 L86 64 L74 70 L62 64 Z"/></g>`;
+        body = `<ellipse cx="22" cy="80" rx="12" ry="9" fill="url(#ttB)"/><ellipse cx="78" cy="80" rx="12" ry="9" fill="url(#ttB)"/>
+  <ellipse cx="50" cy="70" rx="26" ry="20" fill="#e8e09a" stroke="#b8a85a" stroke-width="1"/><path d="M30 64 H70 M28 72 H72 M32 80 H68" stroke="#c9b86a" stroke-width="1.2"/>
+  <ellipse cx="50" cy="40" rx="30" ry="22" fill="url(#ttB)"/>`;
+        face = `${eyes('#1e2a10')}${smile('#3a5a1a')}<circle cx="46" cy="42" r="1.2" fill="#3a5a1a"/><circle cx="54" cy="42" r="1.2" fill="#3a5a1a"/><ellipse cx="24" cy="48" rx="5" ry="3" fill="#ff7aa8" opacity=".45"/><ellipse cx="76" cy="48" rx="5" ry="3" fill="#ff7aa8" opacity=".45"/>${shine}`;
+        feet = '<g fill="url(#ttB)"><ellipse cx="33" cy="87" rx="9" ry="5.6"/><ellipse cx="67" cy="87" rx="9" ry="5.6"/></g>';
+      },
+      johnny() {     // A — clássico: galo branquinho, olhar sossegado de surfista, topete de penas
+        defs = g('chB', '#ffffff', '#f4efe2', '#d8cfb8');
+        back = '<path d="M74 70 Q94 60 92 46 Q86 56 78 58 Q90 48 84 36 Q80 50 72 56 Z" fill="#efe7d2" stroke="#c9bfa4" stroke-width="1"/>';
+        body = `<ellipse cx="18" cy="70" rx="10" ry="17" fill="#efe7d2" stroke="#c9bfa4" stroke-width="1" transform="rotate(18 18 70)"/><ellipse cx="82" cy="70" rx="10" ry="17" fill="#efe7d2" stroke="#c9bfa4" stroke-width="1" transform="rotate(-18 82 70)"/>
+  <ellipse cx="50" cy="68" rx="29" ry="23" fill="url(#chB)"/><path d="M38 11 Q40 1 46 9 Q49 -1 54 9 Q59 1 62 12 Q56 17 50 16 Q42 17 38 11 Z" fill="#e53935" stroke="#a51d1d" stroke-width="1"/>
+  <ellipse cx="50" cy="38" rx="31" ry="25" fill="url(#chB)"/><path d="M42 15 Q46 8 50 14 Q53 8 57 15" stroke="#d8cfb8" stroke-width="1.4" fill="none" stroke-linecap="round"/>`;
+        face = `${eyes('#3a2a10', '#f4efe2')}<path d="M44 40 Q50 36 56 40 L50 48 Z" fill="#ffc21f" stroke="#c98a00" stroke-width="1" stroke-linejoin="round"/><path d="M44.6 41.4 Q50 43 55.4 41.4" stroke="#c98a00" stroke-width=".8" fill="none"/>
+  <path d="M47 48 Q46 55 50 56 Q54 55 53 48 Z" fill="#e53935" stroke="#a51d1d" stroke-width=".8"/><ellipse cx="25" cy="44" rx="5" ry="3" fill="#ff9ab6" opacity=".55"/><ellipse cx="75" cy="44" rx="5" ry="3" fill="#ff9ab6" opacity=".55"/>${shine}`;
+        feet = '<g stroke="#ff9a1f" stroke-width="2.2" stroke-linecap="round" fill="none"><path d="M36 82 V88 M36 88 l-5 4 M36 88 l0 5 M36 88 l5 4"/><path d="M64 82 V88 M64 88 l-5 4 M64 88 l0 5 M64 88 l5 4"/></g>';
+      },
+      tatu() {        // B — focinhudo: focinho comprido de tatu com narizinho rosa, orelhas em pé, carapaça marrom de plaquinhas
+        defs = g('tbS2', '#d4b48a', '#a8845a', '#7a5a34') + g('tbK2', '#f6e0cc', '#e9c6a6', '#cfa27c');
+        back = '<path d="M74 84 Q90 88 94 76" stroke="#a8845a" stroke-width="5" fill="none" stroke-linecap="round"/><path d="M84 86 l2 -4 M89 83 l2 -4" stroke="#7a5a34" stroke-width="1"/>';
+        body = `<ellipse cx="21" cy="80" rx="11" ry="8.6" fill="url(#tbK2)"/><ellipse cx="79" cy="80" rx="11" ry="8.6" fill="url(#tbK2)"/>
+  <ellipse cx="50" cy="68" rx="32" ry="23" fill="url(#tbS2)" stroke="#6a4a2a" stroke-width="1.2"/>
+  ${[0, 1, 2, 3].map(k => `<path d="M${20 + k} ${58 + k * 7} Q50 ${52 + k * 7} ${80 - k} ${58 + k * 7}" stroke="#7a5a34" stroke-width="1.3" fill="none"/>`).join('')}
+  ${[[32, 61], [42, 59], [52, 58.6], [62, 59], [70, 61], [28, 69], [38, 67], [48, 66], [58, 66], [68, 67], [74, 69]].map(([x, y]) => `<rect x="${x - 2.6}" y="${y - 1.8}" width="5.2" height="3.6" rx="1" fill="#c9a476" opacity=".7"/>`).join('')}
+  <path d="M25 20 L22 0 L36 14 Z M75 20 L78 0 L64 14 Z" fill="#e9c6a6" stroke="#b88a64" stroke-width="1" stroke-linejoin="round"/><path d="M26 15 L25 6 L32 13 Z M74 15 L75 6 L68 13 Z" fill="#ffb3c6"/>
+  <ellipse cx="50" cy="38" rx="30" ry="22" fill="url(#tbK2)"/><path d="M26 28 Q32 14 50 13 Q68 14 74 28 Q62 22 50 22 Q38 22 26 28 Z" fill="url(#tbS2)" stroke="#6a4a2a" stroke-width="1"/>`;
+        face = `${eyes('#2a1a0e')}<path d="M43 40 Q50 37 57 40 Q56 52 50 55 Q44 52 43 40 Z" fill="#f2d4b8" stroke="#cfa27c" stroke-width="1"/><ellipse cx="50" cy="53" rx="3.6" ry="2.6" fill="#ff8aa6"/><circle cx="49" cy="52.4" r=".8" fill="#fff" opacity=".8"/>
+  <ellipse cx="27" cy="45" rx="5" ry="3" fill="#ff9ab6" opacity=".55"/><ellipse cx="73" cy="45" rx="5" ry="3" fill="#ff9ab6" opacity=".55"/>${shine}`;
+        feet = '<g fill="#cfa27c"><ellipse cx="33" cy="88" rx="8" ry="4.6"/><ellipse cx="67" cy="88" rx="8" ry="4.6"/></g><g stroke="#5a3a1e" stroke-width="1.2" stroke-linecap="round"><path d="M28 90 v3 M33 91 v3 M38 90 v3 M62 90 v3 M67 91 v3 M72 90 v3"/></g>';
+      },
+      caramelo() {     // vira-lata caramelo: orelhas caídas, focinho clarinho, peito branco, língua de fora
+        defs = g('dgB', '#f2c27a', '#d9963f', '#a8691f');
+        back = '<path d="M78 76 Q94 70 90 56" stroke="#c9842f" stroke-width="6" fill="none" stroke-linecap="round"/>';
+        body = `<ellipse cx="20" cy="77" rx="15" ry="11" fill="url(#dgB)"/><ellipse cx="80" cy="77" rx="15" ry="11" fill="url(#dgB)"/>
+  <ellipse cx="50" cy="66" rx="31" ry="24" fill="url(#dgB)"/><path d="M38 60 Q50 54 62 60 Q60 80 50 86 Q40 80 38 60 Z" fill="#fff4e0"/>
+  <ellipse cx="50" cy="40" rx="34" ry="26" fill="url(#dgB)"/>`;
+        face = `<path d="M18 22 Q4 30 10 52 Q18 56 22 44 Q22 30 26 24 Z M82 22 Q96 30 90 52 Q82 56 78 44 Q78 30 74 24 Z" fill="#8a5420"/>${eyes('#2a1608')}
+  <ellipse cx="50" cy="47" rx="14" ry="10" fill="#fff0d4"/><ellipse cx="50" cy="41.6" rx="5" ry="3.6" fill="#2a1a10"/><circle cx="48.4" cy="40.8" r="1.1" fill="#fff" opacity=".7"/>
+  <path d="M42 49 Q50 55 58 49" stroke="#5a3418" stroke-width="2" fill="none" stroke-linecap="round"/><path d="M47 52 Q47 60 51 60 Q55 60 54 52 Z" fill="#ff7a8a" stroke="#c94a5a" stroke-width=".8"/>${shine}`;
+        feet = '<g fill="#fff4e0" stroke="#c9842f" stroke-width=".8"><ellipse cx="33" cy="87" rx="9" ry="5.4"/><ellipse cx="67" cy="87" rx="9" ry="5.4"/></g><path d="M30 88 v3 M33 89 v3 M36 88 v3 M64 88 v3 M67 89 v3 M70 88 v3" stroke="#c9842f" stroke-width="1" stroke-linecap="round"/>';
+      },
+    };
+    K[kind]();
+    const cls = [opts.cls, opts.outfit && Outfit.flies(opts.outfit) ? 'fly' : ''].filter(Boolean).join(' ');
+    return `<svg viewBox="0 0 100 100" overflow="visible" aria-hidden="true"${cls ? ` class="${cls}"` : ''}${opts.attrs ? ' ' + opts.attrs : ''}><defs>${defs}</defs><ellipse class="fshadow" cx="50" cy="92" rx="31" ry="6" fill="rgba(0,20,50,.3)"/>
+<g class="fbody">${L.back}${back}${body}${L.head}${face}${L.under}${L.shoes ? '' : feet}${L.front}${L.eyes}${L.hand}${L.top}</g></svg>`;
+  },
   frog(color, opts = {}) {
+    if (opts.char && opts.char !== 'sapo') return Art.creature(opts.char, opts);     // personagem escolhido no guarda-roupa
     const red = color === 'red';
     const B = red ? 'rB' : 'gB', D = red ? 'rD' : 'gD', Y = red ? 'rY' : 'gY';
     const line = red ? '#5c0808' : '#0f3d12';
@@ -1258,7 +1349,7 @@ ${dim ? '' : `<path d="M${x - r * .32} ${y - r * .42} q${r * .12} -${r * .14} ${
 <ellipse cx="170" cy="104" rx="20" ry="6" fill="url(#lily)" stroke="#155f1a" stroke-width="1"/>
 <ellipse cx="26" cy="110" rx="16" ry="5" fill="url(#lily)" stroke="#155f1a" stroke-width="1"/>
 <g fill="#fff" opacity=".85"><path d="M20 30l2 5 5 2-5 2-2 5-2-5-5-2 5-2z"/><path d="M178 26l1.5 4 4 1.5-4 1.5-1.5 4-1.5-4-4-1.5 4-1.5z"/><path d="M160 52l1 2.6 2.6 1-2.6 1-1 2.6-1-2.6-2.6-1 2.6-1z"/></g>
-</svg><div class="hero-frog${Outfit.flies(Outfit.worn) ? ' fly' : ''}">${Art.frog('green', { outfit: Outfit.worn })}</div><div class="hero-mini${Outfit.flies(Outfit.wornRed) ? ' fly' : ''}">${Art.frog('red', { outfit: Outfit.wornRed })}</div></div>`;
+</svg><div class="hero-frog${Outfit.flies(Outfit.worn) ? ' fly' : ''}">${Art.frog('green', { outfit: Outfit.worn, char: Outfit.char })}</div><div class="hero-mini${Outfit.flies(Outfit.wornRed) ? ' fly' : ''}">${Art.frog('red', { outfit: Outfit.wornRed, char: Outfit.charRed })}</div></div>`;
   },
   star(fill = '#ffd23f') {
     return `<svg viewBox="0 0 24 24"><path d="M12 1.8l3.1 6.4 7 1-5.1 4.9 1.2 7L12 17.8l-6.2 3.3 1.2-7L1.9 9.2l7-1z" fill="${fill}" stroke="#c98a00" stroke-width="1.2" stroke-linejoin="round"/><path d="M9 7.5l1.5-3" stroke="#fff" stroke-width="1.4" stroke-linecap="round" opacity=".8"/></svg>`;
@@ -1707,6 +1798,11 @@ ${vest}<g transform="translate(100 0) scale(-1 1)">${vest}</g>
   if (!worn || typeof worn !== 'object') worn = {};
   if (!wornRed || typeof wornRed !== 'object') wornRed = {};
   const flies = o => !!o && Object.values(o).some(id => BY[id] && BY[id].fly);     // mochila a jato: o sapo flutua
+  /* Personagens: o sapo e os amigos que chegam ao abrir certos pântanos. Cada lugar (o seu e o do sapinho vermelho)
+     escolhe o seu personagem no guarda-roupa. */
+  const CHARS = [{ id: 'sapo', name: 'Sapo' }, { id: 'johnny', name: 'Johnny Chicken', at: 'montemor' }, { id: 'lollipop', name: 'Lollipop', at: 'praia' },
+    { id: 'porco', name: 'Porco', at: 'nebuloso' }, { id: 'caramelo', name: 'Caramelo', at: 'carnaval' }, { id: 'corujao', name: 'Corujão', at: 'festa' }, { id: 'tatu', name: 'Tatu', at: 'skatepark' }];
+  let char = Store.get('char', 'sapo'), charRed = Store.get('charRed', 'sapo');
   const big = o => flies(o) || !!(o && o.ride);       // ocupa mais espaço em volta do sapo (chama, caixa)
   function layers(o, red) {
     const L = { back: '', head: '', under: '', front: '', eyes: '', hand: '', top: '' };
@@ -1732,6 +1828,10 @@ ${vest}<g transform="translate(100 0) scale(-1 1)">${vest}</g>
     ITEMS, BY, GROUP, layers, preview, flies, big,
     get worn() { return { ...worn }; },
     get wornRed() { return { ...wornRed }; },
+    CHARS, get char() { return char; }, get charRed() { return charRed; },
+    setChar(id, red) { if (red) { charRed = id; Store.set('charRed', id); } else { char = id; Store.set('char', id); } },
+    // personagem que ainda não chegou (ex.: progresso zerado) volta a ser o sapo
+    pruneChars(have) { if (!have.includes(char)) this.setChar('sapo', false); if (!have.includes(charRed)) this.setChar('sapo', true); },
     // veste/tira (red: no sapinho vermelho)
     wear(id, red) { const it = BY[id], o = red ? wornRed : worn; if (!it) return; if (o[it.slot] === id) delete o[it.slot]; else o[it.slot] = id; Store.set(red ? 'outfitRed' : 'outfit', o); },
     isWorn: (id, red) => BY[id] && (red ? wornRed : worn)[BY[id].slot] === id,
@@ -2297,7 +2397,7 @@ const UI = (() => {
   // ---- telas ----
   function show(id) {
     if (id === 'home' && window.wardNew) wardNew();
-    if (id === 'home') { const k = JSON.stringify([Outfit.worn, Outfit.wornRed]); if (k !== heroKey) { heroKey = k; $('heroArt').innerHTML = Art.heroScene(); if (window.heroZoom) heroZoom.reset(); } }   // só redesenha se a roupa mudou
+    if (id === 'home') { const k = JSON.stringify([Outfit.worn, Outfit.wornRed, Outfit.char, Outfit.charRed]); if (k !== heroKey) { heroKey = k; $('heroArt').innerHTML = Art.heroScene(); if (window.heroZoom) heroZoom.reset(); } }   // só redesenha se a roupa mudou
     document.querySelectorAll('.screen').forEach(s => s.classList.toggle('active', s.id === id));
     app.scrollTop = 0;                               // o foco num botão de painel pode ter rolado o contêiner
     $('bubbles').hidden = id === 'career' || id === 'wardrobe';   // telas que cobrem o fundo: bolhas desligadas
@@ -2493,9 +2593,9 @@ const UI = (() => {
       Sound.win(); confetti(); if (last) Daily.practiced();
       $('tutTitle').textContent = last ? 'Você pegou o jeito!' : 'Muito bem!';
       $('btnTutGo').textContent = last ? 'Jogar desafio do dia' : 'Próxima fase';
-      $('tutArt').innerHTML = Art.frog('green', { cls: 'rfrog', outfit: Outfit.worn }); $('ovTut').classList.add('show'); Base.dim(true); return;
+      $('tutArt').innerHTML = Art.frog('green', { cls: 'rfrog', char: Outfit.char, outfit: Outfit.worn }); $('ovTut').classList.add('show'); Base.dim(true); return;
     }
-    $('winArt').innerHTML = Art.frog('green', { cls: 'rfrog', outfit: Outfit.worn }) +      // o personagem, com o que estiver vestindo
+    $('winArt').innerHTML = Art.frog('green', { cls: 'rfrog', char: Outfit.char, outfit: Outfit.worn }) +      // o personagem, com o que estiver vestindo
       [[0, 4, '#ffd23f', .1], [76, 2, '#ffd23f', .3], [40, -14, '#fff27a', .5], [6, 60, '#b9f55a', .7], [74, 58, '#ff9cbc', .9]]
         .map(([x, y, c, d]) => `<div class="star" style="left:${x}%;top:${y}%;animation-delay:${d}s,${d + .6}s">${Art.star(c)}</div>`).join('');
     const c = Game.card;
@@ -2512,6 +2612,13 @@ const UI = (() => {
       if (res.finished) { title = 'Carreira concluída!'; next = 'Ver troféu'; winToMap = true; }
       if (res.bonusFinished) { title = 'Bônus concluído!'; next = 'Ver estrela'; winToMap = true; }
       prize = res.prize;
+      // uma vez só: ao terminar um pântano sem todas as 3★, conta que existe o presente
+      if (res.advanced && !Store.get('tip3', false)) {
+        let s0 = 0; const R = Career.REGIONS.find(x => { const hit = c.career >= s0 && c.career < s0 + x.count; if (!hit) s0 += x.count; return hit; });
+        if (R && Career.RARE[R.id] && c.career === s0 + R.count - 1 && !Career.stars.slice(s0, s0 + R.count).every(v => v === 3)) {
+          stars += '<p class="wmin near">🎁 Todas as fases do pântano com ⭐⭐⭐ dão um presente</p>'; Store.set('tip3', true);
+        }
+      }
     }
     $('winTitle').textContent = title; $('btnNewWin').textContent = next; $('winStars').innerHTML = stars;
     $('winPrize').classList.toggle('hidden', !prize);
@@ -2538,7 +2645,7 @@ const UI = (() => {
   }
   function showStuck() {
     if (!Game.over || Rules.isWin(Game.state)) return;
-    $('stuckArt').innerHTML = Art.frog('green', { cls: 'rfrog', outfit: Outfit.worn, sad: true });     // sem jogadas: o personagem fica tristinho
+    $('stuckArt').innerHTML = Art.frog('green', { cls: 'rfrog', char: Outfit.char, outfit: Outfit.worn, sad: true });     // sem jogadas: o personagem fica tristinho
     $('ovStuck').classList.add('show'); Base.dim(true);
     Sound.lose();
   }
@@ -2692,7 +2799,7 @@ const UI = (() => {
     const b = e.target.closest('.use-now'); if (!b) return;
     Outfit.toggleUse(b); b.classList.contains('on') ? Sound.pick() : Sound.click();
     const old = $('winArt').querySelector('svg.rfrog');           // o sapo da vitória troca de roupa na hora (ex.: loafer → Vans)
-    if (old) { old.insertAdjacentHTML('afterend', Art.frog('green', { cls: 'rfrog', outfit: Outfit.worn })); old.remove();
+    if (old) { old.insertAdjacentHTML('afterend', Art.frog('green', { cls: 'rfrog', char: Outfit.char, outfit: Outfit.worn })); old.remove();
       if (!reduceMotion()) animate($('winArt').querySelector('svg.rfrog'), [{ transform: 'scale(.85)' }, { transform: 'scale(1.12)' }, { transform: 'scale(1)' }], { duration: 380, easing: 'ease-out', composite: 'add' }); }
   });
   $('btnNewWin').addEventListener('click', () => {
@@ -3213,7 +3320,7 @@ ${portalPos ? `<path d="M${finalPos.x} ${finalPos.y} L${portalPos.x} ${portalPos
     html += `<button class="cnode final${done === TOTAL && !bonusOpen ? ' cur' : ''}" data-i="T" style="left:${finalPos.x - fs / 2}px;top:${finalPos.y - fs / 2}px;width:${fs}px;height:${fs}px" aria-label="Troféu final">${Deco.trophy()}</button>`;
     if (portalPos) html += `<button class="cnode portal" data-i="P" style="left:${portalPos.x - fs / 2}px;top:${portalPos.y - fs / 2}px;width:${fs}px;height:${fs}px" aria-label="Fase extra secreta">${Deco.portal()}<span class="num">Bônus</span></button>`;
     if (starPos) html += `<button class="cnode final star${done >= ALL ? ' cur' : ''}" data-i="S" style="left:${starPos.x - fs / 2}px;top:${starPos.y - fs / 2}px;width:${fs}px;height:${fs}px" aria-label="Estrela final">${Deco.bigStar()}</button>`;
-    html += `<div class="cavatar" id="cavatar" style="width:${ns * .95}px;height:${ns * .95}px">${Art.frog('green', { outfit: Outfit.worn })}</div>`;
+    html += `<div class="cavatar" id="cavatar" style="width:${ns * .95}px;height:${ns * .95}px">${Art.frog('green', { outfit: Outfit.worn, char: Outfit.char })}</div>`;
     inner.innerHTML = html;
     watchRegions();
     avatar = $('cavatar');
@@ -3319,8 +3426,8 @@ ${tw.join('')}<div class="cbanner${canUnlock(REGIONS.indexOf(R)) ? ' can' : ''}"
     const r = REGIONS.indexOf(R);
     if (canUnlock(r)) return `<em class="gate unlock"><span class="lk">🔒</span> Desbloquear</em>`;
     if (!isOpen(r)) return `<em class="gate">🔒 ${need(r)} ⭐ para desbloquear</em>`;
-    if (START[r] > done) return '';
-    return `<em class="rst">⭐ ${regionStars(r)}/${R.count * 3}</em>`;
+    const g = RARE[R.id], gift = !g ? '' : rare.includes(g) ? `<span class="cgift got" title="${Outfit.BY[g].name}">${Outfit.preview(g)}</span>` : '<span class="cgift">🎁</span>';
+    return `<em class="rst">⭐ ${START[r] > done ? 0 : regionStars(r)}/${R.count * 3}${g ? ' → ' : ''}${gift}</em>`;
   }
   function placeAvatar(i) {
     const p = posOf(i); if (!p || !avatar) return;
@@ -3410,18 +3517,31 @@ ${tw.join('')}<div class="cbanner${canUnlock(REGIONS.indexOf(R)) ? ' can' : ''}"
     key.remove();
     if (!rm) await animate(ban, [{ transform: `${T} scale(1.35)` }, { transform: `${T} scale(1)` }], { duration: 300, easing: 'ease-in', fill: 'forwards' });
     opened.push(r); Store.set('opened', opened);
-    render(); mapKey = [map.clientWidth, done, bonusOpen, JSON.stringify(Outfit.worn), stars.join('')].join('|');
+    render(); mapKey = [map.clientWidth, done, bonusOpen, JSON.stringify(Outfit.worn), Outfit.char, stars.join('')].join('|');
     placeAvatar(done - 1); scrollToIdx(done - 1, false);
     await wait(250);
     await hop(done - 1, done);
     unlocking = false;
+    const c = Outfit.CHARS.find(x => x.at === REGIONS[r].id); if (c) friendPop(c);
+  }
+  // personagem novo chegou com o pântano: apresenta e oferece usar na hora
+  function friendPop(c) {
+    const ov = document.createElement('div'); ov.className = 'overlay show'; ov.setAttribute('role', 'dialog'); ov.setAttribute('aria-modal', 'true');
+    ov.innerHTML = `<div class="panel result win"><div class="res-art">${Art.creature(c.id, { cls: 'rfrog' })}</div><div class="res-text"><h3>Novo amigo!</h3><p class="wmin"><b>${c.name}</b> chegou para pular com você</p>
+<div class="row win-row"><button type="button" class="btn blue" data-k="0">Depois</button><button type="button" class="btn green grow" data-k="1">Usar agora</button></div></div></div>`;
+    $('ovWin').parentNode.appendChild(ov); Base.dim(true); Sound.sparkle();
+    ov.addEventListener('click', e => {
+      const b = e.target.closest('button'); if (!b) return;
+      if (b.dataset.k === '1') { Outfit.setChar(c.id, false); render(); placeAvatar(done); }
+      Sound.click(); ov.remove(); Base.dim(false); if (window.wardNew) wardNew();
+    });
   }
   async function open(opts = {}) {
     UI.hideOverlays();
     UI.show('career');
     await ensureBuilt();
     // a trilha só é refeita se algo mudou (largura, progresso, bônus ou roupa do sapo)
-    const key = [map.clientWidth, done, bonusOpen, JSON.stringify(Outfit.worn), stars.join('')].join('|');
+    const key = [map.clientWidth, done, bonusOpen, JSON.stringify(Outfit.worn), Outfit.char, stars.join('')].join('|');
     if (key !== mapKey) { render(); mapKey = key; } else syncBase();
     const from = opts.hopFrom;
     if (from != null && from + 1 === done && done < limit() && !playable(done)) {      // pântano fechado: o sapo fica na última fase
@@ -3585,7 +3705,8 @@ ${tw.join('')}<div class="cbanner${canUnlock(REGIONS.indexOf(R)) ? ' can' : ''}"
   }
   // prêmio fora da trilha (ex.: desafio do dia perfeito); devolve true se for novo
   function grant(id) { if (rare.includes(id)) return false; rare.push(id); Store.set('rare', rare); return true; }
-  return { open, complete, relayout, ensureBuilt, syncBase, dailyPick, grant, dailyWin, ORDER, DAILY, RARE, get stars() { return stars.slice(); }, totalStars, playable, get dailyCount() { dailyPick(0); return { iniciante: dailyClasses.filter(x => x.id === 'iniciante').length, medio: dailyClasses.filter(x => x.id === 'medio').length }; }, seeded, cardFor, owned, openBonus, bigBang, REGIONS, TOTAL, ALL, PRIZE, BONUS, get bonusOpen() { return bonusOpen; }, set bonusOpen(v) { bonusOpen = v; }, get list() { return list; }, get done() { return done; }, set done(v) { done = v; } };
+  const chars = () => Outfit.CHARS.filter(c => !c.at || isOpen(REGIONS.findIndex(R => R.id === c.at))).map(c => c.id);
+  return { open, complete, relayout, ensureBuilt, syncBase, dailyPick, grant, dailyWin, ORDER, DAILY, RARE, chars, get stars() { return stars.slice(); }, totalStars, playable, get dailyCount() { dailyPick(0); return { iniciante: dailyClasses.filter(x => x.id === 'iniciante').length, medio: dailyClasses.filter(x => x.id === 'medio').length }; }, seeded, cardFor, owned, openBonus, bigBang, REGIONS, TOTAL, ALL, PRIZE, BONUS, get bonusOpen() { return bonusOpen; }, set bonusOpen(v) { bonusOpen = v; }, get list() { return list; }, get done() { return done; }, set done(v) { done = v; } };
 })();
 
 /* ---------------------------------------------------------------------
@@ -3894,31 +4015,37 @@ const Wardrobe = (() => {
   const SECTIONS = [['cabeca', 'Cabeça'], ['oculos', 'Óculos'], ['corpo', 'Corpo'], ['pes', 'Calçados'], ['acess', 'Acessórios']];
   const rank = id => { const i = Career.ORDER.indexOf(id); return i < 0 ? 999 : i; };
   // apetrechos já vistos no guarda-roupa; quem já jogava começa com tudo o que tem como visto
+  const mine = () => Career.owned().concat(Career.chars().filter(c => c !== 'sapo').map(c => 'char:' + c));     // apetrechos e personagens
   let seen = Store.get('seen', null), fresh = [];
-  if (!Array.isArray(seen)) { seen = Career.owned(); Store.set('seen', seen); }
-  window.wardNew = () => { $('wardNew').hidden = !Career.owned().some(id => !seen.includes(id)); };
+  if (!Array.isArray(seen)) { seen = mine(); Store.set('seen', seen); }
+  window.wardNew = () => { $('wardNew').hidden = !mine().some(id => !seen.includes(id)); };
   wardNew();
   let red = false;          // vestindo o sapinho vermelho
   const zoom = zoomable($('wStage'), '.wzoom', '.wzoom > svg');
   // os dois sapos lado a lado; o escolhido (toque nele) tem a vitória-régia em destaque
   function stageFrog(isRed, dx) {
-    const o = isRed ? Outfit.wornRed : Outfit.worn, sel = isRed === red;
+    const o = isRed ? Outfit.wornRed : Outfit.worn, sel = isRed === red, ch = isRed ? Outfit.charRed : Outfit.char;
     return `<g class="wfrog${sel ? ' sel' : ''}" data-red="${isRed ? 1 : 0}" transform="translate(${dx} 0)" role="button" aria-label="Vestir o sapo ${isRed ? 'vermelho' : 'verde'}">
 <ellipse cx="50" cy="97" rx="50" ry="12" fill="#063f78" opacity=".25"/>
 <path d="M4 94 A46 11 0 1 0 96 94 A46 11 0 0 0 56 83 L50 94 L45 83 A46 11 0 0 0 4 94Z" fill="url(#lily)" stroke="${sel ? '#ffd23f' : '#155f1a'}" stroke-width="${sel ? 3 : 1}"/>
-${Art.frog(isRed ? 'red' : 'green', { outfit: o, attrs: 'x="0" y="5" width="100" height="100"' })}
+${Art.frog(isRed ? 'red' : 'green', { outfit: o, char: ch, attrs: 'x="0" y="5" width="100" height="100"' })}
 <rect x="22" y="${sel ? 113 : 114}" width="56" height="13" rx="6.5" fill="${sel ? '#fffdf4' : 'rgba(255,255,255,.45)'}" stroke="${sel ? '#2fbf3a' : 'none'}" stroke-width="2"/>
-<text x="50" y="${sel ? 122.4 : 123.4}" text-anchor="middle" font-family="Nunito,system-ui,sans-serif" font-weight="900" font-size="8" fill="#123">${isRed ? 'Vermelho' : 'Verde'}</text></g>`;
+<text x="50" y="${sel ? 122.4 : 123.4}" text-anchor="middle" font-family="Nunito,system-ui,sans-serif" font-weight="900" font-size="8" fill="#123">${ch !== 'sapo' ? Outfit.CHARS.find(c => c.id === ch).name : isRed ? 'Vermelho' : 'Verde'}</text></g>`;
   }
   function render() {
-    const owned = Career.owned();
-    Outfit.prune(owned);
+    const owned = Career.owned(), have = Career.chars();
+    Outfit.prune(owned); Outfit.pruneChars(have);
     const big = Outfit.big(Outfit.worn) || Outfit.big(Outfit.wornRed);
     $('wStage').innerHTML = `<div class="wzoom"><svg viewBox="${big ? '-14 -40 248 170' : '-10 -20 240 150'}" preserveAspectRatio="xMidYMid meet" aria-hidden="false">
 ${stageFrog(false, 0)}${stageFrog(true, 120)}</svg></div>`;
     zoom.apply();
     $('wCount').textContent = `${Outfit.ITEMS.filter(it => owned.includes(it.id)).length}/${Outfit.ITEMS.length}`;
-    grid.innerHTML = SECTIONS.map(([g, title]) => {
+    const cur = red ? Outfit.charRed : Outfit.char;
+    grid.innerHTML = `<h4 class="wsec">Personagens</h4>` + Outfit.CHARS.map(c => {
+      const pv = `<span class="pv">${c.id === 'sapo' ? Art.frog(red ? 'red' : 'green', { still: true }) : Art.creature(c.id)}</span>`;
+      if (!have.includes(c.id)) return `<button type="button" class="witem wchar locked" data-char="${c.id}" aria-label="Personagem ainda não liberado">${pv}<b>???</b></button>`;
+      return `<button type="button" class="witem wchar${c.id === cur ? ' worn' : ''}${fresh.includes('char:' + c.id) ? ' new' : ''}" data-char="${c.id}" aria-pressed="${c.id === cur}">${pv}<b>${c.id === 'sapo' && red ? 'Sapo vermelho' : c.name}</b></button>`;
+    }).join('') + SECTIONS.map(([g, title]) => {
       const items = Outfit.ITEMS.filter(it => Outfit.GROUP[it.slot] === g).sort((a, b) => rank(a.id) - rank(b.id));
       return `<h4 class="wsec">${title}</h4>` + items.map(it => {
         if (!owned.includes(it.id)) return `<button type="button" class="witem locked" data-id="${it.id}" aria-label="Apetrecho ainda não ganho"><span class="pv">${Outfit.preview(it.id)}</span><b>???</b></button>`;
@@ -3929,6 +4056,8 @@ ${stageFrog(false, 0)}${stageFrog(true, 120)}</svg></div>`;
   }
   // onde o apetrecho sai: pântano da fase, pântano com 3★ ou desafio do dia
   function where(id) {
+    const c = Outfit.CHARS.find(x => x.id === id);
+    if (c) { const r = Career.REGIONS.find(x => x.id === c.at); return `Chega ao abrir ${r.na === 'na' ? 'a' : 'o'} ${r.name}`; }
     const R = Career.REGIONS, at = i => { let r = 0, st = 0; R.forEach((x, k) => { if (i >= st) r = k; st += x.count; }); return R[r]; };
     const i = Object.keys(Career.PRIZE).find(k => Career.PRIZE[k].includes(id));
     if (i != null) { const r = at(+i); return `Desbloqueado ${r.na} ${r.name}`; }
@@ -3940,10 +4069,11 @@ ${stageFrog(false, 0)}${stageFrog(true, 120)}</svg></div>`;
     const b = e.target.closest('.witem'); if (!b) return;
     if (b.classList.contains('locked')) {
       Sound.click(); animate(b, [0, -5, 5, -3, 3, 0].map(v => ({ transform: `translateX(${v}px)` })), { duration: 300 });
-      const t = b.querySelector('b'); t.textContent = where(b.dataset.id); b.classList.add('hint');
+      const t = b.querySelector('b'); t.textContent = where(b.dataset.id || b.dataset.char); b.classList.add('hint');
       clearTimeout(b._t); b._t = setTimeout(() => { t.textContent = '???'; b.classList.remove('hint'); }, 2600);
       return;
     }
+    if (b.dataset.char) { Outfit.setChar(b.dataset.char, red); Sound.pick(); render(); return; }
     Outfit.wear(b.dataset.id, red); Sound.pick(); render();
   });
   $('wStage').addEventListener('click', e => {
@@ -3953,7 +4083,7 @@ ${stageFrog(false, 0)}${stageFrog(true, 120)}</svg></div>`;
   });
   $('btnWardHome').addEventListener('click', () => { Sound.click(); UI.show('home'); });
   function open() {
-    const owned = Career.owned(); fresh = owned.filter(id => !seen.includes(id));     // os novos ficam com bolinha até sair do guarda-roupa
+    const owned = mine(); fresh = owned.filter(id => !seen.includes(id));     // os novos ficam com bolinha até sair do guarda-roupa
     seen = [...new Set(seen.concat(owned))]; Store.set('seen', seen);
     UI.hideOverlays(); UI.show('wardrobe'); red = false; zoom.reset(); render();
   }
@@ -4104,6 +4234,8 @@ const Tests = {
     t('desafio do dia: mensagem do Zap com os 5 mapas (emojis variando), total, nota e tempo', msg.length === 5 && msg[3] === '3min12s' && msg[1].split(' ').length === 5 && msg[1].split(' ')[0].replace(/^\d+/, '') !== msg[1].split(' ')[3].replace(/^\d+/, '') && msg[2] === 'Total: 44 pulos ⭐⭐⚪', msg.join(' | '));
     const far = Daily.message({ date: '2026-10-21', moves: [5, 4, 69, 7, 4], mins: [5, 4, 7, 7, 4] }).split('\n')[2];
     t('desafio do dia: nota pela soma dos pulos (um mapa ruim derruba o total)', far === 'Total: 89 pulos ⭐⚪⚪', far);
+    t('personagens: sapo + 6 amigos, cada um chega com um pântano e desenha com qualquer apetrecho',
+      Outfit.CHARS.length === 7 && Outfit.CHARS.slice(1).every(c => Career.REGIONS.some(R => R.id === c.at) && Art.creature(c.id, { outfit: { head: 'bolovo', eyes: 'oculos', torso: 'traje' } }).startsWith('<svg')));
     // 11. áudio
     t('áudio não é criado antes de um gesto', window.__frogGesture ? true : Sound.ctx === null, window.__frogGesture ? 'houve gesto antes do teste' : 'sem gesto: sem AudioContext');
     return { out, fails };
