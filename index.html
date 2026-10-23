@@ -416,6 +416,7 @@ canvas.confetti{position:absolute;inset:0;width:100%;height:100%;pointer-events:
   font-size:1.2rem;font-weight:900;letter-spacing:.05em;text-transform:uppercase;color:#fff;text-shadow:0 1px 0 rgba(0,40,90,.4);margin-top:.2rem;text-align:left}
 .wsec small{font-size:1rem;letter-spacing:0;opacity:.9;font-variant-numeric:tabular-nums}
 .wsec .ar{display:inline-block;transition:transform .15s ease}
+.wsec .sdot{margin-left:auto;width:.85rem;height:.85rem;border-radius:50%;background:#ff2d2d;box-shadow:0 0 0 2px #fff;flex:none}
 .wsec.shut .ar{transform:rotate(-90deg)}
 .wsec:focus-visible,.wall:focus-visible{outline:3px solid #ffd23f;outline-offset:2px}
 .wall{padding:.45rem 1rem;border-radius:999px;background:#fffdf4;color:#0b2545;font-weight:900;font-size:.95rem;box-shadow:0 .15rem 0 rgba(0,0,0,.15)}
@@ -855,7 +856,7 @@ canvas.bigbang{position:absolute;inset:0;width:100%;height:100%;z-index:400;poin
 
 <script>
 'use strict';
-const BUILD = '2026-10-22.1919';      // versão publicada: trocada pela data e hora a cada publicação (ver Update, no fim); 'dev' não confere
+const BUILD = '2026-10-22.2219';      // versão publicada: trocada pela data e hora a cada publicação (ver Update, no fim); 'dev' não confere
 /* =====================================================================
    FROGGO — jogo de sapos saltadores (peg-solitaire), arquivo único e offline.
    Módulos (todos neste arquivo): Store · Geo · Rules · Solver · Gen ·
@@ -4429,7 +4430,8 @@ const Wardrobe = (() => {
   const ALLSEC = () => ['amigos'].concat(SECTIONS.map(x => x[0]));
   let closed = [];
   // título com quantos a pessoa já tem e quantos existem na seção: "Amigos (6/12)"
-  const head = (key, title, n, tot) => `<button type="button" class="wsec${closed.includes(key) ? ' shut' : ''}" data-sec="${key}" aria-expanded="${!closed.includes(key)}"><span class="ar">▾</span>${title} <small>(${n}/${tot})</small></button>`;
+  // isNew: tem item/amigo novo dentro (bolinha vermelha no título, mesmo com a seção fechada)
+  const head = (key, title, n, tot, isNew) => `<button type="button" class="wsec${closed.includes(key) ? ' shut' : ''}" data-sec="${key}" aria-expanded="${!closed.includes(key)}"><span class="ar">▾</span>${title} <small>(${n}/${tot})</small>${isNew ? '<span class="sdot" aria-label="tem novidade"></span>' : ''}</button>`;
   const NONE = '<svg viewBox="0 0 24 24" fill="none" stroke="#8a96a8" stroke-width="2.4" stroke-linecap="round"><circle cx="12" cy="12" r="8.5"/><path d="M6 18L18 6"/></svg>';
   const rank = id => { const i = Career.ORDER.indexOf(id); return i < 0 ? 999 : i; };
   // apetrechos já vistos no guarda-roupa; quem já jogava começa com tudo o que tem como visto
@@ -4459,14 +4461,14 @@ ${stageFrog(false, 0)}${stageFrog(true, 104, .5)}</svg></div>`;
     zoom.apply();
     const cur = red ? Outfit.charRed : Outfit.char, allShut = ALLSEC().every(k => closed.includes(k));
     $('wAll').textContent = allShut ? 'Abrir tudo' : 'Fechar tudo'; $('wAll').dataset.all = allShut ? 'open' : 'close';
-    grid.innerHTML = head('amigos', 'Amigos', have.length, Outfit.CHARS.length) + (closed.includes('amigos') ? '' : Outfit.CHARS.map(c => {
+    grid.innerHTML = head('amigos', 'Amigos', have.length, Outfit.CHARS.length, fresh.some(id => id.startsWith('char:'))) + (closed.includes('amigos') ? '' : Outfit.CHARS.map(c => {
       const pv = `<span class="pv">${c.id === 'sapo' ? Art.frog(red ? 'red' : 'green', { still: true }) : Art.creature(c.id)}</span>`;
       if (!have.includes(c.id)) return `<button type="button" class="witem wchar locked" data-char="${c.id}" aria-label="Personagem ainda não liberado">${pv}<b>???</b></button>`;
       return `<button type="button" class="witem wchar${c.id === cur ? ' worn' : ''}${fresh.includes('char:' + c.id) ? ' new' : ''}" data-char="${c.id}" aria-pressed="${c.id === cur}">${pv}<b>${c.id === 'sapo' && red ? 'Sapo vermelho' : c.name}</b></button>`;
     }).join('')) + SECTIONS.map(([g, title, parts]) => {
       const byPart = parts.flatMap(pt => Outfit.ITEMS.filter(it => Outfit.GROUP[it.slot] === pt).sort((a, b) => rank(a.id) - rank(b.id)));
       const items = byPart.filter(it => owned.includes(it.id)).concat(byPart.filter(it => !owned.includes(it.id)));
-      const h = head(g, title, items.filter(it => owned.includes(it.id)).length, items.length);
+      const h = head(g, title, items.filter(it => owned.includes(it.id)).length, items.length, items.some(it => fresh.includes(it.id)));
       if (closed.includes(g)) return h;
       const bare = !items.some(it => Outfit.isWorn(it.id, red));      // nada vestido nessa seção: "Nenhum" fica marcado
       return h + `<button type="button" class="witem wnone${bare ? ' worn' : ''}" data-none="${g}" aria-pressed="${bare}"><span class="pv">${NONE}</span><b>Nenhum</b></button>` + items.map(it => {
