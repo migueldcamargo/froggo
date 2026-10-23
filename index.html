@@ -513,6 +513,12 @@ canvas.confetti{position:absolute;inset:0;width:100%;height:100%;pointer-events:
 .sybox h4{font-size:1.1rem;font-weight:900;color:#0b2545}
 .sywhere{font-weight:900!important;opacity:1!important;color:#0b2545}
 .syhint{font-size:.8rem!important}
+.sybox.solo{margin-top:.4rem;padding-top:0;border-top:0}      /* sem a parte de voltar fase (instalar / trazer progresso) */
+.systeps{list-style:none;counter-reset:sy;display:flex;flex-direction:column;gap:.4rem;text-align:left;margin:0 0 .2rem;padding:0}
+.systeps li{counter-increment:sy;display:flex;gap:.55rem;align-items:center;font-weight:700;font-size:.9rem;color:#0b2545;line-height:1.25}
+.systeps li::before{content:counter(sy);flex:none;width:1.6rem;height:1.6rem;border-radius:50%;display:grid;place-items:center;background:#0b6fc9;color:#fff;font-weight:900;font-size:.85rem}
+.insmove{width:100%;display:flex;flex-direction:column;gap:.45rem;padding:.7rem .8rem;border-radius:1rem;background:#fff6d6;border:2px solid #ffd23f;text-align:center}
+.insmove p{font-size:.85rem;font-weight:700;color:#5a4300;margin:0;opacity:1}
 #sySrc{width:100%;border-radius:.8rem;border:2px solid #c9d8e4;padding:.5rem .6rem;font:600 .8rem/1.25 ui-monospace,monospace;color:#0b2545;background:#fff;resize:none;user-select:text;-webkit-user-select:text}
 .bkregs{display:flex;flex-wrap:wrap;gap:.35rem;justify-content:center;margin:.7rem 0 .5rem}
 .bkregs button{padding:.35rem .65rem;border-radius:999px;background:#e8f1f8;color:#0b2545;font:800 .82rem/1.2 Nunito,system-ui,sans-serif}
@@ -661,6 +667,9 @@ canvas.bigbang{position:absolute;inset:0;width:100%;height:100%;z-index:400;poin
     <div class="home-bar">
       <button class="pill-btn" id="btnInstall" aria-label="Como instalar na tela de início">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2" width="12" height="20" rx="3"/><path d="M12 8v6M9 11h6"/></svg><span>Instalar</span>
+      </button>
+      <button class="pill-btn only-icon" id="btnBring" hidden aria-label="Trazer progresso">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 10l5 5 5-5"/><path d="M5 19h14"/></svg>
       </button>
       <div class="home-right">
         <button class="icon-btn snd" aria-label="Som ligado/desligado"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9h4l5-4v14l-5-4H4z" fill="currentColor"/><g class="sound-waves"><path d="M16 9a4 4 0 0 1 0 6"/><path d="M18.5 6.5a7.5 7.5 0 0 1 0 11"/></g><g class="muted-x"><path d="M16.5 9.5l5 5M21.5 9.5l-5 5"/></g></svg></button>
@@ -815,11 +824,17 @@ canvas.bigbang{position:absolute;inset:0;width:100%;height:100%;z-index:400;poin
         <div class="bkregs" id="bkRegs"></div>
         <div class="bkfases" id="bkFases"></div>
       </div>
-      <div class="sybox">
-        <h4>Transferir progresso</h4>
+      <div class="sybox" id="syBox">
+        <h4 id="syTitle">Transferir progresso</h4>
+        <ol class="systeps" id="sySteps" hidden>
+          <li><span>Toque em <b>Copiar progresso</b> aqui embaixo.</span></li>
+          <li><span>Instale o Froggo e abra pelo ícone da tela inicial.</span></li>
+          <li><span>No app, toque na setinha <b>↓</b> no alto da tela e cole o código.</span></li>
+        </ol>
         <p class="sywhere" id="syHere"></p>
         <button class="btn blue" id="btnSyncCopy" type="button">Copiar progresso</button>
-        <p class="syhint">No outro lugar (navegador ou app), toque 10 vezes no sapo e cole o código abaixo</p>
+        <button class="btn green" id="btnSyInstall" type="button" hidden>Ver como instalar</button>
+        <p class="syhint" id="syHint">No outro lugar (navegador ou app), toque 10 vezes no sapo e cole o código abaixo</p>
         <textarea id="sySrc" rows="2" placeholder="Cole aqui o código" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
         <button class="btn green" id="btnSyncUse" type="button">Colar progresso</button>
       </div>
@@ -878,6 +893,10 @@ canvas.bigbang{position:absolute;inset:0;width:100%;height:100%;z-index:400;poin
         <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2" width="12" height="20" rx="3"/><path d="M12 8v6M9 11h6"/></svg></span><span>Toque em <b>Adicionar à tela inicial</b> (ou <b>Instalar app</b>).</span></li>
         <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"/></svg></span><span>Confirme em <b>Adicionar</b>. Pronto!</span></li>
       </ol>
+      <div class="insmove" id="insMove" hidden>
+        <p>O app instalado começa do zero. Leve seu progresso junto antes de instalar!</p>
+        <button class="btn blue" id="btnInstallMove" type="button">Leve seu progresso</button>
+      </div>
       <div class="row">
         <button class="btn green hidden" id="btnInstallNow">Instalar agora</button>
         <button class="btn" id="btnInstallOk">Entendi!</button>
@@ -890,7 +909,7 @@ canvas.bigbang{position:absolute;inset:0;width:100%;height:100%;z-index:400;poin
 
 <script>
 'use strict';
-const BUILD = '2026-10-23.1212';      // versão publicada: trocada pela data e hora a cada publicação (ver Update, no fim); 'dev' não confere
+const BUILD = '2026-10-23.1241';      // versão publicada: trocada pela data e hora a cada publicação (ver Update, no fim); 'dev' não confere
 /* =====================================================================
    FROGGO — jogo de sapos saltadores (peg-solitaire), arquivo único e offline.
    Módulos (todos neste arquivo): Store · Geo · Rules · Solver · Gen ·
@@ -1361,6 +1380,23 @@ const Art = {
   <ellipse cx="44" cy="44.6" rx="1.8" ry="1.3" fill="#1e2a0a"/><ellipse cx="56" cy="44.6" rx="1.8" ry="1.3" fill="#1e2a0a"/><path d="M29 52 Q50 58 71 52" stroke="#2a3a0a" stroke-width="1.6" fill="none"/>
   <path d="M33 53.4 l1.6 3 1.6 -2.6 M41 55 l1.6 3 1.6 -2.8 M55 55.2 l1.6 3 1.6 -3 M63 53.6 l1.6 3 1.6 -2.8" fill="#fff" stroke="#fff" stroke-width=".6" stroke-linejoin="round"/><g fill="#3a5a1a" opacity=".5"><circle cx="40" cy="30" r="1.4"/><circle cx="60" cy="30" r="1.4"/><circle cx="50" cy="26" r="1.6"/></g>${shine}`;
         feet = '<g fill="#5f8a2e" stroke="#3a5a1a" stroke-width=".8"><ellipse cx="34" cy="88" rx="9" ry="4.6"/><ellipse cx="66" cy="88" rx="9" ry="4.6"/></g><path d="M28 90 l-1 3 M33 91 v3 M38 90 l1 3 M62 90 l-1 3 M67 91 v3 M72 90 l1 3" stroke="#f2e6a8" stroke-width="1.2" stroke-linecap="round"/>';
+      },
+      origa() {      // Origa, o lobo husky (chega na fase do skate, com a regata CBJR 013): cinza-azulado, máscara branca, olhar de chapado e sorrisão
+        defs = g('orB', '#8a98ad', '#56637a', '#2c3444');
+        back = '<path d="M70 80 Q92 84 96 66 Q97 56 90 52 Q92 62 84 66 Q78 70 70 70 Z" fill="#56637a" stroke="#1a2030" stroke-width="1"/><path d="M92 54 Q96 58 95.6 64 Q93 60 90 58 Z" fill="#f4f6fa"/>';
+        body = `<path d="M17 30 L16 2 L38 16 Z M83 30 L84 2 L62 16 Z" fill="#56637a" stroke="#1a2030" stroke-width="1" stroke-linejoin="round"/><path d="M20 24 L19.6 9 L31.6 17 Z M80 24 L80.4 9 L68.4 17 Z" fill="#f0c4bc"/>
+  <ellipse cx="20" cy="78" rx="13" ry="9.6" fill="url(#orB)"/><ellipse cx="80" cy="78" rx="13" ry="9.6" fill="url(#orB)"/>
+  <ellipse cx="50" cy="66" rx="30" ry="24" fill="url(#orB)"/><ellipse cx="50" cy="74" rx="17" ry="13" fill="#f4f6fa" opacity=".9"/>
+  <path d="M18 40 L10 46 L18 48 L11 54 L22 54 Q30 60 34 58 Z M82 40 L90 46 L82 48 L89 54 L78 54 Q70 60 66 58 Z" fill="#e9edf3" stroke="#1a2030" stroke-width=".8" stroke-linejoin="round"/>
+  <ellipse cx="50" cy="40" rx="33" ry="24" fill="url(#orB)"/><path d="M50 20 Q44 30 40 34 Q28 34 22 44 Q30 58 50 60 Q70 58 78 44 Q72 34 60 34 Q56 30 50 20 Z" fill="#eef2f7"/>`;
+        // olho de chapado: pálpebra pesada até o meio, íris azul de husky olhando para baixo
+        const lazy = [31, 69].map(x => { const ix = x + (x < 50 ? 1.6 : -1.6);
+          return `<circle cx="${x}" cy="26" r="11" fill="#f4f6fa" stroke="#141a26" stroke-width=".6"/><circle cx="${ix}" cy="30.6" r="5.4" fill="#5aa8e8"/><circle cx="${ix}" cy="30.6" r="2.6" fill="#0d1b26"/><circle cx="${ix + 1.6}" cy="29.4" r="1.3" fill="#fff"/>
+  <path d="M${x - 12} 26 A12 12 0 0 1 ${x + 12} 26 L${x + 11.6} 28.2 Q${x} 31.2 ${x - 11.6} 28.2 Z" fill="#56637a"/><path d="M${x - 11.4} 28.2 Q${x} 31.2 ${x + 11.4} 28.2" stroke="#141a26" stroke-width="1.6" fill="none" stroke-linecap="round"/>`; }).join('');
+        face = `${lazy}<path d="M34 42 Q36 34 50 34 Q64 34 66 42 Q66 56 50 58 Q34 56 34 42 Z" fill="#f4f6fa"/><path d="M45 38.6 Q50 36.4 55 38.6 Q55 42.6 50 43.6 Q45 42.6 45 38.6 Z" fill="#1a1614"/><ellipse cx="48.4" cy="38.8" rx="1.4" ry=".8" fill="#fff" opacity=".5"/>
+  <path d="M50 43.6 V47" stroke="#1a2030" stroke-width="1.3" stroke-linecap="round"/><path d="M38 47.6 Q50 50 62 47.6 Q60 59 50 59.6 Q40 59 38 47.6 Z" fill="#6a1414" stroke="#1a2030" stroke-width="1.3" stroke-linejoin="round"/>
+  <path d="M39.6 48.6 Q50 50.6 60.4 48.6 L59.8 51 Q50 52.6 40.2 51 Z" fill="#fff"/><ellipse cx="50" cy="56.4" rx="5" ry="2.2" fill="#e85a6a"/><ellipse cx="37" cy="33" rx="10" ry="4" fill="#fff" opacity=".22" transform="rotate(-14 37 33)"/>`;
+        feet = '<g fill="#3c4658"><ellipse cx="34" cy="88" rx="9" ry="4.8"/><ellipse cx="66" cy="88" rx="9" ry="4.8"/></g><path d="M30 90 v2.2 M34 91 v2.2 M38 90 v2.2 M62 90 v2.2 M66 91 v2.2 M70 90 v2.2" stroke="#1a2030" stroke-width=".9" stroke-linecap="round"/>';
       },
       caramelo() {     // vira-lata caramelo: orelhas caídas, focinho clarinho, peito branco, língua de fora
         defs = g('dgB', '#f2c27a', '#d9963f', '#a8691f');
@@ -2003,6 +2039,19 @@ ${vest}<g transform="translate(100 0) scale(-1 1)">${vest}</g>
       // amigos: copo vermelho de festa do Porco
       svg: () => `<path d="M80 56 H100 L97 82 H83 Z" fill="#e5262b" stroke="#8a0f12" stroke-width="1.1" stroke-linejoin="round"/><path d="M80 56 H100 L99.4 60.4 H80.6 Z" fill="#fff" stroke="#8a0f12" stroke-width=".8"/>
 <path d="M81 66 H99 M82 72 H98" stroke="#b81a1f" stroke-width=".7"/><path d="M84 62 L85.6 80" stroke="#fff" stroke-width="1.4" opacity=".35" stroke-linecap="round"/>` },
+    { id: 'regata', name: 'Regata CBJR 013', slot: 'torso', rare: true, box: '14 54 72 40',
+      // amigos: regata do Charlie Brown Jr. do Origa: preta, frisos brancos, faixa quadriculada, escudinho e CBJR 013;
+      // recortada na elipse do corpo do molde (50,66), então serve no sapo e em todos os amigos
+      svg: () => {
+        const shape = 'M33 59 Q41 66.4 50 66.4 Q59 66.4 67 59 L71.4 59 Q70 65 75 71 L83 74 L83 82 Q50 91 17 82 L17 74 L25 71 Q30 65 28.6 59 Z';
+        let chk = ''; for (let r = 0; r < 7; r++) for (let c = 0; c < 2; c++) if ((r + c) % 2) chk += `<rect x="${26.6 + c * 2.5}" y="${68 + r * 2.5}" width="2.5" height="2.5" fill="#fff"/>`;
+        return `<defs><clipPath id="rgB"><ellipse cx="50" cy="66" rx="31.4" ry="24.4"/></clipPath><clipPath id="rgS"><path d="${shape}"/></clipPath></defs>
+<g clip-path="url(#rgB)"><path d="${shape}" fill="#161616"/><g clip-path="url(#rgS)">${chk}<path d="M17 82 Q50 91 83 82" stroke="#000" stroke-width="1.6" fill="none"/></g>
+<path d="M33 59 Q41 66.4 50 66.4 Q59 66.4 67 59 M28.6 59 Q30 65 25 71 L17 74 M71.4 59 Q70 65 75 71 L83 74" stroke="#fff" stroke-width="1.3" fill="none" stroke-linejoin="round"/></g>
+<g transform="translate(63.4 71.4) scale(.85)"><path d="M-2.6 -2.2 H2.6 V1 Q2.6 3.4 0 4.4 Q-2.6 3.4 -2.6 1 Z" fill="#fff" stroke="#bbb" stroke-width=".3"/><path d="M-1.4 -2 V3.4 M0 -2 V4.2 M1.4 -2 V3.4" stroke="#111" stroke-width=".55"/><path d="M-2.6 -.6 H2.6" stroke="#111" stroke-width=".6"/><circle cx="-1" cy="-3.2" r=".45" fill="#fff"/><circle cx="1" cy="-3.2" r=".45" fill="#fff"/></g>
+<text x="51" y="77" text-anchor="middle" font-family="Arial Black,Arial,sans-serif" font-weight="900" font-size="5.8" fill="#fff" letter-spacing=".2">CBJR</text>
+<text x="51" y="83.2" text-anchor="middle" font-family="Arial Black,Arial,sans-serif" font-weight="900" font-size="5.2" fill="#fff">013</text>`;
+      } },
     { id: 'pastel', name: 'Pastel', slot: 'hand', rare: true, box: '70 50 40 34',
       // amigos: pastel de feira da Roger, retangular, com a borda apertada de garfo
       svg: () => { let crimp = ''; for (let k = 0; k < 10; k++) crimp += `<path d="M${77.4 + k * 2.8} 58.2 v2.2 M${77.4 + k * 2.8} 77.6 v2.2" stroke="#b8741e" stroke-width=".8" stroke-linecap="round"/>`;
@@ -2139,9 +2188,9 @@ ${zig}<path d="${band}" fill="${W}" stroke="${WD}" stroke-width="1"/>
   // kit: itens que chegam junto com o amigo (o Dillo, tatu do Skatepark, ainda não tem). O vira-lata (id caramelo) se chama Tatu
   const CHARS = [{ id: 'sapo', name: 'Sapo' }, { id: 'johnny', name: 'Johnny Chicken', at: 'montemor', kit: ['prancha'] }, { id: 'lollipop', name: 'Loripop', at: 'praia', kit: ['ninja'] },
     { id: 'corujao', name: 'Corujão', at: 'nebuloso', kit: ['violao'] }, { id: 'caramelo', name: 'Tatu', at: 'carnaval', kit: ['osso', 'colarprata'] }, { id: 'porco', name: 'Porco', at: 'festa', kit: ['copofesta'] },
-    { id: 'tatu', name: 'Dillo', at: 'skatepark' }, { id: 'topogigio', name: 'Topogígio', at: 'esgoto', kit: ['queijo'] }, { id: 'roger', name: 'Roger', at: 'avancado', kit: ['pastel'] },
+    { id: 'tatu', name: 'Dillo', at: 'skatepark' }, { id: 'origa', name: 'Origa', fase: 67, kit: ['regata'] }, { id: 'topogigio', name: 'Topogígio', at: 'esgoto', kit: ['queijo'] }, { id: 'roger', name: 'Roger', at: 'avancado', kit: ['pastel'] },
     { id: 'jare', name: 'Jaré', at: 'expert' }, { id: 'baurets', name: 'Baurets', at: 'espaco', kit: ['capacete'] },
-    { id: 'kiwi', name: 'Kiwi', gift: true, kit: ['kiwifruta'] }];      // gift: presente do desafio do dia (ver Daily, KIWI)      // gift: presente do desafio do dia (ver Daily, KIWI)
+    { id: 'kiwi', name: 'Kiwi', gift: true, kit: ['kiwifruta'] }];      // gift: presente do desafio do dia (ver Daily, KIWI); fase: chega ao passar essa fase (índice), não ao abrir o pântano
   let char = Store.get('char', 'sapo'), charRed = Store.get('charRed', 'sapo');
   if (char === charRed && char !== 'sapo') { charRed = 'sapo'; Store.set('charRed', charRed); }     // verde e vermelho não podem ser o mesmo personagem (só o sapo)
   const big = o => flies(o) || !!(o && o.ride);       // ocupa mais espaço em volta do sapo (chama, caixa)
@@ -2977,7 +3026,7 @@ const UI = (() => {
       [[0, 4, '#ffd23f', .1], [76, 2, '#ffd23f', .3], [40, -14, '#fff27a', .5], [6, 60, '#b9f55a', .7], [74, 58, '#ff9cbc', .9]]
         .map(([x, y, c, d]) => `<div class="star" style="left:${x}%;top:${y}%;animation-delay:${d}s,${d + .6}s">${Art.star(c)}</div>`).join('');
     const c = Game.card;
-    let title = 'Você venceu!', next = 'Próxima carta', prize = null, stars = '', got = 0;
+    let title = 'Você venceu!', next = 'Próxima carta', prize = null, friend = null, stars = '', got = 0;
     winToMap = false; $('btnNewWin').classList.remove('nudge');
     if (c.career != null) {
       if (c.career === LESSONS.length - 1) Daily.practiced();     // terminou o tutorial da trilha: o mapa do dia não repete o treino
@@ -2989,7 +3038,7 @@ const UI = (() => {
       $('btnNewWin').classList.add('nudge');     // o que chama atenção é seguir para a próxima fase
       if (res.finished) { title = 'Carreira concluída!'; next = 'Ver troféu'; winToMap = true; }
       if (res.bonusFinished) { title = 'Espaço concluído!'; next = 'Ver estrela'; winToMap = true; }
-      prize = res.prize;
+      prize = res.prize; friend = res.friend;
       // uma vez só: ao terminar um pântano sem todas as 3★, conta que existe o presente
       if (res.advanced && !Store.get('tip3', false)) {
         let s0 = 0; const R = Career.REGIONS.find(x => { const hit = c.career >= s0 && c.career < s0 + x.count; if (!hit) s0 += x.count; return hit; });
@@ -3004,6 +3053,7 @@ const UI = (() => {
     $('ovWin').classList.add('show'); Base.dim(true);
     Sound.win(); confetti();
     if (got) dropStars(got);
+    if (friend) setTimeout(() => { if ($('ovWin').classList.contains('show')) Career.friendPop(friend, true); }, 1600);
   }
   // as estrelas caem uma a uma nas casas vazias ("tum"); com 3, brilham juntas
   let dropT = [];
@@ -3636,7 +3686,7 @@ const Career = (() => {
     return got.length ? got : null;
   }
   // ordem em que os apetrechos saem (trilha, 3★ de cada pântano, coleção do desafio): organiza o guarda-roupa
-  const ORDER = REGIONS.flatMap((R, r) => Object.keys(PRIZE).filter(i => +i >= START[r] && +i < START[r] + R.count).sort((a, b) => a - b).flatMap(i => PRIZE[i])
+  const ORDER = REGIONS.flatMap((R, r) => Object.keys(PRIZE).filter(i => +i >= START[r] && +i < START[r] + R.count).sort((a, b) => a - b).flatMap(i => PRIZE[i].concat(...Outfit.CHARS.filter(c => c.fase === +i).map(c => c.kit || [])))   // kit de amigo que chega na fase vem logo depois
     .concat(RARE[R.id] || [], (Outfit.CHARS.find(c => c.at === R.id) || {}).kit || []))
     .concat(DAILY.map(([, id]) => id), 'kiwifruta');
   let list = null, built = null, nodes = [], finalPos = null, portalPos = null, starPos = null, lastW = 0, avatar = null;
@@ -4007,7 +4057,7 @@ ${portalPos ? `<path d="M${finalPos.x} ${finalPos.y} L${portalPos.x} ${portalPos
     const c = Outfit.CHARS.find(x => x.at === REGIONS[r].id); if (c) friendPop(c);
   }
   // personagem novo chegou com o pântano: apresenta e oferece usar na hora
-  function friendPop(c) {
+  function friendPop(c, keepDim) {     // keepDim: aberto por cima da vitória, que continua escurecendo o fundo
     const ov = document.createElement('div'); ov.className = 'overlay show'; ov.setAttribute('role', 'dialog'); ov.setAttribute('aria-modal', 'true');
     const kit = c.kit || [];
     ov.innerHTML = `<div class="panel result win"><div class="res-art">${Art.creature(c.id, { cls: 'rfrog', outfit: Object.fromEntries(kit.map(id => [Outfit.BY[id].slot, id])) })}</div><div class="res-text"><h3>${c.name}</h3><p class="wmin">Novo amigo desbloqueado!</p>
@@ -4017,7 +4067,7 @@ ${kit.length ? `<p class="wmin">Vem com: <b>${kit.map(id => Outfit.BY[id].name).
     ov.addEventListener('click', e => {
       const b = e.target.closest('button'); if (!b) return;
       if (b.dataset.k === '1') { Outfit.setChar(c.id, false); Outfit.put(kit); render(); placeAvatar(done); }     // usa o amigo já com o kit
-      Sound.click(); ov.remove(); Base.dim(false); if (window.wardNew) wardNew();
+      Sound.click(); ov.remove(); if (!keepDim) Base.dim(false); if (window.wardNew) wardNew();
     });
   }
   async function open(opts = {}) {
@@ -4048,7 +4098,8 @@ ${kit.length ? `<p class="wmin">Vem com: <b>${kit.map(id => Outfit.BY[id].name).
     if (i === done && done < limit() && playable(i)) {
       done++; Store.set('career', done);
       Track(`fase-${String(i + 1).padStart(3, '0')}`, `Fase ${i + 1} · ${R.name}`);     // passou a fase pela 1ª vez
-      return { advanced: true, finished: done === TOTAL, bonusFinished: done === ALL, prize: (PRIZE[i] || []).concat(prize || []).length ? (PRIZE[i] || []).concat(prize || []) : null };
+      return { advanced: true, finished: done === TOTAL, bonusFinished: done === ALL, prize: (PRIZE[i] || []).concat(prize || []).length ? (PRIZE[i] || []).concat(prize || []) : null,
+        friend: Outfit.CHARS.find(c => c.fase === i) || null };      // amigo que chega com esta fase (o Origa, na fase do skate)
     }
     return { advanced: false, finished: false, bonusFinished: false, prize };
   }
@@ -4207,8 +4258,8 @@ ${kit.length ? `<p class="wmin">Vem com: <b>${kit.map(id => Outfit.BY[id].name).
   }
   // prêmio fora da trilha (ex.: desafio do dia perfeito); devolve true se for novo
   function grant(id) { if (rare.includes(id)) return false; rare.push(id); Store.set('rare', rare); return true; }
-  const chars = () => Outfit.CHARS.filter(c => { if (c.gift) return rare.includes('char:' + c.id); const k = REGIONS.findIndex(R => R.id === c.at); return !c.at || (REGIONS[k].bonus ? bonusOpen : isOpen(k)); }).map(c => c.id);
-  return { open, complete, rewind, relayout, ensureBuilt, syncBase, dailyPick, grant, dailyWin, ORDER, DAILY, RARE, chars, get stars() { return stars.slice(); }, totalStars, playable, get dailyCount() { dailyPick(0); return { iniciante: dailyClasses.filter(x => x.id === 'iniciante').length, medio: dailyClasses.filter(x => x.id === 'medio').length }; }, seeded, cardFor, owned, openBonus, bigBang, REGIONS, TOTAL, ALL, PRIZE, BONUS, get bonusOpen() { return bonusOpen; }, set bonusOpen(v) { bonusOpen = v; }, get list() { return list; }, get done() { return done; }, set done(v) { done = v; } };
+  const chars = () => Outfit.CHARS.filter(c => { if (c.gift) return rare.includes('char:' + c.id); if (c.fase != null) return done > c.fase; const k = REGIONS.findIndex(R => R.id === c.at); return !c.at || (REGIONS[k].bonus ? bonusOpen : isOpen(k)); }).map(c => c.id);
+  return { open, complete, friendPop, rewind, relayout, ensureBuilt, syncBase, dailyPick, grant, dailyWin, ORDER, DAILY, RARE, chars, get stars() { return stars.slice(); }, totalStars, playable, get dailyCount() { dailyPick(0); return { iniciante: dailyClasses.filter(x => x.id === 'iniciante').length, medio: dailyClasses.filter(x => x.id === 'medio').length }; }, seeded, cardFor, owned, openBonus, bigBang, REGIONS, TOTAL, ALL, PRIZE, BONUS, get bonusOpen() { return bonusOpen; }, set bonusOpen(v) { bonusOpen = v; }, get list() { return list; }, get done() { return done; }, set done(v) { done = v; } };
 })();
 
 /* ---------------------------------------------------------------------
@@ -4555,37 +4606,87 @@ window.heroZoom = zoomable($('heroArt'), '.hero-stage', '.hero-zoom', false);   
    Num deles, "Copiar progresso" gera um código com tudo o que o jogo guarda (fases, estrelas, itens, amigos, roupas, desafio do dia);
    no outro, colar o código troca o progresso de lá por esse, depois de mostrar os dois lados para comparar. */
 const Sync = (() => {
-  const TAG = 'FROGGO1:', SKIP = ['frog.updTry'];
+  /* Código de transferência: o progresso (JSON) vai comprimido, embaralhado com uma chave e um sal aleatório e com uma
+     conferência no fim. Fica com cara de letras soltas (muda a cada cópia) e qualquer letra trocada invalida o código,
+     então não dá para "escrever" um progresso à mão. Formato: FROGGO-<base64url de [2][flags][sal×4][dados][conferência×4]> */
+  const TAG = 'FROGGO-', SKIP = ['frog.updTry'], KEY = new TextEncoder().encode('lagoa-do-froggo/sapo-pula-sapo');
   const keys = () => Object.keys(localStorage).filter(k => k.startsWith('frog.') && !SKIP.includes(k));
-  const pack = () => TAG + btoa(unescape(encodeURIComponent(JSON.stringify(Object.fromEntries(keys().map(k => [k, localStorage.getItem(k)]))))));
-  function unpack(txt) {
-    const i = txt.indexOf(TAG); if (i < 0) return null;
-    try { const d = JSON.parse(decodeURIComponent(escape(atob(txt.slice(i + TAG.length).replace(/[^A-Za-z0-9+/=]/g, ''))))); return d && typeof d === 'object' && 'frog.career' in d ? d : null; } catch (e) { return null; }
+  const here = () => Object.fromEntries(keys().map(k => [k, localStorage.getItem(k)]));
+  const fnv = (bytes, seed) => { let h = (2166136261 ^ seed) >>> 0; for (let i = 0; i < bytes.length; i++) { h ^= bytes[i]; h = Math.imul(h, 16777619) >>> 0; } return h; };
+  const check = (data, salt) => { let h = fnv(data, salt); h ^= fnv(KEY, h); return h >>> 0; };
+  function mask(bytes, salt) {
+    let x = fnv(KEY, salt) || 1; const out = new Uint8Array(bytes.length);
+    for (let i = 0; i < bytes.length; i++) { x ^= x << 13; x >>>= 0; x ^= x >>> 17; x ^= x << 5; x >>>= 0; out[i] = bytes[i] ^ (x & 255); }
+    return out;
+  }
+  const zip = async (bytes, inflate) => new Uint8Array(await new Response(new Blob([bytes]).stream()
+    .pipeThrough(inflate ? new DecompressionStream('deflate-raw') : new CompressionStream('deflate-raw'))).arrayBuffer());
+  const b64 = bytes => { let t = ''; for (let i = 0; i < bytes.length; i += 4096) t += String.fromCharCode.apply(null, bytes.subarray(i, i + 4096)); return btoa(t).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, ''); };
+  const unb64 = t => { const r = atob(t.replace(/-/g, '+').replace(/_/g, '/') + '==='.slice((t.length + 3) % 4)); return Uint8Array.from(r, c => c.charCodeAt(0)); };
+  async function pack(d = here()) {
+    let data = new TextEncoder().encode(JSON.stringify(d)), flags = 0;
+    if (typeof CompressionStream === 'function') { try { data = await zip(data, false); flags = 1; } catch (e) { /* sem compressão */ } }
+    const saltB = crypto.getRandomValues(new Uint8Array(4)), salt = new DataView(saltB.buffer).getUint32(0);
+    const out = new Uint8Array(2 + 4 + data.length + 4), dv = new DataView(out.buffer);
+    out[0] = 2; out[1] = flags; out.set(saltB, 2); out.set(mask(data, salt), 6); dv.setUint32(6 + data.length, check(data, salt));
+    return TAG + b64(out);
+  }
+  async function unpack(txt) {
+    const i = (txt || '').indexOf(TAG); if (i < 0) return null;
+    try {
+      const raw = unb64(txt.slice(i + TAG.length).replace(/[^A-Za-z0-9_-]/g, ''));
+      if (raw.length < 11 || raw[0] !== 2) return null;
+      const dv = new DataView(raw.buffer), salt = dv.getUint32(2), n = raw.length - 10;
+      let data = mask(raw.subarray(6, 6 + n), salt);
+      if (dv.getUint32(6 + n) !== check(data, salt)) return null;          // código mexido ou incompleto
+      if (raw[1] & 1) data = await zip(data, true);
+      const d = JSON.parse(new TextDecoder().decode(data));
+      return d && typeof d === 'object' && 'frog.career' in d ? d : null;
+    } catch (e) { return null; }
   }
   const num = (d, k, v) => { try { return JSON.parse(d['frog.' + k]); } catch (e) { return v; } };
   const sum = d => { const st = num(d, 'stars', []); return `fase ${(+num(d, 'career', 0) || 0) + 1} · ⭐ ${Array.isArray(st) ? st.reduce((a, b) => a + (b || 0), 0) : 0}`; };
-  const here = () => Object.fromEntries(keys().map(k => [k, localStorage.getItem(k)]));
-  function reset() { $('syHere').textContent = `Aqui: ${sum(here())}`; $('sySrc').value = ''; $('btnSyncCopy').textContent = 'Copiar progresso'; }
+  // onde o progresso está: pântano e fase em que a pessoa está (a próxima a jogar)
+  const place = d => {
+    const c = +num(d, 'career', 0) || 0, st = num(d, 'stars', []), ss = Array.isArray(st) ? st.reduce((a, b) => a + (b || 0), 0) : 0;
+    let a = 0; const R = Career.REGIONS.find(x => { if (c < a + x.count) return true; a += x.count; return false; });
+    return `${R ? `${R.name}, fase ${c + 1}` : 'tudo completo'} · ⭐ ${ss}`;
+  };
+  const diff = (to, from) => { const n = (+num(to, 'career', 0) || 0) - (+num(from, 'career', 0) || 0), f = k => k === 1 ? '1 fase' : `${k} fases`;
+    return n > 0 ? `Isso faz você avançar ${f(n)}.` : n < 0 ? `Isso faz você voltar ${f(-n)}.` : 'Você continua na mesma fase.'; };
+  /* modos do painel (todos com copiar e colar): 'secret' (10 toques no sapo), 'move' (da tela de instalar, com o passo a passo)
+     e 'bring' (botão "Trazer progresso" do app instalado, mesmo já com fases feitas nele) */
+  let code = null, mode = 'secret';
+  function reset(m = 'secret') {
+    mode = m; code = null;
+    const show = (id, on) => { $(id).hidden = !on; };
+    $('syBox').classList.toggle('solo', m !== 'secret'); show('syTitle', m === 'secret'); show('sySteps', m === 'move');
+    show('btnSyInstall', m === 'move'); ['syHere', 'btnSyncCopy', 'syHint', 'sySrc', 'btnSyncUse'].forEach(id => show(id, true));
+    $('syHint').textContent = m === 'bring' ? 'Cole aqui o código que você copiou no navegador' : m === 'move' ? 'Já tem um código? Cole aqui:' : 'No outro lugar (navegador ou app), toque 10 vezes no sapo e cole o código abaixo';
+    $('syHere').textContent = `Aqui: ${place(here())}`; $('sySrc').value = ''; $('btnSyncCopy').textContent = 'Copiar progresso';
+    pack().then(c => { code = c; }).catch(() => {});     // pronto antes do toque (o iPhone só copia dentro do toque)
+  }
   $('btnSyncCopy').addEventListener('click', async () => {
-    const code = pack();
-    try { await navigator.clipboard.writeText(code); $('btnSyncCopy').textContent = 'Copiado ✓'; }
-    catch (e) { $('sySrc').value = code; $('sySrc').select(); $('btnSyncCopy').textContent = 'Copie o código abaixo'; }
+    const c = code || await pack();
+    try { await navigator.clipboard.writeText(c); $('btnSyncCopy').textContent = 'Copiado ✓'; }
+    catch (e) { $('sySrc').value = c; $('sySrc').select(); $('btnSyncCopy').textContent = 'Copie o código abaixo'; }
   });
-  $('btnSyncUse').addEventListener('click', () => {
-    const d = unpack($('sySrc').value);
+  $('btnSyncUse').addEventListener('click', async () => {
+    const d = await unpack($('sySrc').value);
     if (!d) { toast('Código inválido'); return; }
     $('ovBack').classList.remove('show');
-    UI.confirm('Trocar o progresso?', `Código: ${sum(d)}\nAqui agora: ${sum(here())}\nO progresso daqui será substituído pelo do código.`, 'Trocar', () => {
+    const h = here();
+    UI.confirm('Quer mesmo substituir seu progresso aqui?', `Do código: ${place(d)}\nAqui agora: ${place(h)}\n\n${diff(d, h)}\nO progresso daqui será trocado pelo do código.`, 'Substituir', () => {
       try { keys().forEach(k => localStorage.removeItem(k)); Object.entries(d).forEach(([k, v]) => { if (k.startsWith('frog.') && typeof v === 'string') localStorage.setItem(k, v); }); }
       catch (e) { toast('Não deu para salvar aqui'); return; }
       location.reload();
     });
   });
-  return { reset, pack, unpack };
+  return { reset, pack, unpack, get mode() { return mode; } };
 })();
 /* 10 toques seguidos no personagem da tela inicial: janela para voltar a uma fase anterior da carreira (nunca avançar)
-   e para transferir o progresso */
-(() => {
+   e para transferir o progresso. A mesma janela abre só com a transferência pela tela de instalar e pelo "Trazer progresso" */
+const ProgressPanel = (() => {
   let n = 0, t = 0, reg = 0;
   const regs = () => Career.REGIONS.map((R, r, A) => ({ R, r, a: A.slice(0, r).reduce((s, x) => s + x.count, 0) })).filter(x => x.a < Career.done && (!x.R.bonus || Career.bonusOpen));
   function fases() {
@@ -4594,15 +4695,16 @@ const Sync = (() => {
     const top = Math.min(Career.done, x.a + x.R.count);
     $('bkFases').innerHTML = Array.from({ length: top - x.a }, (_, k) => `<button type="button" data-i="${x.a + k}">${x.a + k + 1}</button>`).join('');
   }
-  function open() {
-    const list = regs();
+  function open(mode = 'secret') {
+    const list = mode === 'secret' ? regs() : [];
+    $('bkTitle').textContent = mode === 'move' ? 'Leve seu progresso' : mode === 'bring' ? 'Trazer progresso' : 'Seu progresso';
     $('bkBack').hidden = !list.length;            // ainda sem fase para voltar: só a transferência
     if (list.length) {
       reg = list[list.length - 1].r;
       $('bkRegs').innerHTML = list.map(x => `<button type="button" data-r="${x.r}">${x.R.name}</button>`).join('');
       fases();
     }
-    Sync.reset(); heroZoom.reset();
+    Sync.reset(mode); heroZoom.reset();
     $('ovBack').classList.add('show'); Base.dim(true);
   }
   $('heroArt').addEventListener('click', e => {
@@ -4621,6 +4723,8 @@ const Sync = (() => {
     });
   });
   $('btnBackClose').addEventListener('click', () => { $('ovBack').classList.remove('show'); Base.dim(false); });
+  $('btnSyInstall').addEventListener('click', () => { Sound.click(); $('ovBack').classList.remove('show'); Install.open(); });
+  return { open };
 })();
 const Wardrobe = (() => {
   const grid = $('wGrid');
@@ -4683,6 +4787,7 @@ ${stageFrog(false, 0)}${stageFrog(true, 104, .5)}</svg></div>`;
     const nm = r => r.bonus && !Career.bonusOpen ? '???' : r.name;      // o Espaço é segredo até ser aberto
     const c = Outfit.CHARS.find(x => x.id === id);
     if (c && c.gift) return 'Chega com o Desafio do dia';
+    if (c && c.fase != null) { const R = Career.REGIONS; let st = 0, r = R[0]; for (const x of R) { if (c.fase >= st) r = x; st += x.count; } return `Chega na fase ${c.fase + 1} ${r.na} ${nm(r)}`; }
     if (c) { const r = Career.REGIONS.find(x => x.id === c.at); return `Chega ao abrir ${r.na === 'na' ? 'a' : 'o'} ${nm(r)}`; }
     const R = Career.REGIONS, at = i => { let r = 0, st = 0; R.forEach((x, k) => { if (i >= st) r = k; st += x.count; }); return R[r]; };
     const i = Object.keys(Career.PRIZE).find(k => Career.PRIZE[k].includes(id));
@@ -4739,7 +4844,7 @@ const Install = (() => {
   }
   $('tabIos').addEventListener('click', () => tab(true));
   $('tabAnd').addEventListener('click', () => tab(false));
-  function open() { tab(!/android/i.test(ua)); $('ovInstall').classList.add('show'); Base.dim(true); }
+  function open() { tab(!/android/i.test(ua)); $('insMove').hidden = !(Career.done > 0); $('ovInstall').classList.add('show'); Base.dim(true); }
   function close() { $('ovInstall').classList.remove('show'); Base.dim(false); }
   $('btnInstallOk').addEventListener('click', () => { Sound.click(); close(); });
   $('btnInstallNow').addEventListener('click', async () => {
@@ -4748,8 +4853,12 @@ const Install = (() => {
     deferred = null; $('btnInstallNow').classList.add('hidden'); close();
   });
   $('btnInstall').addEventListener('click', () => { Sound.click(); open(); });
+  // "Leve seu progresso": copia o código antes de instalar (o app instalado no iPhone não enxerga o que ficou no Safari)
+  $('btnInstallMove').addEventListener('click', () => { Sound.click(); close(); ProgressPanel.open('move'); });
+  $('btnBring').addEventListener('click', () => { Sound.click(); ProgressPanel.open('bring'); });
   function boot() {
-    if (isStandalone()) { $('btnInstall').classList.add('hidden'); return; }
+    // no app instalado: botão para trazer o código do navegador (sempre, mesmo já com fases feitas no app)
+    if (isStandalone()) { $('btnInstall').classList.add('hidden'); $('btnBring').hidden = false; return; }
   }
   return { boot, open };
 })();
@@ -4832,7 +4941,7 @@ const Tests = {
       at(0, 1)[0] === 'cardigan' && at(1, 3)[0] === 'oldskool' && Career.REGIONS.slice(1).every((R, r) => Outfit.BY[last(r + 1)[0]].slot === 'head') && last(10).join() === 'coroa,trofeu'
       && at(2, 7)[0] === 'woody' && at(7, 7)[0] === 'skate' && new Set(Object.values(P).flat()).size === 40 && Object.values(P).flat().every(id => Outfit.BY[id] && !Outfit.BY[id].rare));
     t('prêmios fora da trilha (marcados rare): 10 de pântano com 3★ + 5 da coleção do desafio + kiwi + kits dos amigos; ninguém fica sem jeito de ganhar',
-      Outfit.ITEMS.filter(i => i.rare).length === 25 && Object.values(Career.RARE).concat(Career.DAILY.map(d => d[1])).every(id => Outfit.BY[id] && Outfit.BY[id].rare)
+      Outfit.ITEMS.filter(i => i.rare).length === 26 && Object.values(Career.RARE).concat(Career.DAILY.map(d => d[1])).every(id => Outfit.BY[id] && Outfit.BY[id].rare)
       && Outfit.ITEMS.every(it => Career.ORDER.includes(it.id)) && Career.ORDER.length === Outfit.ITEMS.length);
     t('estrelas: 3 no mínimo, 2 com +1, 1 acima', starsFor(5, 5) === 3 && starsFor(6, 5) === 2 && starsFor(7, 5) === 1 && starsFor(10, 5) === 1);
     t('tutorial com 1, 2 e 3 sapos verdes', [0, 1, 2].every(i => Rules.greens(CL[i].start) === i + 1));
@@ -4870,7 +4979,7 @@ const Tests = {
     const far = Daily.message({ date: '2026-10-21', moves: [5, 4, 69, 7, 4], mins: [5, 4, 7, 7, 4] }).split('\n')[2];
     t('desafio do dia: nota pela soma dos pulos (um mapa ruim derruba o total)', far === 'Total: 89 pulos ⭐⚪⚪', far);
     t('personagens: sapo + 6 amigos, cada um chega com um pântano e desenha com qualquer apetrecho',
-      Outfit.CHARS.length === 12 && Outfit.CHARS.slice(1).every(c => (c.gift || Career.REGIONS.some(R => R.id === c.at)) && Art.creature(c.id, { outfit: { head: 'bolovo', eyes: 'oculos', torso: 'traje' } }).startsWith('<svg')));
+      Outfit.CHARS.length === 13 && Outfit.CHARS.slice(1).every(c => (c.gift || c.fase != null || Career.REGIONS.some(R => R.id === c.at)) && Art.creature(c.id, { outfit: { head: 'bolovo', eyes: 'oculos', torso: 'traje' } }).startsWith('<svg')));
     // 11. áudio
     t('áudio não é criado antes de um gesto', window.__frogGesture ? true : Sound.ctx === null, window.__frogGesture ? 'houve gesto antes do teste' : 'sem gesto: sem AudioContext');
     return { out, fails };
@@ -4976,7 +5085,7 @@ const Tests = {
     setTimeout(check, 3000);
     setInterval(go, 2000);      // achou versão nova durante uma fase: atualiza quando voltar à tela inicial
   })();
-  window.__frog = { Geo, Rules, Solver, Gen, Game, Board, UI, Tests, Sound, Career, Outfit, Wardrobe, Daily };
+  window.__frog = { Geo, Rules, Solver, Gen, Game, Board, UI, Tests, Sound, Career, Outfit, Wardrobe, Daily, Sync };
 })();
 </script>
 </body>
