@@ -872,7 +872,7 @@ canvas.bigbang{position:absolute;inset:0;width:100%;height:100%;z-index:400;poin
 
 <script>
 'use strict';
-const BUILD = '2026-10-23.0605';      // versão publicada: trocada pela data e hora a cada publicação (ver Update, no fim); 'dev' não confere
+const BUILD = '2026-10-23.1048';      // versão publicada: trocada pela data e hora a cada publicação (ver Update, no fim); 'dev' não confere
 /* =====================================================================
    FROGGO — jogo de sapos saltadores (peg-solitaire), arquivo único e offline.
    Módulos (todos neste arquivo): Store · Geo · Rules · Solver · Gen ·
@@ -1565,6 +1565,10 @@ ${dim ? '' : `<path d="M${x - r * .32} ${y - r * .42} q${r * .12} -${r * .14} ${
    A ordem da lista é a ordem dos prêmios (do mais simples ao mais nobre).
    --------------------------------------------------------------------- */
 const Outfit = (() => {
+  // itens dupla face (Bucket Kiwi): lado em uso no sapo verde (g) e no vermelho (r); 0 = frente, 1 = verso
+  let flip = Store.get('flip', {}); if (!flip || typeof flip !== 'object') flip = {};
+  const side = (id, red) => (flip[id] || {})[red ? 'r' : 'g'] || 0;
+  const kiwiSil = (x, y, s, c) => `<g transform="translate(${x} ${y}) scale(${s})" fill="${c}" stroke="${c}"><ellipse cx="0" cy="0" rx="3" ry="2.5" stroke="none"/><circle cx="2.5" cy="-1.3" r="1.25" stroke="none"/><path d="M3.5 -1 Q6.2 .4 6.9 3" fill="none" stroke-width=".75" stroke-linecap="round"/><path d="M-.7 2 V4 M-.7 4 h-.9 M.9 2 V4 M.9 4 h-.9" fill="none" stroke-width=".7" stroke-linecap="round"/></g>`;
   const ITEMS = [
     // presentes do tutorial (um por fase)
     { id: 'cardigan', name: 'Cardigan verde', slot: 'torso', box: '16 58 68 36',
@@ -2006,6 +2010,20 @@ ${vest}<g transform="translate(100 0) scale(-1 1)">${vest}</g>
 <ellipse cx="89" cy="66" rx="13" ry="11.2" fill="#8cc63f"/><ellipse cx="89" cy="66" rx="11" ry="9.4" fill="#a9d856"/><path d="${rays}" stroke="#c9ea8a" stroke-width=".6" opacity=".8"/>
 <ellipse cx="89" cy="66" rx="3.4" ry="3" fill="#f2f4d6"/>${seeds}<ellipse cx="84" cy="61" rx="3.6" ry="1.6" fill="#fff" opacity=".35" transform="rotate(-25 84 61)"/>`;
       } },
+    { id: 'bucket', name: 'Bucket Kiwi', slot: 'head', layer: 'top', flip: true, box: '13 -11 74 40',
+      // chapéu cata-ovo dupla face, par do Kiwi: frente verde com kiwis pretos, verso preto com kiwis verdes (2º toque vira)
+      svg: red => {
+        const [base, dark, print, k] = side('bucket', red) ? ['#1a1a1a', '#000', '#6fd05a', 'p'] : ['#6fd05a', '#2f7a22', '#111', 'v'];
+        const crown = 'M29.4 13.6 L31.2 -1.8 Q31.6 -5.2 35.4 -5.4 L64.6 -5.4 Q68.4 -5.2 68.8 -1.8 L70.6 13.6 Z', brim = 'M28.4 12.6 Q50 10.6 71.6 12.6 L85.6 22.6 Q50 30.4 14.4 22.6 Z';
+        const pc = [[39.4, -0.6], [60.6, 0.4], [49.6, 6.6]].map(([x, y]) => kiwiSil(x, y, .95, print)).join('');
+        const pb = [[25.6, 20.8], [42.6, 22.8], [59.4, 22.4], [75.6, 20.6]].map(([x, y]) => kiwiSil(x, y, .8, print)).join('');
+        return `<g transform="translate(0 -3)"><defs><clipPath id="bk${k}c"><path d="${crown}"/></clipPath><clipPath id="bk${k}b"><path d="${brim}"/></clipPath></defs>
+<path d="${brim}" fill="${base}" stroke="${dark}" stroke-width="1" stroke-linejoin="round"/><g clip-path="url(#bk${k}b)">${pb}</g>
+<path d="M27.4 15.6 Q50 13 72.6 15.6 M23.4 18.6 Q50 16 76.6 18.6" stroke="${dark}" stroke-width=".55" fill="none" stroke-dasharray="1.3 1" opacity=".7"/>
+<path d="${crown}" fill="${base}" stroke="${dark}" stroke-width="1" stroke-linejoin="round"/><g clip-path="url(#bk${k}c)">${pc}</g>
+<path d="M30.2 11 Q50 9.2 69.8 11" stroke="${dark}" stroke-width=".6" fill="none" stroke-dasharray="1.3 1" opacity=".75"/>
+<path d="M33.6 .4 Q34 -3.4 37.4 -3.8" stroke="#fff" stroke-width="1.2" opacity=".35" fill="none" stroke-linecap="round"/></g>`;
+      } },
     { id: 'oculos3d', name: 'Óculos de estrela', slot: 'eyes', space: true, box: '14 8 72 38',
       svg: () => {
         const star = (x, y) => `<path transform="translate(${x} ${y}) scale(1.25)" d="M0 -11 l3.2 6.6 7.3 1 -5.3 5.1 1.3 7.2 -6.5 -3.4 -6.5 3.4 1.3 -7.2 -5.3 -5.1 7.3 -1z" fill="#ff6ad5" fill-opacity=".55" stroke="#ffd23f" stroke-width="2.2" stroke-linejoin="round"/>`;
@@ -2051,7 +2069,7 @@ ${vest}<g transform="translate(100 0) scale(-1 1)">${vest}</g>
     L.shoes = !!get('feet') && !get('feet').open || !!(get('torso') && get('torso').over);     // de sapato: sem dedinhos (sandália aberta mostra os dedos)
     return L;
   }
-  function preview(id) { const it = BY[id]; return uniqIds(`<svg viewBox="${it.box}" overflow="visible" aria-hidden="true">${it.sole ? it.sole() : ''}${it.svg(false)}${it.front ? it.front() : ''}</svg>`); }
+  function preview(id, red = false) { const it = BY[id]; return uniqIds(`<svg viewBox="${it.box}" overflow="visible" aria-hidden="true">${it.sole ? it.sole() : ''}${it.svg(red)}${it.front ? it.front() : ''}</svg>`); }
   return {
     ITEMS, BY, GROUP, layers, preview, flies, big,
     get worn() { return { ...worn }; },
@@ -2062,7 +2080,16 @@ ${vest}<g transform="translate(100 0) scale(-1 1)">${vest}</g>
     // personagem que ainda não chegou (ex.: progresso zerado) volta a ser o sapo
     pruneChars(have) { if (!have.includes(char)) this.setChar('sapo', false); if (!have.includes(charRed)) this.setChar('sapo', true); },
     // veste/tira (red: no sapinho vermelho)
-    wear(id, red) { const it = BY[id], o = red ? wornRed : worn; if (!it) return; if (o[it.slot] === id) delete o[it.slot]; else o[it.slot] = id; Store.set(red ? 'outfitRed' : 'outfit', o); },
+    // dupla face: 1º toque veste a frente, 2º vira para o verso, 3º tira
+    wear(id, red) {
+      const it = BY[id], o = red ? wornRed : worn; if (!it) return;
+      if (it.flip) {
+        const f = flip[id] = flip[id] || {}, k = red ? 'r' : 'g';
+        if (o[it.slot] !== id) f[k] = 0; else if (!f[k]) { f[k] = 1; Store.set('flip', flip); return; } else f[k] = 0;
+        Store.set('flip', flip);
+      }
+      if (o[it.slot] === id) delete o[it.slot]; else o[it.slot] = id; Store.set(red ? 'outfitRed' : 'outfit', o);
+    },
     // tira tudo o que estiver nesses lugares (card "Nenhum" do guarda-roupa)
     clear(slots, red) { const o = red ? wornRed : worn; slots.forEach(s => delete o[s]); Store.set(red ? 'outfitRed' : 'outfit', o); },
     // veste de uma vez (kit do amigo novo), trocando o que estiver em cada lugar
@@ -3367,7 +3394,7 @@ const Career = (() => {
     const at = (r, n, ...ids) => { PRIZE[S[r] + n - 1] = ids; };      // pântano r, mapa n
     at(0, 1, 'cardigan'); at(0, 2, 'loafer'); at(0, 3, 'celular');
     at(1, 3, 'oldskool'); at(1, 6, 'oculos'); at(1, 8, 'bolovo');                       // Tranquilo
-    at(2, 4, 'linus'); at(2, 7, 'woody'); at(2, 10, 'chapeuwoody');                    // Monte Mor
+    at(2, 2, 'bucket'); at(2, 4, 'linus'); at(2, 7, 'woody'); at(2, 10, 'chapeuwoody');   // Monte Mor (o bucket é o par do Kiwi)
     at(3, 4, 'havaianas'); at(3, 7, 'picole'); at(3, 10, 'bellato');                   // Praia
     at(4, 5, 'zerezes'); at(4, 10, 'cartola');                                         // Nebuloso
     at(5, 5, 'coracao'); at(5, 10, 'pirata');                                          // Carnaval
@@ -4519,7 +4546,7 @@ ${stageFrog(false, 0)}${stageFrog(true, 104, .5)}</svg></div>`;
       return h + `<button type="button" class="witem wnone${bare ? ' worn' : ''}" data-none="${g}" aria-pressed="${bare}"><span class="pv">${NONE}</span><b>Nenhum</b></button>` + items.map(it => {
         if (!owned.includes(it.id)) return `<button type="button" class="witem locked" data-id="${it.id}" aria-label="Apetrecho ainda não ganho"><span class="pv">${Outfit.preview(it.id)}</span><b>???</b></button>`;
         const on = Outfit.isWorn(it.id, red);
-        return `<button type="button" class="witem${on ? ' worn' : ''}${fresh.includes(it.id) ? ' new' : ''}" data-id="${it.id}" aria-pressed="${on}"><span class="pv">${Outfit.preview(it.id)}</span><b>${it.name}</b></button>`;
+        return `<button type="button" class="witem${on ? ' worn' : ''}${fresh.includes(it.id) ? ' new' : ''}" data-id="${it.id}" aria-pressed="${on}"><span class="pv">${Outfit.preview(it.id, red)}</span><b>${it.name}</b></button>`;
       }).join('');
     }).join('');
   }
@@ -4673,9 +4700,9 @@ const Tests = {
     t('carreira: 11 pântanos e 100 fases (+10 do Espaço); começa com um pântano curto', Career.TOTAL === 100 && CL.length === 110 && RC.length === 12 && RC[1] === 8 && RC[8] === 7 && RC[11] === 10, RC.join(' + '));
     const P = Career.PRIZE, at = (r, n) => P[Career.REGIONS.slice(0, r).reduce((a, R) => a + R.count, 0) + n - 1] || [];
     const last = r => at(r, Career.REGIONS[r].count);
-    t('prêmios da trilha: tutorial 1-3, Vans logo no 3º mapa, chapéu/boné na última fase de cada pântano; 35 apetrechos sem repetir',
+    t('prêmios da trilha: tutorial 1-3, Vans logo no 3º mapa, chapéu/boné na última fase de cada pântano; 36 apetrechos sem repetir',
       at(0, 1)[0] === 'cardigan' && at(1, 3)[0] === 'oldskool' && Career.REGIONS.slice(1).every((R, r) => Outfit.BY[last(r + 1)[0]].slot === 'head') && last(10).join() === 'coroa,trofeu'
-      && at(2, 7)[0] === 'woody' && at(7, 7)[0] === 'skate' && new Set(Object.values(P).flat()).size === 35 && Object.values(P).flat().every(id => Outfit.BY[id] && !Outfit.BY[id].rare));
+      && at(2, 7)[0] === 'woody' && at(7, 7)[0] === 'skate' && new Set(Object.values(P).flat()).size === 36 && Object.values(P).flat().every(id => Outfit.BY[id] && !Outfit.BY[id].rare));
     t('prêmios fora da trilha (marcados rare): 10 de pântano com 3★ + 5 da coleção do desafio + kiwi + kits dos amigos; ninguém fica sem jeito de ganhar',
       Outfit.ITEMS.filter(i => i.rare).length === 25 && Object.values(Career.RARE).concat(Career.DAILY.map(d => d[1])).every(id => Outfit.BY[id] && Outfit.BY[id].rare)
       && Outfit.ITEMS.every(it => Career.ORDER.includes(it.id)) && Career.ORDER.length === Outfit.ITEMS.length);
