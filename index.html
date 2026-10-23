@@ -46,7 +46,7 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;touch-
 button:disabled{cursor:default}
 svg{display:block}
 
-.app{position:fixed;inset:0;overflow:hidden;touch-action:manipulation;
+.app{position:fixed;inset:0;overflow:hidden;overflow:clip;touch-action:manipulation;
   background:
     radial-gradient(90% 60% at 10% 110%, rgba(155,227,60,.35), transparent 60%),
     linear-gradient(180deg,#4fd2ff 0%, #19a2ec 45%, var(--sky2) 100%);}
@@ -264,6 +264,10 @@ svg.fly .fshadow{transform-box:fill-box;transform-origin:50% 50%;transform:scale
   box-shadow:0 .8rem 1.4rem rgba(0,25,70,.3)}
 .board>svg.bsvg{position:absolute;inset:0;width:100%;height:100%}
 .pmark{position:absolute;width:var(--psz,15%);height:var(--psz,15%);margin:calc(var(--psz,15%) / -2) 0 0 calc(var(--psz,15%) / -2);border-radius:50%;pointer-events:none;transition:box-shadow .15s, background .15s}
+.hbeat{transform-box:fill-box;transform-origin:50% 50%;animation:hbeat 1.4s ease-in-out infinite}
+@keyframes hbeat{0%,40%,100%{transform:scale(1)}15%{transform:scale(1.1)}28%{transform:scale(1.04)}}
+.pspin2{transform-box:fill-box;transform-origin:50% 50%;animation:pglow 2.4s ease-in-out infinite}
+@keyframes pglow{50%{opacity:.6}}
 .pmark.bad{box-shadow:0 0 0 .6vmin #ff3b30, 0 0 2vmin .6vmin rgba(255,59,48,.85);background:rgba(255,59,48,.3)}
 .pmark.origin{box-shadow:0 0 0 .5vmin #ffd23f, 0 0 1.8vmin .5vmin rgba(255,210,63,.9)}
 /* treino guiado do mapa do dia: sapo a pegar, casa de destino e a mãozinha mostrando o arrasto */
@@ -273,6 +277,11 @@ svg.fly .fshadow{transform-box:fill-box;transform-origin:50% 50%;transform:scale
 .ghand{position:absolute;width:0;height:0;pointer-events:none;z-index:6}
 .ghand span{position:absolute;left:-.32em;top:-.12em;line-height:1;filter:drop-shadow(0 .06em .08em rgba(0,0,0,.4))}
 #game.guided .gctrl{visibility:hidden}
+/* pular o tutorial (só no 1º acesso: fases do Tutorial da trilha e treino do mapa do dia) */
+.skiptut{display:none;position:absolute;left:50%;bottom:calc(var(--sab) + 1.1rem);transform:translateX(-50%);z-index:5;padding:.55rem 1.1rem;border-radius:999px;
+  background:rgba(255,255,255,.22);border:2px solid rgba(255,255,255,.6);color:#fff;font:800 .95rem Nunito,system-ui,sans-serif;text-shadow:0 1px 0 rgba(0,0,0,.25)}
+#game.tutorial .skiptut{display:block}
+.skiplink{margin-top:.5rem;background:none;border:0;color:#0b6fc9;font:800 .9rem Nunito,system-ui,sans-serif;text-decoration:underline;padding:.3rem}
 /* dica: lâmpada logo acima do canto direito do tabuleiro (fora das casas), a partir da 4ª tentativa da fase; entra chamando atenção e depois fica quieta */
 .hintbtn{position:absolute;z-index:7;left:calc(50% + var(--bs,300px) / 2 - 3rem);top:calc(50% - var(--bs,300px) / 2 - 3rem - 8px);width:3rem;height:3rem;padding:.45rem;border:0;border-radius:50%;
   background:#fffbe6;box-shadow:0 .22rem 0 #c98a00,0 .4rem .8rem rgba(0,30,70,.3);cursor:pointer}
@@ -623,6 +632,8 @@ canvas.bigbang{position:absolute;inset:0;width:100%;height:100%;z-index:400;poin
 .app.skin-nebuloso{background:radial-gradient(60% 30% at 20% 30%, rgba(255,255,255,.7), transparent 70%),radial-gradient(60% 30% at 85% 70%, rgba(255,255,255,.55), transparent 70%),linear-gradient(180deg,#9fd8ff 0,#c9d6ee calc(var(--sat) + 8rem),#a9b8d8 60%,#7f90b8)}
 .app.skin-carnaval{background:radial-gradient(70% 40% at 15% 20%, rgba(255,210,63,.35), transparent 70%),linear-gradient(180deg,#4fd2ff 0,#b56bff calc(var(--sat) + 6rem),#e0559f 60%,#a8287a)}
 .app.skin-festa{background:radial-gradient(70% 40% at 80% 25%, rgba(255,106,213,.35), transparent 65%),radial-gradient(60% 35% at 15% 80%, rgba(111,208,255,.3), transparent 65%),linear-gradient(180deg,#4fd2ff 0,#5a3fc0 calc(var(--sat) + 5rem),#2e1a78 50%,#170b3d)}
+.app.skin-cemiterio{background:radial-gradient(60% 30% at 80% 8%, rgba(255,243,184,.25), transparent 70%),linear-gradient(180deg,#3a3456 0,#2c2840 calc(var(--sat) + 6rem),#1e1a2c 60%,#110e19)}
+.app.skin-amor{background:radial-gradient(70% 40% at 20% 85%, rgba(255,255,255,.25), transparent 70%),linear-gradient(180deg,#ffb3cf 0,#ff8ab4 calc(var(--sat) + 6rem),#ff6fa3 55%,#e8558d)}
 .app.skin-skatepark{background:radial-gradient(70% 40% at 80% 90%, rgba(255,106,19,.22), transparent 70%),linear-gradient(180deg,#4fd2ff 0,#a9b4c2 calc(var(--sat) + 6rem),#8a95a4 55%,#5f6a79)}
 .app.skin-festa::before{opacity:.07}
 .app.space-mode{background:radial-gradient(90% 50% at 80% 25%, rgba(155,108,255,.3), transparent 60%),radial-gradient(80% 50% at 0% 100%, rgba(111,208,255,.2), transparent 60%),linear-gradient(180deg,#4fd2ff 0,#3a5bc0 calc(var(--sat) + 2.5rem),#1d1450 calc(var(--sat) + 10rem),#05030f)}
@@ -729,6 +740,7 @@ canvas.bigbang{position:absolute;inset:0;width:100%;height:100%;z-index:400;poin
     <p class="gtip" id="gtip"></p>
     <div class="board-wrap" id="boardWrap"><div class="board" id="board" aria-label="Tabuleiro"></div>
       <button class="hintbtn" id="btnHint" aria-label="Dica" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><g class="hray" stroke="#ffb400" stroke-width="1.8" stroke-linecap="round"><path d="M12 .6v1.6M3.4 4.2l1.2 1.2M20.6 4.2l-1.2 1.2M.8 11h1.7M21.5 11h1.7"/></g><path d="M12 3.4a6.4 6.4 0 0 0-3.8 11.5c.7.5 1.1 1.3 1.1 2.1v.4h5.4V17c0-.8.4-1.6 1.1-2.1A6.4 6.4 0 0 0 12 3.4z" fill="#ffd23f" stroke="#a86a00" stroke-width="1.3" stroke-linejoin="round"/><path d="M9.6 19.2h4.8M10.2 21.6h3.6" stroke="#6b7078" stroke-width="1.8" stroke-linecap="round"/><path d="M9.4 8.4a3.2 3.2 0 0 1 2.6-1.9" stroke="#fff" stroke-width="1.4" stroke-linecap="round" fill="none" opacity=".85"/></svg><span class="hintn" id="hintN"></span></button></div>
+    <button class="skiptut" id="btnSkipTut" type="button">Pular tutorial ›</button>
     <div class="gctrl">
       <button class="btn blue" id="btnUndo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 14L4 9l5-5"/><path d="M4 9h10a6 6 0 0 1 0 12h-3"/></svg>Desfazer</button>
       <button class="btn" id="btnRestart"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>Reiniciar</button>
@@ -853,6 +865,7 @@ canvas.bigbang{position:absolute;inset:0;width:100%;height:100%;z-index:400;poin
       <p class="rcap" id="rCap"></p>
       <div class="rdots" id="rDots"><i></i><i></i><i></i><i></i></div>
       <div class="row"><button class="btn green big" id="btnRulesNext">Próximo</button></div>
+      <button class="skiplink" id="btnRulesSkip" type="button">Já sei jogar · pular tutorial</button>
     </div>
   </div>
 
@@ -912,7 +925,7 @@ canvas.bigbang{position:absolute;inset:0;width:100%;height:100%;z-index:400;poin
 
 <script>
 'use strict';
-const BUILD = '2026-10-23.1326';      // versão publicada: trocada pela data e hora a cada publicação (ver Update, no fim); 'dev' não confere
+const BUILD = '2026-10-23.1706';      // versão publicada: trocada pela data e hora a cada publicação (ver Update, no fim); 'dev' não confere
 /* =====================================================================
    FROGGO — jogo de sapos saltadores (peg-solitaire), arquivo único e offline.
    Módulos (todos neste arquivo): Store · Geo · Rules · Solver · Gen ·
@@ -999,7 +1012,38 @@ const Geo = (() => {
    BigGeo(3) devolve o Geo original (mesma ordem de casas e saltos). */
 const BigGeo = (() => {
   const cache = { 3: Geo };
+  /* Tabuleiros com formato (pântanos depois do Espaço): máscara das casas principais, de cima para baixo. As casas do meio
+     entram onde os 4 cantos do quadradinho existem; as linhas são as mesmas regras da grade, cortadas onde falta casa.
+     cruzP: cruz fininha (11 casas) · cruz: cruz de cemitério (29) · coracao: coração (22). */
+  const SHAPES = {
+    cruzP: ['.X.', 'XXX', 'XXX', '.X.', '.X.'],
+    cruz: ['.XXX.', 'XXXXX', 'XXXXX', '.XXX.', '.XXX.'],
+    coracao: ['.X.X.', 'XXXXX', 'XXXXX', '.XXX.', '..X..']
+  };
+  function shape(key) {
+    const M = SHAPES[key], rows = M.length, cols = M[0].length, Lx = 2 * (cols - 1), Ly = 2 * (rows - 1), L = Math.max(Lx, Ly);
+    const main = (x, y) => x % 2 === 0 && y % 2 === 0 && y / 2 < rows && x / 2 < cols && M[y / 2][x / 2] === 'X';
+    const has = (x, y) => x >= 0 && y >= 0 && x <= Lx && y <= Ly && (main(x, y) || (x % 2 === 1 && y % 2 === 1 && main(x - 1, y - 1) && main(x + 1, y - 1) && main(x - 1, y + 1) && main(x + 1, y + 1)));
+    const CELLS = [];
+    for (let y = 0; y <= Ly; y++) for (let x = 0; x <= Lx; x++) if (has(x, y)) CELLS.push([x, y]);
+    const idx = new Map(CELLS.map((c, i) => [c[0] + ',' + c[1], i]));
+    const idOf = (x, y) => idx.has(x + ',' + y) ? idx.get(x + ',' + y) : -1;
+    // linhas: trechos seguidos de casas (de 2 em 2 na horizontal/vertical, de 1 em 1 na diagonal), com 3 casas ou mais
+    const LINES = [], seen = new Set();
+    for (const [dx, dy] of [[2, 0], [0, 2], [1, 1], [1, -1]]) for (const [x0, y0] of CELLS) {
+      if (has(x0 - dx, y0 - dy) || seen.has([x0, y0, dx, dy].join())) continue;
+      const l = []; for (let x = x0, y = y0; has(x, y); x += dx, y += dy) { l.push(idOf(x, y)); seen.add([x, y, dx, dy].join()); }
+      if (l.length >= 3) LINES.push(l);
+    }
+    const JUMPS = [];
+    for (const l of LINES) for (let i = 0; i + 2 < l.length; i++) { JUMPS.push({ from: l[i], over: l[i + 1], to: l[i + 2] }); JUMPS.push({ from: l[i + 2], over: l[i + 1], to: l[i] }); }
+    const FROM = Array.from({ length: CELLS.length }, () => []);
+    JUMPS.forEach(j => FROM[j.from].push(j));
+    const ox = (L - Lx) / 2, oy = (L - Ly) / 2, pct = v => 11 + v * 78 / L;
+    return { n: key, L, shape: key, CELLS, N: CELLS.length, LINES, JUMPS, FROM, PX: CELLS.map(c => pct(c[0] + ox)), PY: CELLS.map(c => pct(c[1] + oy)), idOf };
+  }
   function make(n) {
+    if (SHAPES[n]) return shape(n);
     const L = 2 * (n - 1), CELLS = [];
     for (let y = 0; y <= L; y++) for (let x = 0; x <= L; x++) if ((x % 2 === 0 && y % 2 === 0) || (x % 2 === 1 && y % 2 === 1)) CELLS.push([x, y]);
     const idx = new Map(CELLS.map((c, i) => [c[0] + ',' + c[1], i]));
@@ -1269,6 +1313,24 @@ const Art = {
   ${lid ? `<path d="M19.6 25 A11.4 11.4 0 0 1 42.4 25 Z" fill="${lid}"/><path d="M57.6 25 A11.4 11.4 0 0 1 80.4 25 Z" fill="${lid}"/><path d="M19.6 25 H42.4 M57.6 25 H80.4" stroke="rgba(0,0,0,.35)" stroke-width="1.2"/>` : ''}`;
     const smile = c => `<path d="M38 52 Q50 60 62 52" stroke="${c}" stroke-width="2.6" fill="none" stroke-linecap="round"/>`;
     const shine = '<ellipse cx="37" cy="36" rx="11" ry="4.5" fill="#fff" opacity=".3" transform="rotate(-14 37 36)"/>';
+    // ---- ajudantes da dupla de morsas do Amor (Cataras e Tcharina) ----
+    const fringe = (hair, hl) => {
+      const c = [[30, 12, 6], [38, 8, 6.6], [46, 6.4, 6.8], [54, 6.4, 6.8], [62, 8, 6.6], [70, 12, 6], [26, 18, 4.6], [74, 18, 4.6], [36, 15, 5.2], [44, 16.4, 5], [51, 17, 5], [58, 16, 5], [65, 15, 5]];
+      return c.map(([x, y, r]) => `<circle cx="${x}" cy="${y + .9}" r="${r + .5}" fill="#1a100a"/>`).join('') + c.map(([x, y, r]) => `<circle cx="${x}" cy="${y}" r="${r}" fill="${hair}"/>`).join('')
+        + c.filter((_, i) => i % 2 === 0).map(([x, y, r]) => `<path d="M${x - r * .45} ${y} q${r * .45} ${-r * .6} ${r * .9} 0" stroke="${hl}" stroke-width="1" fill="none" stroke-linecap="round" opacity=".7"/>`).join('');
+    };
+    const lowEyes = (k, line) => `<defs><clipPath id="le${k}"><path d="M20.6 30.4 Q31 19.6 41.4 30.4 Q31 25.8 20.6 30.4 Z M58.6 30.4 Q69 19.6 79.4 30.4 Q69 25.8 58.6 30.4 Z"/></clipPath></defs>
+    <g clip-path="url(#le${k})">${[31, 69].map(x => `<rect x="${x - 11}" y="18" width="22" height="14" fill="#fff"/><circle cx="${x}" cy="27.4" r="4.6" fill="#3a2010"/><circle cx="${x + 1.6}" cy="25.4" r="1.3" fill="#fff"/>`).join('')}</g>
+    <path d="M19.8 30.6 Q31 18.8 42.2 30.6 M57.8 30.6 Q69 18.8 80.2 30.6" stroke="${line}" stroke-width="2.2" fill="none" stroke-linecap="round"/>`;
+    const softEyes = (skin, line) => [31, 69].map(x => { const d = x < 50 ? -1 : 1;
+      return `<circle cx="${x}" cy="27" r="9.6" fill="#fff"/><circle cx="${x - d}" cy="28.2" r="5.6" fill="#4a2410"/><circle cx="${x - d}" cy="28.2" r="2.8" fill="#1a0a04"/><circle cx="${x - d + 1.8}" cy="26.2" r="1.6" fill="#fff"/>
+    <path d="M${x - 10} 25 A10 10 0 0 1 ${x + 10} 25 Z" fill="${skin}"/><path d="M${x - 10} 25 Q${x} 22.6 ${x + 10} 25" stroke="${line}" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+    <path d="M${x + d * 9.6} 25 l${d * 3} -2.2 M${x + d * 7.4} 23.6 l${d * 2} -2.8" stroke="${line}" stroke-width="1.3" stroke-linecap="round"/>`; }).join('');
+    const brows = c => `<path d="M20 17.4 Q29 13 40 17 L39.4 19.4 Q29 16.4 21 19.6 Z M80 17.4 Q71 13 60 17 L60.6 19.4 Q71 16.4 79 19.6 Z" fill="${c}"/>`;
+    const stache = c => `<path d="M33 49 Q36 43 43 44 Q47.6 44.8 50 46.4 Q52.4 44.8 57 44 Q64 43 67 49 Q63.6 50.6 59 49.2 Q54 48 50 49.6 Q46 48 41 49.2 Q36.4 50.6 33 49 Z" fill="${c}"/><path d="M37 47 q3 -2 6 -.6 M57 46.4 q3 -1.4 6 .6" stroke="#5a3a24" stroke-width=".9" fill="none" stroke-linecap="round"/>`;
+    const grin = `<path d="M37.4 50.4 Q50 54.4 62.6 50.4 Q61.4 60 50 61 Q38.6 60 37.4 50.4 Z" fill="#7a2c1c"/><path d="M38.2 51 Q50 54.8 61.8 51 L60.8 55.4 Q50 58.6 39.2 55.4 Z" fill="#fff"/><path d="M45 52.6 V56.8 M50 53.2 V57.4 M55 52.6 V56.8" stroke="#e2dad2" stroke-width=".5"/>`;
+    const djCurls = (pts, c, d, l) => pts.map(([x, y, r]) => `<circle cx="${x}" cy="${y + .5}" r="${r + .5}" fill="${d}"/>`).join('') + pts.map(([x, y, r]) => `<circle cx="${x}" cy="${y}" r="${r}" fill="${c}"/>`).join('')
+      + pts.map(([x, y, r]) => `<path d="M${(x + r * .55).toFixed(1)} ${(y + r * .2).toFixed(1)} A${(r * .6).toFixed(1)} ${(r * .6).toFixed(1)} 0 1 1 ${(x - r * .1).toFixed(1)} ${(y - r * .62).toFixed(1)} M${(x - r * .1).toFixed(1)} ${(y + r * .1).toFixed(1)} a${(r * .25).toFixed(1)} ${(r * .25).toFixed(1)} 0 1 0 ${(r * .35).toFixed(1)} ${(-r * .3).toFixed(1)}" stroke="${l}" stroke-width=".8" fill="none" stroke-linecap="round" opacity=".85"/>`).join('');
     let defs = '', back = '', body = '', face = '', feet = '';
     const K = {
       corujao() {
@@ -1401,6 +1463,132 @@ const Art = {
   <path d="M39.6 48.6 Q50 50.6 60.4 48.6 L59.8 51 Q50 52.6 40.2 51 Z" fill="#fff"/><ellipse cx="50" cy="56.4" rx="5" ry="2.2" fill="#e85a6a"/><ellipse cx="37" cy="33" rx="10" ry="4" fill="#fff" opacity=".22" transform="rotate(-14 37 33)"/>`;
         feet = '<g fill="#3c4658"><ellipse cx="34" cy="88" rx="9" ry="4.8"/><ellipse cx="66" cy="88" rx="9" ry="4.8"/></g><path d="M30 90 v2.2 M34 91 v2.2 M38 90 v2.2 M62 90 v2.2 M66 91 v2.2 M70 90 v2.2" stroke="#1a2030" stroke-width=".9" stroke-linecap="round"/>';
       },
+      nelson() {      // Nelson Rubens, o búfalo (desenho vindo do ChatGPT): cabelo e barba cacheados, sobrancelha de mau, chifres colados na cabeça
+        defs = `<radialGradient id="nrB" cx="38%" cy="29%" r="78%"><stop stop-color="#c99265"/><stop offset=".62" stop-color="#99603f"/><stop offset="1" stop-color="#67402e"/></radialGradient>
+<radialGradient id="nrHead" cx="42%" cy="35%" r="72%"><stop stop-color="#e7a878"/><stop offset=".57" stop-color="#b97a51"/><stop offset="1" stop-color="#77442e"/></radialGradient>
+<radialGradient id="nrMuzzle" cx="40%" cy="20%" r="90%"><stop stop-color="#f6c596"/><stop offset=".65" stop-color="#d99a70"/><stop offset="1" stop-color="#a36546"/></radialGradient>
+<radialGradient id="nrHorn" cx="30%" cy="25%" r="85%"><stop stop-color="#fff1d6"/><stop offset=".65" stop-color="#efd0a4"/><stop offset="1" stop-color="#c89b70"/></radialGradient>
+<radialGradient id="nrHair" cx="38%" cy="25%" r="90%"><stop stop-color="#60433a"/><stop offset=".6" stop-color="#352522"/><stop offset="1" stop-color="#241b1a"/></radialGradient>
+<radialGradient id="nrHoof" cx="35%" cy="18%" r="80%"><stop stop-color="#655854"/><stop offset=".45" stop-color="#3b302e"/><stop offset="1" stop-color="#1f1b1b"/></radialGradient>
+<radialGradient id="nrIris" cx="35%" cy="28%" r="76%"><stop stop-color="#87502a"/><stop offset=".7" stop-color="#49230f"/><stop offset="1" stop-color="#24140e"/></radialGradient>
+<radialGradient id="nrPink" cx="45%" cy="34%" r="75%"><stop stop-color="#ffad91"/><stop offset="1" stop-color="#d97869"/></radialGradient>
+<radialGradient id="nrEyeW" cx="42%" cy="30%" r="78%"><stop stop-color="#fff"/><stop offset=".82" stop-color="#fff"/><stop offset="1" stop-color="#d9d3cc"/></radialGradient>`;
+        back = `<path d="M77 75 Q89 72 88 63" stroke="#7f4d36" stroke-width="4" fill="none" stroke-linecap="round"/>
+<path d="M87 67 C79 61 84 54 91 51 C94 55 96 62 87 67 Z" fill="url(#nrHair)"/>
+<path d="M88 64 Q91 60 91 55" stroke="#7e594e" stroke-width="1.1" opacity=".28" fill="none"/>
+<path d="M26 23 C16 30 4 23 4 12 C4 8 7 2 15 -2 C11 7 12 13 17 16 C21 18 25 15 30 15 Z" fill="url(#nrHorn)"/>
+<path d="M4 12 C6 5 12 -1 15 -2 C12 5 11 9 12 13 Q8 14 4 12 Z" fill="#745342"/>
+<path d="M74 23 C84 30 96 23 96 12 C96 8 93 2 85 -2 C89 7 88 13 83 16 C79 18 75 15 70 15 Z" fill="url(#nrHorn)"/>
+<path d="M96 12 C94 5 88 -1 85 -2 C88 5 89 9 88 13 Q92 14 96 12 Z" fill="#745342"/>`;
+        body = `<ellipse cx="17" cy="79" rx="14" ry="12.5" fill="url(#nrB)"/><ellipse cx="83" cy="79" rx="14" ry="12.5" fill="url(#nrB)"/>
+<ellipse cx="50" cy="66" rx="30" ry="24" fill="url(#nrB)"/>
+<path d="M36 66 C35 78 41 84 50 86 C59 84 65 78 64 66 C60 61 57 64 50 65 C43 64 40 61 36 66 Z" fill="#d4a078" opacity=".76"/>
+<ellipse cx="25" cy="80" rx="14" ry="10" fill="url(#nrB)"/><ellipse cx="75" cy="80" rx="14" ry="10" fill="url(#nrB)"/>
+<path d="M27 30 C11 26 3 34 4 42 C5 49 20 48 29 40 Z" fill="#694235" stroke="#4a302a" stroke-width=".7"/>
+<path d="M24 33 C12 31 7 36 8 41 C10 44 20 43 26 38 Z" fill="url(#nrPink)"/>
+<path d="M73 30 C89 26 97 34 96 42 C95 49 80 48 71 40 Z" fill="#694235" stroke="#4a302a" stroke-width=".7"/>
+<path d="M76 33 C88 31 93 36 92 41 C90 44 80 43 74 38 Z" fill="url(#nrPink)"/>
+<path d="M25 25 C26 11 39 10 50 10 C66 10 76 17 76 32 L75 50 C70 63 58 68 50 68 C35 67 24 57 24 42 Z" fill="url(#nrHead)"/>
+<path d="M25 27 C20 18 26 13 31 14 C28 6 38 5 42 9 C43 1 55 0 58 8 C66 4 73 10 72 16 C80 17 82 22 78 27 C83 30 77 33 72 29 C68 34 62 30 58 29 C52 34 47 30 44 28 C38 33 32 30 29 29 Z" fill="url(#nrHair)"/>
+<g fill="url(#nrHair)"><circle cx="31" cy="18" r="5.8"/><circle cx="37" cy="13" r="6.2"/><circle cx="44" cy="11" r="6.6"/><circle cx="52" cy="10" r="7"/><circle cx="60" cy="13" r="6.6"/><circle cx="68" cy="17" r="6"/><circle cx="74" cy="23" r="5"/><circle cx="27" cy="24" r="5.2"/><circle cx="35" cy="24" r="5.4"/><circle cx="43" cy="22" r="6"/><circle cx="51" cy="24" r="5.7"/><circle cx="59" cy="22" r="5.7"/><circle cx="67" cy="24" r="5.5"/></g>
+<g opacity=".20" fill="#a07660"><ellipse cx="43" cy="9.5" rx="5" ry="2.5"/><ellipse cx="60" cy="14" rx="3" ry="1.6"/></g>`;
+        face = `<circle cx="31" cy="26" r="11" fill="url(#nrEyeW)"/><circle cx="69" cy="26" r="11" fill="url(#nrEyeW)"/>
+<circle cx="33" cy="27" r="5.8" fill="url(#nrIris)"/><circle cx="67" cy="27" r="5.8" fill="url(#nrIris)"/>
+<circle cx="33.8" cy="27.8" r="3.5" fill="#311609"/><circle cx="66.2" cy="27.8" r="3.5" fill="#311609"/>
+<circle cx="35" cy="24.2" r="2.15" fill="#fff"/><circle cx="69" cy="24.2" r="2.15" fill="#fff"/>
+<path d="M18.4 17.4 C20.5 12.6 26.4 11.2 31.5 13.2 L43.2 17.8 C46.6 19.1 47.8 22.3 46.8 24.9 C45.8 27.1 43 27.7 40.2 26.7 L28.8 22.7 C24.9 21.4 21.4 21.1 18.9 21.4 C16.9 21.6 16.2 20.4 18.4 17.4 Z" fill="#241b1a"/>
+<path d="M81.6 17.4 C79.5 12.6 73.6 11.2 68.5 13.2 L56.8 17.8 C53.4 19.1 52.2 22.3 53.2 24.9 C54.2 27.1 57 27.7 59.8 26.7 L71.2 22.7 C75.1 21.4 78.6 21.1 81.1 21.4 C83.1 21.6 83.8 20.4 81.6 17.4 Z" fill="#241b1a"/>
+<ellipse cx="50" cy="38" rx="18.3" ry="10" fill="url(#nrMuzzle)"/>
+<ellipse cx="49" cy="35" rx="11.5" ry="3.5" fill="#f7d0a9" opacity=".25"/>
+<ellipse cx="43.6" cy="39" rx="2.35" ry="3.1" fill="#3d211a" transform="rotate(-25 43.6 39)"/>
+<ellipse cx="56.4" cy="39" rx="2.35" ry="3.1" fill="#3d211a" transform="rotate(25 56.4 39)"/>
+<path d="M25 40 C20 40 19 47 22 53 C23 62 31 68 37 68 Q42 74 50 73 Q58 74 63 68 C71 67 77 59 78 51 C81 46 78 40 75 40 C73 46 70 49 65 48 Q56 55 50 55 Q42 55 35 48 C30 49 27 45 25 40 Z" fill="url(#nrHair)"/>
+<path d="M30 45 Q24 46 26 54 Q28 58 33 58 Q31 65 39 66 Q43 71 49 68 Q55 73 61 66 Q69 67 71 59 Q77 55 74 47" fill="none" stroke="#55403b" opacity=".55" stroke-width="4.1" stroke-linecap="round" stroke-dasharray="3 6"/>
+<path d="M31 46 C35 40 39 41 44 44 C47 47 49 47 50 48 C51 47 53 47 56 44 C61 41 65 40 69 46 Q66 51 61 49 Q58 53 54 50 Q50 55 46 50 Q42 53 39 49 Q34 51 31 46 Z" fill="#2a1e1b"/>
+<ellipse cx="36" cy="45" rx="6" ry="2.5" fill="#42302b" transform="rotate(-12 36 45)"/>
+<ellipse cx="64" cy="45" rx="6" ry="2.5" fill="#42302b" transform="rotate(12 64 45)"/>
+<path d="M38.2 49.6 Q50 57.6 61.8 49.6 Q61.4 57.4 50 61.2 Q38.6 57.4 38.2 49.6 Z" fill="#6e2e22"/>
+<path d="M38.7 48.2 Q50 54.8 61.3 48.2 Q59.9 53.4 50 54.7 Q40.1 53.4 38.7 48.2 Z" fill="#fffdf8"/>
+<path d="M40.3 53.2 Q50 56.6 59.7 53.2" fill="none" stroke="#d99695" stroke-width="1.1" opacity=".65"/>
+<path d="M40 48.7 Q50 54.5 60 48.7" fill="none" stroke="#5d2c21" stroke-width="1.2" stroke-linecap="round" opacity=".55"/>`;
+        feet = `<path d="M21 86 C21 80 27 78 34 79 C41 79 43 83 43 90 Q35 92 22 91 Z" fill="url(#nrHoof)"/>
+<path d="M79 86 C79 80 73 78 66 79 C59 79 57 83 57 90 Q65 92 78 91 Z" fill="url(#nrHoof)"/>
+<path d="M32 91 L33 85 L35 91 M68 91 L67 85 L65 91" fill="#161515"/>
+<path d="M23 86 Q26 81 30 82 M59 86 Q62 81 66 82" stroke="#fff" opacity=".13" stroke-width="2.5" fill="none" stroke-linecap="round"/>`;
+      },
+      conde() {      // Conde, o morcego vampiro do Cemitério: roxo-escuro, orelhonas, asas dobradas dos lados e cabelo lambido em bico
+        defs = g('cdB', '#8a7ab0', '#4f416e', '#2a2140');
+        back = `<path d="M26 58 Q12 46 1 50 Q6 54 4 60 Q10 58 11 64 Q15 60 18 66 Q20 62 26 70 Z" fill="#3a2f55" stroke="#1e1830" stroke-width="1" stroke-linejoin="round"/><path d="M74 58 Q88 46 99 50 Q94 54 96 60 Q90 58 89 64 Q85 60 82 66 Q80 62 74 70 Z" fill="#3a2f55" stroke="#1e1830" stroke-width="1" stroke-linejoin="round"/>
+  <path d="M24 60 L6 53 M24 63 L11 62 M75 60 L94 53 M76 63 L89 62" stroke="#5a4a80" stroke-width=".8"/>`;
+        body = `<path d="M26 22 L14 -6 L40 12 Z M74 22 L86 -6 L60 12 Z" fill="#4f416e" stroke="#1e1830" stroke-width="1" stroke-linejoin="round"/><path d="M27 17 L20 2 L35 12 Z M73 17 L80 2 L65 12 Z" fill="#c98ab0"/>
+  <ellipse cx="22" cy="79" rx="11" ry="8.6" fill="url(#cdB)"/><ellipse cx="78" cy="79" rx="11" ry="8.6" fill="url(#cdB)"/>
+  <ellipse cx="50" cy="66" rx="28" ry="24" fill="url(#cdB)"/><ellipse cx="50" cy="73" rx="16" ry="13" fill="#9a8cbc" opacity=".75"/>
+  <ellipse cx="50" cy="40" rx="32" ry="24" fill="url(#cdB)"/>
+  <path d="M20 31 Q20 9 50 8 Q80 9 80 31 Q72 20 60 20 Q55 21 50 29 Q45 21 40 20 Q28 20 20 31 Z" fill="#1e1830"/><path d="M30 16 Q40 11 48 13 M70 16 Q60 11 52 13" stroke="#5a4a80" stroke-width="1.4" fill="none" stroke-linecap="round"/>`;
+        face = `${eyes('#9a1f3a')}<ellipse cx="50" cy="42" rx="6.4" ry="4.2" fill="#c98ab0"/><ellipse cx="47.6" cy="42.4" rx="1.3" ry="1" fill="#4a2a40"/><ellipse cx="52.4" cy="42.4" rx="1.3" ry="1" fill="#4a2a40"/>
+  <path d="M36 50 Q50 58 64 50" stroke="#1e1830" stroke-width="2.4" fill="none" stroke-linecap="round"/><path d="M60 49.6 l3.4 -1.6" stroke="#1e1830" stroke-width="2" stroke-linecap="round"/>
+  <ellipse cx="24" cy="48" rx="5" ry="3" fill="#ff7aa8" opacity=".35"/><ellipse cx="76" cy="48" rx="5" ry="3" fill="#ff7aa8" opacity=".35"/>${shine}`;
+        feet = '<g fill="#1e1830"><ellipse cx="35" cy="88" rx="7.6" ry="4.2"/><ellipse cx="65" cy="88" rx="7.6" ry="4.2"/></g>';
+      },
+      cataras() {      // Cataras, a morsa gente boa do Amor: cabelo liso com franjinha, olhinhos fechados de rir, narigão e o focinho é só o bigodão
+      defs = g('mrB', '#d9b49a', '#a8806a', '#6e5244');
+      back = '';
+      body = `<path d="M8 74 Q2 86 12 90 Q22 88 26 80 Z M92 74 Q98 86 88 90 Q78 88 74 80 Z" fill="#8a6a58"/>
+  <ellipse cx="50" cy="66" rx="33" ry="25" fill="url(#mrB)"/><ellipse cx="50" cy="75" rx="18" ry="12" fill="#e3c4ae" opacity=".6"/>
+  <ellipse cx="50" cy="40" rx="34" ry="25" fill="url(#mrB)"/><path d="M30 64 Q36 70 44 70 M56 70 Q64 70 70 64" stroke="#8a6a58" stroke-width="1" fill="none" opacity=".5"/>`;
+      body += `<path d="M16.4 36 Q15.4 13.6 50 12.4 Q84.6 13.6 83.6 36 Q81.4 27.6 77 24 L73.4 26 L71 20.8 L66 24.4 L62.4 19.4 L57.2 23.6 L53 18.6 L48.4 23.4 L44 19 L39.4 24 L35.4 20.2 L31 25 L26.6 22.8 Q20 27 16.4 36 Z" fill="#2e1c12"/>
+  <path d="M27 18 Q40 14 54 14.6 M58 15.4 Q70 16.4 77 22 M34 19.6 Q42 17 50 17.2" stroke="#5a3a26" stroke-width="1.3" fill="none" stroke-linecap="round"/>`;
+      face = `${lowEyes('m', '#2a1608')}${brows('#2e1c12')}
+  <ellipse cx="41" cy="46" rx="10.6" ry="8.4" fill="#ecd2bc"/><ellipse cx="59" cy="46" rx="10.6" ry="8.4" fill="#ecd2bc"/>
+  <g fill="#a8806a"><circle cx="37" cy="48" r=".8"/><circle cx="41" cy="50" r=".8"/><circle cx="35" cy="44" r=".8"/><circle cx="63" cy="48" r=".8"/><circle cx="59" cy="50" r=".8"/><circle cx="65" cy="44" r=".8"/></g>
+  <path d="M44 35 Q50 31.6 56 35 Q58.6 40 50 42.6 Q41.4 40 44 35 Z" fill="#4a2a1c"/><ellipse cx="48" cy="35.6" rx="2.4" ry="1.1" fill="#fff" opacity=".4"/>
+  ${stache('#2e1c12')}
+  <ellipse cx="22" cy="46" rx="4.6" ry="2.8" fill="#ff7aa8" opacity=".35"/><ellipse cx="78" cy="46" rx="4.6" ry="2.8" fill="#ff7aa8" opacity=".35"/>${shine}`;
+      feet = '<g fill="#8a6a58"><path d="M24 88 Q24 82 34 82 Q44 82 44 88 Q38 92 24 88 Z"/><path d="M76 88 Q76 82 66 82 Q56 82 56 88 Q62 92 76 88 Z"/></g>';
+      },
+      tcharina() {      // Tcharina, a morsa dupla do Cataras: cabelo liso escuro repartido de lado (colado na cabeça), sardinhas, argola no nariz, sorriso fechado e correntinha dourada
+      defs = g('tmB', '#ecc6ae', '#c49a82', '#8a6a5a');
+      back = `<path d="M19 28 Q8 48 12 70 Q16 78 26 74 Q22 56 28 42 Z M81 28 Q92 48 88 70 Q84 78 74 74 Q78 56 72 42 Z" fill="#1e1612"/><path d="M14 50 Q12 62 16 72 M86 50 Q88 62 84 72" stroke="#3a2c24" stroke-width="1.2" fill="none"/>`;
+      body = `<path d="M8 74 Q2 86 12 90 Q22 88 26 80 Z M92 74 Q98 86 88 90 Q78 88 74 80 Z" fill="#a8806e"/>
+  <ellipse cx="50" cy="66" rx="31" ry="25" fill="url(#tmB)"/><ellipse cx="50" cy="75" rx="17" ry="12" fill="#f4dccb" opacity=".6"/>
+  <path d="M30 63 Q50 74 70 63" stroke="#d9a73a" stroke-width="1.4" fill="none" stroke-dasharray="1.6 1"/><circle cx="50" cy="68.6" r="1.3" fill="#e8b84a"/>
+  <ellipse cx="50" cy="40" rx="33" ry="24.6" fill="url(#tmB)"/>
+  <path d="M16.6 38 Q14.6 12.4 46 10.6 Q84.6 9.6 83.4 36 Q80.4 26 72.4 21.4 Q62 18.4 50 20 Q41 21.4 35.6 18.4 Q38.4 25.4 30 27.4 Q21 29.4 16.6 38 Z" fill="#1e1612"/><path d="M36.6 11.8 Q35.8 15 35.6 18.4 M44 12.6 Q58 12.2 70 16.6 M50 15.4 Q63 15.6 75 22.4" stroke="#4a3a30" stroke-width="1.4" fill="none" stroke-linecap="round"/>`;
+      face = `${softEyes('#d9b29a', '#1e1612')}<path d="M20 18.6 Q29 15.4 39 18.4 M61 18.4 Q71 15.4 80 18.6" stroke="#1e1612" stroke-width="2" fill="none" stroke-linecap="round"/>
+  <ellipse cx="42" cy="46" rx="10" ry="7.8" fill="#f6e0d0"/><ellipse cx="58" cy="46" rx="10" ry="7.8" fill="#f6e0d0"/>
+  <g fill="#b07a5a" opacity=".7"><circle cx="24" cy="40" r=".7"/><circle cx="27" cy="43" r=".6"/><circle cx="22" cy="44" r=".6"/><circle cx="76" cy="40" r=".7"/><circle cx="73" cy="43" r=".6"/><circle cx="78" cy="44" r=".6"/><circle cx="46" cy="39" r=".5"/><circle cx="54" cy="39" r=".5"/></g>
+  <path d="M44.6 35.6 Q50 32.4 55.4 35.6 Q57.6 40 50 42 Q42.4 40 44.6 35.6 Z" fill="#6a3a2c"/><ellipse cx="48.4" cy="36" rx="2.2" ry="1" fill="#fff" opacity=".4"/>
+  <circle cx="56.4" cy="40.2" r="2" fill="none" stroke="#d9dde2" stroke-width=".9"/>
+  <path d="M42 51 Q50 57 58 51" stroke="#7a3a34" stroke-width="2" fill="none" stroke-linecap="round"/><path d="M43.6 52.6 Q50 56.4 56.4 52.6" stroke="#d98a8a" stroke-width="1.6" fill="none" stroke-linecap="round" opacity=".7"/>
+  <ellipse cx="24" cy="47" rx="5" ry="3" fill="#ff7aa8" opacity=".4"/><ellipse cx="76" cy="47" rx="5" ry="3" fill="#ff7aa8" opacity=".4"/>${shine}`;
+      feet = '<g fill="#a8806e"><path d="M24 88 Q24 82 34 82 Q44 82 44 88 Q38 92 24 88 Z"/><path d="M76 88 Q76 82 66 82 Q56 82 56 88 Q62 92 76 88 Z"/></g>';
+      },
+      djanho() {      // Djanho, o suricato: cabelo de cachinhos com as laterais curtinhas, máscara escura nos olhos, bigodinho e sorriso singelo
+      const FUR = '#e2a868', HI = '#f4c88c', DK = '#b77a3e', CREAM = '#f7deb0', MASK = '#8a5428', HAIR = '#3e2416', HD = '#1e1008', HL = '#7a4a2e';
+      defs = g('srB', HI, FUR, DK) + g('srH', '#f8d29a', '#e8ad6c', '#b97c40');
+      back = `<path d="M70 84 Q90 84 92 66 Q93 56 86 50" stroke="${FUR}" stroke-width="7" fill="none" stroke-linecap="round"/><path d="M86 50 Q84 56 88 60" stroke="${FUR}" stroke-width="7" fill="none"/>
+<path d="M89.6 62 Q93 56 86 48.6" stroke="#5a3418" stroke-width="7.4" fill="none" stroke-linecap="round"/>`;
+      const ears = `<circle cx="16" cy="36" r="8.4" fill="#9a5e2c"/><circle cx="16.6" cy="36.4" r="5.4" fill="#d9826a"/><circle cx="84" cy="36" r="8.4" fill="#9a5e2c"/><circle cx="83.4" cy="36.4" r="5.4" fill="#d9826a"/>`;
+      body = `${ears}<ellipse cx="22" cy="80" rx="11" ry="8.6" fill="url(#srB)"/><ellipse cx="78" cy="80" rx="11" ry="8.6" fill="url(#srB)"/>
+<ellipse cx="50" cy="67" rx="27" ry="24" fill="url(#srB)"/><ellipse cx="50" cy="72" rx="15" ry="17" fill="${CREAM}"/>
+<path d="M29 62 Q27 70 31 76 M71 62 Q73 70 69 76" stroke="${DK}" stroke-width="1.2" fill="none" opacity=".5"/>
+<path d="M18 30 Q17 10 50 8.6 Q83 10 82 30 L82 46 Q78 62 50 64 Q22 62 18 46 Z" fill="url(#srH)"/>
+<path d="M28 44 Q30 58 50 61 Q70 58 72 44 Q64 50 50 50 Q36 50 28 44 Z" fill="${CREAM}"/>
+<path d="M18.6 30 Q18 16 26 10 L28 24 Q22 24 18.6 30 Z M81.4 30 Q82 16 74 10 L72 24 Q78 24 81.4 30 Z" fill="#5a3826" opacity=".45"/><g fill="#3e2416" opacity=".35"><circle cx="21" cy="20" r=".6"/><circle cx="23" cy="17" r=".6"/><circle cx="22" cy="24" r=".6"/><circle cx="79" cy="20" r=".6"/><circle cx="77" cy="17" r=".6"/><circle cx="78" cy="24" r=".6"/></g>
+      ${djCurls([[31.7, 0.5, 3.5], [37.3, 1.1, 3.3], [43.3, 1.0, 3.0], [49.9, 0.4, 3.1], [55.9, 1.5, 3.1], [61.6, 1.2, 3.8], [68.1, 0.9, 3.8], [26.3, 5.7, 3.2], [32.4, 4.7, 3.2], [39.5, 4.8, 3.5], [45.2, 5.0, 3.4], [50.3, 4.6, 3.2], [57.3, 5.1, 3.3], [63.1, 5.1, 3.2], [69.5, 5.5, 3.2], [74.1, 5.2, 3.7], [24.4, 9.3, 3.8], [29.4, 9.5, 3.6], [35.4, 9.6, 3.0], [42.3, 10.0, 3.5], [48.6, 9.3, 3.6], [54.2, 9.7, 3.4], [60.5, 10.2, 3.4], [66.3, 9.0, 3.6], [72.2, 10.3, 3.7], [76.7, 9.4, 3.5], [22.2, 13.9, 3.1], [28.4, 13.4, 3.6], [34.4, 13.6, 3.3], [41.6, 13.4, 3.4], [47.1, 14.5, 3.7], [53.6, 13.7, 3.3], [58.8, 14.5, 3.8], [64.4, 13.5, 3.2], [70.6, 14.0, 3.5], [76.6, 13.3, 3.3], [26.8, 17.7, 3.8], [33.3, 17.6, 3.5], [39.3, 17.0, 3.7], [45.4, 18.1, 3.6], [50.8, 17.5, 3.1], [57.2, 17.0, 3.1], [62.5, 17.1, 3.3], [68.3, 16.9, 3.1], [73.4, 17.4, 3.0]], HAIR, HD, HL)}`;
+      const mask = `<path d="M18 22 Q14 34 20 42 Q24 47 29 44 Q33 41 38 39 Q44 35 43 26 Q41 17 31 15.6 Q21 15.6 18 22 Z" fill="${MASK}" opacity=".85"/><path d="M82 22 Q86 34 80 42 Q76 47 71 44 Q67 41 62 39 Q56 35 57 26 Q59 17 69 15.6 Q79 15.6 82 22 Z" fill="${MASK}" opacity=".85"/>`;
+      const eye = (x, d) => `<circle cx="${x}" cy="27" r="10" fill="#fff"/><circle cx="${x + d}" cy="28" r="6.8" fill="#5a2c10"/><circle cx="${x + d}" cy="28" r="4" fill="#1a0a04"/><circle cx="${x + d + 2.2}" cy="25.2" r="2.4" fill="#fff"/><circle cx="${x + d - 2.2}" cy="31" r="1" fill="#fff" opacity=".7"/>`;
+      const brows = `<path d="M21 15.6 Q29 11.6 38 14.4 L37.4 16.6 Q29 14.2 21.8 17.6 Z M79 15.6 Q71 11.6 62 14.4 L62.6 16.6 Q71 14.2 78.2 17.6 Z" fill="${HD}"/>`;
+      const nose = `<path d="M44.6 40 Q50 36.8 55.4 40 Q55.6 44 50 45.2 Q44.4 44 44.6 40 Z" fill="#4a2414"/><ellipse cx="48.4" cy="40" rx="2" ry="1" fill="#fff" opacity=".45"/><path d="M50 45.2 V47" stroke="#6a3a20" stroke-width="1"/>`;
+      const stache = `<path d="M50 47.4 Q46 45.4 41 46.4 Q37 47.4 34.6 46 Q34 48.6 37.6 49.6 Q42.4 50.6 46.4 49.2 Q48.6 48.4 50 49 Q51.4 48.4 53.6 49.2 Q57.6 50.6 62.4 49.6 Q66 48.6 65.4 46 Q63 47.4 59 46.4 Q54 45.4 50 47.4 Z" fill="#3e2416"/>`;
+      const grin = `<path d="M41.4 51.6 Q50 56.6 58.6 51.6 Q57 56.8 50 57.4 Q43 56.8 41.4 51.6 Z" fill="#8a3a2c"/><path d="M42.2 51.9 Q50 55.8 57.8 51.9 L57.2 53.4 Q50 56.4 42.8 53.4 Z" fill="#fff"/>
+<path d="M40.4 51.2 Q50 57.6 59.6 51.2" stroke="#5a2a18" stroke-width="1.3" fill="none" stroke-linecap="round"/><path d="M39.8 50.4 l1 1.2 M60.2 50.4 l-1 1.2" stroke="#5a2a18" stroke-width="1.1" stroke-linecap="round"/>`;
+      const hands = `<path d="M30 62 Q34 70 42 69 M70 62 Q66 70 58 69" stroke="${FUR}" stroke-width="6" fill="none" stroke-linecap="round"/>
+<path d="M38.6 65.6 Q44.6 64.4 47 68.4 Q47.6 73 43 73.6 Q38.4 73.6 37.6 70 Q37.2 67.2 38.6 65.6 Z M61.4 65.6 Q55.4 64.4 53 68.4 Q52.4 73 57 73.6 Q61.6 73.6 62.4 70 Q62.8 67.2 61.4 65.6 Z" fill="#6a3a1c"/>
+<path d="M40.4 72.6 l.8 -3 M43 73.4 l.4 -3.2 M45.4 72.6 l-.2 -3 M59.6 72.6 l-.8 -3 M57 73.4 l-.4 -3.2 M54.6 72.6 l.2 -3" stroke="#3a1e0c" stroke-width=".6" stroke-linecap="round"/>`;
+      face = `${mask}${eye(31, 1)}${eye(69, -1)}${brows}${nose}${stache}${grin}${hands}`;
+      feet = '<g fill="#6a3a1c"><ellipse cx="34" cy="88.6" rx="9" ry="4.4"/><ellipse cx="66" cy="88.6" rx="9" ry="4.4"/></g><path d="M30 90 v2 M34 90.6 v2 M38 90 v2 M62 90 v2 M66 90.6 v2 M70 90 v2" stroke="#3a1e0c" stroke-width=".9" stroke-linecap="round"/>';
+      },
       caramelo() {     // vira-lata caramelo: orelhas caídas, focinho clarinho, peito branco, língua de fora
         defs = g('dgB', '#f2c27a', '#d9963f', '#a8691f');
         back = '<path d="M78 76 Q94 70 90 56" stroke="#c9842f" stroke-width="6" fill="none" stroke-linecap="round"/>';
@@ -1518,7 +1706,8 @@ ${dim ? '' : `<path d="M${x - r * .32} ${y - r * .42} q${r * .12} -${r * .14} ${
     const SK = { daily: ['#ffeeb0', '#f6c45c', '#c98a2a', '#fff8dc'], iniciante: ['#4fdccb', '#16a090', '#0b6b62', '#b8fff3'], medio: ['#6bb67a', '#2f6e47', '#1d4630', '#c4f2b4'],
       avancado: ['#6476bd', '#2c3572', '#191e4a', '#c3ccff'], expert: ['#86753a', '#3d3416', '#221c08', '#e3d394'],
       montemor: ['#a8d870', '#5f9a35', '#3a6a1c', '#efffd0'], praia: ['#ffe2a0', '#e2b45e', '#9a742a', '#fff7dc'], nebuloso: ['#e3ebf8', '#a7b6d6', '#6b7ba0', '#ffffff'],
-      carnaval: ['#ff8fd0', '#c23f98', '#73185e', '#ffe0f4'], festa: ['#8268ff', '#3d24a8', '#1f1260', '#ddd2ff'], skatepark: ['#cfd6df', '#8e99a8', '#525c6b', '#f4f6f9'] }[theme];
+      carnaval: ['#ff8fd0', '#c23f98', '#73185e', '#ffe0f4'], festa: ['#8268ff', '#3d24a8', '#1f1260', '#ddd2ff'], skatepark: ['#cfd6df', '#8e99a8', '#525c6b', '#f4f6f9'],
+      cemiterio: ['#7d76a0', '#3e3858', '#221e33', '#e0dcff'], amor: ['#ffc2da', '#ff6fa3', '#b81f55', '#fff0f6'] }[theme];
     if (SK) return `<svg class="bsvg" viewBox="0 0 100 100" aria-hidden="true"><defs><linearGradient id="bdSkin" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${SK[0]}"/><stop offset="1" stop-color="${SK[1]}"/></linearGradient></defs>
 <rect x=".8" y="2.6" width="98.4" height="96.8" rx="11" fill="${SK[2]}"/>
 <rect x=".8" y=".8" width="98.4" height="96" rx="11" fill="url(#bdSkin)" stroke="${SK[3]}" stroke-opacity=".7" stroke-width=".6"/>
@@ -1869,6 +2058,9 @@ ${vest}<g transform="translate(100 0) scale(-1 1)">${vest}</g>
     { id: 'bigode', name: 'Bigode', slot: 'face', rare: true, box: '34 36 32 16',
       // bigodão preto de pontas enroladas, entre o nariz e a boca
       svg: () => `<path d="M50 42.4 Q45 40 40.6 42.6 Q37.6 44.6 36.4 42 Q35.6 46.6 40 47 Q45 47.4 50 44.6 Q55 47.4 60 47 Q64.4 46.6 63.6 42 Q62.4 44.6 59.4 42.6 Q55 40 50 42.4 Z" fill="#2b1a10"/><path d="M42 43.6 Q45 42.6 48 43.6" stroke="#5a3a24" stroke-width=".7" fill="none"/>` },
+    { id: 'dentes', name: 'Dentes de vampiro', slot: 'face', box: '36 46 28 16',
+      // dois caninos pontudos saindo do canto da boca (Cemitério)
+      svg: () => `<path d="M39.6 52.2 L44 53.6 L42.4 59.6 Z M60.4 52.2 L56 53.6 L57.6 59.6 Z" fill="#fff" stroke="#9aa4ad" stroke-width=".7" stroke-linejoin="round"/><path d="M41.2 53.6 L42.2 57" stroke="#dfe6ec" stroke-width=".6"/><path d="M58.8 53.6 L57.8 57" stroke="#dfe6ec" stroke-width=".6"/><circle cx="42.6" cy="60.6" r=".9" fill="#d81e3a"/>` },
     { id: 'pipoca', name: 'Pipoca', slot: 'hand', rare: true, box: '72 40 36 52',
       // balde listrado de pipoca na mão direita
       svg: () => `<g transform="rotate(-6 90 72)"><g fill="#fff8dc" stroke="#e8c97a" stroke-width=".5"><circle cx="81" cy="56" r="4"/><circle cx="87" cy="52" r="4.4"/><circle cx="93" cy="53" r="4.2"/><circle cx="99" cy="56" r="4"/><circle cx="84" cy="51" r="3.4"/><circle cx="96" cy="49" r="3.4"/><circle cx="90" cy="47" r="3.6"/></g>
@@ -2019,7 +2211,7 @@ ${vest}<g transform="translate(100 0) scale(-1 1)">${vest}</g>
 <path d="M86 26 Q94 30 98 38 Q92 36 88 30 M86 26 Q95 24 100 18 Q93 20 87 24" fill="#2b7de9" stroke="#174a8f" stroke-width="1" stroke-linejoin="round"/><circle cx="87" cy="26.4" r="2.6" fill="#2b7de9" stroke="#174a8f" stroke-width="1"/>` },
     // ---- itens que vêm junto com os amigos (kit) e presentes de 3★ da Praia e do Jacaroso ----
     { id: 'violao', name: 'Violão', slot: 'hand', rare: true, box: '72 10 38 88',
-      // amigos: violão do Corujão, de madeira clara, com boca preta e cordas, em pé ao lado
+      // amigos: violão do Jorge (corujão), de madeira clara, com boca preta e cordas, em pé ao lado
       svg: () => `<g transform="rotate(8 90 60)"><rect x="87.4" y="12" width="5.2" height="44" rx="1.2" fill="#5a3418" stroke="#3a200c" stroke-width=".7"/>
 <path d="M86 6 Q90 3 94 6 L94 15 H86 Z" fill="#3a200c"/><g fill="#d9d9d9"><circle cx="85" cy="8" r="1.2"/><circle cx="85" cy="12" r="1.2"/><circle cx="95" cy="8" r="1.2"/><circle cx="95" cy="12" r="1.2"/></g>
 <path d="M90 50 C78 48 76 60 81 66 C74 72 74 92 90 94 C106 92 106 72 99 66 C104 60 102 48 90 50 Z" fill="#e0a85a" stroke="#8a5a20" stroke-width="1.1"/>
@@ -2032,8 +2224,8 @@ ${vest}<g transform="translate(100 0) scale(-1 1)">${vest}</g>
 <path d="M83 62.4 H97" stroke="#fff" stroke-width="1.2" opacity=".8" stroke-linecap="round"/></g>` },
     { id: 'colarprata', name: 'Colar de prata', slot: 'neck', rare: true, box: '18 52 64 34',
       // amigos: colar de prata do vira-lata Tatu, elos grandes só no pescoço
-      svg: () => { let l = ''; for (let i = 0; i <= 6; i++) { const t = i / 6, x = 25 + 50 * t, y = 64 + 11 * Math.sin(Math.PI * t), a = (i % 2 ? 90 : 0) + Math.cos(Math.PI * t) * -28, tr = `transform="rotate(${a.toFixed(0)} ${x.toFixed(1)} ${y.toFixed(1)})"`;
-        l += `<ellipse cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" rx="5.4" ry="3.6" fill="none" stroke="#6f7a84" stroke-width="3.4" ${tr}/><ellipse cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" rx="5.4" ry="3.6" fill="none" stroke="#dfe5ea" stroke-width="2" ${tr}/><ellipse cx="${(x - 1.6).toFixed(1)}" cy="${(y - 2).toFixed(1)}" rx="1.6" ry=".7" fill="#fff" ${tr}/>`; } return l; } },
+      svg: () => { let l = ''; for (let i = 0; i <= 9; i++) { const t = i / 9, x = 25 + 50 * t, y = 64 + 11 * Math.sin(Math.PI * t), a = (i % 2 ? 90 : 0) + Math.cos(Math.PI * t) * -28, tr = `transform="rotate(${a.toFixed(0)} ${x.toFixed(1)} ${y.toFixed(1)})"`;
+        l += `<ellipse cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" rx="3.9" ry="2.6" fill="none" stroke="#6f7a84" stroke-width="2.6" ${tr}/><ellipse cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" rx="3.9" ry="2.6" fill="none" stroke="#dfe5ea" stroke-width="1.5" ${tr}/><ellipse cx="${(x - 1.2).toFixed(1)}" cy="${(y - 1.4).toFixed(1)}" rx="1.2" ry=".5" fill="#fff" ${tr}/>`; } return l; } },
     { id: 'queijo', name: 'Queijo', slot: 'hand', rare: true, box: '72 52 36 28',
       // amigos: fatia de queijo do Topogígio, com furinhos
       svg: () => `<path d="M76 74 L101 60 L104 74 Z" fill="#ffc93a" stroke="#c98a00" stroke-width="1.1" stroke-linejoin="round"/><path d="M76 74 L104 74 L104 78 L76 78 Z" fill="#f0b400" stroke="#c98a00" stroke-width="1.1"/>
@@ -2190,10 +2382,11 @@ ${zig}<path d="${band}" fill="${W}" stroke="${WD}" stroke-width="1"/>
      escolhe o seu personagem no guarda-roupa. */
   // kit: itens que chegam junto com o amigo (o Dillo, tatu do Skatepark, ainda não tem). O vira-lata (id caramelo) se chama Tatu
   const CHARS = [{ id: 'sapo', name: 'Sapo' }, { id: 'johnny', name: 'Johnny Chicken', at: 'montemor', kit: ['prancha'] }, { id: 'lollipop', name: 'Loripop', at: 'praia', kit: ['ninja'] },
-    { id: 'corujao', name: 'Corujão', at: 'nebuloso', kit: ['violao'] }, { id: 'caramelo', name: 'Tatu', at: 'carnaval', kit: ['osso', 'colarprata'] }, { id: 'porco', name: 'Porco', at: 'festa', kit: ['copofesta'] },
+    { id: 'corujao', name: 'Jorge', at: 'nebuloso', kit: ['violao'] }, { id: 'caramelo', name: 'Tatu', at: 'carnaval', kit: ['osso', 'colarprata'] }, { id: 'porco', name: 'Porco', at: 'festa', kit: ['copofesta'] },
     { id: 'tatu', name: 'Dillo', at: 'skatepark' }, { id: 'origa', name: 'Origa', fase: 67, kit: ['regata'] }, { id: 'topogigio', name: 'Topogígio', at: 'esgoto', kit: ['queijo'] }, { id: 'roger', name: 'Roger', at: 'avancado', kit: ['pastel'] },
     { id: 'jare', name: 'Jaré', at: 'expert' }, { id: 'baurets', name: 'Baurets', at: 'espaco', kit: ['capacete'] },
-    { id: 'kiwi', name: 'Kiwi', gift: true, kit: ['kiwifruta'] }];      // gift: presente do desafio do dia (ver Daily, KIWI); fase: chega ao passar essa fase (índice), não ao abrir o pântano
+    { id: 'kiwi', name: 'Kiwi', gift: true, kit: ['kiwifruta'] },
+    { id: 'nelson', name: 'Nelson Rubens', fase: 59 }, { id: 'conde', name: 'Conde', at: 'cemiterio' }, { id: 'cataras', name: 'Cataras', at: 'amor' }, { id: 'tcharina', name: 'Tcharina', fase: 120 }, { id: 'djanho', name: 'Djanho', fase: 125 }];   // Djanho: fase 126, 6º mapa do Amor   // Nelson: fase 60 da Porradinha; Tcharina: 1ª fase do Amor (dupla do Cataras)      // gift: presente do desafio do dia (ver Daily, KIWI); fase: chega ao passar essa fase (índice), não ao abrir o pântano
   let char = Store.get('char', 'sapo'), charRed = Store.get('charRed', 'sapo');
   if (char === charRed && char !== 'sapo') { charRed = 'sapo'; Store.set('charRed', charRed); }     // verde e vermelho não podem ser o mesmo personagem (só o sapo)
   const big = o => flies(o) || !!(o && o.ride);       // ocupa mais espaço em volta do sapo (chama, caixa)
@@ -2327,6 +2520,14 @@ const Sound = (() => {
     star(k = 0) { if (!ok()) return; const t = ctx.currentTime; tone(160, t, .14, { to: 70, vol: .32 }); tone(f(84 + k * 4), t + .02, .4, { type: 'triangle', vol: .17 }); tone(f(96 + k * 4), t + .04, .25, { type: 'sine', vol: .07 }); },
     key() { if (!ok()) return; const t = ctx.currentTime; tone(1300, t, .04, { type: 'square', vol: .05, filter: 3000 }); tone(950, t + .07, .05, { type: 'square', vol: .06, filter: 2500 }); tone(f(79), t + .16, .3, { type: 'triangle', vol: .14 }); tone(f(86), t + .24, .4, { type: 'triangle', vol: .12 }); },
     sparkle() { if (!ok()) return; const t = ctx.currentTime; [96, 100, 103, 108, 112].forEach((m, i) => tone(f(m), t + i * .055, .35, { type: 'sine', vol: .09 })); },
+    // portão do Cemitério: acorde diminuto grave de órgão com vento passando
+    spooky() {
+      if (!ok()) return;
+      const t = ctx.currentTime;
+      [45, 48, 51, 54].forEach((m, i) => tone(f(m), t + i * .12, 1.8 - i * .1, { type: 'triangle', vol: .12, attack: .25, filter: 1200 }));
+      [69, 72, 75].forEach((m, i) => tone(f(m), t + .5 + i * .22, .9, { type: 'sine', vol: .05, attack: .1 }));
+      noise(t, 1.6, { freq: 500, q: .6, vol: .12 });
+    },
     lose() { if (!ok()) return; const t = ctx.currentTime; [67, 64, 60].forEach((m, i) => tone(f(m), t + i * .18, .3, { type: 'triangle', vol: .14 })); },
     // coro angelical: acorde maior com vogal "a" (filtros de formante), vibrato suave e brilho agudo
     angel() {
@@ -2343,13 +2544,36 @@ const Sound = (() => {
       }));
       tone(f(96), t + .15, 1.6, { type: 'sine', vol: .06, attack: .3 }); tone(f(103), t + .3, 1.4, { type: 'sine', vol: .04, attack: .3 });
     },
+    /* Big Bang, no ritmo da animação (núcleo cresce até 0,6 s, explode, clarão em 0,9 s): sucção subindo, estalo seco,
+       "bum" com distorção (os harmônicos aparecem até em alto-falante de celular, que não toca o grave puro),
+       ronco que vai fechando por uns 2 s e, só no fim, um brilho baixinho */
     bigBang() {
       if (!ok()) return;
-      const t = ctx.currentTime;
-      tone(70, t, 1.6, { type: 'sine', to: 24, vol: .5, attack: .02 });
-      tone(140, t, .9, { type: 'triangle', to: 40, vol: .2, attack: .01 });
-      noise(t, 1.2, { freq: 400, q: .5, vol: .35 });
-      [72, 79, 84, 88, 91, 96].forEach((m, i) => tone(f(m), t + .5 + i * .09, .7, { type: 'sine', vol: .1 }));
+      const t = ctx.currentTime, X = t + .6;
+      const filtered = (type, freq, q = .7) => { const fl = ctx.createBiquadFilter(); fl.type = type; fl.frequency.value = freq; fl.Q.value = q; return fl; };
+      const noiseSrc = (at, dur) => { const n = ctx.createBufferSource(); n.buffer = noiseBuf; n.loop = true; n.start(at); n.stop(at + dur + .05); return n; };
+      // 1) sucção: chiado e tom subindo enquanto o núcleo cresce
+      { const n = noiseSrc(t, .62), fl = filtered('bandpass', 300, 1.2), g = ctx.createGain();
+        fl.frequency.setValueAtTime(300, t); fl.frequency.exponentialRampToValueAtTime(3200, X);
+        g.gain.setValueAtTime(.0001, t); g.gain.exponentialRampToValueAtTime(.22, X - .02); g.gain.linearRampToValueAtTime(.0001, X);
+        n.connect(fl); fl.connect(g); g.connect(sfx); }
+      tone(90, t, .6, { type: 'sawtooth', to: 520, vol: .07, attack: .5, filter: 1400 });
+      // 2) estalo seco no instante da explosão
+      { const n = noiseSrc(X, .09), fl = filtered('highpass', 1800), g = ctx.createGain();
+        g.gain.setValueAtTime(.9, X); g.gain.exponentialRampToValueAtTime(.0001, X + .09); n.connect(fl); fl.connect(g); g.connect(sfx); }
+      // 3) bum: grave descendo + a mesma onda saturada (soa forte no celular)
+      { const o = ctx.createOscillator(), ws = ctx.createWaveShaper(), g = ctx.createGain(), curve = new Float32Array(1024);
+        for (let i = 0; i < 1024; i++) { const x = i / 512 - 1; curve[i] = Math.tanh(x * 6); }
+        ws.curve = curve; o.type = 'triangle'; o.frequency.setValueAtTime(190, X); o.frequency.exponentialRampToValueAtTime(42, X + .7);
+        g.gain.setValueAtTime(.0001, X); g.gain.exponentialRampToValueAtTime(.5, X + .015); g.gain.exponentialRampToValueAtTime(.0001, X + .9);
+        o.connect(ws); ws.connect(g); g.connect(sfx); o.start(X); o.stop(X + .95); }
+      tone(120, X, 1.2, { type: 'sine', to: 32, vol: .7, attack: .01 });
+      // 4) ronco: ruído grave que vai abafando
+      { const n = noiseSrc(X, 2.45), fl = filtered('lowpass', 1600, .9), g = ctx.createGain();
+        fl.frequency.setValueAtTime(1600, X); fl.frequency.exponentialRampToValueAtTime(110, X + 2.2);
+        g.gain.setValueAtTime(.6, X); g.gain.linearRampToValueAtTime(.4, X + .7); g.gain.exponentialRampToValueAtTime(.0001, X + 2.4); n.connect(fl); fl.connect(g); g.connect(sfx); }
+      // 5) brilho do espaço, baixinho, depois que a poeira baixa
+      [84, 91, 96, 103].forEach((m, i) => tone(f(m), X + 1.5 + i * .12, .9, { type: 'sine', vol: .035, attack: .05 }));
     },
     start() { if (!ok()) return; const t = ctx.currentTime; [60, 67, 72].forEach((m, i) => tone(f(m), t + i * .07, .25, { type: 'triangle', vol: .13 })); }
   };
@@ -2566,6 +2790,7 @@ const Board = (() => {
     const j = Game.play(from, to);
     if (!j) return false;
     if (!Game.card.guide) hint(null);                 // a lâmpada de dica some quando o sapo pula
+    UI.moved();
     if (Game.card && Game.card.daily) Daily.move();
     Game.busy = true; clearSel();
     const cap = frogs[j.over];
@@ -2834,7 +3059,7 @@ const UI = (() => {
     Layout.update();
     if (id === 'career') Career.syncBase(); else Base.set(app.classList.contains('space-mode') ? '#06051a' : '#0b7bd6');
   }
-  const SKINS = ['space-mode', 'skin-daily', 'skin-tutorial', 'skin-iniciante', 'skin-medio', 'skin-avancado', 'skin-expert', 'skin-montemor', 'skin-praia', 'skin-nebuloso', 'skin-carnaval', 'skin-festa', 'skin-skatepark'];
+  const SKINS = ['space-mode', 'skin-daily', 'skin-tutorial', 'skin-iniciante', 'skin-medio', 'skin-avancado', 'skin-expert', 'skin-montemor', 'skin-praia', 'skin-nebuloso', 'skin-carnaval', 'skin-festa', 'skin-skatepark', 'skin-cemiterio', 'skin-amor'];
   function setSkin(id) { SKINS.forEach(c => app.classList.remove(c)); if (id) app.classList.add(id === 'space' ? 'space-mode' : 'skin-' + id); }
   // ---- seletor de dificuldade: lista suspensa, pode marcar várias (sorteia entre elas) ----
   const menu = $('lvlMenu'), lvlBtn = $('lvlBtn');
@@ -2943,7 +3168,7 @@ const UI = (() => {
     Game.start(card);
     show('game');
     if (card.label || !card.level.icons) $('hudLevel').textContent = card.label || card.level.name; else $('hudLevel').innerHTML = card.level.icons; $('hudLevel').style.setProperty('--lvc', card.level.color);
-    $('gtip').textContent = card.tip || ''; $('game').classList.toggle('has-tip', !!card.tip); $('game').classList.toggle('guided', !!card.guide);
+    $('gtip').textContent = card.tip || ''; $('game').classList.toggle('has-tip', !!card.tip); $('game').classList.toggle('guided', !!card.guide); $('game').classList.toggle('tutorial', !!(card.practice || (card.career != null && card.career < LESSONS.length)));
     $('btnGameBack').setAttribute('aria-label', card.career != null ? 'Voltar para a trilha' : 'Voltar para as cartas');
     Layout.update();
     // skin do jogo = pântano/dificuldade da fase (espaço no bônus)
@@ -2963,7 +3188,7 @@ const UI = (() => {
   function hud() {
     const pulos = n => n === 1 ? '1 pulo' : `${n} pulos`;
     $('hudMoves').textContent = Game.card && Game.card.daily && Daily.running ? `${Daily.clock(Daily.elapsed())} · ${pulos(Daily.moves)}` : pulos(Game.count);
-    $('btnUndo').disabled = Game.moves === 0;
+    $('btnUndo').disabled = Game.moves === 0; $('btnRestart').disabled = Game.moves === 0;
   }
   // "Como jogar": vermelho come verde, verde come verde, verde não come vermelho e o objetivo
   const RULES = [['red', 'green', true, 'Vermelho come verde'], ['green', 'green', true, 'Verde come verde'], ['green', 'red', false, 'Verde não come vermelho'],
@@ -3005,6 +3230,17 @@ const UI = (() => {
   }
   $('btnRulesNext').addEventListener('click', () => { Sound.click(); if (ruleStep < RULES.length - 1) { ruleStep++; paintRule(); } else closeRules(); });
   $('btnRulesClose').addEventListener('click', () => { Sound.click(); closeRules(); });
+  /* Pular tutorial: no treino do mapa do dia vai direto para o desafio; no Tutorial da trilha dá as 3 fases como feitas (com 3★
+     e os prêmios delas) e abre a trilha no Pântano Tranquilo. Nos dois casos o treino não volta a aparecer. */
+  function skipTutorial() {
+    const c = card; if (!c) return;
+    Sound.click(); closeRules(); hideOverlays(); Game.active = false; Board.hint(null);
+    Daily.practiced(); Track('pulou-tutorial', 'Pulou o tutorial');
+    if (c.practice) { Daily.play(); return; }
+    Career.skipTutorial(); Career.open();
+  }
+  $('btnRulesSkip').addEventListener('click', skipTutorial);
+  $('btnSkipTut').addEventListener('click', skipTutorial);
   // treino guiado: mãozinha mostrando qual sapo pegar e para onde arrastar
   function guide() { Board.hint(Game.card.guide[Game.moves]); }
   function checkEnd() {
@@ -3042,6 +3278,8 @@ const UI = (() => {
       $('btnNewWin').classList.add('nudge');     // o que chama atenção é seguir para a próxima fase
       if (res.finished) { title = 'Carreira concluída!'; next = 'Ver troféu'; winToMap = true; }
       if (res.bonusFinished) { title = 'Espaço concluído!'; next = 'Ver estrela'; winToMap = true; }
+      if (res.extraDone) { title = `${res.extraDone} concluído!`; next = 'Ver trilha'; winToMap = true; }
+      if (res.allDone) { title = 'Você completou tudo!'; next = 'Ver o final'; }
       prize = res.prize; friend = res.friend;
       // uma vez só: ao terminar um pântano sem todas as 3★, conta que existe o presente
       if (res.advanced && !Store.get('tip3', false)) {
@@ -3131,19 +3369,26 @@ const UI = (() => {
      salto e acende o sapo do seguinte. Por rodada vale até hintCap dicas (até 3 saltos nenhuma, 4→1, 5→2, 6→3 e daí em diante
      metade: 7→3, 8→4, 10→5); rever um salto já aberto não gasta. Usou dica na rodada: a fase vale no máximo ★★. */
   const hintCap = n => n <= 3 ? 0 : n <= 6 ? n - 3 : Math.floor(n / 2);
-  let tries = Store.get('tries', {}), hintOn = null, budget = 0, revealed = 0, hinted = false;   // hinted: usou dica nesta visita à fase (reiniciar não apaga)     // hintOn: { k: salto, full: já mostrou o destino }
+  /* Só conta tentativa em que a pessoa chegou a pular (entrar/sair ou reiniciar sem mexer não vale). A lâmpada aparece depois de
+     3 tentativas assim: 1 dica na 4ª, 2 na 5ª… até hintCap. */
+  let tries = Store.get('tries2', {}), hintOn = null, budget = 0, revealed = 0, hinted = false, counted = false;   // hinted: usou dica nesta visita à fase (reiniciar não apaga); hintOn: { k: salto, full: já mostrou o destino }; counted: esta tentativa já contou
   if (!tries || typeof tries !== 'object') tries = {};
   const triesMem = {};
+  const tryBag = () => card.code ? tries : triesMem, tryKey = () => card.code || Rules.key(card.start);
+  function moved() {      // 1º pulo da tentativa: agora ela conta
+    if (counted || !hintable()) return;
+    counted = true; const bag = tryBag(), k = tryKey(); bag[k] = (bag[k] || 0) + 1;
+    if (card.code) Store.set('tries2', tries);
+  }
   const hintable = () => !!(card && !card.guide && !card.daily && !card.replay && !card.practice && card.solution && card.solution.length);
   function newTry(entering) {
-    hintOn = null; Board.hint(null); if (entering) hinted = false;
+    hintOn = null; Board.hint(null); if (entering) hinted = false; counted = false;
     const b = $('btnHint');
     if (!hintable()) { b.hidden = true; return; }
-    const k = card.code || Rules.key(card.start), bag = card.code ? tries : triesMem, n = bag[k] = (bag[k] || 0) + 1;
-    if (card.code) Store.set('tries', tries);
+    const n = tryBag()[tryKey()] || 0;          // tentativas anteriores com pelo menos 1 pulo
     const was = !b.hidden;
-    budget = hintCap(card.solution.length); revealed = 0; hintCount();
-    b.hidden = n < 4 || budget < 1;
+    budget = Math.min(n - 2, hintCap(card.solution.length)); revealed = 0; hintCount();
+    b.hidden = n < 3 || budget < 1;
     if (!b.hidden && (entering || !was)) { b.classList.remove('intro'); void b.offsetWidth; b.classList.add('intro'); }
   }
   function hintCount() { const left = Math.max(0, budget - revealed); $('hintN').textContent = left; $('btnHint').classList.toggle('empty', !left); }
@@ -3166,7 +3411,7 @@ const UI = (() => {
   }
   $('btnHint').addEventListener('click', hintTap);
   function restart() {
-    if (Game.busy || !Game.active) return;
+    if (Game.busy || !Game.active || !Game.moves) return;      // sem nenhum pulo não há o que reiniciar
     const doIt = () => { hideOverlays(); Game.restart(); if (Game.card.daily) Daily.save(); Board.reset(); hud(); Sound.start(); newTry(false); };
     doIt();
   }
@@ -3292,7 +3537,7 @@ const UI = (() => {
   $('btnStuckHome').addEventListener('click', () => { hideOverlays(); Sound.click(); show('home'); });
   document.querySelectorAll('.snd').forEach(b => b.addEventListener('click', () => { Sound.unlock(); Sound.setMuted(!Sound.muted); }));
 
-  return { show, hud, checkEnd, guide, draw, startGame, hideOverlays, confirm, dailyIntro, dailyReview, phasePop, get card() { return card; }, get levels() { return levels; } };
+  return { show, hud, checkEnd, guide, draw, startGame, hideOverlays, confirm, moved, dailyIntro, dailyReview, phasePop, get card() { return card; }, get levels() { return levels; } };
 })();
 
 /* ---------------------------------------------------------------------
@@ -3506,6 +3751,51 @@ ${ring ? '<ellipse rx="29" ry="7" fill="none" stroke="#ffe3b0" stroke-width="3" 
 <path d="M0 -16 Q8 -6 6 12 H-6 Q-8 -6 0 -16 Z" fill="#eef3fb" stroke="#8a95ab" stroke-width="1"/><circle cy="-2" r="3" fill="#6fd0ff" stroke="#4b5874" stroke-width="1"/><path d="M0 -16 Q4 -11 5 -8 H-5 Q-4 -11 0 -16Z" fill="#ff4b3a"/></g>`;
   },
   comet: (x, y, k) => `<g transform="translate(${x} ${y}) scale(${k}) rotate(-25)"><path d="M0 0 L-46 -4 L-46 4 Z" fill="#bff6ff" opacity=".35"/><path d="M0 0 L-30 -2 L-30 2 Z" fill="#fff" opacity=".5"/><circle r="4" fill="#fff"/><circle r="7" fill="#bff6ff" opacity=".3"/></g>`,
+  // ---- Cemitério e Pântano do Amor ----
+  tomb(x, y, k, q) {      // lápide arredondada, um pouco torta, com RIP e matinho
+    return `<g transform="translate(${x} ${y}) scale(${k}) rotate(${(q * 14 - 7).toFixed(1)})"><ellipse cx="0" cy="1" rx="13" ry="3" fill="#000" opacity=".3"/><path d="M-9 1 V-14 Q-9 -24 0 -24 Q9 -24 9 -14 V1 Z" fill="#8f8aa6" stroke="#4a4560" stroke-width="1.2"/>
+<path d="M-6 -13 Q-6 -20 0 -20" stroke="#c9c4dc" stroke-width="1.4" fill="none" opacity=".7"/><text y="-9" text-anchor="middle" font-size="5.4" font-weight="900" fill="#4a4560" font-family="system-ui,sans-serif">RIP</text>
+<path d="M-11 1 l2 -4 2 4 2 -5 2 5 M4 1 l2 -4 2 4 2 -3" stroke="#4f7a3a" stroke-width="1.2" fill="none"/></g>`;
+  },
+  graveCross(x, y, k, q) {      // cruz de madeira inclinada
+    return `<g transform="translate(${x} ${y}) scale(${k}) rotate(${(q * 20 - 10).toFixed(1)})"><ellipse cx="0" cy="1" rx="9" ry="2.4" fill="#000" opacity=".3"/><rect x="-2" y="-26" width="4" height="27" rx="1" fill="#6b5640" stroke="#3a2c1c" stroke-width=".8"/><rect x="-9" y="-19" width="18" height="4" rx="1" fill="#6b5640" stroke="#3a2c1c" stroke-width=".8"/></g>`;
+  },
+  bat(x, y, k, flip) {
+    return `<g transform="translate(${x} ${y}) scale(${flip ? -k : k} ${k})"><path d="M0 -2 Q-5 -8 -12 -6 Q-9 -3 -10 1 Q-6 -1 -4 2 Q-2 0 0 3 Q2 0 4 2 Q6 -1 10 1 Q9 -3 12 -6 Q5 -8 0 -2 Z" fill="#1a1426"/><circle cx="-1.2" cy="-1" r=".7" fill="#ffd23f"/><circle cx="1.2" cy="-1" r=".7" fill="#ffd23f"/></g>`;
+  },
+  ghost(x, y, k) {
+    return `<g transform="translate(${x} ${y}) scale(${k})" opacity=".85"><path d="M-9 6 V-6 Q-9 -16 0 -16 Q9 -16 9 -6 V6 L6 3 L3 6 L0 3 L-3 6 L-6 3 Z" fill="#f2f0ff"/><ellipse cx="-3" cy="-7" rx="1.6" ry="2.2" fill="#2a2440"/><ellipse cx="3" cy="-7" rx="1.6" ry="2.2" fill="#2a2440"/><ellipse cx="0" cy="-1.6" rx="2" ry="1.4" fill="#2a2440"/></g>`;
+  },
+  moon(x, y, k) {
+    return `<g transform="translate(${x} ${y}) scale(${k})"><circle r="22" fill="#fff6c8" opacity=".12"/><circle r="13" fill="#fff3b8"/><circle cx="6" cy="-4" r="11" fill="#2c2840"/></g>`;
+  },
+  heart(x, y, k, c, rot = 0) {
+    return `<g transform="translate(${x} ${y}) scale(${k}) rotate(${rot})"><path d="M0 7 C-12 -1 -9 -12 -3 -10 Q-1 -9 0 -6 Q1 -9 3 -10 C9 -12 12 -1 0 7 Z" fill="${c}"/><ellipse cx="-4" cy="-6" rx="2" ry="1.2" fill="#fff" opacity=".5" transform="rotate(-30 -4 -6)"/></g>`;
+  },
+  rose(x, y, k) {
+    return `<g transform="translate(${x} ${y}) scale(${k})"><path d="M0 0 V12" stroke="#3f8a2a" stroke-width="1.4"/><path d="M0 7 Q5 4 7 7 Q4 9 0 7 Z" fill="#4fa33a"/><circle cy="-3" r="5.4" fill="#e8264f"/><path d="M-3 -4 Q0 -8 3 -4 Q0 -1 -3 -4 Z M-2 -2 Q0 -5 2.6 -2" stroke="#9a0f30" stroke-width=".8" fill="none"/></g>`;
+  },
+  // casas das fases: lápide (Cemitério) e coração (Amor)
+  tombNode() { return `<path d="M-8 10 V-2 Q-8 -11 0 -11 Q8 -11 8 -2 V10 Z" fill="#9d98b6" stroke="#4a4560" stroke-width="1.2"/><path d="M-5 -2 Q-5 -8 0 -8" stroke="#d6d2ea" stroke-width="1.2" fill="none" opacity=".8"/><path d="M-10 10 H10" stroke="#4f7a3a" stroke-width="2.4" stroke-linecap="round"/>`; },
+  heartNode() { return `<path d="M0 10 C-15 0 -12 -12 -4.4 -10 Q-1.4 -9 0 -5.6 Q1.4 -9 4.4 -10 C12 -12 15 0 0 10 Z" fill="#ff5c93" stroke="#b81f55" stroke-width="1.2"/><ellipse cx="-5" cy="-5" rx="2.6" ry="1.5" fill="#fff" opacity=".5" transform="rotate(-30 -5 -5)"/>`; },
+  // portais dos pântanos extras: portão de cemitério com cruz e névoa; coração brilhando
+  gateCross() {
+    return `<svg viewBox="-30 -30 60 60" aria-hidden="true"><defs><radialGradient id="gcr" cx="50%" cy="55%" r="50%"><stop offset="0" stop-color="#d9d2ff"/><stop offset=".5" stop-color="#6a5a9a"/><stop offset="1" stop-color="#1e1830" stop-opacity="0"/></radialGradient></defs>
+<circle r="28" fill="url(#gcr)"/><path d="M-17 22 V-6 Q-17 -22 0 -22 Q17 -22 17 -6 V22" fill="#2a2440" stroke="#9a92c4" stroke-width="2.6"/><path d="M-11 22 V-4 M-5.5 22 V-10 M0 22 V-12 M5.5 22 V-10 M11 22 V-4" stroke="#6a62a0" stroke-width="1.6"/>
+<g class="pspin2"><rect x="-2.6" y="-15" width="5.2" height="24" rx="1" fill="#e9e4ff"/><rect x="-8.6" y="-9.6" width="17.2" height="5" rx="1" fill="#e9e4ff"/></g><ellipse cx="0" cy="22" rx="22" ry="4" fill="#d9d2ff" opacity=".35"/></svg>`;
+  },
+  gateHeart() {
+    const h = 'M0 20 C-30 2 -24 -22 -9 -19 Q-3 -17 0 -10 Q3 -17 9 -19 C24 -22 30 2 0 20 Z';
+    return `<svg viewBox="-30 -30 60 60" aria-hidden="true"><defs><radialGradient id="ghr" cx="50%" cy="45%" r="55%"><stop offset="0" stop-color="#fff"/><stop offset=".4" stop-color="#ff9cc2"/><stop offset="1" stop-color="#e8266b"/></radialGradient></defs>
+<circle r="28" fill="#ff4f8b" opacity=".18"/><g class="hbeat"><path d="${h}" fill="url(#ghr)" stroke="#b81f55" stroke-width="2"/><path d="M-14 -9 Q-12 -15 -6 -15" stroke="#fff" stroke-width="2.4" fill="none" stroke-linecap="round" opacity=".8"/></g>
+<g class="pspin" fill="none" stroke-linecap="round"><path d="M0 -26 A26 26 0 0 1 26 0" stroke="#ffd1e3" stroke-width="2"/><path d="M0 26 A26 26 0 0 1 -26 0" stroke="#fff27a" stroke-width="2"/></g></svg>`;
+  },
+  bigHeart() {
+    const h = 'M0 22 C-32 2 -26 -24 -10 -21 Q-3 -19 0 -11 Q3 -19 10 -21 C26 -24 32 2 0 22 Z';
+    return `<svg viewBox="-30 -30 60 60" aria-hidden="true"><defs><clipPath id="bhc"><path d="${h}"/></clipPath><linearGradient id="bhg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ff8ab4"/><stop offset="1" stop-color="#d8155c"/></linearGradient></defs>
+<circle r="27" fill="#ff4f8b" opacity=".18"/><path d="${h}" fill="url(#bhg)" stroke="#9a0f40" stroke-width="1.8"/><path d="M-15 -10 Q-13 -17 -6 -17" stroke="#fff" stroke-width="2.6" fill="none" stroke-linecap="round" opacity=".8"/>
+<g clip-path="url(#bhc)"><rect class="shine" x="-60" y="-40" width="10" height="80" fill="#fff" opacity=".8" transform="rotate(22)"/></g><path d="M-6 -2 l3 3 7 -8" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+  },
   portal() {
     return `<svg viewBox="-30 -30 60 60" aria-hidden="true"><defs><radialGradient id="ptl" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#fff"/><stop offset=".35" stop-color="#c9b6ff"/><stop offset=".7" stop-color="#7b3fe4"/><stop offset="1" stop-color="#2a0f6b" stop-opacity="0"/></radialGradient></defs>
 <circle r="28" fill="url(#ptl)"/><g class="pspin" fill="none" stroke-linecap="round"><path d="M0 -20 A20 20 0 0 1 20 0" stroke="#ff6ad5" stroke-width="3"/><path d="M0 20 A20 20 0 0 1 -20 0" stroke="#6fd0ff" stroke-width="3"/><path d="M14 -6 A15 15 0 0 1 -6 14" stroke="#fff27a" stroke-width="2"/></g>
@@ -3552,7 +3842,10 @@ const Career = (() => {
     { id: 'avancado', na: 'no', name: 'Brejo', color: LEVELS.avancado.color, g: [8, 8, 8, 8, 9, 8, 9, 9, 9, 10, 10, 10], top: '#3d6f78', bot: '#2b3a6e', bank: '#3c5a36' },   // entardecer azul-violeta
     { id: 'expert', na: 'no', name: 'Pântano Jacaroso', color: LEVELS.expert.color, g: [11, 11, 11, 11, 11, 11, 11, 11, 11, 11], top: '#4a4422', bot: '#1d1a0c', bank: '#6b4f2a' },   // lamaçal oliva-marrom
     // pântano secreto: só aparece depois de concluir a carreira e tocar no portal (Big Bang)
-    { id: 'espaco', na: 'no', name: 'Espaço', color: '#8a5cff', count: 10, bonus: true, bg: 'linear-gradient(180deg,#1d1a0c 0,#1d1450 140px,#120a35 55%,#05030f)', bank: null }
+    { id: 'espaco', na: 'no', name: 'Espaço', color: '#8a5cff', count: 10, bonus: true, bg: 'linear-gradient(180deg,#1d1a0c 0,#1d1450 140px,#120a35 55%,#05030f)', bank: null },
+    // depois do Espaço (extra): cada um abre por um portal, só com ⭐⭐⭐ em todas as fases anteriores; tabuleiros com formato (EXTRA)
+    { id: 'cemiterio', na: 'no', name: 'Cemitério', color: '#8a7fb0', count: 10, extra: true, gate: 'cruz', top: '#2c2840', bot: '#16131f', bank: null },
+    { id: 'amor', na: 'no', name: 'Pântano do Amor', short: 'Amor', color: '#ff4f8b', count: 8, extra: true, gate: 'coracao', top: '#ff9cc2', bot: '#e8558d', bank: '#ffd1e3' }
   ];
   REGIONS.forEach(R => { if (R.g) R.count = R.g.length; });
   /* Fases bônus em tabuleiros maiores (4×4 nas 5 primeiras, 5×5 nas 5 últimas).
@@ -3574,9 +3867,36 @@ const Career = (() => {
     { n: 5, s: '.G.G..GGG.G.GRG.G.G.G..GG..G..GGGG..GG.G.', sol: [39,21,37,29,20,38,1,19,3,11,36,28,27,29,18,28,28,10,12,20,24,16,16,26,38,20,6,16,14,6,13,3,31,21,21,11,20,2,3,1,1,11] }
   ];
   const TUTORIAL = LESSONS;
-  const MAIN = REGIONS.filter(r => !r.bonus);
+  /* Fases dos pântanos extras, em tabuleiros com formato (cruz no Cemitério, coração no Amor). Geradas por construção reversa
+     como as do Espaço (solução guardada e conferida), cada uma mais traiçoeira que a anterior. */
+  const EXTRA = {
+    cemiterio: [
+      { n: 'cruzP', s: '....GGG..GR', sol: [6,2,10,7,7,3,3,1] },
+      { n: 'cruzP', s: '..GGG...RGG', sol: [10,7,3,1,8,6,1,7,6,8] },
+      { n: 'cruzP', s: '..G.GGG.GGR', sol: [10,7,7,0,6,2,0,7,8,2,7,0] },
+      { n: 'cruz', s: '.....RG.G.GGG......G.G.......', sol: [21,16,5,15,15,7,7,9,16,8,9,7,7,5] },
+      { n: 'cruz', s: '.GRG..G....GG.G....G.G.......', sol: [21,16,3,10,12,19,19,3,2,0,14,6,0,7,7,5] },
+      { n: 'cruz', s: '...G...G..GGG.G....G...GG...R', sol: [7,15,14,6,3,10,28,17,24,11,10,19,19,3,17,7,7,0] },
+      { n: 'cruz', s: '.....GR...G.G.GG.GGGG.G......', sol: [18,16,6,21,20,11,5,15,14,16,22,15,12,19,15,7,21,16,16,1] },
+      { n: 'cruz', s: '...GGGG.G.G...R.G.G.GG....G..', sol: [20,11,26,15,5,7,10,19,4,13,18,8,8,6,3,10,19,3,14,6,6,1] },
+      { n: 'cruz', s: '....GGG....GG..G.G..RG..GGG.G', sol: [12,10,10,19,20,13,5,7,4,11,21,27,27,23,11,24,28,17,26,22,13,20,20,24] },
+      { n: 'cruz', s: '.GGG.GGG..GGGG..GG..R..G.....', sol: [20,4,23,8,5,15,7,22,15,0,0,7,2,17,13,20,22,17,1,16,17,15,15,7,4,11] }
+    ],
+    amor: [
+      { n: 'coracao', s: '.GR..G......GG..G...G.', sol: [12,19,1,14,14,12,20,18,18,3,2,4] },
+      { n: 'coracao', s: '......GGG.G.G...GGR...', sol: [18,13,6,14,13,3,14,19,3,11,11,13,13,21] },
+      { n: 'coracao', s: '..G.....GG..G..RGGGG..', sol: [18,20,20,13,13,3,12,19,2,4,4,14,15,13,13,21] },
+      { n: 'coracao', s: '..GG...G.GGR....GGGG..', sol: [18,20,20,13,2,4,10,8,16,9,11,3,3,5,8,10,5,15] },
+      { n: 'coracao', s: '..G.GGGGGGG..G.....GR.', sol: [20,18,4,14,2,12,18,3,6,4,3,5,8,17,5,15,15,13,13,20] },
+      { n: 'coracao', s: '..G.GRGGGGGGG...GG....', sol: [11,13,4,14,2,12,14,19,12,4,5,3,6,14,14,12,3,18,18,13,13,21] },
+      { n: 'coracao', s: '.GGG...GGGG.R.G.G.G.GG', sol: [20,5,18,13,2,4,12,2,1,14,10,17,9,7,4,19,21,13,2,12,12,14,14,19] },
+      { n: 'coracao', s: 'G..R.GGGG.G.G.G.GGG.GG', sol: [14,19,21,13,12,14,18,13,10,17,3,11,13,3,6,4,20,13,0,12,4,19,11,13,13,21] }
+    ]
+  };
+  const MAIN = REGIONS.filter(r => !r.bonus && !r.extra);
   const TOTAL = MAIN.reduce((a, r) => a + r.count, 0);            // fases da carreira (100)
   const ALL = TOTAL + REGIONS.find(r => r.bonus).count;           // + 10 do Espaço (bônus)
+  const LAST = REGIONS.reduce((a, r) => a + r.count, 0);          // + Cemitério e Amor (extras, depois do Espaço)
   let bonusOpen = !!Store.get('bonus', false);
   /* Prêmios da trilha, ligados ao tema de cada pântano: um em cada fase do tutorial; no começo, prêmio a cada 3 ou 4
      mapas (depois vão se espaçando); um boné/chapéu na última fase e um premium para quem fizer o pântano todo com 3★
@@ -3597,10 +3917,11 @@ const Career = (() => {
     at(9, 4, 'cachecol'); at(9, 8, 'gravata'); at(9, 12, 'bone');                      // Brejo
     at(10, 3, 'oculos3d'); at(10, 7, 'jetpack'); at(10, 10, 'coroa', 'trofeu');        // Jacaroso
     at(11, 5, 'traje'); at(11, 10, 'antenas');                                         // Espaço
+    at(12, 5, 'dentes');                                                               // Cemitério
   }
   // desafio do dia com nota 3★ (na 1ª tentativa do dia): coleção, um item a cada tantas vezes
   const DAILY = [[1, 'aniversario'], [3, 'bigode'], [5, 'pipoca'], [10, 'polaroid'], [20, 'guardachuva']];
-  let done = Math.max(0, Math.min(bonusOpen ? ALL : TOTAL, +Store.get('career', 0) || 0));
+  let done = Math.max(0, Math.min(bonusOpen ? LAST : TOTAL, +Store.get('career', 0) || 0));
   /* Estrelas (1 a 3 por fase, vale a melhor; no tutorial sempre 3). Um pântano só abre com um total de estrelas na
      carreira (ver need): cada pântano anterior soma 2×fases + metade das fases (arredondada para baixo), ex. 10 fases → 25.
      O Pântano Tranquilo pede as 9 do tutorial.
@@ -3674,7 +3995,7 @@ const Career = (() => {
     Store.set('career', done); Store.set('stars', stars); Store.set('opened', opened);
   }
   if (!Store.get('trilha4', false)) { ['prizeSwap', 'prizeSwap2', 'prizeSwap3', 'trilha2', 'trilha3'].forEach(k => Store.set(k, true)); Store.set('trilha4', true); }
-  if (stars.length < ALL) stars = stars.concat(new Array(ALL - stars.length).fill(0));
+  if (stars.length < LAST) stars = stars.concat(new Array(LAST - stars.length).fill(0));
   // quem já tinha entrado num pântano (fases feitas nele) continua com ele aberto
   REGIONS.forEach((R, r) => { if (r > 0 && START[r] < done && !opened.includes(r)) { opened.push(r); Store.set('opened', opened); } });
   for (let i = 0; i < REGIONS[0].count; i++) if (i < done && stars[i] !== 3) { stars[i] = 3; Store.set('stars', stars); }   // tutorial feito vale 3★
@@ -3686,7 +4007,9 @@ const Career = (() => {
   const need = r => { let t = 0; for (let k = 1; k <= r; k++) t += step(k); return t; };
   const isOpen = r => r === 0 || !!REGIONS[r].bonus || opened.includes(r);
   // pode desbloquear: estrelas suficientes no total da carreira e já terminou todas as fases do pântano anterior
-  const canUnlock = r => r > 0 && !isOpen(r) && done >= START[r] && totalStars() >= need(r);
+  const canUnlock = r => r > 0 && !REGIONS[r].extra && !isOpen(r) && done >= START[r] && totalStars() >= need(r);
+  // pântanos extras: o portal só abre com ⭐⭐⭐ em todas as fases anteriores (devolve quantas faltam e a primeira)
+  const missing3 = r => { const m = []; for (let i = 0; i < START[r]; i++) if ((stars[i] || 0) < 3) m.push(i); return m; };
   const playable = i => i <= done && isOpen(regionOf(i));
   const totalStars = () => stars.reduce((a, b) => a + (b || 0), 0);
   const kits = () => chars().flatMap(id => (Outfit.CHARS.find(c => c.id === id) || {}).kit || []);      // itens que vieram com os amigos
@@ -3706,7 +4029,7 @@ const Career = (() => {
   const ORDER = REGIONS.flatMap((R, r) => Object.keys(PRIZE).filter(i => +i >= START[r] && +i < START[r] + R.count).sort((a, b) => a - b).flatMap(i => PRIZE[i].concat(...Outfit.CHARS.filter(c => c.fase === +i).map(c => c.kit || [])))   // kit de amigo que chega na fase vem logo depois
     .concat(RARE[R.id] || [], (Outfit.CHARS.find(c => c.at === R.id) || {}).kit || []))
     .concat(DAILY.map(([, id]) => id), 'kiwifruta');
-  let list = null, built = null, nodes = [], finalPos = null, portalPos = null, starPos = null, lastW = 0, avatar = null;
+  let list = null, built = null, nodes = [], finalPos = null, portalPos = null, starPos = null, endPos = null, gates = [], lastW = 0, avatar = null;
   const map = $('cmap'), inner = $('cmapInner');
   let baseRects = [], mapKey = '';
   function syncBase() {
@@ -3756,6 +4079,12 @@ const Career = (() => {
       for (let k = 0; k < b.sol.length; k += 2) { const j = Rules.findMove(st, b.sol[k], b.sol[k + 1]); if (!j) break; solution.push(j); st = Rules.apply(st, j); }
       out.push({ region: bi, n: i + 1, start, solution, valid: Rules.isWin(st) && solution.length === b.sol.length / 2 });
     });
+    REGIONS.forEach((R, ri) => { if (R.extra) EXTRA[R.id].forEach((b, i) => {
+      const start = Rules.fromStr(b.s, b.n), solution = [];
+      let st = start;
+      for (let k = 0; k < b.sol.length; k += 2) { const j = Rules.findMove(st, b.sol[k], b.sol[k + 1]); if (!j) break; solution.push(j); st = Rules.apply(st, j); }
+      out.push({ region: ri, n: i + 1, start, solution, valid: Rules.isWin(st) && solution.length === b.sol.length / 2 });
+    }); });
     return out;
   }
   function ensureBuilt() {
@@ -3766,8 +4095,8 @@ const Career = (() => {
     const L = list[i], R = REGIONS[L.region];
     const level = { name: R.name, color: R.color };
     const start = { ...L.start }, greens = Rules.greens(start);
-    return { career: i, level, levelId: R.id, label: `${R.name.replace(/^Pântano /, '')} - ${i + 1}`, start, greens, jumps: greens,
-      solution: R.bonus ? L.solution : Solver.solve(start), tip: L.tip || '', guide: L.guide, intro: L.intro, theme: R.bonus ? 'space' : '', code: 'C-' + (i + 1) };
+    return { career: i, level, levelId: R.id, label: `${R.short || R.name.replace(/^Pântano /, '')} - ${i + 1}`, start, greens, jumps: greens,
+      solution: L.solution || Solver.solve(start), tip: L.tip || '', guide: L.guide, intro: L.intro, theme: R.bonus ? 'space' : '', code: 'C-' + (i + 1) };
   }
   // só animam os enfeites do pântano que está na tela
   let regIO = null;
@@ -3784,8 +4113,9 @@ const Career = (() => {
     decoIO = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { fillDeco(e.target); decoIO.unobserve(e.target); } }), { root: map, rootMargin: '700px 0px' });
     inner.querySelectorAll('.creg').forEach(r => { r.classList.add('zz'); regIO.observe(r); if (decoQ[+r.dataset.q]) decoIO.observe(r); });
   }
-  const limit = () => bonusOpen ? ALL : TOTAL;
-  const posOf = i => i < TOTAL ? nodes[i] : !bonusOpen ? (i === TOTAL ? finalPos : null) : i < ALL ? nodes[i] : starPos;
+  // até onde a trilha vai agora: carreira, + Espaço se aberto, + cada pântano extra já aberto
+  const limit = () => !bonusOpen ? TOTAL : REGIONS.reduce((a, R, r) => a + (R.extra && !isOpen(r) ? 0 : R.bonus || R.extra ? R.count : 0), TOTAL);
+  const posOf = i => nodes[i] || (i === TOTAL && !bonusOpen ? finalPos : i === LAST && endPos ? endPos : i === ALL ? starPos : gates.find(g => START[g.r] === i) || null);
 
   // ---- desenho do mapa ----
   function render() {
@@ -3796,8 +4126,8 @@ const Career = (() => {
     let y = 0, k = 0, html = '';
     nodes = [];
     const rects = [];
-    const shown = REGIONS.filter(R => !R.bonus || bonusOpen);
-    portalPos = starPos = null;
+    const shown = REGIONS.filter((R, ri) => R.extra ? bonusOpen && isOpen(ri) : !R.bonus || bonusOpen);
+    portalPos = starPos = endPos = null; gates = [];
     shown.forEach((R, r) => {
       const top = y;
       y += HEAD + ns / 2;
@@ -3808,6 +4138,10 @@ const Career = (() => {
         if (!bonusOpen && done >= TOTAL) { portalPos = { x: cx, y: y + 30 }; y += 160; }     // fase extra secreta
       }
       if (R.bonus) { starPos = { x: cx, y: y + 40 }; y += 160; }
+      // portal do próximo pântano extra (cruz do Cemitério, coração do Amor), assim que a pessoa chega nele
+      const ri = REGIONS.indexOf(R), nx = REGIONS[ri + 1];
+      if (bonusOpen && nx && nx.extra && !isOpen(ri + 1) && done >= START[ri + 1]) { gates.push({ r: ri + 1, x: cx, y: y + 30 }); y += 170; }
+      if (R.extra && ri === REGIONS.length - 1) { endPos = { x: cx, y: y + 40 }; y += 170; }
       rects.push({ top, h: y - top, stops: R.bonus ? [[0, '#1d1a0c'], [140 / (y - top), '#1d1450'], [.55, '#120a35'], [1, '#05030f']] : [[0, R.top], [1, R.bot]] });
     });
     const totalH = y;
@@ -3816,8 +4150,20 @@ const Career = (() => {
     decoQ = [];
     rects.forEach((rc, r) => { html += regionHTML(shown[r], r, rc, W, ns); });
     // trilha
-    const pts = [...nodes.slice(0, TOTAL), finalPos, ...(bonusOpen ? [...nodes.slice(TOTAL), starPos] : [])];
-    const doneUpto = done < TOTAL ? done + 1 : bonusOpen ? done + 2 : TOTAL + 1;
+    // pontos da trilha na ordem: fases, troféu, (Espaço, estrela, extras abertos, fim); at[i] = posição da fase i na lista
+    const pts = [], at = [];
+    const push = i => { at[i] = pts.length; pts.push(nodes[i]); };
+    for (let i = 0; i < TOTAL; i++) push(i);
+    const finalIdx = pts.length; pts.push(finalPos);
+    let starIdx = -1, endIdx = -1;
+    if (bonusOpen) {
+      for (let i = TOTAL; i < ALL; i++) push(i);
+      starIdx = pts.length; pts.push(starPos);
+      for (let i = ALL; i < nodes.length; i++) push(i);
+      if (endPos) { endIdx = pts.length; pts.push(endPos); }
+    }
+    const doneUpto = 1 + (done < TOTAL ? at[done] : !bonusOpen ? finalIdx : done === LAST && endIdx >= 0 ? endIdx : at[done] != null ? at[done] : done === ALL ? starIdx : at[done - 1]);
+    const gateLine = gates.map(g => { const p = posOf(START[g.r] - 1) || starPos; return `<path d="M${p.x} ${p.y} L${g.x} ${g.y}" stroke="${REGIONS[g.r].gate === 'coracao' ? '#ff9cc2' : '#b9b0d8'}" stroke-opacity=".75" stroke-width="5" stroke-linecap="round" stroke-dasharray="1 12" fill="none"/>`; }).join('');
     const path = list => {
       if (list.length < 2) return '';
       let d = `M${list[0].x.toFixed(1)} ${list[0].y.toFixed(1)}`;
@@ -3830,7 +4176,7 @@ const Career = (() => {
     html += `<svg class="ctrail" width="${W}" height="${totalH}" viewBox="0 0 ${W} ${totalH}" aria-hidden="true">
 <path d="${path(pts)}" fill="none" stroke="#062a3a" stroke-opacity=".25" stroke-width="9" stroke-linecap="round" stroke-dasharray="1 15"/>
 <path d="${path(pts)}" fill="none" stroke="#fff" stroke-opacity=".7" stroke-width="6" stroke-linecap="round" stroke-dasharray="1 15"/>
-${portalPos ? `<path d="M${finalPos.x} ${finalPos.y} L${portalPos.x} ${portalPos.y}" stroke="#c9b6ff" stroke-opacity=".7" stroke-width="5" stroke-linecap="round" stroke-dasharray="1 12" fill="none"/>` : ''}
+${portalPos ? `<path d="M${finalPos.x} ${finalPos.y} L${portalPos.x} ${portalPos.y}" stroke="#c9b6ff" stroke-opacity=".7" stroke-width="5" stroke-linecap="round" stroke-dasharray="1 12" fill="none"/>` : ''}${gateLine}
 <path d="${path(pts.slice(0, doneUpto))}" fill="none" stroke="#ffd23f" stroke-width="7" stroke-linecap="round" stroke-dasharray="1 15"/></svg>`;
     // fases
     const lock = '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"><rect x="5" y="11" width="14" height="10" rx="2" fill="#fff"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>';
@@ -3842,12 +4188,15 @@ ${portalPos ? `<path d="M${finalPos.x} ${finalPos.y} L${portalPos.x} ${portalPos
     nodes.forEach((p, i) => {
       const st = i < done ? 'done' : i === done && playable(i) ? 'cur' : 'locked', L = list[i];
       html += `<button class="cnode ${st}${st === 'done' && stars[i] === 3 ? ' perfect' : ''}" data-i="${i}" style="left:${p.x - ns / 2}px;top:${p.y - ns / 2}px;width:${ns}px;height:${ns}px" aria-label="Fase ${i + 1}, ${REGIONS[L.region].name}${st === 'locked' ? ' (bloqueada)' : ''}">
-<svg viewBox="-12 -12 24 24">${REGIONS[L.region].bonus ? Art.saucer(0, 0, 10.5) : Art.lily(0, 0, 10.5, (i * 47) % 360, true)}</svg><span class="num">${i + 1}</span>${st === 'locked' ? `<span class="lock">${lock}</span>` : st === 'done' ? `<span class="ok">${stars[i] === 3 ? okStar : ok}</span>` : ''}${stars[i] ? `<span class="cst">${starHTML(stars[i])}</span>` : ''}${PRIZE[i] && i >= done ? `<span class="prize mystery${i === np ? ' next' : ''}" title="Prêmio surpresa"${i === np ? ` style="--p:${ring.toFixed(3)}"` : ''}>?</span>` : ''}</button>`;
+<svg viewBox="-12 -12 24 24">${REGIONS[L.region].bonus ? Art.saucer(0, 0, 10.5) : REGIONS[L.region].id === 'cemiterio' ? Deco.tombNode() : REGIONS[L.region].id === 'amor' ? Deco.heartNode() : Art.lily(0, 0, 10.5, (i * 47) % 360, true)}</svg><span class="num">${i + 1}</span>${st === 'locked' ? `<span class="lock">${lock}</span>` : st === 'done' ? `<span class="ok">${stars[i] === 3 ? okStar : ok}</span>` : ''}${stars[i] ? `<span class="cst">${starHTML(stars[i])}</span>` : ''}${PRIZE[i] && i >= done ? `<span class="prize mystery${i === np ? ' next' : ''}" title="Prêmio surpresa"${i === np ? ` style="--p:${ring.toFixed(3)}"` : ''}>?</span>` : ''}</button>`;
     });
     const fs = ns * 1.3;
     html += `<button class="cnode final${done === TOTAL && !bonusOpen ? ' cur' : ''}" data-i="T" style="left:${finalPos.x - fs / 2}px;top:${finalPos.y - fs / 2}px;width:${fs}px;height:${fs}px" aria-label="Troféu final">${Deco.trophy()}</button>`;
     if (portalPos) html += `<button class="cnode portal" data-i="P" style="left:${portalPos.x - fs / 2}px;top:${portalPos.y - fs / 2}px;width:${fs}px;height:${fs}px" aria-label="Fase extra secreta">${Deco.portal()}<span class="num">Espaço</span></button>`;
     if (starPos) html += `<button class="cnode final star${done >= ALL ? ' cur' : ''}" data-i="S" style="left:${starPos.x - fs / 2}px;top:${starPos.y - fs / 2}px;width:${fs}px;height:${fs}px" aria-label="Estrela final">${Deco.bigStar()}</button>`;
+    gates.forEach(g => { const R = REGIONS[g.r], gs = fs * 1.15;
+      html += `<button class="cnode portal gate" data-i="G${g.r}" style="left:${g.x - gs / 2}px;top:${g.y - gs / 2}px;width:${gs}px;height:${gs}px" aria-label="Portal: ${R.name}">${R.gate === 'coracao' ? Deco.gateHeart() : Deco.gateCross()}<span class="num">${R.short || R.name}</span></button>`; });
+    if (endPos) html += `<button class="cnode final end${done >= LAST ? ' cur' : ''}" data-i="E" style="left:${endPos.x - fs / 2}px;top:${endPos.y - fs / 2}px;width:${fs}px;height:${fs}px" aria-label="Fim de tudo">${Deco.bigHeart()}</button>`;
     html += `<div class="cavatar" id="cavatar" style="width:${ns * .95}px;height:${ns * .95}px">${Art.frog('green', { outfit: Outfit.worn, char: Outfit.char })}</div>`;
     inner.innerHTML = html;
     watchRegions();
@@ -3863,7 +4212,7 @@ ${portalPos ? `<path d="M${finalPos.x} ${finalPos.y} L${portalPos.x} ${portalPos
     const k = Math.max(.85, Math.min(1.35, W / 390));
     const items = [];
     const avoid = (x, y, rad) => nodes.some(p => p.r === r && Math.hypot(p.x - x, p.y - (rc.top + y)) < ns * .75 + rad) ||
-      [finalPos, portalPos, starPos].some(f => f && Math.hypot(f.x - x, f.y - (rc.top + y)) < ns * 1.4 + rad) ||
+      [finalPos, portalPos, starPos, endPos, ...gates].some(f => f && Math.hypot(f.x - x, f.y - (rc.top + y)) < ns * 1.4 + rad) ||
       (Math.abs(x - W / 2) < 120 && y < 105) || x < rad * .9 || x > W - rad * .9 || y < 40 || y > H - 12;
     const place = (n, rad, fn) => {
       for (let i = 0, t = 0; i < n && t < n * 30; t++) {
@@ -3936,6 +4285,19 @@ ${portalPos ? `<path d="M${finalPos.x} ${finalPos.y} L${portalPos.x} ${portalPos
       place(7, 16, (x, y) => Deco.mushroom(x, y, k));
       place(3, 26, (x, y, q) => Deco.tree(x, y, k, q() < .5, true));
       place(Math.round(area * 1.1), 6, (x, y, q) => q() < .3 ? twinkle(x, y, 'ff', q()) : Deco.firefly(x, y, k));
+    } else if (R.id === 'cemiterio') {
+      place(1, 40, (x, y) => Deco.moon(x, y, k * 1.3));
+      place(Math.round(area * .25), 60, (x, y) => Deco.fog(x, y, k));
+      place(Math.round(area * .55), 22, (x, y, q) => q() < .6 ? Deco.tomb(x, y, k, q()) : Deco.graveCross(x, y, k, q()));
+      place(3, 30, (x, y, q) => Deco.tree(x, y, k, q() < .5, false));
+      place(5, 16, (x, y, q) => Deco.bat(x, y, k, q() < .5));
+      place(3, 20, (x, y) => Deco.ghost(x, y, k));
+      place(Math.round(area * .6), 6, (x, y, q) => q() < .3 ? twinkle(x, y, 'ff', q()) : Deco.firefly(x, y, k));
+    } else if (R.id === 'amor') {
+      place(Math.round(area * .9), 14, (x, y, q) => Deco.heart(x, y, k * (.6 + q() * .7), ['#ff4f8b', '#ff8ab4', '#e8264f', '#fff'][Math.floor(q() * 4)], q() * 40 - 20));
+      place(Math.round(area * .35), 14, (x, y) => Deco.rose(x, y, k));
+      place(Math.round(area * .25), 14, (x, y, q) => Deco.lily(x, y, k * .8, q() * 360));
+      place(Math.round(area * .6), 6, (x, y, q) => q() < .3 ? twinkle(x, y, 'st', q()) : Deco.bubble(x, y, k));
     } else if (R.bonus) {
       place(Math.round(area * 2.2), 3, (x, y, q) => q() < .08 ? twinkle(x, y, 'st', q()) : Deco.star(x, y, k * (.5 + q())));
       place(5, 70, (x, y, q) => Deco.nebula(x, y, k, ['#ff6ad5', '#6fd0ff', '#9b6cff'][Math.floor(q() * 3)]));
@@ -4065,13 +4427,49 @@ ${portalPos ? `<path d="M${finalPos.x} ${finalPos.y} L${portalPos.x} ${portalPos
     key.remove();
     if (!rm) await animate(ban, [{ transform: `${T} scale(1.35)` }, { transform: `${T} scale(1)` }], { duration: 300, easing: 'ease-in', fill: 'forwards' });
     opened.push(r); Store.set('opened', opened);
-    render(); mapKey = [map.clientWidth, done, bonusOpen, JSON.stringify(Outfit.worn), Outfit.flipKey, Outfit.char, stars.join('')].join('|');
+    render(); mapKey = [map.clientWidth, done, bonusOpen, JSON.stringify(Outfit.worn), Outfit.flipKey, Outfit.char, stars.join(''), opened.join()].join('|');
     placeAvatar(done - 1); scrollToIdx(done - 1, false);
     await wait(250);
     await hop(done - 1, done);
     unlocking = false;
     Track(`pantano-${REGIONS[r].id}`, `Abriu ${REGIONS[r].name}`);
     const c = Outfit.CHARS.find(x => x.at === REGIONS[r].id); if (c) friendPop(c);
+  }
+  /* Fim de tudo (última fase do Pântano do Amor): parabéns, chama para compartilhar e oferece voltar a uma fase ou recomeçar
+     do zero. Recomeçar zera fases e estrelas, mas os itens e amigos ganhos continuam (entram como prêmios fora da trilha). */
+  function finalPop() {
+    const ov = document.createElement('div'); ov.className = 'overlay show'; ov.setAttribute('role', 'dialog'); ov.setAttribute('aria-modal', 'true');
+    ov.innerHTML = `<div class="panel result win"><div class="res-art fimart">${Deco.bigHeart()}</div><div class="res-text"><h3>Você completou tudo!</h3>
+<p class="wmin">Todas as ${LAST} fases do Froggo. Parabéns! 🎉</p><p class="wmin">Chama alguém que vai gostar de jogar:</p>
+<div class="row win-row"><button type="button" class="btn wa grow" data-k="s">Compartilhar</button></div>
+<div class="row win-row"><button type="button" class="btn blue grow" data-k="v">Voltar fase</button><button type="button" class="btn green grow" data-k="z">Recomeçar</button></div>
+<div class="row win-row"><button type="button" class="btn" data-k="x">Fechar</button></div></div></div>`;
+    $('ovWin').parentNode.appendChild(ov); Base.dim(true); Sound.win(); if (UI.confetti) UI.confetti();
+    ov.addEventListener('click', async e => {
+      const b = e.target.closest('button[data-k]'); if (!b) return;
+      Sound.click();
+      const k = b.dataset.k;
+      if (k === 's') {
+        const text = `🐸 Terminei o Froggo inteiro: as ${LAST} fases, até o Cemitério e o Pântano do Amor! Duvido você conseguir:`, url = 'https://migueldcamargo.github.io/froggo';
+        try { if (navigator.share) { await navigator.share({ title: 'Froggo', text, url }); return; } } catch (err) { return; }
+        window.open((/android/i.test(navigator.userAgent || '') ? 'whatsapp://send?text=' : 'https://wa.me/?text=') + encodeURIComponent(text + ' ' + url), '_blank');
+        return;
+      }
+      ov.remove(); Base.dim(false);
+      if (k === 'v') ProgressPanel.open('secret');
+      if (k === 'z') UI.confirm('Recomeçar do zero?', 'As fases e as estrelas voltam para o começo.\nOs itens e amigos que você ganhou continuam seus.', 'Recomeçar', restartAll);
+    });
+  }
+  function skipTutorial() { for (let i = 0; i < REGIONS[0].count; i++) if (i === done) complete(i, 3); }
+  function restartAll() {
+    const keep = owned(), have = chars();
+    keep.forEach(id => { if (!rare.includes(id)) rare.push(id); });
+    have.forEach(id => { if (id !== 'sapo' && !rare.includes('char:' + id)) rare.push('char:' + id); });
+    Store.set('rare', rare);
+    done = 0; stars = new Array(LAST).fill(0); opened = []; bonusOpen = false;
+    Store.set('career', 0); Store.set('stars', stars); Store.set('opened', opened); Store.set('bonus', false); Store.set('fimVisto', false); Store.set('tries2', {});
+    Track('recomecou', 'Recomeçou do zero');
+    location.reload();
   }
   // personagem novo chegou com o pântano: apresenta e oferece usar na hora
   function friendPop(c, keepDim) {     // keepDim: aberto por cima da vitória, que continua escurecendo o fundo
@@ -4092,7 +4490,7 @@ ${kit.length ? `<p class="wmin">Vem com: <b>${kit.map(id => Outfit.BY[id].name).
     UI.show('career');
     await ensureBuilt();
     // a trilha só é refeita se algo mudou (largura, progresso, bônus ou roupa do sapo, inclusive o lado do cata-ovo)
-    const key = [map.clientWidth, done, bonusOpen, JSON.stringify(Outfit.worn), Outfit.flipKey, Outfit.char, stars.join('')].join('|');
+    const key = [map.clientWidth, done, bonusOpen, JSON.stringify(Outfit.worn), Outfit.flipKey, Outfit.char, stars.join(''), opened.join()].join('|');
     if (key !== mapKey) { render(); mapKey = key; } else syncBase();
     const from = opts.hopFrom;
     if (from != null && from + 1 === done && done < limit() && !playable(done)) {      // pântano fechado: o sapo fica na última fase
@@ -4104,6 +4502,14 @@ ${kit.length ? `<p class="wmin">Vem com: <b>${kit.map(id => Outfit.BY[id].name).
       placeAvatar(from); scrollToIdx(from, false);
       await wait(380);
       await hop(from, done);
+      // chegou num portal de pântano extra: a trilha mostra o portal e ele pulsa chamando
+      const gt = gates.find(g => START[g.r] === done);
+      if (gt) {
+        await wait(250); scrollToY(gt.y, true); await wait(450); Sound.reveal();
+        const el = inner.querySelector(`.cnode[data-i="G${gt.r}"]`);
+        if (el && !reduceMotion()) animate(el, [{ transform: 'scale(1)' }, { transform: 'scale(1.25)' }, { transform: 'scale(1)' }, { transform: 'scale(1.18)' }, { transform: 'scale(1)' }], { duration: 1300 });
+      }
+      if (done === LAST && !Store.get('fimVisto', false)) { Store.set('fimVisto', true); await wait(500); finalPop(); }
     } else scrollToIdx(near != null ? near : spot(), false);
   }
   function complete(i, st = 1) {
@@ -4115,7 +4521,7 @@ ${kit.length ? `<p class="wmin">Vem com: <b>${kit.map(id => Outfit.BY[id].name).
     if (i === done && done < limit() && playable(i)) {
       done++; Store.set('career', done);
       Track(`fase-${String(i + 1).padStart(3, '0')}`, `Fase ${i + 1} · ${R.name}`);     // passou a fase pela 1ª vez
-      return { advanced: true, finished: done === TOTAL, bonusFinished: done === ALL, prize: (PRIZE[i] || []).concat(prize || []).length ? (PRIZE[i] || []).concat(prize || []) : null,
+      return { advanced: true, finished: done === TOTAL, bonusFinished: done === ALL, extraDone: R.extra && done === START[r] + R.count ? R.name : null, allDone: done === LAST, prize: (PRIZE[i] || []).concat(prize || []).length ? (PRIZE[i] || []).concat(prize || []) : null,
         friend: Outfit.CHARS.find(c => c.fase === i) || null };      // amigo que chega com esta fase (o Origa, na fase do skate)
     }
     return { advanced: false, finished: false, bonusFinished: false, prize };
@@ -4137,7 +4543,7 @@ ${kit.length ? `<p class="wmin">Vem com: <b>${kit.map(id => Outfit.BY[id].name).
       const P = Array.from({ length: rm ? 0 : 420 }, () => { const a = Math.random() * Math.PI * 2, v = .25 + Math.random() * 1.1; return { a, v, s: 1 + Math.random() * 2.6, c: cols[Math.floor(Math.random() * cols.length)] }; });
       const S = Array.from({ length: 160 }, () => ({ x: Math.random() * W, y: Math.random() * H, r: Math.random() * 1.6 + .3, t: Math.random() }));
       Sound.bigBang();
-      try { if (navigator.vibrate) navigator.vibrate([40, 60, 220]); } catch (e) {}
+      try { if (navigator.vibrate) navigator.vibrate([15, 585, 380, 80, 160]); } catch (e) {}     // tique, espera a explosão (0,6 s) e treme junto com o bum
       const DUR = rm ? 900 : 3000, t0 = performance.now();
       const frame = now => {
         const t = (now - t0) / DUR;
@@ -4217,6 +4623,40 @@ ${kit.length ? `<p class="wmin">Vem com: <b>${kit.map(id => Outfit.BY[id].name).
     Track('pantano-espaco', 'Abriu o Espaço');
     const c = Outfit.CHARS.find(x => x.at === 'espaco'); if (c) friendPop(c);     // o ET chega junto com o Espaço
   }
+  // portal de um pântano extra: só abre com ⭐⭐⭐ em todas as fases anteriores
+  async function openGate(r) {
+    if (opening || isOpen(r) || done < START[r]) return;
+    const R = REGIONS[r], miss = missing3(r), el = inner.querySelector(`.cnode[data-i="G${r}"]`), g = gates.find(x => x.r === r);
+    if (miss.length) {
+      Sound.invalid();
+      if (el) animate(el, [0, -7, 7, -5, 5, 0].map(x => ({ transform: `translateX(${x}px)` })), { duration: 360 });
+      UI.confirm(`${R.name} trancado`, `Para abrir, todas as fases anteriores precisam de ⭐⭐⭐.\nFaltam ${miss.length === 1 ? '1 fase' : miss.length + ' fases'}.`, 'Ir para a primeira', () => {
+        UI.hideOverlays(); scrollToIdx(miss[0], true);
+        const nb = inner.querySelector(`.cnode[data-i="${miss[0]}"]`);
+        if (nb) setTimeout(() => animate(nb, [{ transform: 'scale(1)' }, { transform: 'scale(1.3)' }, { transform: 'scale(1)' }, { transform: 'scale(1.3)' }, { transform: 'scale(1)' }], { duration: 1200 }), 450);
+      });
+      return;
+    }
+    opening = true;
+    if (R.gate === 'coracao') Sound.angel(); else Sound.spooky();
+    try { if (navigator.vibrate) navigator.vibrate([30, 80, 120]); } catch (e) {}
+    if (el && !reduceMotion()) await animate(el, [{ transform: 'scale(1)', opacity: 1 }, { transform: 'scale(1.35) rotate(-6deg)', opacity: 1, offset: .45 }, { transform: 'scale(.15) rotate(20deg)', opacity: 0 }], { duration: 1100, easing: 'ease-in', fill: 'forwards' });
+    opened.push(r); Store.set('opened', opened);
+    render(); mapKey = [map.clientWidth, done, bonusOpen, JSON.stringify(Outfit.worn), Outfit.flipKey, Outfit.char, stars.join(''), opened.join()].join('|');
+    const first = posOf(START[r]);
+    placeAvatarAt(g); scrollToY(g.y, false);
+    await wait(300); scrollToY(first.y, true); await wait(250);
+    placeAvatar(START[r]);
+    const dx = g.x - first.x, dy = g.y - first.y;
+    Sound.jump();
+    await animate(avatar, reduceMotion() ? [{ opacity: .4 }, { opacity: 1 }] : [
+      { transform: `translate(${dx}px,${dy}px)` }, { transform: `translate(${dx * .5}px,${dy * .5 - 90}px) scale(1.3) rotate(-14deg)`, offset: .5 }, { transform: 'translate(0,0)' }],
+      { duration: 900, easing: 'cubic-bezier(.35,.1,.4,1)' });
+    Sound.land();
+    opening = false;
+    Track(`pantano-${R.id}`, `Abriu ${R.name}`);
+    const c = Outfit.CHARS.find(x => x.at === R.id); if (c) friendPop(c);     // Conde chega com o Cemitério, Cataras com o Amor
+  }
   function placeAvatarAt(p) { const s = avatar.getBoundingClientRect().width || 56; avatar.style.left = (p.x - s / 2) + 'px'; avatar.style.top = (p.y - s * .82) + 'px'; }
   function scrollToY(y, smooth) {
     const top = Math.max(0, y - map.clientHeight * .5);
@@ -4227,6 +4667,8 @@ ${kit.length ? `<p class="wmin">Vem com: <b>${kit.map(id => Outfit.BY[id].name).
     const b = e.target.closest('.cnode'); if (!b) return;
     const tag = b.dataset.i;
     if (tag === 'P') { openBonus(); return; }
+    if (tag[0] === 'G') { openGate(+tag.slice(1)); return; }
+    if (tag === 'E') { celebrate(b); finalPop(); return; }
     if (tag === 'T' || tag === 'S') { celebrate(b); return; }
     const i = +tag;
     if (i <= done && !playable(i)) { if (canUnlock(regionOf(i))) invite(regionOf(i)); else denied(regionOf(i)); return; }
@@ -4275,8 +4717,8 @@ ${kit.length ? `<p class="wmin">Vem com: <b>${kit.map(id => Outfit.BY[id].name).
   }
   // prêmio fora da trilha (ex.: desafio do dia perfeito); devolve true se for novo
   function grant(id) { if (rare.includes(id)) return false; rare.push(id); Store.set('rare', rare); return true; }
-  const chars = () => Outfit.CHARS.filter(c => { if (c.gift) return rare.includes('char:' + c.id); if (c.fase != null) return done > c.fase; const k = REGIONS.findIndex(R => R.id === c.at); return !c.at || (REGIONS[k].bonus ? bonusOpen : isOpen(k)); }).map(c => c.id);
-  return { open, complete, friendPop, rewind, relayout, ensureBuilt, syncBase, dailyPick, grant, dailyWin, ORDER, DAILY, RARE, chars, get stars() { return stars.slice(); }, totalStars, playable, get dailyCount() { dailyPick(0); return { iniciante: dailyClasses.filter(x => x.id === 'iniciante').length, medio: dailyClasses.filter(x => x.id === 'medio').length }; }, seeded, cardFor, owned, openBonus, bigBang, REGIONS, TOTAL, ALL, PRIZE, BONUS, get bonusOpen() { return bonusOpen; }, set bonusOpen(v) { bonusOpen = v; }, get list() { return list; }, get done() { return done; }, set done(v) { done = v; } };
+  const chars = () => Outfit.CHARS.filter(c => { if (rare.includes('char:' + c.id)) return true; if (c.gift) return false; if (c.fase != null) return done > c.fase; const k = REGIONS.findIndex(R => R.id === c.at); return !c.at || (REGIONS[k].bonus ? bonusOpen : isOpen(k)); }).map(c => c.id);
+  return { open, complete, friendPop, finalPop, skipTutorial, rewind, LAST, relayout, ensureBuilt, syncBase, dailyPick, grant, dailyWin, ORDER, DAILY, RARE, chars, get stars() { return stars.slice(); }, totalStars, playable, get dailyCount() { dailyPick(0); return { iniciante: dailyClasses.filter(x => x.id === 'iniciante').length, medio: dailyClasses.filter(x => x.id === 'medio').length }; }, seeded, cardFor, owned, openBonus, bigBang, REGIONS, TOTAL, ALL, PRIZE, BONUS, get bonusOpen() { return bonusOpen; }, set bonusOpen(v) { bonusOpen = v; }, get list() { return list; }, get done() { return done; }, set done(v) { done = v; } };
 })();
 
 /* ---------------------------------------------------------------------
@@ -4559,7 +5001,7 @@ const Daily = (() => {
   });
   paintButton();
   setInterval(paintButton, 60000);     // vira o dia sozinho se o app ficar aberto à meia-noite
-  return { N, card, kindOf, begin, move, save, pause, phaseWon, invite, practiced, replayWon, reopen, redo, elapsed, clock, fmtTime, message, today, hash, closePanel, moods, get running() { return !!run; }, get moves() { return run ? run.moves[run.phase] : 0; } };
+  return { N, card, kindOf, begin, move, save, pause, phaseWon, invite, practiced, play, replayWon, reopen, redo, elapsed, clock, fmtTime, message, today, hash, closePanel, moods, get running() { return !!run; }, get moves() { return run ? run.moves[run.phase] : 0; } };
 })();
 
 /* ---------------------------------------------------------------------
@@ -4951,26 +5393,28 @@ const Tests = {
     await Career.ensureBuilt();
     const CL = Career.list;
     const RC = Career.REGIONS.map(r => r.count);
-    t('carreira: 11 pântanos e 100 fases (+10 do Espaço); começa com um pântano curto', Career.TOTAL === 100 && CL.length === 110 && RC.length === 12 && RC[1] === 8 && RC[8] === 7 && RC[11] === 10, RC.join(' + '));
+    t('carreira: 11 pântanos e 100 fases (+10 do Espaço, +10 do Cemitério, +8 do Amor); começa com um pântano curto', Career.TOTAL === 100 && CL.length === 128 && Career.LAST === 128 && RC.length === 14 && RC[1] === 8 && RC[8] === 7 && RC[11] === 10 && RC[12] === 10 && RC[13] === 8, RC.join(' + '));
     const P = Career.PRIZE, at = (r, n) => P[Career.REGIONS.slice(0, r).reduce((a, R) => a + R.count, 0) + n - 1] || [];
     const last = r => at(r, Career.REGIONS[r].count);
-    t('prêmios da trilha: tutorial 1-3, Vans logo no 3º mapa, chapéu/boné na última fase de cada pântano; 40 apetrechos sem repetir',
-      at(0, 1)[0] === 'cardigan' && at(1, 3)[0] === 'oldskool' && Career.REGIONS.slice(1).every((R, r) => Outfit.BY[last(r + 1)[0]].slot === 'head') && last(10).join() === 'coroa,trofeu'
-      && at(2, 7)[0] === 'woody' && at(7, 7)[0] === 'skate' && new Set(Object.values(P).flat()).size === 40 && Object.values(P).flat().every(id => Outfit.BY[id] && !Outfit.BY[id].rare));
+    t('prêmios da trilha: tutorial 1-3, Vans logo no 3º mapa, chapéu/boné na última fase de cada pântano; 41 apetrechos sem repetir',
+      at(0, 1)[0] === 'cardigan' && at(1, 3)[0] === 'oldskool' && Career.REGIONS.slice(1).filter(R => !R.extra).every((R, r) => Outfit.BY[last(r + 1)[0]].slot === 'head') && last(10).join() === 'coroa,trofeu'
+      && at(2, 7)[0] === 'woody' && at(7, 7)[0] === 'skate' && new Set(Object.values(P).flat()).size === 41 && Object.values(P).flat().every(id => Outfit.BY[id] && !Outfit.BY[id].rare));
     t('prêmios fora da trilha (marcados rare): 10 de pântano com 3★ + 5 da coleção do desafio + kiwi + kits dos amigos; ninguém fica sem jeito de ganhar',
       Outfit.ITEMS.filter(i => i.rare).length === 26 && Object.values(Career.RARE).concat(Career.DAILY.map(d => d[1])).every(id => Outfit.BY[id] && Outfit.BY[id].rare)
       && Outfit.ITEMS.every(it => Career.ORDER.includes(it.id)) && Career.ORDER.length === Outfit.ITEMS.length);
     t('estrelas: 3 no mínimo, 2 com +1, 1 acima', starsFor(5, 5) === 3 && starsFor(6, 5) === 2 && starsFor(7, 5) === 1 && starsFor(10, 5) === 1);
     t('tutorial com 1, 2 e 3 sapos verdes', [0, 1, 2].every(i => Rules.greens(CL[i].start) === i + 1));
-    t('todas as fases da carreira têm solução', CL.filter(l => !Career.REGIONS[l.region].bonus).every(l => !!Solver.solve(l.start)));
+    t('todas as fases da carreira têm solução', CL.filter(l => !Career.REGIONS[l.region].bonus && !Career.REGIONS[l.region].extra).every(l => !!Solver.solve(l.start)));
+    const XL = CL.filter(l => Career.REGIONS[l.region].extra);
+    t('Cemitério (cruz) e Amor (coração): 18 fases com solução conferida no tabuleiro do formato', XL.length === 18 && XL.every(l => l.valid && l.solution.length === Rules.greens(l.start) && ['cruzP', 'cruz', 'coracao'].includes(l.start.n)));
     const BL = CL.filter(l => Career.REGIONS[l.region].bonus);
     t('tabuleiros bônus: 4×4 com 25 casas/96 saltos e 5×5 com 41 casas/192 saltos (casas do meio pulam na horizontal e na vertical)', BigGeo(4).N === 25 && BigGeo(4).JUMPS.length === 96 && BigGeo(5).N === 41 && BigGeo(5).JUMPS.length === 192 && BigGeo(3) === Geo && Geo.JUMPS.length === 32);
     t('10 fases bônus (5 em 4×4, 5 em 5×5), cada solução conferida jogada a jogada até sobrar só o vermelho',
       BL.length === 10 && BL.every((l, i) => l.valid && l.start.n === (i < 5 ? 4 : 5) && l.solution.length === Rules.greens(l.start)));
     t('fases de cada pântano com a quantidade de verdes planejada (dificuldade subindo devagar) e sem repetir desenho',
-      Career.REGIONS.slice(1).filter(R => !R.bonus).every((R, ri) => { const f = CL.filter(l => l.region === ri + 1); return f.length === R.g.length && f.every((l, i) => Rules.greens(l.start) === R.g[i]); })
-      && Career.REGIONS.slice(1).filter(R => !R.bonus).every((R, ri) => Math.max(...R.g) <= Math.min(...(Career.REGIONS[ri + 2] && Career.REGIONS[ri + 2].g || [99])) + 1)
-      && new Set(CL.filter(l => !Career.REGIONS[l.region].bonus).map(l => Rules.key(l.start))).size === CL.filter(l => !Career.REGIONS[l.region].bonus).length);
+      Career.REGIONS.slice(1).filter(R => !R.bonus && !R.extra).every((R, ri) => { const f = CL.filter(l => l.region === ri + 1); return f.length === R.g.length && f.every((l, i) => Rules.greens(l.start) === R.g[i]); })
+      && Career.REGIONS.slice(1).filter(R => !R.bonus && !R.extra).every((R, ri) => Math.max(...R.g) <= Math.min(...(Career.REGIONS[ri + 2] && Career.REGIONS[ri + 2].g || [99])) + 1)
+      && new Set(CL.filter(l => !Career.REGIONS[l.region].bonus && !Career.REGIONS[l.region].extra).map(l => Rules.key(l.start))).size === CL.filter(l => !Career.REGIONS[l.region].bonus && !Career.REGIONS[l.region].extra).length);
     // sorteio dos desenhos (mesma data, mesmo desenho)
     const days = ['2026-10-21', '2026-10-22', '2026-12-25', '2027-01-01'];
     const picks = days.map(d => Career.dailyPick(Daily.hash('froggo-daily-' + d)));
@@ -4996,7 +5440,7 @@ const Tests = {
     const far = Daily.message({ date: '2026-10-21', moves: [5, 4, 69, 7, 4], mins: [5, 4, 7, 7, 4] }).split('\n')[2];
     t('desafio do dia: nota pela soma dos pulos (um mapa ruim derruba o total)', far === 'Total: 89 pulos ⭐⚪⚪', far);
     t('personagens: sapo + 6 amigos, cada um chega com um pântano e desenha com qualquer apetrecho',
-      Outfit.CHARS.length === 13 && Outfit.CHARS.slice(1).every(c => (c.gift || c.fase != null || Career.REGIONS.some(R => R.id === c.at)) && Art.creature(c.id, { outfit: { head: 'bolovo', eyes: 'oculos', torso: 'traje' } }).startsWith('<svg')));
+      Outfit.CHARS.length === 18 && Outfit.CHARS.slice(1).every(c => (c.gift || c.fase != null || Career.REGIONS.some(R => R.id === c.at)) && Art.creature(c.id, { outfit: { head: 'bolovo', eyes: 'oculos', torso: 'traje' } }).startsWith('<svg')));
     // 11. áudio
     t('áudio não é criado antes de um gesto', window.__frogGesture ? true : Sound.ctx === null, window.__frogGesture ? 'houve gesto antes do teste' : 'sem gesto: sem AudioContext');
     return { out, fails };
