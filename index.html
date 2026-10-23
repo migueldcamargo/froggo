@@ -872,7 +872,7 @@ canvas.bigbang{position:absolute;inset:0;width:100%;height:100%;z-index:400;poin
 
 <script>
 'use strict';
-const BUILD = '2026-10-23.1048';      // versão publicada: trocada pela data e hora a cada publicação (ver Update, no fim); 'dev' não confere
+const BUILD = '2026-10-23.1053';      // versão publicada: trocada pela data e hora a cada publicação (ver Update, no fim); 'dev' não confere
 /* =====================================================================
    FROGGO — jogo de sapos saltadores (peg-solitaire), arquivo único e offline.
    Módulos (todos neste arquivo): Store · Geo · Rules · Solver · Gen ·
@@ -1565,7 +1565,7 @@ ${dim ? '' : `<path d="M${x - r * .32} ${y - r * .42} q${r * .12} -${r * .14} ${
    A ordem da lista é a ordem dos prêmios (do mais simples ao mais nobre).
    --------------------------------------------------------------------- */
 const Outfit = (() => {
-  // itens dupla face (Bucket Kiwi): lado em uso no sapo verde (g) e no vermelho (r); 0 = frente, 1 = verso
+  // itens dupla face (Cata-Ovo): lado em uso no sapo verde (g) e no vermelho (r); 0 = frente, 1 = verso
   let flip = Store.get('flip', {}); if (!flip || typeof flip !== 'object') flip = {};
   const side = (id, red) => (flip[id] || {})[red ? 'r' : 'g'] || 0;
   const kiwiSil = (x, y, s, c) => `<g transform="translate(${x} ${y}) scale(${s})" fill="${c}" stroke="${c}"><ellipse cx="0" cy="0" rx="3" ry="2.5" stroke="none"/><circle cx="2.5" cy="-1.3" r="1.25" stroke="none"/><path d="M3.5 -1 Q6.2 .4 6.9 3" fill="none" stroke-width=".75" stroke-linecap="round"/><path d="M-.7 2 V4 M-.7 4 h-.9 M.9 2 V4 M.9 4 h-.9" fill="none" stroke-width=".7" stroke-linecap="round"/></g>`;
@@ -2010,7 +2010,7 @@ ${vest}<g transform="translate(100 0) scale(-1 1)">${vest}</g>
 <ellipse cx="89" cy="66" rx="13" ry="11.2" fill="#8cc63f"/><ellipse cx="89" cy="66" rx="11" ry="9.4" fill="#a9d856"/><path d="${rays}" stroke="#c9ea8a" stroke-width=".6" opacity=".8"/>
 <ellipse cx="89" cy="66" rx="3.4" ry="3" fill="#f2f4d6"/>${seeds}<ellipse cx="84" cy="61" rx="3.6" ry="1.6" fill="#fff" opacity=".35" transform="rotate(-25 84 61)"/>`;
       } },
-    { id: 'bucket', name: 'Bucket Kiwi', slot: 'head', layer: 'top', flip: true, box: '13 -11 74 40',
+    { id: 'bucket', name: 'Cata-Ovo', slot: 'head', layer: 'top', flip: true, box: '13 -11 74 40',
       // chapéu cata-ovo dupla face, par do Kiwi: frente verde com kiwis pretos, verso preto com kiwis verdes (2º toque vira)
       svg: red => {
         const [base, dark, print, k] = side('bucket', red) ? ['#1a1a1a', '#000', '#6fd05a', 'p'] : ['#6fd05a', '#2f7a22', '#111', 'v'];
@@ -3394,8 +3394,8 @@ const Career = (() => {
     const at = (r, n, ...ids) => { PRIZE[S[r] + n - 1] = ids; };      // pântano r, mapa n
     at(0, 1, 'cardigan'); at(0, 2, 'loafer'); at(0, 3, 'celular');
     at(1, 3, 'oldskool'); at(1, 6, 'oculos'); at(1, 8, 'bolovo');                       // Tranquilo
-    at(2, 2, 'bucket'); at(2, 4, 'linus'); at(2, 7, 'woody'); at(2, 10, 'chapeuwoody');   // Monte Mor (o bucket é o par do Kiwi)
-    at(3, 4, 'havaianas'); at(3, 7, 'picole'); at(3, 10, 'bellato');                   // Praia
+    at(2, 4, 'linus'); at(2, 7, 'woody'); at(2, 10, 'chapeuwoody');                    // Monte Mor
+    at(3, 4, 'havaianas'); at(3, 7, 'picole'); at(3, 8, 'bucket'); at(3, 10, 'bellato');   // Praia (o Cata-Ovo é o par do Kiwi)
     at(4, 5, 'zerezes'); at(4, 10, 'cartola');                                         // Nebuloso
     at(5, 5, 'coracao'); at(5, 10, 'pirata');                                          // Carnaval
     at(6, 4, 'pochete'); at(6, 7, 'bandana'); at(6, 10, 'coque');                      // Porradinha
@@ -3500,6 +3500,8 @@ const Career = (() => {
   const owned = () => Object.keys(PRIZE).filter(i => +i < done).flatMap(i => PRIZE[i]).concat(rare, kits());
   // quem já fechou pântanos inteiros com 3★ (inclusive na passagem para a trilha nova) recebe o premium deles
   REGIONS.forEach((R, r) => { const g = RARE[R.id]; if (g && done >= START[r] + R.count && stars.slice(START[r], START[r] + R.count).every(v => v === 3) && !rare.includes(g)) { rare.push(g); Store.set('rare', rare); } });
+  // o Cata-Ovo saiu da fase 13 (Monte Mor) para a 29 (Praia): quem já tinha passado da 13 continua com ele
+  if (!Store.get('bucketMove', false)) { if (done > 12 && done <= 28 && !rare.includes('bucket')) { rare.push('bucket'); Store.set('rare', rare); } Store.set('bucketMove', true); }
   // desafio do dia com 3★: conta mais uma vez e entrega o que a coleção já liberou (devolve os itens novos ou null)
   function dailyWin() {
     const n = (+Store.get('daily3', 0) || 0) + 1, mine = owned(); Store.set('daily3', n);
