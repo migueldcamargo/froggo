@@ -426,6 +426,10 @@ canvas.confetti{position:absolute;inset:0;width:100%;height:100%;pointer-events:
 .prize-won{display:flex;align-items:center;gap:.5rem;padding:.4rem .8rem;border-radius:1rem;background:#fff4c2;box-shadow:inset 0 0 0 2px #ffd23f;font-weight:900;font-size:.92rem}
 .prize-won svg{width:2.4rem;height:2.4rem;flex:none}
 .prize-won{flex-wrap:wrap;justify-content:center}
+.prize-won .pwho{flex:0 0 100%;display:flex;justify-content:center}
+.prize-won .pwho svg{width:5.6rem;height:5.6rem;overflow:visible}
+.btn.career.nudge{animation:nudgeO 1.1s ease-in-out infinite}      /* "Mais itens" chamando o toque */
+@keyframes nudgeO{50%{transform:scale(1.07);box-shadow:0 0 0 .3rem rgba(255,210,63,.85),0 .28rem 0 #a84700,0 .5rem 1rem rgba(0,30,70,.3)}}
 .use-now{flex:none;padding:.3rem .8rem;border-radius:999px;background:#2fbf3a;color:#fff;font-weight:900;font-size:.85rem;box-shadow:0 .15rem 0 #13701a}
 .use-now.on{background:#e8f1f8;color:#0b2545;box-shadow:0 .15rem 0 #b7c7d6}
 .go-ward{flex:none;padding:.3rem .8rem;border-radius:999px;background:#0b6fc9;color:#fff;font-weight:900;font-size:.85rem;box-shadow:0 .15rem 0 #0b4f8f}
@@ -856,7 +860,7 @@ canvas.bigbang{position:absolute;inset:0;width:100%;height:100%;z-index:400;poin
 
 <script>
 'use strict';
-const BUILD = '2026-10-22.2219';      // versão publicada: trocada pela data e hora a cada publicação (ver Update, no fim); 'dev' não confere
+const BUILD = '2026-10-23.0551';      // versão publicada: trocada pela data e hora a cada publicação (ver Update, no fim); 'dev' não confere
 /* =====================================================================
    FROGGO — jogo de sapos saltadores (peg-solitaire), arquivo único e offline.
    Módulos (todos neste arquivo): Store · Geo · Rules · Solver · Gen ·
@@ -4111,8 +4115,10 @@ const Daily = (() => {
   function openPanel(justWon, just, prize) {
     afterWin = !!justWon;
     $('dPrize').hidden = !prize;
-    if (prize) $('dPrize').innerHTML = prize.map(prizeArt).join('') + `<span>Você ganhou: ${[...new Set(prize.map(prizeName))].join(', ').replace(/, ([^,]*)$/, ' e $1')}!</span><button type="button" class="use-now" data-ids="${prize.join(',')}">Usar agora</button><button type="button" class="go-ward">Guarda-roupa</button>`;
+    // o personagem como está agora, ao lado do prêmio; muda na hora em "Usar agora" / "Remover"
+    if (prize) $('dPrize').innerHTML = `<div class="pwho">${Art.frog('green', { outfit: Outfit.worn, char: Outfit.char })}</div>` + prize.map(prizeArt).join('') + `<span>Você ganhou: ${[...new Set(prize.map(prizeName))].join(', ').replace(/, ([^,]*)$/, ' e $1')}!</span><button type="button" class="use-now" data-ids="${prize.join(',')}">Usar agora</button><button type="button" class="go-ward">Guarda-roupa</button>`;
     $('dCareerTxt').textContent = prize ? 'Mais itens' : 'Carreira';      // ganhou item no desafio: a trilha é onde saem os outros
+    $('btnDailyCareer').classList.toggle('nudge', !!prize);                // e o botão chama o toque para seguir
     const r = just || result(), d = just ? just.date : today();
     $('dCalDay').textContent = String(+d.slice(8));
     $('dDate').textContent = dateBR(d, true);
@@ -4288,6 +4294,8 @@ const Daily = (() => {
     if (e.target.closest('.go-ward')) { Sound.click(); Wardrobe.open(); return; }
     const b = e.target.closest('.use-now'); if (!b) return;
     Outfit.toggleUse(b); b.classList.contains('on') ? Sound.pick() : Sound.click();
+    const who = $('dPrize').querySelector('.pwho');
+    if (who) { who.innerHTML = Art.frog('green', { outfit: Outfit.worn, char: Outfit.char }); if (!reduceMotion()) animate(who, [{ transform: 'scale(.8)' }, { transform: 'scale(1.15)' }, { transform: 'scale(1)' }], { duration: 380, easing: 'ease-out' }); }
   });
   paintButton();
   setInterval(paintButton, 60000);     // vira o dia sozinho se o app ficar aberto à meia-noite
