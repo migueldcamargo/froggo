@@ -909,7 +909,7 @@ canvas.bigbang{position:absolute;inset:0;width:100%;height:100%;z-index:400;poin
 
 <script>
 'use strict';
-const BUILD = '2026-10-23.1241';      // versão publicada: trocada pela data e hora a cada publicação (ver Update, no fim); 'dev' não confere
+const BUILD = '2026-10-23.1316';      // versão publicada: trocada pela data e hora a cada publicação (ver Update, no fim); 'dev' não confere
 /* =====================================================================
    FROGGO — jogo de sapos saltadores (peg-solitaire), arquivo único e offline.
    Módulos (todos neste arquivo): Store · Geo · Rules · Solver · Gen ·
@@ -1258,7 +1258,7 @@ const Art = {
      (31,26)/(69,26), corpo em (50,66), pés em y≈86 — para todos os apetrechos servirem em todos. */
   creature(kind, opts = {}) {
     const o = opts.outfit || {};
-    const L = Outfit.layers(o, false);
+    const L = Outfit.layers(o, !!opts.red);
     const g = (id, a, b, c) => `<radialGradient id="${id}" cx="40%" cy="32%" r="75%"><stop offset="0" stop-color="${a}"/><stop offset=".6" stop-color="${b}"/><stop offset="1" stop-color="${c}"/></radialGradient>`;
     const eyes = (iris = '#0d1b26', lid = null, ring = null) => `${ring ? `<circle cx="31" cy="27" r="14" fill="${ring}"/><circle cx="69" cy="27" r="14" fill="${ring}"/>` : ''}
   <circle cx="31" cy="26" r="11" fill="url(#eyeW)"/><circle cx="69" cy="26" r="11" fill="url(#eyeW)"/>
@@ -1416,7 +1416,7 @@ const Art = {
 <g class="fbody">${L.back}${back}${body}${L.head}${face}${L.under}${L.shoes ? '' : feet}${L.front}${L.eyes}${L.hand}${L.top}</g></svg>`);
   },
   frog(color, opts = {}) {
-    if (opts.char && opts.char !== 'sapo') return Art.creature(opts.char, opts);     // personagem escolhido no guarda-roupa
+    if (opts.char && opts.char !== 'sapo') return Art.creature(opts.char, { ...opts, red: color === 'red' });     // personagem escolhido no guarda-roupa (red: no lugar do vermelho, para o lado do cata-ovo)
     const red = color === 'red';
     const B = red ? 'rB' : 'gB', D = red ? 'rD' : 'gD', Y = red ? 'rY' : 'gY';
     const line = red ? '#5c0808' : '#0f3d12';
@@ -2148,7 +2148,7 @@ ${zig}<path d="${band}" fill="${W}" stroke="${WD}" stroke-width="1"/>
 <path d="M30 14.6 Q50 10 70 14.6" stroke="${R}" stroke-width="2.4" fill="none"/>
 <path d="M33 3.6 Q37 .4 42 -.4" stroke="#fff" stroke-width="1.4" opacity=".5" fill="none" stroke-linecap="round"/></g>`;
     } },
-    { id: 'juju', name: 'Juju', slot: 'eyes', box: '9 16 82 22',
+    { id: 'juju', name: 'Lupa', slot: 'eyes', box: '9 16 82 22',
     svg: () => {
       // Oakley Juliet de frente: lentes finas e alongadas com quinas marcadas em cima (degradê roxo → dourado espelhado), aro fino de
       // metal com a borda de cima mais grossa, ponte em X com dois rebites, pino escuro na dobradiça, "pezinho" embaixo e plaquetas pretas
@@ -2217,6 +2217,7 @@ ${zig}<path d="${band}" fill="${W}" stroke="${WD}" stroke-width="1"/>
   return {
     ITEMS, BY, GROUP, layers, preview, flies, big,
     get worn() { return { ...worn }; },
+    get flipKey() { return JSON.stringify(flip); },      // lado em uso dos itens dupla face (refaz a trilha quando vira)
     get wornRed() { return { ...wornRed }; },
     CHARS, get char() { return char; }, get charRed() { return charRed; },
     // verde e vermelho não podem ser o mesmo personagem (no tabuleiro ficaria confuso); o sapo pode nos dois. Devolve false se recusou
@@ -2822,7 +2823,7 @@ const UI = (() => {
   // ---- telas ----
   function show(id) {
     if (id === 'home' && window.wardNew) wardNew();
-    if (id === 'home') { const k = JSON.stringify([Outfit.worn, Outfit.wornRed, Outfit.char, Outfit.charRed]); if (k !== heroKey) { heroKey = k; $('heroArt').innerHTML = Art.heroScene(); if (window.heroZoom) heroZoom.reset(); } }   // só redesenha se a roupa mudou
+    if (id === 'home') { const k = JSON.stringify([Outfit.worn, Outfit.wornRed, Outfit.char, Outfit.charRed, Outfit.flipKey]); if (k !== heroKey) { heroKey = k; $('heroArt').innerHTML = Art.heroScene(); if (window.heroZoom) heroZoom.reset(); } }   // só redesenha se a roupa mudou
     document.querySelectorAll('.screen').forEach(s => s.classList.toggle('active', s.id === id));
     app.scrollTop = 0;                               // o foco num botão de painel pode ter rolado o contêiner
     $('bubbles').hidden = id === 'career' || id === 'wardrobe';   // telas que cobrem o fundo: bolhas desligadas
@@ -4048,7 +4049,7 @@ ${portalPos ? `<path d="M${finalPos.x} ${finalPos.y} L${portalPos.x} ${portalPos
     key.remove();
     if (!rm) await animate(ban, [{ transform: `${T} scale(1.35)` }, { transform: `${T} scale(1)` }], { duration: 300, easing: 'ease-in', fill: 'forwards' });
     opened.push(r); Store.set('opened', opened);
-    render(); mapKey = [map.clientWidth, done, bonusOpen, JSON.stringify(Outfit.worn), Outfit.char, stars.join('')].join('|');
+    render(); mapKey = [map.clientWidth, done, bonusOpen, JSON.stringify(Outfit.worn), Outfit.flipKey, Outfit.char, stars.join('')].join('|');
     placeAvatar(done - 1); scrollToIdx(done - 1, false);
     await wait(250);
     await hop(done - 1, done);
@@ -4074,8 +4075,8 @@ ${kit.length ? `<p class="wmin">Vem com: <b>${kit.map(id => Outfit.BY[id].name).
     UI.hideOverlays();
     UI.show('career');
     await ensureBuilt();
-    // a trilha só é refeita se algo mudou (largura, progresso, bônus ou roupa do sapo)
-    const key = [map.clientWidth, done, bonusOpen, JSON.stringify(Outfit.worn), Outfit.char, stars.join('')].join('|');
+    // a trilha só é refeita se algo mudou (largura, progresso, bônus ou roupa do sapo, inclusive o lado do cata-ovo)
+    const key = [map.clientWidth, done, bonusOpen, JSON.stringify(Outfit.worn), Outfit.flipKey, Outfit.char, stars.join('')].join('|');
     if (key !== mapKey) { render(); mapKey = key; } else syncBase();
     const from = opts.hopFrom;
     if (from != null && from + 1 === done && done < limit() && !playable(done)) {      // pântano fechado: o sapo fica na última fase
