@@ -426,8 +426,20 @@ canvas.confetti{position:absolute;inset:0;width:100%;height:100%;pointer-events:
 .prize-won{display:flex;align-items:center;gap:.5rem;padding:.4rem .8rem;border-radius:1rem;background:#fff4c2;box-shadow:inset 0 0 0 2px #ffd23f;font-weight:900;font-size:.92rem}
 .prize-won svg{width:2.4rem;height:2.4rem;flex:none}
 .prize-won{flex-wrap:wrap;justify-content:center}
-.prize-won .pwho{flex:0 0 100%;display:flex;justify-content:center}
-.prize-won .pwho svg{width:5.6rem;height:5.6rem;overflow:visible}
+.gift-ov{z-index:60;background:rgba(0,20,40,.35)}
+.panel.gift{width:min(100%,19rem);display:flex;flex-direction:column;align-items:center;gap:.6rem;text-align:center;padding:1.4rem 1rem 1.1rem;
+  background:radial-gradient(circle at 50% 38%,#fff8d0 0 28%,transparent 62%),repeating-conic-gradient(from 0deg at 50% 38%,#ffd84a 0 9deg,#ffc21f 9deg 18deg);
+  box-shadow:0 0 0 .3rem #fff,0 0 0 .55rem #ff9a1f,0 1rem 2.4rem rgba(0,20,40,.45)}
+.gift .grib{font:900 1.05rem/1 var(--font, inherit);letter-spacing:.06em;text-transform:uppercase;color:#fff;background:#e5262b;padding:.5rem 1.1rem;border-radius:.6rem;box-shadow:0 .2rem 0 #8a0f12;transform:rotate(-3deg)}
+.gift .gwho{width:7.5rem;height:7.5rem}
+.gift .gwho svg{width:100%;height:100%;overflow:visible}
+.gift .gitems{display:flex;flex-wrap:wrap;justify-content:center;gap:.5rem}
+.gift .gi{display:flex;flex-direction:column;align-items:center;gap:.15rem;background:#fffdf4;border-radius:.9rem;padding:.4rem .6rem;box-shadow:0 .15rem 0 rgba(0,0,0,.15);min-width:4.4rem}
+.gift .gi svg{width:2.8rem;height:2.8rem;overflow:visible}
+.gift .gi b{font-size:.78rem;font-weight:900;color:#0b2545}
+.gift .row{display:flex;gap:.5rem;width:100%}
+.gift .row .btn{flex:1 1 0;min-width:0;font-size:.95rem;padding:.6rem .4rem}
+.gift .btn.soft{background:#e8f1f8;color:#0b2545;text-shadow:none;box-shadow:0 .2rem 0 #b7c7d6}
 .btn.career.nudge{animation:nudgeO 1.1s ease-in-out infinite}      /* "Mais itens" chamando o toque */
 @keyframes nudgeO{50%{transform:scale(1.07);box-shadow:0 0 0 .3rem rgba(255,210,63,.85),0 .28rem 0 #a84700,0 .5rem 1rem rgba(0,30,70,.3)}}
 .use-now{flex:none;padding:.3rem .8rem;border-radius:999px;background:#2fbf3a;color:#fff;font-weight:900;font-size:.85rem;box-shadow:0 .15rem 0 #13701a}
@@ -860,7 +872,7 @@ canvas.bigbang{position:absolute;inset:0;width:100%;height:100%;z-index:400;poin
 
 <script>
 'use strict';
-const BUILD = '2026-10-23.0551';      // versão publicada: trocada pela data e hora a cada publicação (ver Update, no fim); 'dev' não confere
+const BUILD = '2026-10-23.0605';      // versão publicada: trocada pela data e hora a cada publicação (ver Update, no fim); 'dev' não confere
 /* =====================================================================
    FROGGO — jogo de sapos saltadores (peg-solitaire), arquivo único e offline.
    Módulos (todos neste arquivo): Store · Geo · Rules · Solver · Gen ·
@@ -4114,9 +4126,7 @@ const Daily = (() => {
   const prizeName = id => id.startsWith('char:') ? Outfit.CHARS.find(c => c.id === id.slice(5)).name : Outfit.BY[id].name;
   function openPanel(justWon, just, prize) {
     afterWin = !!justWon;
-    $('dPrize').hidden = !prize;
-    // o personagem como está agora, ao lado do prêmio; muda na hora em "Usar agora" / "Remover"
-    if (prize) $('dPrize').innerHTML = `<div class="pwho">${Art.frog('green', { outfit: Outfit.worn, char: Outfit.char })}</div>` + prize.map(prizeArt).join('') + `<span>Você ganhou: ${[...new Set(prize.map(prizeName))].join(', ').replace(/, ([^,]*)$/, ' e $1')}!</span><button type="button" class="use-now" data-ids="${prize.join(',')}">Usar agora</button><button type="button" class="go-ward">Guarda-roupa</button>`;
+    $('dPrize').hidden = true;      // o prêmio aparece numa janela própria de conquista (giftPop), por cima do resultado
     $('dCareerTxt').textContent = prize ? 'Mais itens' : 'Carreira';      // ganhou item no desafio: a trilha é onde saem os outros
     $('btnDailyCareer').classList.toggle('nudge', !!prize);                // e o botão chama o toque para seguir
     const r = just || result(), d = just ? just.date : today();
@@ -4147,6 +4157,33 @@ const Daily = (() => {
       }
     }
     $('ovDaily').classList.add('show'); Base.dim(true);
+    if (prize && justWon) giftPop(prize);
+  }
+  /* "Novo item!" / "Novos itens!": janela menor, por cima do resultado do dia, só para o que foi ganho. Mostra o personagem (muda na hora
+     em "Usar agora"), os itens e o guarda-roupa; fechando, a pessoa vê o resultado do dia, com "Mais itens" pulsando. */
+  function giftPop(prize) {
+    const title = prize.length > 1 ? 'Novos itens!' : 'Novo item!';
+    const ov = document.createElement('div'); ov.className = 'overlay show gift-ov'; ov.setAttribute('role', 'dialog'); ov.setAttribute('aria-modal', 'true'); ov.setAttribute('aria-label', title);
+    const who = () => Art.frog('green', { outfit: Outfit.worn, char: Outfit.char });
+    ov.innerHTML = `<div class="panel gift"><button class="dclose" type="button" data-k="x" aria-label="Fechar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+<div class="grib">${title}</div><div class="gwho">${who()}</div>
+<div class="gitems">${prize.map(id => `<span class="gi">${prizeArt(id)}<b>${prizeName(id)}</b></span>`).join('')}</div>
+<div class="row"><button type="button" class="btn green use-now" data-ids="${prize.join(',')}">Usar agora</button><button type="button" class="btn blue" data-k="w">Guarda-roupa</button></div></div>`;
+    $('ovWin').parentNode.appendChild(ov); Sound.sparkle();
+    if (!reduceMotion()) animate(ov.querySelector('.gift'), [{ transform: 'scale(.6) rotate(-4deg)', opacity: 0 }, { transform: 'scale(1.06) rotate(1deg)', opacity: 1, offset: .7 }, { transform: 'scale(1)' }], { duration: 480, easing: 'ease-out' });
+    ov.addEventListener('click', e => {
+      const use = e.target.closest('.use-now');
+      if (use) {
+        Outfit.toggleUse(use); use.classList.contains('on') ? Sound.pick() : Sound.click();
+        use.classList.toggle('green', !use.classList.contains('on')); use.classList.toggle('soft', use.classList.contains('on'));
+        const w = ov.querySelector('.gwho'); w.innerHTML = who();
+        if (!reduceMotion()) animate(w, [{ transform: 'scale(.8)' }, { transform: 'scale(1.15)' }, { transform: 'scale(1)' }], { duration: 380, easing: 'ease-out' });
+        return;
+      }
+      const b = e.target.closest('[data-k]'); if (!b && e.target !== ov) return;
+      Sound.click(); ov.remove();
+      if (b && b.dataset.k === 'w') Wardrobe.open();
+    });
   }
   /* No Android, o desvio wa.me → api.whatsapp.com estraga emojis (o 🐸 vira "?"); lá o link abre o app
      direto pelo esquema whatsapp://, que entrega o texto intacto. No iPhone o wa.me funciona bem. */
