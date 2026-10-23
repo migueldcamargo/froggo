@@ -632,6 +632,7 @@ canvas.bigbang{position:absolute;inset:0;width:100%;height:100%;z-index:400;poin
 .app.skin-nebuloso{background:radial-gradient(60% 30% at 20% 30%, rgba(255,255,255,.7), transparent 70%),radial-gradient(60% 30% at 85% 70%, rgba(255,255,255,.55), transparent 70%),linear-gradient(180deg,#9fd8ff 0,#c9d6ee calc(var(--sat) + 8rem),#a9b8d8 60%,#7f90b8)}
 .app.skin-carnaval{background:radial-gradient(70% 40% at 15% 20%, rgba(255,210,63,.35), transparent 70%),linear-gradient(180deg,#4fd2ff 0,#b56bff calc(var(--sat) + 6rem),#e0559f 60%,#a8287a)}
 .app.skin-festa{background:radial-gradient(70% 40% at 80% 25%, rgba(255,106,213,.35), transparent 65%),radial-gradient(60% 35% at 15% 80%, rgba(111,208,255,.3), transparent 65%),linear-gradient(180deg,#4fd2ff 0,#5a3fc0 calc(var(--sat) + 5rem),#2e1a78 50%,#170b3d)}
+.app.skin-esgoto{background:radial-gradient(40% 18% at 15% 92%, rgba(159,224,58,.45), transparent 70%),radial-gradient(35% 14% at 85% 70%, rgba(159,224,58,.35), transparent 70%),radial-gradient(30% 12% at 70% 20%, rgba(159,224,58,.25), transparent 70%),linear-gradient(180deg,#5d8a3a 0,#3f6a24 calc(var(--sat) + 6rem),#2c4e18 55%,#1a3010)}
 .app.skin-cemiterio{background:radial-gradient(60% 30% at 80% 8%, rgba(255,243,184,.25), transparent 70%),linear-gradient(180deg,#3a3456 0,#2c2840 calc(var(--sat) + 6rem),#1e1a2c 60%,#110e19)}
 .app.skin-amor{background:radial-gradient(70% 40% at 20% 85%, rgba(255,255,255,.25), transparent 70%),linear-gradient(180deg,#ffb3cf 0,#ff8ab4 calc(var(--sat) + 6rem),#ff6fa3 55%,#e8558d)}
 .app.skin-skatepark{background:radial-gradient(70% 40% at 80% 90%, rgba(255,106,19,.22), transparent 70%),linear-gradient(180deg,#4fd2ff 0,#a9b4c2 calc(var(--sat) + 6rem),#8a95a4 55%,#5f6a79)}
@@ -925,7 +926,7 @@ canvas.bigbang{position:absolute;inset:0;width:100%;height:100%;z-index:400;poin
 
 <script>
 'use strict';
-const BUILD = '2026-10-23.1706';      // versão publicada: trocada pela data e hora a cada publicação (ver Update, no fim); 'dev' não confere
+const BUILD = '2026-10-23.1750';      // versão publicada: trocada pela data e hora a cada publicação (ver Update, no fim); 'dev' não confere
 /* =====================================================================
    FROGGO — jogo de sapos saltadores (peg-solitaire), arquivo único e offline.
    Módulos (todos neste arquivo): Store · Geo · Rules · Solver · Gen ·
@@ -1668,6 +1669,13 @@ ${detail ? `<g stroke="#0b4a44" stroke-opacity=".35" stroke-width=".3" stroke-li
 <path d="M${(-r * .62).toFixed(2)} ${(r * .1).toFixed(2)} A${(r * .64).toFixed(2)} ${(r * .64).toFixed(2)} 0 0 1 ${(-r * .2).toFixed(2)} ${(-r * .6).toFixed(2)}" stroke="#fff" stroke-opacity=".3" stroke-width=".55" fill="none" stroke-linecap="round"/>` : ''}
 </g>`;
   },
+  // gosma verde escorrendo da borda de cima e poças nos cantos (tabuleiro do Esgoto)
+  goo() {
+    const drips = [[8, 9], [19, 15], [31, 7], [44, 19], [57, 10], [69, 16], [81, 8], [92, 13]].map(([x, h]) => `<path d="M${x - 3.6} 1 Q${x - 3} ${h * .6} ${x - 1.4} ${h} Q${x} ${h + 3.2} ${x + 1.4} ${h} Q${x + 3} ${h * .6} ${x + 3.6} 1 Z" fill="#a8ff3e"/><circle cx="${x}" cy="${h + 3.6}" r="1.3" fill="#a8ff3e" opacity=".85"/><ellipse cx="${x - 1}" cy="${h * .55}" rx=".7" ry="${(h * .25).toFixed(1)}" fill="#e6ffb8" opacity=".6"/>`).join('');
+    const pools = [[12, 92, 9, 3], [86, 93, 11, 3.4], [50, 95, 7, 2]].map(([x, y, rx, ry]) => `<ellipse cx="${x}" cy="${y}" rx="${rx}" ry="${ry}" fill="#a8ff3e" opacity=".75"/><ellipse cx="${x - rx * .3}" cy="${y - ry * .3}" rx="${rx * .35}" ry="${ry * .3}" fill="#e6ffb8" opacity=".55"/>`).join('');
+    const bubbles = [[24, 40], [74, 60], [40, 78], [88, 32], [10, 58]].map(([x, y]) => `<circle cx="${x}" cy="${y}" r="1.2" fill="none" stroke="#d6ff9a" stroke-width=".4" opacity=".6"/>`).join('');
+    return `<defs><clipPath id="gooClip"><rect x=".8" y=".8" width="98.4" height="96" rx="11"/></clipPath></defs><g clip-path="url(#gooClip)">${pools}${bubbles}<path d="M.8 6 Q.8 .8 12 .8 H88 Q99.2 .8 99.2 6 V3.4 H.8 Z" fill="#a8ff3e"/>${drips}</g>`;
+  },
   boardLines(stroke, w, hl, G = Geo) {
     let s = '';
     for (const l of G.LINES) {
@@ -1707,12 +1715,12 @@ ${dim ? '' : `<path d="M${x - r * .32} ${y - r * .42} q${r * .12} -${r * .14} ${
       avancado: ['#6476bd', '#2c3572', '#191e4a', '#c3ccff'], expert: ['#86753a', '#3d3416', '#221c08', '#e3d394'],
       montemor: ['#a8d870', '#5f9a35', '#3a6a1c', '#efffd0'], praia: ['#ffe2a0', '#e2b45e', '#9a742a', '#fff7dc'], nebuloso: ['#e3ebf8', '#a7b6d6', '#6b7ba0', '#ffffff'],
       carnaval: ['#ff8fd0', '#c23f98', '#73185e', '#ffe0f4'], festa: ['#8268ff', '#3d24a8', '#1f1260', '#ddd2ff'], skatepark: ['#cfd6df', '#8e99a8', '#525c6b', '#f4f6f9'],
-      cemiterio: ['#7d76a0', '#3e3858', '#221e33', '#e0dcff'], amor: ['#ffc2da', '#ff6fa3', '#b81f55', '#fff0f6'] }[theme];
+      cemiterio: ['#7d76a0', '#3e3858', '#221e33', '#e0dcff'], esgoto: ['#5f8a3c', '#2e5220', '#1a3010', '#c6f07a'], amor: ['#ffc2da', '#ff6fa3', '#b81f55', '#fff0f6'] }[theme];
     if (SK) return `<svg class="bsvg" viewBox="0 0 100 100" aria-hidden="true"><defs><linearGradient id="bdSkin" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${SK[0]}"/><stop offset="1" stop-color="${SK[1]}"/></linearGradient></defs>
 <rect x=".8" y="2.6" width="98.4" height="96.8" rx="11" fill="${SK[2]}"/>
 <rect x=".8" y=".8" width="98.4" height="96" rx="11" fill="url(#bdSkin)" stroke="${SK[3]}" stroke-opacity=".7" stroke-width=".6"/>
 <rect x=".8" y=".8" width="98.4" height="96" rx="11" fill="url(#bdShine)" opacity="${theme === 'expert' || theme === 'avancado' ? .45 : 1}"/>
-<g stroke-dasharray="1.4 1.4">${Art.boardLines(theme === 'daily' ? 'rgba(150,90,10,.28)' : 'rgba(240,255,240,.24)', .6, false, G)}</g>${pads}</svg>`;
+${theme === 'esgoto' ? Art.goo() : ''}<g stroke-dasharray="1.4 1.4">${Art.boardLines(theme === 'daily' ? 'rgba(150,90,10,.28)' : 'rgba(240,255,240,.24)', .6, false, G)}</g>${pads}</svg>`;
     return `<svg class="bsvg" viewBox="0 0 100 100" aria-hidden="true">
 <rect x=".8" y="2.6" width="98.4" height="96.8" rx="11" fill="#053d78"/>
 <rect x=".8" y=".8" width="98.4" height="96" rx="11" fill="url(#bdTop)" stroke="#a8ecff" stroke-opacity=".7" stroke-width=".6"/>
@@ -3059,7 +3067,7 @@ const UI = (() => {
     Layout.update();
     if (id === 'career') Career.syncBase(); else Base.set(app.classList.contains('space-mode') ? '#06051a' : '#0b7bd6');
   }
-  const SKINS = ['space-mode', 'skin-daily', 'skin-tutorial', 'skin-iniciante', 'skin-medio', 'skin-avancado', 'skin-expert', 'skin-montemor', 'skin-praia', 'skin-nebuloso', 'skin-carnaval', 'skin-festa', 'skin-skatepark', 'skin-cemiterio', 'skin-amor'];
+  const SKINS = ['space-mode', 'skin-daily', 'skin-tutorial', 'skin-iniciante', 'skin-medio', 'skin-avancado', 'skin-expert', 'skin-montemor', 'skin-praia', 'skin-nebuloso', 'skin-carnaval', 'skin-festa', 'skin-skatepark', 'skin-esgoto', 'skin-cemiterio', 'skin-amor'];
   function setSkin(id) { SKINS.forEach(c => app.classList.remove(c)); if (id) app.classList.add(id === 'space' ? 'space-mode' : 'skin-' + id); }
   // ---- seletor de dificuldade: lista suspensa, pode marcar várias (sorteia entre elas) ----
   const menu = $('lvlMenu'), lvlBtn = $('lvlBtn');
@@ -3838,7 +3846,7 @@ const Career = (() => {
     { id: 'carnaval', na: 'no', name: 'Carnaval', color: '#d63aa0', g: [5, 5, 5, 5, 5, 5, 5, 5, 5, 5], top: '#c86bff', bot: '#ff5c9a', bank: null },
     { id: 'festa', na: 'na', name: 'Porradinha', color: '#6a4cff', g: [5, 5, 6, 5, 6, 6, 5, 6, 6, 6], top: '#5a3fc0', bot: '#24124f', bank: null },
     { id: 'skatepark', na: 'no', name: 'Skatepark', color: '#6b7685', g: [6, 6, 7, 6, 7, 7, 6, 7, 7, 7], top: '#b9c3cf', bot: '#7b8696', bank: '#9aa4b0' },
-    { id: 'esgoto', na: 'no', name: 'Esgoto', color: '#6fae2e', g: [7, 7, 8, 7, 8, 8, 8], top: '#5b6650', bot: '#323b2e', bank: '#6b6a5e' },   // cano, rato e barata
+    { id: 'esgoto', na: 'no', name: 'Esgoto', color: '#6fae2e', g: [7, 7, 8, 7, 8, 8, 8], top: '#4f7a34', bot: '#2a4a1a', bank: '#6b6a5e' },   // cano, rato e barata
     { id: 'avancado', na: 'no', name: 'Brejo', color: LEVELS.avancado.color, g: [8, 8, 8, 8, 9, 8, 9, 9, 9, 10, 10, 10], top: '#3d6f78', bot: '#2b3a6e', bank: '#3c5a36' },   // entardecer azul-violeta
     { id: 'expert', na: 'no', name: 'Pântano Jacaroso', color: LEVELS.expert.color, g: [11, 11, 11, 11, 11, 11, 11, 11, 11, 11], top: '#4a4422', bot: '#1d1a0c', bank: '#6b4f2a' },   // lamaçal oliva-marrom
     // pântano secreto: só aparece depois de concluir a carreira e tocar no portal (Big Bang)
