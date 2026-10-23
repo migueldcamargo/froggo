@@ -158,6 +158,10 @@ svg.fly .fbody{transform:translateY(-10px);animation:jetFly 2.6s ease-in-out inf
 svg.fly .fshadow{transform-box:fill-box;transform-origin:50% 50%;transform:scale(.75);opacity:.7;animation:jetShadow 2.6s ease-in-out infinite}
 @keyframes jetFly{0%,100%{transform:translateY(-9px)}30%{transform:translateY(-13px)}42%{transform:translateY(-10px)}55%{transform:translateY(-17px)}80%{transform:translateY(-11px)}}
 @keyframes jetShadow{0%,100%{transform:scale(.78);opacity:.75}55%{transform:scale(.62);opacity:.5}}
+.tflame{transform-box:fill-box;transform-origin:50% 100%;animation:tFlick .32s ease-in-out infinite alternate}
+@keyframes tFlick{from{transform:scale(.94,.9) skewX(-2deg)}to{transform:scale(1.04,1.07) skewX(2deg)}}
+.tspark{transform-box:fill-box;animation:tSpark 1.4s ease-out infinite}.tspark.s2{animation-delay:-.7s}
+@keyframes tSpark{0%{opacity:0;transform:translateY(6px)}30%{opacity:1}100%{opacity:0;transform:translateY(-7px)}}
 .jflame{transform-box:fill-box;transform-origin:50% 0;animation:jetFlick .13s ease-in-out infinite alternate}
 @keyframes jetFlick{from{transform:scale(.9,.8)}to{transform:scale(1.05,1.12)}}
 .jsmoke{transform-box:fill-box;transform-origin:50% 50%;opacity:0;animation:jetSmoke 1.3s ease-out infinite}
@@ -872,7 +876,7 @@ canvas.bigbang{position:absolute;inset:0;width:100%;height:100%;z-index:400;poin
 
 <script>
 'use strict';
-const BUILD = '2026-10-23.1053';      // versão publicada: trocada pela data e hora a cada publicação (ver Update, no fim); 'dev' não confere
+const BUILD = '2026-10-23.1101';      // versão publicada: trocada pela data e hora a cada publicação (ver Update, no fim); 'dev' não confere
 /* =====================================================================
    FROGGO — jogo de sapos saltadores (peg-solitaire), arquivo único e offline.
    Módulos (todos neste arquivo): Store · Geo · Rules · Solver · Gen ·
@@ -2024,6 +2028,39 @@ ${vest}<g transform="translate(100 0) scale(-1 1)">${vest}</g>
 <path d="M30.2 11 Q50 9.2 69.8 11" stroke="${dark}" stroke-width=".6" fill="none" stroke-dasharray="1.3 1" opacity=".75"/>
 <path d="M33.6 .4 Q34 -3.4 37.4 -3.8" stroke="#fff" stroke-width="1.2" opacity=".35" fill="none" stroke-linecap="round"/></g>`;
       } },
+    { id: 'tocha', name: 'Tocha', slot: 'hand', box: '72 10 38 88',
+      // tocha de madeira com pano amarrado e cuia de ferro; a chama tremula (.tflame) e solta faíscas
+    svg: () => `<g transform="rotate(10 90 70)">
+<path d="M87.4 60 L88.4 94 Q90 95.6 91.6 94 L92.6 60 Z" fill="#8a5a2b" stroke="#4a2c10" stroke-width="1"/>
+<path d="M89.2 64 V90 M90.9 66 V86" stroke="#6b4220" stroke-width=".5"/><path d="M88.6 63 V88" stroke="#fff" stroke-width="1" opacity=".25" stroke-linecap="round"/>
+<rect x="85.8" y="52.4" width="8.4" height="8.6" rx="1.6" fill="#c9a874" stroke="#6b5028" stroke-width=".9"/>
+<path d="M85.8 55.2 L94.2 53.6 M85.8 58.4 L94.2 56.8 M85.8 61 L94.2 59.6" stroke="#8a6a3a" stroke-width=".6"/>
+<path d="M83.4 45.6 H96.6 L94.6 53.4 H85.4 Z" fill="#6b7078" stroke="#33373c" stroke-width="1" stroke-linejoin="round"/>
+<path d="M83.4 45.6 H96.6 L96.2 47.2 H83.8 Z" fill="#9aa0a8"/><path d="M86 48.6 L87 52.4" stroke="#fff" stroke-width=".9" opacity=".35" stroke-linecap="round"/>
+<g class="tflame"><path d="M90 14 C93 22 100.6 27 100 36 C99.6 42.4 95.6 46.4 90 46.4 C84.4 46.4 80.4 42.4 80 36.4 C79.6 30 84 27.4 84.8 21.6 C86.6 25 88 26 88.8 24 C89.6 21.6 89 17.6 90 14 Z" fill="#ff5a12" opacity=".95"/>
+<path d="M90.4 22 C92.6 28 97 31 96.4 37.4 C96 42 93.4 44.8 90 44.8 C86.6 44.8 83.8 42 83.6 38 C83.4 33.6 86.4 31.6 87 27.6 C88.4 30 89.6 29.4 89.8 27.6 C90.2 25.8 89.8 24 90.4 22 Z" fill="#ffae1e"/>
+<path d="M90 30.6 C91.4 34 93.4 36 93 39.4 C92.8 41.8 91.6 43.4 90 43.4 C88.4 43.4 87 42 87 39.8 C87 37.4 88.8 36 89.2 33.6 C89.8 34.4 90 32.6 90 30.6 Z" fill="#fff1a6"/></g>
+<g fill="#ffb21e"><circle class="tspark" cx="95" cy="18" r=".9"/><circle class="tspark s2" cx="85" cy="20" r=".7"/></g></g>` },
+    { id: 'violino', name: 'Violino do Enter', slot: 'hand', box: '68 8 46 90',
+      // violino em pé ao lado do sapo, com o arco cruzado na frente: tampo envernizado, efes, espelho preto, cavalete, voluta e cravelhas
+    svg: () => {
+      const body = 'M0 -20 C-4 -20.6 -9.6 -20 -9.8 -14.4 C-10 -10.6 -7.6 -9.4 -6.6 -6.6 C-6.4 -4.4 -8.2 -4.4 -8 -2.6 C-11.8 -1 -12.4 5 -11.2 9.4 C-9.6 15.4 -4.6 18 0 18 C4.6 18 9.6 15.4 11.2 9.4 C12.4 5 11.8 -1 8 -2.6 C8.2 -4.4 6.4 -4.4 6.6 -6.6 C7.6 -9.4 10 -10.6 9.8 -14.4 C9.6 -20 4 -20.6 0 -20 Z';
+      return `<defs><radialGradient id="vnWood" cx="45%" cy="40%" r="70%"><stop offset="0" stop-color="#e8902e"/><stop offset=".6" stop-color="#b4521a"/><stop offset="1" stop-color="#6a2608"/></radialGradient></defs>
+<g transform="translate(92 70) rotate(-8)">
+<path d="${body}" fill="url(#vnWood)" stroke="#3a1404" stroke-width="1.4"/><path d="${body}" fill="none" stroke="#2a0c02" stroke-width=".5" transform="scale(.93)"/>
+<path d="M-5.4 -5 C-3.8 -2 -3.8 3 -5.4 6.4 M5.4 -5 C3.8 -2 3.8 3 5.4 6.4" stroke="#1a0800" stroke-width="1.1" fill="none" stroke-linecap="round"/>
+<circle cx="-5.4" cy="-5" r=".8" fill="#1a0800"/><circle cx="-5.4" cy="6.4" r=".8" fill="#1a0800"/><circle cx="5.4" cy="-5" r=".8" fill="#1a0800"/><circle cx="5.4" cy="6.4" r=".8" fill="#1a0800"/>
+<path d="M-2.2 -44 H2.2 L1.8 -2 H-1.8 Z" fill="#141414"/>
+<rect x="-4.2" y="1.2" width="8.4" height="1.6" rx=".5" fill="#e9d6a8" stroke="#8a7240" stroke-width=".3"/>
+<path d="M-2.6 9 L2.6 9 L1.6 16.6 H-1.6 Z" fill="#141414"/><ellipse cx="-5" cy="15" rx="3.4" ry="2" fill="#1e1e1e" transform="rotate(-14 -5 15)"/>
+<g stroke="#e8e8e8" stroke-width=".28"><path d="M-1.1 -43 L-1 10 M-.37 -43 L-.33 10 M.37 -43 L.33 10 M1.1 -43 L1 10"/></g>
+<path d="M-1.8 -44 L-2 -50 H2 L1.8 -44 Z" fill="#9a4a18" stroke="#3a1404" stroke-width=".6"/>
+<path d="M0 -50 C-3.4 -50 -3.6 -53.6 -1.6 -54.6 C.6 -55.6 2.4 -54 1.6 -52.6 C1 -51.6 -.4 -52 -.2 -52.8" fill="#9a4a18" stroke="#3a1404" stroke-width=".7"/>
+<g fill="#2a1408"><rect x="-4" y="-48.6" width="2.4" height="1.1" rx=".5"/><rect x="-4" y="-46.2" width="2.4" height="1.1" rx=".5"/><rect x="1.6" y="-48.6" width="2.4" height="1.1" rx=".5"/><rect x="1.6" y="-46.2" width="2.4" height="1.1" rx=".5"/></g>
+<path d="M-7 -14 Q-6 -17.6 -2.6 -18.4" stroke="#fff" stroke-width="1.3" opacity=".35" fill="none" stroke-linecap="round"/>
+</g>
+<g transform="translate(91 68) rotate(28)"><path d="M-.5 -32 V28" stroke="#5a2a10" stroke-width="1.3" stroke-linecap="round"/><path d="M.9 -30 V25" stroke="#f4ecd4" stroke-width=".6"/>
+<path d="M-1.2 -33 H1.6 V-29 H-1.2 Z" fill="#3a1a08"/><rect x="-1.6" y="22" width="3.2" height="5" rx=".8" fill="#141414"/><circle cx="0" cy="28" r=".8" fill="#e0e0e0"/></g>`; } },
     { id: 'oculos3d', name: 'Óculos de estrela', slot: 'eyes', space: true, box: '14 8 72 38',
       svg: () => {
         const star = (x, y) => `<path transform="translate(${x} ${y}) scale(1.25)" d="M0 -11 l3.2 6.6 7.3 1 -5.3 5.1 1.3 7.2 -6.5 -3.4 -6.5 3.4 1.3 -7.2 -5.3 -5.1 7.3 -1z" fill="#ff6ad5" fill-opacity=".55" stroke="#ffd23f" stroke-width="2.2" stroke-linejoin="round"/>`;
@@ -3396,8 +3433,8 @@ const Career = (() => {
     at(1, 3, 'oldskool'); at(1, 6, 'oculos'); at(1, 8, 'bolovo');                       // Tranquilo
     at(2, 4, 'linus'); at(2, 7, 'woody'); at(2, 10, 'chapeuwoody');                    // Monte Mor
     at(3, 4, 'havaianas'); at(3, 7, 'picole'); at(3, 8, 'bucket'); at(3, 10, 'bellato');   // Praia (o Cata-Ovo é o par do Kiwi)
-    at(4, 5, 'zerezes'); at(4, 10, 'cartola');                                         // Nebuloso
-    at(5, 5, 'coracao'); at(5, 10, 'pirata');                                          // Carnaval
+    at(4, 5, 'zerezes'); at(4, 8, 'tocha'); at(4, 10, 'cartola');                     // Nebuloso (a tocha clareia a neblina)
+    at(5, 5, 'coracao'); at(5, 7, 'violino'); at(5, 10, 'pirata');                    // Carnaval
     at(6, 4, 'pochete'); at(6, 7, 'bandana'); at(6, 10, 'coque');                      // Porradinha
     at(7, 4, 'fone'); at(7, 7, 'skate'); at(7, 10, 'gorro');                           // Skatepark
     at(8, 1, 'galocha'); at(8, 3, 'mascara'); at(8, 5, 'macacao'); at(8, 7, 'capacetelanterna');   // Esgoto
@@ -4702,9 +4739,9 @@ const Tests = {
     t('carreira: 11 pântanos e 100 fases (+10 do Espaço); começa com um pântano curto', Career.TOTAL === 100 && CL.length === 110 && RC.length === 12 && RC[1] === 8 && RC[8] === 7 && RC[11] === 10, RC.join(' + '));
     const P = Career.PRIZE, at = (r, n) => P[Career.REGIONS.slice(0, r).reduce((a, R) => a + R.count, 0) + n - 1] || [];
     const last = r => at(r, Career.REGIONS[r].count);
-    t('prêmios da trilha: tutorial 1-3, Vans logo no 3º mapa, chapéu/boné na última fase de cada pântano; 36 apetrechos sem repetir',
+    t('prêmios da trilha: tutorial 1-3, Vans logo no 3º mapa, chapéu/boné na última fase de cada pântano; 38 apetrechos sem repetir',
       at(0, 1)[0] === 'cardigan' && at(1, 3)[0] === 'oldskool' && Career.REGIONS.slice(1).every((R, r) => Outfit.BY[last(r + 1)[0]].slot === 'head') && last(10).join() === 'coroa,trofeu'
-      && at(2, 7)[0] === 'woody' && at(7, 7)[0] === 'skate' && new Set(Object.values(P).flat()).size === 36 && Object.values(P).flat().every(id => Outfit.BY[id] && !Outfit.BY[id].rare));
+      && at(2, 7)[0] === 'woody' && at(7, 7)[0] === 'skate' && new Set(Object.values(P).flat()).size === 38 && Object.values(P).flat().every(id => Outfit.BY[id] && !Outfit.BY[id].rare));
     t('prêmios fora da trilha (marcados rare): 10 de pântano com 3★ + 5 da coleção do desafio + kiwi + kits dos amigos; ninguém fica sem jeito de ganhar',
       Outfit.ITEMS.filter(i => i.rare).length === 25 && Object.values(Career.RARE).concat(Career.DAILY.map(d => d[1])).every(id => Outfit.BY[id] && Outfit.BY[id].rare)
       && Outfit.ITEMS.every(it => Career.ORDER.includes(it.id)) && Career.ORDER.length === Outfit.ITEMS.length);
