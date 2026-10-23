@@ -273,7 +273,7 @@ svg.fly .fshadow{transform-box:fill-box;transform-origin:50% 50%;transform:scale
 .ghand{position:absolute;width:0;height:0;pointer-events:none;z-index:6}
 .ghand span{position:absolute;left:-.32em;top:-.12em;line-height:1;filter:drop-shadow(0 .06em .08em rgba(0,0,0,.4))}
 #game.guided .gctrl{visibility:hidden}
-/* dica: lâmpada logo acima do canto direito do tabuleiro (fora das casas) (a partir da 4ª tentativa da fase); entra chamando atenção e depois fica quieta */
+/* dica: lâmpada logo acima do canto direito do tabuleiro (fora das casas), a partir da 3ª tentativa da fase; entra chamando atenção e depois fica quieta */
 .hintbtn{position:absolute;z-index:7;left:calc(50% + var(--bs,300px) / 2 - 3rem);top:calc(50% - var(--bs,300px) / 2 - 3rem - 8px);width:3rem;height:3rem;padding:.45rem;border:0;border-radius:50%;
   background:#fffbe6;box-shadow:0 .22rem 0 #c98a00,0 .4rem .8rem rgba(0,30,70,.3);cursor:pointer}
 .hintbtn[hidden]{display:none}
@@ -890,7 +890,7 @@ canvas.bigbang{position:absolute;inset:0;width:100%;height:100%;z-index:400;poin
 
 <script>
 'use strict';
-const BUILD = '2026-10-23.1131';      // versão publicada: trocada pela data e hora a cada publicação (ver Update, no fim); 'dev' não confere
+const BUILD = '2026-10-23.1208';      // versão publicada: trocada pela data e hora a cada publicação (ver Update, no fim); 'dev' não confere
 /* =====================================================================
    FROGGO — jogo de sapos saltadores (peg-solitaire), arquivo único e offline.
    Módulos (todos neste arquivo): Store · Geo · Rules · Solver · Gen ·
@@ -3069,8 +3069,9 @@ const UI = (() => {
     if (Game.card.daily) Daily.move();          // no mapa do dia, desfazer também conta
     hideOverlays(); Sound.click(); hud(); Board.undoAnim(j);
     if (hintOn) { hintOn = null; Board.hint(null); }
+    if (Game.moves === 0) newTry(false);          // voltar até o começo com "Desfazer" também conta como nova tentativa
   }
-  /* Dica: cada vez que a fase começa conta uma tentativa; da 4ª em diante aparece a lâmpada (fora do desafio do dia e do treino).
+  /* Dica: cada vez que a fase começa conta uma tentativa; da 3ª em diante (2 reinícios ou 2 voltas ao início com Desfazer) aparece a lâmpada (fora do desafio do dia e do treino).
      Cada toque mostra o próximo salto da solução. Se o sapo já saiu do caminho da solução, volta ao início e mostra o 1º;
      se a dica já estava na tela e ninguém pulou, faz esse salto e mostra o seguinte. */
   let tries = Store.get('tries', {}), hintOn = null;
@@ -3084,7 +3085,7 @@ const UI = (() => {
     const k = card.code || Rules.key(card.start), bag = card.code ? tries : triesMem, n = bag[k] = (bag[k] || 0) + 1;
     if (card.code) Store.set('tries', tries);
     const was = !b.hidden;
-    b.hidden = n < 4;
+    b.hidden = n < 3;
     if (!b.hidden && (entering || !was)) { b.classList.remove('intro'); void b.offsetWidth; b.classList.add('intro'); }
   }
   async function hintTap() {
