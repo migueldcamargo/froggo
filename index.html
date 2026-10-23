@@ -420,7 +420,8 @@ canvas.confetti{position:absolute;inset:0;width:100%;height:100%;pointer-events:
 
 /* ---------- Guarda-roupa ---------- */
 #wardrobe{grid-template-rows:auto minmax(0,.85fr) auto minmax(0,1.15fr);grid-template-columns:minmax(0,1fr);gap:.5rem;grid-template-areas:"top" "stage" "tools" "grid"}
-.wtools{grid-area:tools;display:flex;justify-content:flex-end}      /* fora da lista: o botão fica sempre à mão */
+.wtools{grid-area:tools;display:flex;justify-content:flex-end;gap:.5rem}
+.wswap{display:inline-flex;align-items:center;gap:.35em}.wswap svg{width:1.1em;height:1.1em}      /* fora da lista: o botão fica sempre à mão */
 .ctitle .hg{color:#fff}
 .wstage{grid-area:stage;position:relative;min-height:0}
 .wzoom{position:absolute;inset:0;overflow:hidden;touch-action:none;border-radius:1rem}
@@ -766,7 +767,7 @@ canvas.bigbang{position:absolute;inset:0;width:100%;height:100%;z-index:400;poin
       <button class="icon-btn snd" aria-label="Som ligado/desligado"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9h4l5-4v14l-5-4H4z" fill="currentColor"/><g class="sound-waves"><path d="M16 9a4 4 0 0 1 0 6"/><path d="M18.5 6.5a7.5 7.5 0 0 1 0 11"/></g><g class="muted-x"><path d="M16.5 9.5l5 5M21.5 9.5l-5 5"/></g></svg></button>
     </div>
     <div class="wstage" id="wStage"></div>
-    <div class="wtools"><button type="button" class="wall" id="wAll">Abrir tudo</button></div>
+    <div class="wtools"><button type="button" class="wall wswap" id="wSwap" aria-label="Trocar o visual do grande com o do pequeno"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h12l-3-3M17 17H5l3 3"/></svg>Inverter</button><button type="button" class="wall" id="wAll">Abrir tudo</button></div>
     <div class="wgrid" id="wGrid"></div>
   </section>
 
@@ -926,7 +927,7 @@ canvas.bigbang{position:absolute;inset:0;width:100%;height:100%;z-index:400;poin
 
 <script>
 'use strict';
-const BUILD = '2026-10-23.1750';      // versão publicada: trocada pela data e hora a cada publicação (ver Update, no fim); 'dev' não confere
+const BUILD = '2026-10-23.1804';      // versão publicada: trocada pela data e hora a cada publicação (ver Update, no fim); 'dev' não confere
 /* =====================================================================
    FROGGO — jogo de sapos saltadores (peg-solitaire), arquivo único e offline.
    Módulos (todos neste arquivo): Store · Geo · Rules · Solver · Gen ·
@@ -2443,6 +2444,12 @@ ${zig}<path d="${band}" fill="${W}" stroke="${WD}" stroke-width="1"/>
     clear(slots, red) { const o = red ? wornRed : worn; slots.forEach(s => delete o[s]); Store.set(red ? 'outfitRed' : 'outfit', o); },
     // veste de uma vez (kit do amigo novo), trocando o que estiver em cada lugar
     put(ids) { ids.forEach(id => { const it = BY[id]; if (it) worn[it.slot] = id; }); Store.set('outfit', worn); },
+    // botão "Inverter" do guarda-roupa: o visual do grande (personagem + roupa + lado do cata-ovo) vai para o pequeno e vice-versa
+    swap() {
+      [worn, wornRed] = [wornRed, worn]; [char, charRed] = [charRed, char];
+      for (const id in flip) { const f = flip[id]; [f.g, f.r] = [f.r || 0, f.g || 0]; }
+      Store.set('outfit', worn); Store.set('outfitRed', wornRed); Store.set('char', char); Store.set('charRed', charRed); Store.set('flip', flip);
+    },
     isWorn: (id, red) => BY[id] && (red ? wornRed : worn)[BY[id].slot] === id,
     // tira o que o jogador não ganhou (ex.: progresso zerado)
     prune(owned) { for (const [o, k] of [[worn, 'outfit'], [wornRed, 'outfitRed']]) { let ch = false; for (const s in o) if (!owned.includes(o[s])) { delete o[s]; ch = true; } if (ch) Store.set(k, o); } },
@@ -5281,6 +5288,10 @@ ${stageFrog(false, 0)}${stageFrog(true, 104, .5)}</svg></div>`;
       Sound.pick(); render(); return;
     }
     Outfit.wear(b.dataset.id, red); Sound.pick(); render();
+  });
+  $('wSwap').addEventListener('click', () => {
+    Outfit.swap(); Sound.pick(); render();
+    const z = $('wStage').querySelector('.wzoom'); if (z && !reduceMotion()) animate(z, [{ transform: 'scale(1)' }, { transform: 'scale(.94) rotate(-2deg)', offset: .4 }, { transform: 'scale(1)' }], { duration: 320, easing: 'ease-out' });
   });
   $('wAll').addEventListener('click', () => { closed = $('wAll').dataset.all === 'close' ? ALLSEC() : []; grid.scrollTop = 0; Sound.click(); render(); });
   $('wStage').addEventListener('click', e => {
