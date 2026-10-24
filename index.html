@@ -927,7 +927,7 @@ canvas.bigbang{position:absolute;inset:0;width:100%;height:100%;z-index:400;poin
 
 <script>
 'use strict';
-const BUILD = '2026-10-23.1804';      // versão publicada: trocada pela data e hora a cada publicação (ver Update, no fim); 'dev' não confere
+const BUILD = '2026-10-24.0848';      // versão publicada: trocada pela data e hora a cada publicação (ver Update, no fim); 'dev' não confere
 /* =====================================================================
    FROGGO — jogo de sapos saltadores (peg-solitaire), arquivo único e offline.
    Módulos (todos neste arquivo): Store · Geo · Rules · Solver · Gen ·
@@ -1590,6 +1590,22 @@ const Art = {
 <path d="M40.4 72.6 l.8 -3 M43 73.4 l.4 -3.2 M45.4 72.6 l-.2 -3 M59.6 72.6 l-.8 -3 M57 73.4 l-.4 -3.2 M54.6 72.6 l.2 -3" stroke="#3a1e0c" stroke-width=".6" stroke-linecap="round"/>`;
       face = `${mask}${eye(31, 1)}${eye(69, -1)}${brows}${nose}${stache}${grin}${hands}`;
       feet = '<g fill="#6a3a1c"><ellipse cx="34" cy="88.6" rx="9" ry="4.4"/><ellipse cx="66" cy="88.6" rx="9" ry="4.4"/></g><path d="M30 90 v2 M34 90.6 v2 M38 90 v2 M62 90 v2 M66 90.6 v2 M70 90 v2" stroke="#3a1e0c" stroke-width=".9" stroke-linecap="round"/>';
+      },
+      gata() {      // Marcelina, a gata preta (2º desafio do dia): pelagem preta com reflexo azulado, orelhas em ponta, olhões verde-amarelados com pupila fina, cílios longos, focinho rosa e bigodes
+        defs = g('gtB', '#4a4a5c', '#22222e', '#0e0e14') + `<radialGradient id="gtE" cx="45%" cy="40%" r="60%"><stop offset="0" stop-color="#e8ff7a"/><stop offset=".6" stop-color="#9ad83a"/><stop offset="1" stop-color="#4a8a1a"/></radialGradient>`;
+        back = `<path d="M74 84 Q94 86 95 70 Q96 56 86 52 Q84 58 88 62 Q90 74 76 76 Z" fill="#1a1a24"/><path d="M88 60 Q90 66 89 70" stroke="#5a5a72" stroke-width="1" fill="none" opacity=".6"/>`;
+        body = `<path d="M18 30 L14 2 L38 16 Z M82 30 L86 2 L62 16 Z" fill="#1a1a24" stroke="#0a0a10" stroke-width=".8" stroke-linejoin="round"/><path d="M21 24 L19 9 L32 17 Z M79 24 L81 9 L68 17 Z" fill="#f4a0b8"/>
+  <ellipse cx="22" cy="80" rx="11" ry="8.4" fill="url(#gtB)"/><ellipse cx="78" cy="80" rx="11" ry="8.4" fill="url(#gtB)"/>
+  <ellipse cx="50" cy="67" rx="27" ry="23" fill="url(#gtB)"/><ellipse cx="50" cy="74" rx="13" ry="11" fill="#3a3a4a" opacity=".6"/>
+  <ellipse cx="50" cy="40" rx="33" ry="24" fill="url(#gtB)"/><path d="M17 44 L6 42 M17 48 L7 50 M83 44 L94 42 M83 48 L93 50" stroke="#0a0a10" stroke-width="2.6" stroke-linecap="round"/>`;
+        face = [31, 69].map(x => { const d = x < 50 ? -1 : 1;
+          return `<ellipse cx="${x}" cy="27" rx="10.4" ry="10" fill="url(#gtE)"/><ellipse cx="${x}" cy="27.6" rx="2.6" ry="7.4" fill="#0a0a10"/><circle cx="${x + 2.6}" cy="23.4" r="2.3" fill="#fff"/><circle cx="${x - 3}" cy="31" r=".9" fill="#fff" opacity=".7"/>
+  <path d="M${x - 11} 25 Q${x} 15.4 ${x + 11} 25" stroke="#0a0a10" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+  <path d="M${x + d * 10.6} 24 l${d * 4.4} -2.8 M${x + d * 8.6} 20.6 l${d * 3.4} -3.6 M${x + d * 5.6} 18.4 l${d * 2} -3.8" stroke="#0a0a10" stroke-width="1.5" stroke-linecap="round"/>`; }).join('')
+          + `<path d="M46.4 39.6 Q50 37.8 53.6 39.6 Q52.6 42.6 50 43.4 Q47.4 42.6 46.4 39.6 Z" fill="#ff8ab4"/><path d="M50 43.4 V45.4 M50 45.4 Q47 48.6 44 46.6 M50 45.4 Q53 48.6 56 46.6" stroke="#ff8ab4" stroke-width="1.3" fill="none" stroke-linecap="round"/>
+  <path d="M40 43 L22 40.6 M40 45.4 L23 46.4 M60 43 L78 40.6 M60 45.4 L77 46.4" stroke="#d6d6e4" stroke-width=".7" opacity=".85" stroke-linecap="round"/>
+  <ellipse cx="25" cy="38" rx="5" ry="2.8" fill="#ff7aa8" opacity=".35"/><ellipse cx="75" cy="38" rx="5" ry="2.8" fill="#ff7aa8" opacity=".35"/><ellipse cx="37" cy="36" rx="10" ry="4" fill="#fff" opacity=".12" transform="rotate(-14 37 36)"/>`;
+        feet = '<g fill="#1a1a24"><ellipse cx="35" cy="88" rx="8" ry="4.4"/><ellipse cx="65" cy="88" rx="8" ry="4.4"/></g><g fill="#f4a0b8"><circle cx="32" cy="88.6" r="1.1"/><circle cx="35" cy="89.4" r="1.1"/><circle cx="38" cy="88.6" r="1.1"/><circle cx="62" cy="88.6" r="1.1"/><circle cx="65" cy="89.4" r="1.1"/><circle cx="68" cy="88.6" r="1.1"/></g>';
       },
       caramelo() {     // vira-lata caramelo: orelhas caídas, focinho clarinho, peito branco, língua de fora
         defs = g('dgB', '#f2c27a', '#d9963f', '#a8691f');
@@ -2395,7 +2411,8 @@ ${zig}<path d="${band}" fill="${W}" stroke="${WD}" stroke-width="1"/>
     { id: 'tatu', name: 'Dillo', at: 'skatepark' }, { id: 'origa', name: 'Origa', fase: 67, kit: ['regata'] }, { id: 'topogigio', name: 'Topogígio', at: 'esgoto', kit: ['queijo'] }, { id: 'roger', name: 'Roger', at: 'avancado', kit: ['pastel'] },
     { id: 'jare', name: 'Jaré', at: 'expert' }, { id: 'baurets', name: 'Baurets', at: 'espaco', kit: ['capacete'] },
     { id: 'kiwi', name: 'Kiwi', gift: true, kit: ['kiwifruta'] },
-    { id: 'nelson', name: 'Nelson Rubens', fase: 59 }, { id: 'conde', name: 'Conde', at: 'cemiterio' }, { id: 'cataras', name: 'Cataras', at: 'amor' }, { id: 'tcharina', name: 'Tcharina', fase: 120 }, { id: 'djanho', name: 'Djanho', fase: 125 }];   // Djanho: fase 126, 6º mapa do Amor   // Nelson: fase 60 da Porradinha; Tcharina: 1ª fase do Amor (dupla do Cataras)      // gift: presente do desafio do dia (ver Daily, KIWI); fase: chega ao passar essa fase (índice), não ao abrir o pântano
+    { id: 'nelson', name: 'Nelson Rubens', fase: 59 }, { id: 'conde', name: 'Conde', at: 'cemiterio' }, { id: 'cataras', name: 'Cataras', at: 'amor' }, { id: 'tcharina', name: 'Tcharina', fase: 120 }, { id: 'djanho', name: 'Djanho', fase: 125 },
+    { id: 'gata', name: 'Marcelina', gift: true }];   // Marcelina, a gata preta: 2º desafio do dia concluído (o 1º traz o Kiwi)   // Djanho: fase 126, 6º mapa do Amor   // Nelson: fase 60 da Porradinha; Tcharina: 1ª fase do Amor (dupla do Cataras)      // gift: presente do desafio do dia (ver Daily, KIWI); fase: chega ao passar essa fase (índice), não ao abrir o pântano
   let char = Store.get('char', 'sapo'), charRed = Store.get('charRed', 'sapo');
   if (char === charRed && char !== 'sapo') { charRed = 'sapo'; Store.set('charRed', charRed); }     // verde e vermelho não podem ser o mesmo personagem (só o sapo)
   const big = o => flies(o) || !!(o && o.ride);       // ocupa mais espaço em volta do sapo (chama, caixa)
@@ -4989,7 +5006,11 @@ const Daily = (() => {
     // nota 3★ na tentativa que vale (a 1ª do dia): mais um na coleção do desafio
     let prize = first && grade(r) === 3 ? Career.dailyWin() : null;
     // a partir de 23/10/2026, o 1º desafio concluído (qualquer nota) traz o amigo Kiwi e a fruta kiwi
-    if (first && r.date >= KIWI) { const got = ['char:kiwi', 'kiwifruta'].filter(id => Career.grant(id)); if (got.length) prize = got.concat(prize || []); }
+    // e o 2º desafio concluído (depois do Kiwi) traz a Marcelina, a gata preta
+    if (first && r.date >= KIWI) {
+      const hadKiwi = Career.owned().includes('kiwifruta') || Career.chars().includes('kiwi');
+      const got = (hadKiwi ? ['char:gata'] : ['char:kiwi', 'kiwifruta']).filter(id => Career.grant(id)); if (got.length) prize = got.concat(prize || []);
+    }
     if (first) { Track('desafio-feito', 'Desafio do dia concluído'); if (grade(r) === 3) Track('desafio-3-estrelas', 'Desafio do dia com ⭐⭐⭐'); }
     stop(); paintButton(); openPanel(true, r, prize);   // mostra o resultado mesmo se o desafio virou a meia-noite
   }
@@ -5260,7 +5281,7 @@ ${stageFrog(false, 0)}${stageFrog(true, 104, .5)}</svg></div>`;
   function where(id) {
     const nm = r => r.bonus && !Career.bonusOpen ? '???' : r.name;      // o Espaço é segredo até ser aberto
     const c = Outfit.CHARS.find(x => x.id === id);
-    if (c && c.gift) return 'Chega com o Desafio do dia';
+    if (c && c.gift) return c.id === 'gata' ? 'Chega com o 2º Desafio do dia' : 'Chega com o 1º Desafio do dia';
     if (c && c.fase != null) { const R = Career.REGIONS; let st = 0, r = R[0]; for (const x of R) { if (c.fase >= st) r = x; st += x.count; } return `Chega na fase ${c.fase + 1} ${r.na} ${nm(r)}`; }
     if (c) { const r = Career.REGIONS.find(x => x.id === c.at); return `Chega ao abrir ${r.na === 'na' ? 'a' : 'o'} ${nm(r)}`; }
     const R = Career.REGIONS, at = i => { let r = 0, st = 0; R.forEach((x, k) => { if (i >= st) r = k; st += x.count; }); return R[r]; };
@@ -5459,7 +5480,7 @@ const Tests = {
     const far = Daily.message({ date: '2026-10-21', moves: [5, 4, 69, 7, 4], mins: [5, 4, 7, 7, 4] }).split('\n')[2];
     t('desafio do dia: nota pela soma dos pulos (um mapa ruim derruba o total)', far === 'Total: 89 pulos ⭐⚪⚪', far);
     t('personagens: sapo + 6 amigos, cada um chega com um pântano e desenha com qualquer apetrecho',
-      Outfit.CHARS.length === 18 && Outfit.CHARS.slice(1).every(c => (c.gift || c.fase != null || Career.REGIONS.some(R => R.id === c.at)) && Art.creature(c.id, { outfit: { head: 'bolovo', eyes: 'oculos', torso: 'traje' } }).startsWith('<svg')));
+      Outfit.CHARS.length === 19 && Outfit.CHARS.slice(1).every(c => (c.gift || c.fase != null || Career.REGIONS.some(R => R.id === c.at)) && Art.creature(c.id, { outfit: { head: 'bolovo', eyes: 'oculos', torso: 'traje' } }).startsWith('<svg')));
     // 11. áudio
     t('áudio não é criado antes de um gesto', window.__frogGesture ? true : Sound.ctx === null, window.__frogGesture ? 'houve gesto antes do teste' : 'sem gesto: sem AudioContext');
     return { out, fails };
