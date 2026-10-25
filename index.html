@@ -262,6 +262,7 @@ svg.fly .fshadow{transform-box:fill-box;transform-origin:50% 50%;transform:scale
 
 .board{position:relative;width:var(--bs,300px);height:var(--bs,300px);flex:none;touch-action:none;border-radius:11%;
   box-shadow:0 .8rem 1.4rem rgba(0,25,70,.3)}
+.board.shaped{box-shadow:none;border-radius:0}.board.shaped>svg.bsvg{filter:drop-shadow(0 .7rem 1rem rgba(0,25,70,.35))}
 .board>svg.bsvg{position:absolute;inset:0;width:100%;height:100%}
 .pmark{position:absolute;width:var(--psz,15%);height:var(--psz,15%);margin:calc(var(--psz,15%) / -2) 0 0 calc(var(--psz,15%) / -2);border-radius:50%;pointer-events:none;transition:box-shadow .15s, background .15s}
 .hbeat{transform-box:fill-box;transform-origin:50% 50%;animation:hbeat 1.4s ease-in-out infinite}
@@ -927,7 +928,7 @@ canvas.bigbang{position:absolute;inset:0;width:100%;height:100%;z-index:400;poin
 
 <script>
 'use strict';
-const BUILD = '2026-10-24.0848';      // versão publicada: trocada pela data e hora a cada publicação (ver Update, no fim); 'dev' não confere
+const BUILD = '2026-10-25.0350';      // versão publicada: trocada pela data e hora a cada publicação (ver Update, no fim); 'dev' não confere
 /* =====================================================================
    FROGGO — jogo de sapos saltadores (peg-solitaire), arquivo único e offline.
    Módulos (todos neste arquivo): Store · Geo · Rules · Solver · Gen ·
@@ -1733,6 +1734,16 @@ ${dim ? '' : `<path d="M${x - r * .32} ${y - r * .42} q${r * .12} -${r * .14} ${
       montemor: ['#a8d870', '#5f9a35', '#3a6a1c', '#efffd0'], praia: ['#ffe2a0', '#e2b45e', '#9a742a', '#fff7dc'], nebuloso: ['#e3ebf8', '#a7b6d6', '#6b7ba0', '#ffffff'],
       carnaval: ['#ff8fd0', '#c23f98', '#73185e', '#ffe0f4'], festa: ['#8268ff', '#3d24a8', '#1f1260', '#ddd2ff'], skatepark: ['#cfd6df', '#8e99a8', '#525c6b', '#f4f6f9'],
       cemiterio: ['#7d76a0', '#3e3858', '#221e33', '#e0dcff'], esgoto: ['#5f8a3c', '#2e5220', '#1a3010', '#c6f07a'], amor: ['#ffc2da', '#ff6fa3', '#b81f55', '#fff0f6'] }[theme];
+    if (SK && G.shape) {      // tabuleiro com formato: a moldura acompanha a cruz / o coração, em vez do quadrado
+      const s = 156 / G.L, geo = G.shape === 'coracao'
+        ? '<path d="M50 99.4 C38 90 1.4 67 .8 40 C.2 17 12 .8 30 .8 C40 .8 47 6 50 12 C53 6 60 .8 70 .8 C88 .8 99.8 17 99.2 40 C98.6 67 62 90 50 99.4 Z"/>'
+        : G.CELLS.map((c, i) => c[0] % 2 || c[1] % 2 ? '' : `<rect x="${(G.PX[i] - s / 2 - 3).toFixed(2)}" y="${(G.PY[i] - s / 2 - 3).toFixed(2)}" width="${(s + 6).toFixed(2)}" height="${(s + 6).toFixed(2)}" rx="1.6"/>`).join('');
+      return `<svg class="bsvg" viewBox="0 0 100 100" overflow="visible" aria-hidden="true"><defs><linearGradient id="bdSkin" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="0" y2="100"><stop offset="0" stop-color="${SK[0]}"/><stop offset="1" stop-color="${SK[1]}"/></linearGradient><clipPath id="shpC">${geo}</clipPath></defs>
+<g transform="translate(0 1.8)" fill="${SK[2]}" stroke="${SK[2]}" stroke-width="1.6" stroke-linejoin="round">${geo}</g>
+<g fill="${SK[3]}" stroke="${SK[3]}" stroke-width="1.4" stroke-linejoin="round" opacity=".7">${geo}</g><g fill="url(#bdSkin)">${geo}</g>
+<g clip-path="url(#shpC)"><rect x="0" y="0" width="100" height="100" fill="url(#bdShine)" opacity=".8"/></g>
+<g stroke-dasharray="1.4 1.4">${Art.boardLines('rgba(240,255,240,.28)', .6, false, G)}</g>${pads}</svg>`;
+    }
     if (SK) return `<svg class="bsvg" viewBox="0 0 100 100" aria-hidden="true"><defs><linearGradient id="bdSkin" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${SK[0]}"/><stop offset="1" stop-color="${SK[1]}"/></linearGradient></defs>
 <rect x=".8" y="2.6" width="98.4" height="96.8" rx="11" fill="${SK[2]}"/>
 <rect x=".8" y=".8" width="98.4" height="96" rx="11" fill="url(#bdSkin)" stroke="${SK[3]}" stroke-opacity=".7" stroke-width=".6"/>
@@ -2722,7 +2733,7 @@ const Board = (() => {
     if (g2 === G && th === theme) return;
     G = g2; theme = th; K = 4 / G.L;
     el.innerHTML = Art.boardSVG(G, theme);
-    el.classList.toggle('space', theme === 'space');
+    el.classList.toggle('space', theme === 'space'); el.classList.toggle('shaped', !!G.shape);
     el.style.setProperty('--fsz', (19 * K).toFixed(2) + '%'); el.style.setProperty('--psz', (15 * K).toFixed(2) + '%');
     marks = [];
     for (let i = 0; i < G.N; i++) {
@@ -3396,7 +3407,7 @@ const UI = (() => {
     if (Game.moves === 0) newTry(false);          // voltar até o começo com "Desfazer" também conta como nova tentativa
   }
   /* Dica: cada vez que a fase começa conta uma tentativa; da 4ª em diante (3 reinícios ou 3 voltas ao início com Desfazer) aparece a lâmpada (nunca no desafio do dia, nem ao refazer um mapa dele, nem no treino).
-     Cada dica vem em duas etapas: o 1º toque acende só o sapo que deve pular, o 2º mostra para onde (mãozinha).
+     Cada toque gasta 1 dica e mostra o salto inteiro: o sapo acende e a mãozinha mostra para onde ele pula.
      Se o sapo já saiu do caminho da solução, volta ao início; se o salto inteiro já estava na tela e ninguém pulou, faz esse
      salto e acende o sapo do seguinte. Por rodada vale até hintCap dicas (até 3 saltos nenhuma, 4→1, 5→2, 6→3 e daí em diante
      metade: 7→3, 8→4, 10→5); rever um salto já aberto não gasta. Usou dica na rodada: a fase vale no máximo ★★. */
@@ -3429,17 +3440,17 @@ const UI = (() => {
     $('btnHint').classList.remove('intro');
     const sol = card.solution, done = Game.history.map(h => h.jump);
     const onPath = done.every((j, i) => sol[i] && sol[i].from === j.from && sol[i].to === j.to), k = done.length;
-    const same = onPath && hintOn && hintOn.k === k, auto = same && hintOn.full, target = !onPath ? 0 : auto ? k + 1 : k;
-    if (!(same && !hintOn.full) && target < sol.length && target >= revealed && revealed >= budget) {      // acabaram as dicas desta rodada
+    const auto = onPath && hintOn && hintOn.k === k, target = !onPath ? 0 : auto ? k + 1 : k;     // auto: a dica já estava na tela e ninguém pulou
+    if (target >= sol.length) return;
+    if (target >= revealed && revealed >= budget) {      // acabaram as dicas desta rodada
       Sound.click(); toast('Sem mais dicas nesta rodada');
       animate($('btnHint'), [0, -4, 4, -3, 3, 0].map(v => ({ transform: `translateX(${v}px)` })), { duration: 300 }); return;
     }
     Sound.click();
-    if (same && !hintOn.full) { hintOn.full = true; Board.hint([sol[k].from, sol[k].to]); return; }      // 2º toque: para onde
     if (!onPath) { hideOverlays(); Game.restart(); Board.reset(); hud(); hintOn = null; }
-    else if (auto) { hintOn = null; await Board.commit(sol[k].from, sol[k].to, null); if (Game.over || target >= sol.length) return; }
+    else if (auto) { hintOn = null; await Board.commit(sol[k].from, sol[k].to, null); if (Game.over) return; }
     revealed = Math.max(revealed, target + 1); hinted = true; hintCount();
-    hintOn = { k: target, full: false }; Board.hint([sol[target].from, sol[target].to], true);      // 1º toque: qual sapo
+    hintOn = { k: target }; Board.hint([sol[target].from, sol[target].to]);      // um toque: o sapo acende e a mãozinha mostra para onde ele pula
   }
   $('btnHint').addEventListener('click', hintTap);
   function restart() {
@@ -4472,7 +4483,7 @@ ${portalPos ? `<path d="M${finalPos.x} ${finalPos.y} L${portalPos.x} ${portalPos
   function finalPop() {
     const ov = document.createElement('div'); ov.className = 'overlay show'; ov.setAttribute('role', 'dialog'); ov.setAttribute('aria-modal', 'true');
     ov.innerHTML = `<div class="panel result win"><div class="res-art fimart">${Deco.bigHeart()}</div><div class="res-text"><h3>Você completou tudo!</h3>
-<p class="wmin">Todas as ${LAST} fases do Froggo. Parabéns! 🎉</p><p class="wmin">Chama alguém que vai gostar de jogar:</p>
+<p class="wmin">Todos os mapas do Froggo. Parabéns! 🎉</p><p class="wmin">Chama alguém que vai gostar de jogar:</p>
 <div class="row win-row"><button type="button" class="btn wa grow" data-k="s">Compartilhar</button></div>
 <div class="row win-row"><button type="button" class="btn blue grow" data-k="v">Voltar fase</button><button type="button" class="btn green grow" data-k="z">Recomeçar</button></div>
 <div class="row win-row"><button type="button" class="btn" data-k="x">Fechar</button></div></div></div>`;
@@ -4482,9 +4493,9 @@ ${portalPos ? `<path d="M${finalPos.x} ${finalPos.y} L${portalPos.x} ${portalPos
       Sound.click();
       const k = b.dataset.k;
       if (k === 's') {
-        const text = `🐸 Terminei o Froggo inteiro: as ${LAST} fases, até o Cemitério e o Pântano do Amor! Duvido você conseguir:`, url = 'https://migueldcamargo.github.io/froggo';
-        try { if (navigator.share) { await navigator.share({ title: 'Froggo', text, url }); return; } } catch (err) { return; }
-        window.open((/android/i.test(navigator.userAgent || '') ? 'whatsapp://send?text=' : 'https://wa.me/?text=') + encodeURIComponent(text + ' ' + url), '_blank');
+        const text = '🐸 Terminei todos os mapas do Froggo! Duvido você conseguir:', url = 'https://migueldcamargo.github.io/froggo';
+        try { if (navigator.share) { await navigator.share({ title: 'Froggo', text: text + '\n' + url }); return; } } catch (err) { return; }
+        window.open((/android/i.test(navigator.userAgent || '') ? 'whatsapp://send?text=' : 'https://wa.me/?text=') + encodeURIComponent(text + '\n' + url), '_blank');
         return;
       }
       ov.remove(); Base.dim(false);
