@@ -932,7 +932,7 @@ canvas.bigbang{position:absolute;inset:0;width:100%;height:100%;z-index:400;poin
 
 <script>
 'use strict';
-const BUILD = '2026-10-25.1151';      // versão publicada: trocada pela data e hora a cada publicação (ver Update, no fim); 'dev' não confere
+const BUILD = '2026-10-25.1211';      // versão publicada: trocada pela data e hora a cada publicação (ver Update, no fim); 'dev' não confere
 /* =====================================================================
    FROGGO — jogo de sapos saltadores (peg-solitaire), arquivo único e offline.
    Módulos (todos neste arquivo): Store · Geo · Rules · Solver · Gen ·
@@ -1323,11 +1323,7 @@ const Art = {
     const smile = c => `<path d="M38 52 Q50 60 62 52" stroke="${c}" stroke-width="2.6" fill="none" stroke-linecap="round"/>`;
     const shine = '<ellipse cx="37" cy="36" rx="11" ry="4.5" fill="#fff" opacity=".3" transform="rotate(-14 37 36)"/>';
     // ---- ajudantes da dupla de morsas do Amor (Cataras e Tcharina) ----
-    const fringe = (hair, hl) => {
-      const c = [[30, 12, 6], [38, 8, 6.6], [46, 6.4, 6.8], [54, 6.4, 6.8], [62, 8, 6.6], [70, 12, 6], [26, 18, 4.6], [74, 18, 4.6], [36, 15, 5.2], [44, 16.4, 5], [51, 17, 5], [58, 16, 5], [65, 15, 5]];
-      return c.map(([x, y, r]) => `<circle cx="${x}" cy="${y + .9}" r="${r + .5}" fill="#1a100a"/>`).join('') + c.map(([x, y, r]) => `<circle cx="${x}" cy="${y}" r="${r}" fill="${hair}"/>`).join('')
-        + c.filter((_, i) => i % 2 === 0).map(([x, y, r]) => `<path d="M${x - r * .45} ${y} q${r * .45} ${-r * .6} ${r * .9} 0" stroke="${hl}" stroke-width="1" fill="none" stroke-linecap="round" opacity=".7"/>`).join('');
-    };
+
     const lowEyes = (k, line) => `<defs><clipPath id="le${k}"><path d="M20.6 30.4 Q31 19.6 41.4 30.4 Q31 25.8 20.6 30.4 Z M58.6 30.4 Q69 19.6 79.4 30.4 Q69 25.8 58.6 30.4 Z"/></clipPath></defs>
     <g clip-path="url(#le${k})">${[31, 69].map(x => `<rect x="${x - 11}" y="18" width="22" height="14" fill="#fff"/><circle cx="${x}" cy="27.4" r="4.6" fill="#3a2010"/><circle cx="${x + 1.6}" cy="25.4" r="1.3" fill="#fff"/>`).join('')}</g>
     <path d="M19.8 30.6 Q31 18.8 42.2 30.6 M57.8 30.6 Q69 18.8 80.2 30.6" stroke="${line}" stroke-width="2.2" fill="none" stroke-linecap="round"/>`;
@@ -1653,6 +1649,8 @@ ${L.front}${L.eyes}${L.hand}${L.top}</g></svg>`);
   },
   // Vitória-régia: folha redonda com o recorte em "V" típico, nervuras saindo do centro.
   // Tom verde-azulado escuro para contrastar com o verde-limão dos sapos.
+  // desenho que se repete muito (vitória-régia da trilha, disco do Espaço…): vai uma vez só para o <defs> e cada cópia é um <use>
+  sym(id, make) { if (!document.getElementById(id)) document.getElementById('gB').parentNode.insertAdjacentHTML('beforeend', `<g id="${id}">${make()}</g>`); return `#${id}`; },
   lily(x, y, r, rot = 0, detail = true) {
     const P = a => `${(Math.cos(a) * r).toFixed(2)} ${(Math.sin(a) * r).toFixed(2)}`;
     const a0 = -Math.PI / 2 - 0.28, a1 = -Math.PI / 2 + 0.28;           // fenda de ~32°
@@ -1891,20 +1889,12 @@ const Outfit = (() => {
     { id: 'celular', name: 'Celular no cordão', slot: 'strap', box: '20 52 66 38',
       svg: () => `<path d="M24.5 63 Q46 73.5 69 77" stroke="#ff8a3d" stroke-width="2.6" fill="none" stroke-linecap="round"/><path d="M24.5 63 Q46 73.5 69 77" stroke="#ffd0a8" stroke-width="1" stroke-dasharray="1.5 2" fill="none"/>
 <g transform="translate(0 -3) rotate(-12 73 80)"><rect x="66" y="72" width="13" height="20" rx="2.6" fill="#1e2430" stroke="#0c0f15" stroke-width="1"/><rect x="67.6" y="74.4" width="9.8" height="14.6" rx="1.4" fill="#6fd0ff"/><path d="M69 76 L72 80" stroke="#fff" stroke-width="1" opacity=".6"/><circle cx="72.5" cy="90.4" r=".8" fill="#55607a"/></g>` },
-    { id: 'cachecol', name: 'Cachecol listrado', slot: 'neck', box: '20 58 60 30',
-      svg: () => `<path d="M23.5 61.5 Q50 77 76.5 61.5 L77.5 68 Q50 84 22.5 68 Z" fill="#e53935"/><path d="M31 66 L32.4 72.4 M40 69.2 L41 75.4 M50 70.4 V76.8 M60 69.2 L59 75.4 M69 66 L67.6 72.4" stroke="#fff" stroke-width="2.6"/>
-<path d="M57 71 L60 84 L67 82.6 L64 70 Z" fill="#e53935"/><path d="M58.2 76 L65.2 74.6 M59.4 80.6 L66.4 79.2" stroke="#fff" stroke-width="2.4"/><path d="M60.6 84 l-.6 2.6 M63.2 83.5 l0 2.7 M65.8 83 l.6 2.6" stroke="#e53935" stroke-width="1.2"/>` },
     { id: 'bone', name: 'Boné de hélice', slot: 'head', box: '30 -14 40 38',
       // boné colorido de gomos com hélice no topo
       svg: () => `<g transform="translate(0 -3.5)"><path d="M50 3 Q33 4 33 22 L41.5 22 Z" fill="#e53935"/><path d="M50 3 L41.5 22 L50 22 Z" fill="#ffd23f"/><path d="M50 3 L50 22 L58.5 22 Z" fill="#2b7de9"/><path d="M50 3 L58.5 22 L67 22 Q67 4 50 3 Z" fill="#2fbf3a"/>
 <path d="M33 22 Q33 3 50 3 Q67 3 67 22 Z" fill="none" stroke="#1d2a44" stroke-width="1.1" stroke-linejoin="round"/><path d="M38 12 Q41 7 46 5.6" stroke="#fff" stroke-width="1.6" opacity=".5" fill="none" stroke-linecap="round"/>
 <path d="M36 21.5 Q50 28.5 64 21.5 L62.4 20 Q50 25.4 37.6 20 Z" fill="#ffd23f" stroke="#a87a00" stroke-width=".8"/>
 <rect x="49.2" y="-2.6" width="1.6" height="6" fill="#555"/><ellipse cx="43.2" cy="-3.4" rx="6.6" ry="1.9" fill="#e53935" stroke="#8a1414" stroke-width=".6" transform="rotate(-8 43.2 -3.4)"/><ellipse cx="56.8" cy="-2.4" rx="6.6" ry="1.9" fill="#2b7de9" stroke="#164a96" stroke-width=".6" transform="rotate(-8 56.8 -2.4)"/><circle cx="50" cy="-2.8" r="1.7" fill="#ffd23f" stroke="#a87a00" stroke-width=".6"/></g>` },
-    { id: 'cartola', name: 'Cartola', slot: 'head', box: '27 -22 46 42',
-      // aba larga e copa alta, acima dos olhos (que são desenhados por cima da camada da cabeça)
-      svg: () => `<g transform="translate(0 -5)"><ellipse cx="50" cy="18" rx="21" ry="4.6" fill="#151515"/><path d="M30 17 Q50 22.2 70 17" stroke="#3a3a3a" stroke-width="1.1" fill="none"/>
-<rect x="38.5" y="-11.5" width="23" height="29.5" rx="2.5" fill="#262626"/><rect x="38.5" y="8.6" width="23" height="5.2" fill="#d9262c"/>
-<ellipse cx="50" cy="-11.5" rx="11.5" ry="2.7" fill="#3a3a3a"/><path d="M42 -7.5 V6" stroke="#fff" stroke-width="1.6" opacity=".25" stroke-linecap="round"/></g>` },
     { id: 'oculos', name: 'Bay-Ran Wayfrog', slot: 'eyes', box: '11 13 78 24',
       // armação preta trapezoidal (mais larga em cima), lentes verde-escuras, rebites prateados
       svg: () => {
@@ -1915,17 +1905,6 @@ const Outfit = (() => {
     { id: 'gravata', name: 'Gravata-borboleta', slot: 'neck', box: '34 61 32 22',
       svg: () => `<g transform="translate(0 9)"><path d="M50 63 L37 55.5 Q35 63 37 70.5 Z" fill="#e53b6b" stroke="#a8173f" stroke-width="1"/><path d="M50 63 L63 55.5 Q65 63 63 70.5 Z" fill="#e53b6b" stroke="#a8173f" stroke-width="1"/>
 <rect x="46.5" y="59.5" width="7" height="7" rx="2.2" fill="#c21f4f"/><g fill="#fff" opacity=".85"><circle cx="40.5" cy="60" r="1.2"/><circle cx="41" cy="66.5" r="1.2"/><circle cx="59.5" cy="60" r="1.2"/><circle cx="59" cy="66.5" r="1.2"/></g></g>` },
-    { id: 'pirata', name: 'Chapéu de pirata', slot: 'head', box: '20 -4 60 30',
-      svg: () => `<path d="M23 22 Q28 5 50 3 Q72 5 77 22 Q50 13.5 23 22 Z" fill="#1d1d1d" stroke="#ffd23f" stroke-width="1.8" stroke-linejoin="round"/>
-<path d="M44 18 L56 8 M56 18 L44 8" stroke="#fff" stroke-width="1.6" stroke-linecap="round"/><circle cx="50" cy="11" r="3.8" fill="#fff"/><rect x="47.8" y="13.4" width="4.4" height="2.4" rx=".9" fill="#fff"/>
-<circle cx="48.6" cy="10.8" r=".9" fill="#1d1d1d"/><circle cx="51.4" cy="10.8" r=".9" fill="#1d1d1d"/>` },
-    { id: 'capa', name: 'Capa de herói', slot: 'back', rare: true, box: '2 40 96 54',
-      svg: () => `<path d="M26 44 Q50 52 74 44 L96 84 Q86 90 76 86 Q64 92 50 88 Q36 92 24 86 Q14 90 4 84 Z" fill="#2f6bff" stroke="#1d47b8" stroke-width="1.5" stroke-linejoin="round"/><path d="M26 44 L9 82 M74 44 L91 82" stroke="#6f98ff" stroke-width="1.6" opacity=".7"/>`,
-      front: () => `<circle cx="30" cy="67" r="2.8" fill="#ffd23f" stroke="#b07a00" stroke-width=".8"/><circle cx="70" cy="67" r="2.8" fill="#ffd23f" stroke="#b07a00" stroke-width=".8"/>` },
-    { id: 'medalha', name: 'Medalha de ouro', slot: 'chest', rare: true, box: '38 64 24 30',
-      // a fita nasce no pescoço (o queixo do sapo fica em y≈69) e a medalha pende sobre a barriga
-      svg: () => `<g transform="translate(0 2.5)"><path d="M42.5 66.5 L50 77 L57.5 66.5" fill="none" stroke="#2b7de9" stroke-width="4.2" stroke-linejoin="round"/><path d="M44.5 67.5 L50 75" stroke="#ff4b3a" stroke-width="1.4"/>
-<circle cx="50" cy="81" r="6.6" fill="url(#crown)" stroke="#a86a00" stroke-width="1.2"/><path d="M50 76.8 l1.3 2.7 3 .45 -2.2 2.1 .5 3 -2.6 -1.4 -2.6 1.4 .5 -3 -2.2 -2.1 3 -.45z" fill="#fff8c0"/></g>` },
     { id: 'manto', name: 'Manto real', slot: 'back', rare: true, box: '0 44 100 62',
       svg: () => {
         let tufts = ''; for (let i = 0; i < 9; i++) tufts += `<path d="M${10 + i * 10} ${97 + Math.sin(i) * .6} l1.2 3 l1.2 -3" fill="#111"/>`;
@@ -1959,7 +1938,7 @@ const Outfit = (() => {
         return tank(9) + tank(76);
       } },
     // caixa de brinquedo espacial: o sapo vai dentro, como boneco na embalagem (fundo e moldura atrás, plástico e rótulo na frente)
-    { id: 'foguete', name: 'Caixa espacial', slot: 'ride', rare: true, box: '-6 -34 112 148',
+    { id: 'foguete', name: 'Ônibus espacial', slot: 'ride', rare: true, box: '-6 -34 112 148',
       svg: () => {
         let stars = ''; [[14, 30], [86, 26], [22, 62], [80, 58], [30, 8], [70, 6], [10, 84], [90, 82], [50, -8]].forEach(([x, y], i) => { stars += `<circle cx="${x}" cy="${y}" r="${i % 3 ? .9 : 1.4}" fill="#fff" opacity="${i % 2 ? .6 : .9}"/>`; });
         return `<path d="M-4 106 V16 L16 -16 Q50 -34 84 -16 L104 16 V106 Z" fill="#7b3fe4" stroke="#3d1a8a" stroke-width="1.6" stroke-linejoin="round"/>
@@ -2002,12 +1981,6 @@ ${boot(33)}${boot(67)}`;
 <g fill="#fff" opacity=".85"><circle cx="35" cy="14" r="1.1"/><circle cx="43" cy="9" r="1.1"/><circle cx="52" cy="7.6" r="1.1"/><circle cx="60" cy="10" r="1.1"/><circle cx="67" cy="15.4" r="1.1"/><circle cx="39" cy="19.4" r=".9"/><circle cx="47" cy="14.6" r=".9"/><circle cx="56" cy="14" r=".9"/><circle cx="63" cy="20" r=".9"/><circle cx="30.6" cy="20.6" r=".8"/></g>
 <path d="M26.2 22.2 Q50 16.6 73.8 22.2" stroke="#7a0f0f" stroke-width=".8" fill="none" opacity=".6"/>
 <path d="M69 8 Q77 0 87 -2 Q84 3 81 5 Q87 7 90 11 Q79 12 72 11 Z" fill="#d32f2f" stroke="#7a0f0f" stroke-width="1" stroke-linejoin="round"/><circle cx="71" cy="9.4" r="2.8" fill="#b71c1c" stroke="#7a0f0f" stroke-width=".8"/></g>` },
-    { id: 'fone', name: 'Fone de ouvido', slot: 'head', layer: 'top', box: '4 -8 92 50',
-      // arco por cima dos olhos e conchas grandes dos lados
-      svg: () => `<path d="M14.4 30 Q13 -6 50 -6 Q87 -6 85.6 30" stroke="#2a2a33" stroke-width="3.6" fill="none" stroke-linecap="round"/><path d="M22 6 Q34 -3 48 -3.4" stroke="#6b6b7a" stroke-width="1.2" fill="none" stroke-linecap="round"/>
-<rect x="5" y="20" width="12" height="20" rx="5.6" fill="#ff4b3a" stroke="#8a1414" stroke-width="1.1"/><rect x="83" y="20" width="12" height="20" rx="5.6" fill="#ff4b3a" stroke="#8a1414" stroke-width="1.1"/>
-<rect x="14" y="22.4" width="4.6" height="15.2" rx="2.3" fill="#2a2a33"/><rect x="81.4" y="22.4" width="4.6" height="15.2" rx="2.3" fill="#2a2a33"/>
-<path d="M7.6 24 V35 M85.6 24 V35" stroke="#fff" stroke-width="1.2" opacity=".45" stroke-linecap="round"/>` },
     { id: 'pochete', name: 'Bag', slot: 'strap', box: '16 54 70 34',
       // pochete colorida atravessada (crossbody): alça branca da cintura até o ombro, bolsa na barriga inclinada,
       // corpo azul, bolso de cima verde, bolso da frente vermelho com borda amarela escrito RAPINA
@@ -2073,19 +2046,6 @@ ${vest}<g transform="translate(100 0) scale(-1 1)">${vest}</g>
 <path d="M82.6 50 Q90 47 97.4 50 L97.6 55 Q90 52 82.4 55 Z" fill="#ff6a13"/><path d="M82.2 58 Q90 55 97.8 58 L97.8 61 Q90 58 82.2 61 Z" fill="#2b7de9"/><path d="M90 22 V96" stroke="#c3ccdd" stroke-width=".8"/>
 <path d="M90 86 L94 94 L90 94 Z" fill="#2b7de9"/><path d="M87 28 Q84 40 84 50" stroke="#fff" stroke-width="1.6" opacity=".8" fill="none" stroke-linecap="round"/></g>` },
     // ---- Festa universitária / Skatepark ----
-    { id: 'coque', name: 'Coque alto', slot: 'head', box: '26 -14 48 38',
-      // cabelo castanho preso no alto: franjinha lisa cobrindo o alto da cabeça e coque bagunçado com xuxinha rosa e fios soltos
-      svg: () => `<path d="M30 21 Q29 7 50 5 Q71 7 70 21 Q62 15 50 15.6 Q38 15 30 21 Z" fill="#5c3820" stroke="#3a2010" stroke-width=".9"/>
-<path d="M36 16 Q42 9 50 8.4 M44 15.4 Q50 10 58 9.6 M54 15.4 Q60 11 66 13" stroke="#7a4c2c" stroke-width="1" fill="none" stroke-linecap="round"/>
-<ellipse cx="50" cy="6.4" rx="6.4" ry="3" fill="#ff6ad5" stroke="#b0144f" stroke-width=".8"/><path d="M44.6 5.6 q1.4 -1.6 2.8 0 q1.4 -1.6 2.8 0 q1.4 -1.6 2.8 0 q1.4 -1.6 2.8 0" stroke="#ff9ee6" stroke-width=".7" fill="none"/>
-<path d="M50 4 C38 4 38 -12 50 -12 C62 -12 62 4 50 4 Z" fill="#6b4226" stroke="#3a2010" stroke-width="1"/>
-<path d="M44 -6 Q48 -11 55 -8 Q51 -4 46 -3 M47 -9 Q53 -3 57 -4 M45 -1 Q50 -5 55 -1" stroke="#8a5a36" stroke-width="1.1" fill="none" stroke-linecap="round"/>
-<path d="M57 -9 Q62 -13 61 -17 M43 -9 Q39 -12 41 -15 M58 0 Q63 1 64 4" stroke="#5c3820" stroke-width="1" fill="none" stroke-linecap="round"/>` },
-    { id: 'caixasom', name: 'Caixa de som', slot: 'hand', rare: true, box: '72 50 36 44',
-      // caixinha de som portátil na mão direita, com alto-falantes e luz colorida pulsando
-      svg: () => `<g transform="rotate(-6 90 74)"><rect x="76" y="62" width="28" height="22" rx="10" fill="#1c1c22" stroke="#3a3a46" stroke-width="1.2"/><path d="M84 62 Q84 56 90 56 Q96 56 96 62" stroke="#3a3a46" stroke-width="2.2" fill="none"/>
-<circle cx="84" cy="73" r="6" fill="#2a2a33" stroke="#6a6a7a"/><circle cx="96" cy="73" r="6" fill="#2a2a33" stroke="#6a6a7a"/><circle cx="84" cy="73" r="2" fill="#6a6a7a"/><circle cx="96" cy="73" r="2" fill="#6a6a7a"/>
-<rect x="77" y="81" width="26" height="2.4" rx="1.2" class="jflame" fill="#9dff6a"/><path d="M106 66 q4 4 0 8 M109 63 q7 7 0 14" stroke="#ff6ad5" stroke-width="1.4" fill="none" stroke-linecap="round"/></g>` },
     { id: 'gorro', name: 'Gorro', slot: 'head', box: '26 -8 48 34',
       // gorro de lã de skatista: copa canelada mostarda e barra dobrada
       svg: () => {
@@ -2212,7 +2172,7 @@ ${vest}<g transform="translate(100 0) scale(-1 1)">${vest}</g>
 <path d="M42 3.4 Q40.6 12 41.2 22 M58 3.4 Q59.4 12 58.8 22" stroke="#22361f" stroke-width=".7" fill="none" opacity=".75"/><circle cx="50" cy="2.3" r="1.6" fill="#3f5a3a" stroke="#22361f" stroke-width=".6"/>
 <g font-family="Georgia,'Times New Roman',serif" font-size="6.6" font-weight="700" fill="#efe6c8" text-anchor="middle"><text x="46.6" y="12.6">R</text><text x="50" y="15.4">P</text><text x="53.4" y="18.2">N</text></g>
 <path d="M33 21 Q50 31 67 21 L65.4 18.6 Q50 26.6 34.6 18.6 Z" fill="#c9b48f" stroke="#8f7a55" stroke-width=".8"/><path d="M36 21.6 Q50 28.6 64 21.6" stroke="#e8dcc0" stroke-width=".5" fill="none" stroke-dasharray="1 .8"/></g>` },
-    { id: 'luiz', name: 'Luiz', slot: 'head', layer: 'top', rare: true, box: '22 -8 56 36',
+    { id: 'luiz', name: 'Lopu', slot: 'head', layer: 'top', rare: true, box: '22 -8 56 36',
       // amigos (Capi): boné preto de aba curva com friso cinza na borda da aba e o L duplo prateado (o da Lupo) na lateral da frente
       svg: () => `<g transform="translate(0 -3.5)"><path d="M30.6 22 Q30 2.6 50 2 Q70 2.6 69.4 22 Z" fill="#17181b" stroke="#000" stroke-width=".9"/>
 <path d="M42 3.4 Q40.6 12 41.2 22 M58 3.4 Q59.4 12 58.8 22" stroke="#2c2e33" stroke-width=".8" fill="none"/><circle cx="50" cy="2.3" r="1.6" fill="#17181b" stroke="#000" stroke-width=".6"/>
@@ -2237,12 +2197,6 @@ ${vest}<g transform="translate(100 0) scale(-1 1)">${vest}</g>
 <path d="M49.7 13.4 Q51.8 12.9 53.6 13.6" stroke="#6d6a70" stroke-width=".2" fill="none"/><circle cx="48.7" cy="13.1" r=".5" fill="#e9c8bd"/><circle cx="48.75" cy="13.1" r=".22" fill="#6d6a70"/>
 <path d="M30.5 21.2 Q50 34 69.5 21.2 Q50 31.4 30.5 21.2 Z" fill="#3a2620" opacity=".28"/>
 <path d="M30 19.6 Q50 32.4 70 19.6 L67.8 17 Q50 27.4 32.2 17 Z" fill="url(#leoPrint)" stroke="#c98f80" stroke-width="1.3" stroke-linejoin="round"/><path d="M32.6 17.6 Q50 27.8 67.4 17.6" stroke="#7a5f58" stroke-width=".7" fill="none" opacity=".7"/></g>` },
-    { id: 'galocha', name: 'Galocha amarela', slot: 'feet', box: '6 62 88 36',
-      // galocha de borracha amarela, cano alto e sola escura (Esgoto)
-      svg: () => { const b = `<path d="M-3 11 V-15 Q-3 -17 -1 -17 H10 Q12 -17 12 -15 V-1 Q22 -2 27 2 Q30.5 4 30.5 8 V11 Z" fill="#ffcf1f" stroke="#a87a00" stroke-width="1"/>
-<rect x="-4.2" y="-19" width="17.4" height="4.4" rx="1.4" fill="#f0b400" stroke="#a87a00" stroke-width="1"/><rect x="-3.6" y="9" width="35" height="4.4" rx="1.6" fill="#3a3a3a"/>
-<path d="M0 -12 V6" stroke="#fff" stroke-width="1.6" opacity=".45" stroke-linecap="round"/><path d="M14 1 Q22 0 26 4" stroke="#fff" stroke-width="1.2" opacity=".4" fill="none" stroke-linecap="round"/>`;
-        return `<g transform="translate(45 82) scale(-.82 .82)">${b}</g><g transform="translate(55 82) scale(.82)">${b}</g>`; } },
     { id: 'mascara', name: 'Máscara de gás', slot: 'face', box: '10 34 80 28',
       // máscara de gás cinza com filtro redondo na frente e tiras para trás (Esgoto)
       svg: () => `<path d="M36 46 Q24 44 14 38 M64 46 Q76 44 86 38" stroke="#22262a" stroke-width="3" fill="none" stroke-linecap="round"/>
@@ -2304,12 +2258,27 @@ ${vest}<g transform="translate(100 0) scale(-1 1)">${vest}</g>
 <text x="51" y="77" text-anchor="middle" font-family="Arial Black,Arial,sans-serif" font-weight="900" font-size="5.8" fill="#fff" letter-spacing=".2">CBJR</text>
 <text x="51" y="83.2" text-anchor="middle" font-family="Arial Black,Arial,sans-serif" font-weight="900" font-size="5.2" fill="#fff">013</text>`;
       } },
-    { id: 'pastel', name: 'Pastel', slot: 'hand', rare: true, legacy: true, box: '70 50 40 34',
-      // amigos: pastel de feira (era da capivara; só para quem já tinha ganhado), retangular, com a borda apertada de garfo
+    { id: 'pastel', name: 'Pastel', slot: 'hand', rare: true, box: '70 50 40 34',
+      // Pira com 3★: pastel de feira, retangular, com a borda apertada de garfo
       svg: () => { let crimp = ''; for (let k = 0; k < 10; k++) crimp += `<path d="M${77.4 + k * 2.8} 58.2 v2.2 M${77.4 + k * 2.8} 77.6 v2.2" stroke="#b8741e" stroke-width=".8" stroke-linecap="round"/>`;
         return `<g transform="rotate(-12 90 69)"><rect x="75" y="57" width="30" height="24" rx="4" fill="#e9a640" stroke="#9a5a14" stroke-width="1.1"/><rect x="77.6" y="61" width="24.8" height="16" rx="3" fill="#f4c25e"/>${crimp}
 <g fill="#fde4a0" stroke="#d89a3a" stroke-width=".5"><ellipse cx="83" cy="66" rx="2.2" ry="1.5"/><ellipse cx="92" cy="64" rx="1.6" ry="1.1"/><ellipse cx="97" cy="71" rx="2" ry="1.4"/><ellipse cx="87" cy="72.6" rx="1.4" ry="1"/></g>
 <path d="M79 63 Q81 61.4 85 61.2" stroke="#fff" stroke-width="1.2" opacity=".45" fill="none" stroke-linecap="round"/></g>`; } },
+    { id: 'garapa', name: 'Garapa', slot: 'hand', box: '72 40 34 46',
+      // Pira: copo de caldo de cana com espuma, gelo, canudo e uma rodela de limão na borda
+      svg: () => `<path d="M93.6 74 L98.6 42" stroke="#2fbf3a" stroke-width="2" stroke-linecap="round"/><path d="M80 52 H100 L97.4 82 H82.6 Z" fill="#fff" fill-opacity=".28" stroke="#8fa3a3" stroke-width="1"/>
+<path d="M80.5 57.6 H99.5 L97.4 82 H82.6 Z" fill="#cfc85c"/><path d="M80.4 56.4 Q85 54.8 90 56.4 Q95 58 99.6 56.4 L99.3 60 Q90 61.6 80.7 60 Z" fill="#f4f0cf"/>
+<g fill="#fff" fill-opacity=".45" stroke="#e8e4b4" stroke-width=".5"><rect x="83.4" y="63" width="5" height="5" rx="1.2" transform="rotate(12 86 65.5)"/><rect x="90.6" y="67" width="4.6" height="4.6" rx="1.2" transform="rotate(-10 93 69)"/></g>
+<path d="M83.6 62 L85 80" stroke="#fff" stroke-width="1.4" opacity=".45" stroke-linecap="round"/>
+<g transform="translate(80 53)"><circle r="4.6" fill="#7cc242" stroke="#3f7a1e" stroke-width=".8"/><circle r="3.4" fill="#d6f08a"/><path d="M0 -3.2 V3.2 M-2.8 -1.6 L2.8 1.6 M-2.8 1.6 L2.8 -1.6" stroke="#9cc84e" stroke-width=".6"/></g>` },
+    { id: 'pamonha', name: 'Pamonha', slot: 'hand', box: '66 48 46 38',
+      // Pira: pamonha embrulhada na palha de milho, presa com um elástico verde na vertical e um amarelo na horizontal, em cruz
+      svg: () => `<g transform="rotate(-14 90 68)"><path d="M70 64 Q72 58 78 58 H102 Q108 58 110 64 L108 76 Q106 82 100 82 H80 Q74 82 72 76 Z" fill="#e3dc95" stroke="#9a9350" stroke-width="1.1"/>
+<path d="M74 62 Q90 60 106 62 M73 68 Q90 66 108 68 M74 74 Q90 72 107 74 M75 79 Q90 77.6 104 79" stroke="#b8b06a" stroke-width=".7" fill="none"/>
+<path d="M70 64 L66 60 Q70 62 72 60 M110 64 L114 59 Q110 62 108 60" stroke="#9a9350" stroke-width="1" fill="#e3dc95" stroke-linejoin="round"/>
+<path d="M71.4 70.4 Q90 68.4 108.6 70.4" stroke="#ffd23f" stroke-width="2.4" fill="none"/><path d="M71.4 70.4 Q90 68.4 108.6 70.4" stroke="#fff4b0" stroke-width=".6" fill="none" opacity=".8"/>
+<path d="M90 57.4 Q89 70 90 82.6" stroke="#1f9d3a" stroke-width="2.4" fill="none"/><path d="M90 57.4 Q89 70 90 82.6" stroke="#6fe08a" stroke-width=".6" fill="none" opacity=".7"/>
+<path d="M76 61 Q80 59.6 86 59.6" stroke="#fff" stroke-width="1.1" opacity=".5" fill="none" stroke-linecap="round"/></g>` },
     { id: 'coco', name: 'Coco', slot: 'hand', rare: true, box: '72 40 36 44',
       // Praia com 3★: coco verde com canudinho, na mão
       svg: () => `<path d="M95 44 L91 60" stroke="#ff4b8a" stroke-width="2.2" stroke-linecap="round"/><path d="M95 44 L100 41" stroke="#ff4b8a" stroke-width="2.2" stroke-linecap="round"/>
@@ -2434,6 +2403,7 @@ ${zig}<path d="${band}" fill="${W}" stroke="${WD}" stroke-width="1"/>
   let worn = Store.get('outfit', {}), wornRed = Store.get('outfitRed', {});    // roupa do sapo verde (o jogador) e do vermelho
   if (!worn || typeof worn !== 'object') worn = {};
   if (!wornRed || typeof wornRed !== 'object') wornRed = {};
+  for (const o of [worn, wornRed]) for (const k in o) if (!BY[o[k]]) delete o[k];      // apetrecho que saiu do jogo (ex.: coque alto)
   const flies = o => !!o && Object.values(o).some(id => BY[id] && BY[id].fly);     // mochila a jato: o sapo flutua
   /* Personagens: o sapo e os amigos que chegam ao abrir certos pântanos. Cada lugar (o seu e o do sapinho vermelho)
      escolhe o seu personagem no guarda-roupa. */
@@ -3612,7 +3582,7 @@ const UI = (() => {
 const Deco = {
   ripple: (x, y, k) => `<g fill="none" stroke="#fff" stroke-opacity=".3" stroke-width="1.5"><ellipse cx="${x}" cy="${y}" rx="${16 * k}" ry="${4.5 * k}"/><ellipse cx="${x}" cy="${y}" rx="${8 * k}" ry="${2.2 * k}" stroke-opacity=".22"/></g>`,
   bubble: (x, y, k) => `<circle cx="${x}" cy="${y}" r="${3.5 * k}" fill="none" stroke="#fff" stroke-opacity=".45" stroke-width="1.2"/><circle cx="${x - k}" cy="${y - k}" r="${.8 * k}" fill="#fff" fill-opacity=".6"/>`,
-  lily: (x, y, k, rot) => Art.lily(x, y, 10 * k, rot, true),
+  lily: (x, y, k, rot) => `<use href="${Art.sym('dLily', () => Art.lily(0, 0, 10, 0, true))}" transform="translate(${x} ${y}) rotate(${rot}) scale(${k})"/>`,
   lotus(x, y, k) {
     let p = '';
     for (const a of [-64, -32, 0, 32, 64]) p += `<ellipse cx="0" cy="-8" rx="4.6" ry="10" fill="#ff9ec4" stroke="#e0609a" stroke-width=".8" transform="rotate(${a} 0 1)"/>`;
@@ -3641,9 +3611,7 @@ const Deco = {
     s += `<path d="M-2 0 Q-14 -14 -18 -26" stroke="#5a8f3a" stroke-width="2.4" fill="none" stroke-linecap="round"/><path d="M3 0 Q14 -12 20 -22" stroke="#5a8f3a" stroke-width="2.4" fill="none" stroke-linecap="round"/>`;
     return `<g transform="translate(${x} ${y}) scale(${k})"><ellipse cx="0" cy="1" rx="14" ry="3.5" fill="#000" opacity=".15"/>${s}</g>`;
   },
-  log(x, y, k, rot) {
-    return `${Deco.ripple(x, y + 7 * k, 2.2 * k)}<g transform="translate(${x} ${y}) rotate(${rot}) scale(${k})"><rect x="-28" y="-7" width="56" height="14" rx="7" fill="#7a4b26"/><path d="M-20 -3 H10 M-12 2 H18" stroke="#5a3418" stroke-width="1.4" stroke-linecap="round"/><ellipse cx="27" cy="0" rx="4.5" ry="7" fill="#d1a06a"/><ellipse cx="27" cy="0" rx="2.2" ry="3.6" fill="none" stroke="#7a4b26" stroke-width="1"/><path d="M-6 -7 q2 -6 6 -7" stroke="#4f8a32" stroke-width="2" fill="none"/></g>`;
-  },
+
   mud: (x, y, k) => `<ellipse cx="${x}" cy="${y}" rx="${26 * k}" ry="${8 * k}" fill="#4b3a1e" opacity=".28"/>`,
   tree(x, y, k, flip, moss) {
     const f = flip ? -1 : 1;
@@ -3654,10 +3622,7 @@ ${moss ? '<path d="M18 -48 v12 M22 -52 v9 M-16 -61 v13 M-19 -64 v8" stroke="#6f8
   },
   fog: (x, y, k) => `<ellipse cx="${x}" cy="${y}" rx="${70 * k}" ry="${11 * k}" fill="#e8f4f0" opacity=".1"/><ellipse cx="${x + 20 * k}" cy="${y + 6 * k}" rx="${45 * k}" ry="${7 * k}" fill="#e8f4f0" opacity=".08"/>`,
   firefly: (x, y, k) => `<circle cx="${x}" cy="${y}" r="${6 * k}" fill="#fff36b" opacity=".22"/><circle cx="${x}" cy="${y}" r="${2 * k}" fill="#fffbc0"/>`,
-  mushroom(x, y, k) {
-    return `<g transform="translate(${x} ${y}) scale(${k})"><ellipse cx="0" cy="1" rx="11" ry="3" fill="#000" opacity=".2"/><rect x="-2.5" y="-10" width="5" height="11" rx="2" fill="#e8e0f0"/><path d="M-11 -9 Q0 -24 11 -9 Z" fill="#9b6cff"/><circle cx="-4" cy="-13" r="1.6" fill="#e6dcff"/><circle cx="3" cy="-15" r="1.3" fill="#e6dcff"/>
-<rect x="9" y="-6" width="3.6" height="7" rx="1.5" fill="#e8e0f0"/><path d="M5 -5 Q10.8 -14 16.6 -5 Z" fill="#6fd0ff"/><circle cx="0" cy="-12" r="14" fill="#9b6cff" opacity=".12"/></g>`;
-  },
+
   gator(x, y, k, flip) {
     const f = flip ? -1 : 1;
     let ridge = ''; for (let i = 0; i < 7; i++) ridge += `<circle cx="${-32 + i * 8.5}" cy="${-5.2 + Math.abs(i - 3) * .3}" r="2.7" fill="#36602c"/>`;
@@ -4058,12 +4023,12 @@ const Career = (() => {
     at('iniciante', 3, 'oldskool'); at('iniciante', 6, 'oculos'); at('iniciante', 8, 'bolovo');                 // Tranquilo
     at('montemor', 4, 'linus'); at('montemor', 7, 'woody'); at('montemor', 10, 'chapeuwoody');                 // Monte Mor
     at('praia', 4, 'havaianas'); at('praia', 7, 'picole'); at('praia', 8, 'bucket'); at('praia', 10, 'bellato');   // Praia (o Cata-Ovo é o par do Kiwi)
-    at('avancado', 4, 'cachecol'); at('avancado', 8, 'gravata'); at('avancado', 12, 'bone');                   // Pira
-    at('nebuloso', 5, 'zerezes'); at('nebuloso', 8, 'tocha'); at('nebuloso', 10, 'cartola');                   // Nebuloso (a tocha clareia a neblina)
-    at('carnaval', 5, 'coracao'); at('carnaval', 7, 'violino'); at('carnaval', 10, 'pirata');                  // Carnaval
-    at('festa', 2, 'juju'); at('festa', 4, 'pochete'); at('festa', 5, 'sanas'); at('festa', 7, 'bandana'); at('festa', 10, 'coque');   // Porradinha
-    at('skatepark', 4, 'fone'); at('skatepark', 7, 'skate', 'regata'); at('skatepark', 10, 'gorro');           // Skatepark (a regata CBJR 013 sai junto com o skate)
-    at('esgoto', 1, 'galocha'); at('esgoto', 3, 'mascara'); at('esgoto', 5, 'macacao'); at('esgoto', 7, 'capacetelanterna');   // Esgoto
+    at('avancado', 4, 'garapa'); at('avancado', 8, 'gravata'); at('avancado', 10, 'pamonha'); at('avancado', 12, 'bone');   // Pira (garapa e pamonha)
+    at('nebuloso', 5, 'zerezes'); at('nebuloso', 8, 'tocha');                   // Nebuloso (a tocha clareia a neblina)
+    at('carnaval', 5, 'coracao'); at('carnaval', 7, 'violino');                  // Carnaval
+    at('festa', 2, 'juju'); at('festa', 4, 'pochete'); at('festa', 5, 'sanas'); at('festa', 7, 'bandana');   // Porradinha
+    at('skatepark', 7, 'skate', 'regata'); at('skatepark', 10, 'gorro');           // Skatepark (a regata CBJR 013 sai junto com o skate)
+    at('esgoto', 3, 'mascara'); at('esgoto', 5, 'macacao'); at('esgoto', 7, 'capacetelanterna');   // Esgoto
     at('expert', 3, 'oculos3d'); at('expert', 7, 'jetpack'); at('expert', 10, 'coroa', 'trofeu');              // Jacaroso
     at('espaco', 5, 'traje'); at('espaco', 10, 'antenas');                                                     // Espaço
     at('cemiterio', 5, 'dentes');                                                                              // Cemitério
@@ -4076,8 +4041,7 @@ const Career = (() => {
      O Pântano Tranquilo pede as 9 do tutorial.
      Fechar um pântano inteiro com 3★ (do Tranquilo em diante) dá um prêmio raro. */
   const START = []; REGIONS.reduce((a, R, r) => (START[r] = a, a + R.count), 0);
-  const RARE = { iniciante: 'medalha', montemor: 'guitarra', praia: 'coco', nebuloso: 'asas', carnaval: 'manto', festa: 'caixasom', skatepark: 'corrente',
-    avancado: 'capa', expert: 'safari', espaco: 'foguete' };    // pântano todo com 3★ (o Esgoto não tem; prancha, faixa ninja e capacete vêm com os amigos)
+  const RARE = { montemor: 'guitarra', praia: 'coco', nebuloso: 'asas', carnaval: 'manto', skatepark: 'corrente', avancado: 'pastel', expert: 'safari', espaco: 'foguete' };    // pântano todo com 3★ (o Esgoto não tem; prancha, faixa ninja e capacete vêm com os amigos)
   let stars = Store.get('stars', null), opened = Store.get('opened', null), rare = Store.get('rare', []);
   if (!Array.isArray(stars)) {        // quem já jogava antes das estrelas: fases feitas valem 1★ e os pântanos já alcançados seguem abertos
     stars = Array.from({ length: ALL }, (_, i) => i < done ? 1 : 0);
@@ -4199,7 +4163,7 @@ const Career = (() => {
   // ordem em que os apetrechos saem (trilha, 3★ de cada pântano, coleção do desafio): organiza o guarda-roupa
   const ORDER = REGIONS.flatMap((R, r) => Object.keys(PRIZE).filter(i => +i >= START[r] && +i < START[r] + R.count).sort((a, b) => a - b).flatMap(i => PRIZE[i].concat(...Outfit.CHARS.filter(c => c.fase === +i).map(c => c.kit || [])))   // kit de amigo que chega na fase vem logo depois
     .concat(RARE[R.id] || [], (Outfit.CHARS.find(c => c.at === R.id) || {}).kit || []))
-    .concat(DAILY.map(([, id]) => id), 'kiwifruta', 'pastel');
+    .concat(DAILY.map(([, id]) => id), 'kiwifruta');
   let list = null, built = null, nodes = [], finalPos = null, portalPos = null, starPos = null, endPos = null, gates = [], lastW = 0, avatar = null;
   const map = $('cmap'), inner = $('cmapInner');
   let baseRects = [], mapKey = '';
@@ -4359,7 +4323,7 @@ ${portalPos ? `<path d="M${finalPos.x} ${finalPos.y} L${portalPos.x} ${portalPos
     nodes.forEach((p, i) => {
       const st = i < done ? 'done' : i === done && playable(i) ? 'cur' : 'locked', L = list[i];
       html += `<button class="cnode ${st}${st === 'done' && stars[i] === 3 ? ' perfect' : ''}" data-i="${i}" style="left:${p.x - ns / 2}px;top:${p.y - ns / 2}px;width:${ns}px;height:${ns}px" aria-label="Fase ${i + 1}, ${REGIONS[L.region].name}${st === 'locked' ? ' (bloqueada)' : ''}">
-<svg viewBox="-12 -12 24 24">${REGIONS[L.region].bonus ? Art.saucer(0, 0, 10.5) : REGIONS[L.region].id === 'cemiterio' ? Deco.tombNode() : REGIONS[L.region].id === 'amor' ? Deco.heartNode() : Art.lily(0, 0, 10.5, (i * 47) % 360, true)}</svg><span class="num">${i + 1}</span>${st === 'locked' ? `<span class="lock">${lock}</span>` : st === 'done' ? `<span class="ok">${stars[i] === 3 ? okStar : ok}</span>` : ''}${stars[i] ? `<span class="cst">${starHTML(stars[i])}</span>` : ''}${PRIZE[i] && i >= done ? `<span class="prize mystery${i === np ? ' next' : ''}" title="Prêmio surpresa"${i === np ? ` style="--p:${ring.toFixed(3)}"` : ''}>?</span>` : ''}</button>`;
+<svg viewBox="-12 -12 24 24">${REGIONS[L.region].bonus ? `<use href="${Art.sym('nUfo', () => Art.saucer(0, 0, 10.5))}"/>` : REGIONS[L.region].id === 'cemiterio' ? `<use href="${Art.sym('nTomb', Deco.tombNode)}"/>` : REGIONS[L.region].id === 'amor' ? `<use href="${Art.sym('nHeart', Deco.heartNode)}"/>` : `<use href="${Art.sym('nLily', () => Art.lily(0, 0, 10.5, 0, true))}" transform="rotate(${(i * 47) % 360})"/>`}</svg><span class="num">${i + 1}</span>${st === 'locked' ? `<span class="lock">${lock}</span>` : st === 'done' ? `<span class="ok">${stars[i] === 3 ? okStar : ok}</span>` : ''}${stars[i] ? `<span class="cst">${starHTML(stars[i])}</span>` : ''}${PRIZE[i] && i >= done ? `<span class="prize mystery${i === np ? ' next' : ''}" title="Prêmio surpresa"${i === np ? ` style="--p:${ring.toFixed(3)}"` : ''}>?</span>` : ''}</button>`;
     });
     const fs = ns * 1.3;
     html += `<button class="cnode final${done === TOTAL && !bonusOpen ? ' cur' : ''}" data-i="T" style="left:${finalPos.x - fs / 2}px;top:${finalPos.y - fs / 2}px;width:${fs}px;height:${fs}px" aria-label="Troféu final">${Deco.trophy()}</button>`;
@@ -5583,11 +5547,11 @@ const Tests = {
     t('carreira: 11 pântanos e 100 fases (+10 do Espaço, +10 do Cemitério, +8 do Amor); começa com um pântano curto', Career.TOTAL === 100 && CL.length === 128 && Career.LAST === 128 && RC.length === 14 && RC[1] === 8 && RC[4] === 12 && RC[9] === 7 && RC[11] === 10 && RC[12] === 10 && RC[13] === 8, RC.join(' + '));
     const P = Career.PRIZE, at = (r, n) => P[Career.REGIONS.slice(0, r).reduce((a, R) => a + R.count, 0) + n - 1] || [];
     const last = r => at(r, Career.REGIONS[r].count);
-    t('prêmios da trilha: tutorial 1-3, Vans logo no 3º mapa, chapéu/boné na última fase de cada pântano; 42 apetrechos sem repetir',
-      at(0, 1)[0] === 'cardigan' && at(1, 3)[0] === 'oldskool' && Career.REGIONS.slice(1).filter(R => !R.extra).every((R, r) => Outfit.BY[last(r + 1)[0]].slot === 'head') && last(10).join() === 'coroa,trofeu'
-      && at(2, 7)[0] === 'woody' && at(8, 7).join() === 'skate,regata' && new Set(Object.values(P).flat()).size === 42 && Object.values(P).flat().every(id => Outfit.BY[id] && !Outfit.BY[id].rare));
-    t('prêmios fora da trilha (marcados rare): 10 de pântano com 3★ + 5 da coleção do desafio + kiwi + kits dos amigos; ninguém fica sem jeito de ganhar',
-      Outfit.ITEMS.filter(i => i.rare).length === 27 && Object.values(Career.RARE).concat(Career.DAILY.map(d => d[1])).every(id => Outfit.BY[id] && Outfit.BY[id].rare)
+    t('prêmios da trilha: tutorial 1-3, Vans logo no 3º mapa, chapéu/boné na última fase de cada pântano; 38 apetrechos sem repetir',
+      at(0, 1)[0] === 'cardigan' && at(1, 3)[0] === 'oldskool' && Career.REGIONS.slice(1).filter(R => !R.extra).every((R, r) => !last(r + 1).length || Outfit.BY[last(r + 1)[0]].slot === 'head') && last(10).join() === 'coroa,trofeu'
+      && at(2, 7)[0] === 'woody' && at(8, 7).join() === 'skate,regata' && new Set(Object.values(P).flat()).size === 38 && Object.values(P).flat().every(id => Outfit.BY[id] && !Outfit.BY[id].rare));
+    t('prêmios fora da trilha (marcados rare): 8 de pântano com 3★ + 5 da coleção do desafio + kiwi + kits dos amigos; ninguém fica sem jeito de ganhar',
+      Outfit.ITEMS.filter(i => i.rare).length === 24 && Object.values(Career.RARE).concat(Career.DAILY.map(d => d[1])).every(id => Outfit.BY[id] && Outfit.BY[id].rare)
       && Outfit.ITEMS.every(it => Career.ORDER.includes(it.id)) && Career.ORDER.length === Outfit.ITEMS.length);
     t('estrelas: 3 no mínimo, 2 com +1, 1 acima', starsFor(5, 5) === 3 && starsFor(6, 5) === 2 && starsFor(7, 5) === 1 && starsFor(10, 5) === 1);
     t('tutorial com 1, 2 e 3 sapos verdes', [0, 1, 2].every(i => Rules.greens(CL[i].start) === i + 1));
