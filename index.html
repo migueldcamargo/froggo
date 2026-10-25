@@ -928,7 +928,7 @@ canvas.bigbang{position:absolute;inset:0;width:100%;height:100%;z-index:400;poin
 
 <script>
 'use strict';
-const BUILD = '2026-10-25.0350';      // versão publicada: trocada pela data e hora a cada publicação (ver Update, no fim); 'dev' não confere
+const BUILD = '2026-10-25.1111';      // versão publicada: trocada pela data e hora a cada publicação (ver Update, no fim); 'dev' não confere
 /* =====================================================================
    FROGGO — jogo de sapos saltadores (peg-solitaire), arquivo único e offline.
    Módulos (todos neste arquivo): Store · Geo · Rules · Solver · Gen ·
@@ -1026,7 +1026,9 @@ const BigGeo = (() => {
   function shape(key) {
     const M = SHAPES[key], rows = M.length, cols = M[0].length, Lx = 2 * (cols - 1), Ly = 2 * (rows - 1), L = Math.max(Lx, Ly);
     const main = (x, y) => x % 2 === 0 && y % 2 === 0 && y / 2 < rows && x / 2 < cols && M[y / 2][x / 2] === 'X';
-    const has = (x, y) => x >= 0 && y >= 0 && x <= Lx && y <= Ly && (main(x, y) || (x % 2 === 1 && y % 2 === 1 && main(x - 1, y - 1) && main(x + 1, y - 1) && main(x - 1, y + 1) && main(x + 1, y + 1)));
+    // casa do meio: na cruz só onde o quadradinho está inteiro; no coração basta uma diagonal completa (assim as bordas inclinadas do coração também têm pulo na diagonal)
+    const mid = (x, y) => key === 'coracao' ? (main(x - 1, y - 1) && main(x + 1, y + 1)) || (main(x + 1, y - 1) && main(x - 1, y + 1)) : main(x - 1, y - 1) && main(x + 1, y - 1) && main(x - 1, y + 1) && main(x + 1, y + 1);
+    const has = (x, y) => x >= 0 && y >= 0 && x <= Lx && y <= Ly && (main(x, y) || (x % 2 === 1 && y % 2 === 1 && mid(x, y)));
     const CELLS = [];
     for (let y = 0; y <= Ly; y++) for (let x = 0; x <= Lx; x++) if (has(x, y)) CELLS.push([x, y]);
     const idx = new Map(CELLS.map((c, i) => [c[0] + ',' + c[1], i]));
@@ -1694,6 +1696,25 @@ ${detail ? `<g stroke="#0b4a44" stroke-opacity=".35" stroke-width=".3" stroke-li
     const bubbles = [[24, 40], [74, 60], [40, 78], [88, 32], [10, 58]].map(([x, y]) => `<circle cx="${x}" cy="${y}" r="1.2" fill="none" stroke="#d6ff9a" stroke-width=".4" opacity=".6"/>`).join('');
     return `<defs><clipPath id="gooClip"><rect x=".8" y=".8" width="98.4" height="96" rx="11"/></clipPath></defs><g clip-path="url(#gooClip)">${pools}${bubbles}<path d="M.8 6 Q.8 .8 12 .8 H88 Q99.2 .8 99.2 6 V3.4 H.8 Z" fill="#a8ff3e"/>${drips}</g>`;
   },
+  // desenho grande e clarinho no fundo dos tabuleiros com formato: no Cemitério, cruz nas fases finas e caveira nas largas; coração no Amor
+  // desenho grande e clarinho no fundo dos tabuleiros com formato: no Cemitério, cruz nas fases finas e caveira nas largas
+  boardMark(theme, kind, G, s) {
+    if (theme !== 'cemiterio') return '';
+    const main = G.CELLS.map((c, i) => c[0] % 2 || c[1] % 2 ? null : [G.PX[i], G.PY[i]]).filter(Boolean);
+    if (kind === 'cruz') {      // a cruz do próprio tabuleiro, com as casas emendadas numa peça só, um pouco para dentro da moldura
+      const d = s / 2 + .4;
+      return `<g fill="#fff" opacity=".26">${main.map(([x, y]) => `<rect x="${(x - d).toFixed(2)}" y="${(y - d).toFixed(2)}" width="${(2 * d).toFixed(2)}" height="${(2 * d).toFixed(2)}"/>`).join('')}</g>`;
+    }
+    // caveira quadradona (cantos arredondados) ocupando quase todo o tabuleiro
+    const m = s / 2 + 3, xs = main.map(p => p[0]), ys = main.map(p => p[1]), x0 = Math.min(...xs) - m, x1 = Math.max(...xs) + m, y0 = Math.min(...ys) - m, y1 = Math.max(...ys) + m;
+    const W = x1 - x0, H = y1 - y0, cx = (x0 + x1) / 2, top = y0, jawY = y0 + H * .66, jw = W * .64;
+    const e = W * .24, eh = H * .17, ey = y0 + H * .36, n = W * .08;
+    let teeth = ''; for (let k = 1; k < 5; k++) teeth += `<rect x="${(cx - jw / 2 + k * jw / 5 - .9).toFixed(2)}" y="${(jawY + H * .06).toFixed(2)}" width="1.8" height="${(H * .16).toFixed(2)}" rx=".6"/>`;
+    return `<g fill="#fff" opacity=".3"><rect x="${x0.toFixed(2)}" y="${top.toFixed(2)}" width="${W.toFixed(2)}" height="${(H * .7).toFixed(2)}" rx="${(W * .2).toFixed(2)}"/>
+<rect x="${(cx - jw / 2).toFixed(2)}" y="${(jawY - 4).toFixed(2)}" width="${jw.toFixed(2)}" height="${(y1 - jawY + 4).toFixed(2)}" rx="${(W * .08).toFixed(2)}"/></g>
+<g fill="#2a2440" opacity=".6"><rect x="${(cx - W * .25 - e / 2).toFixed(2)}" y="${(ey - eh / 2).toFixed(2)}" width="${e.toFixed(2)}" height="${eh.toFixed(2)}" rx="${(e * .32).toFixed(2)}"/><rect x="${(cx + W * .25 - e / 2).toFixed(2)}" y="${(ey - eh / 2).toFixed(2)}" width="${e.toFixed(2)}" height="${eh.toFixed(2)}" rx="${(e * .32).toFixed(2)}"/>
+<path d="M${cx} ${(ey + eh * .8).toFixed(2)} L${(cx - n).toFixed(2)} ${(ey + eh * 1.7).toFixed(2)} H${(cx + n).toFixed(2)} Z"/>${teeth}</g>`;
+  },
   boardLines(stroke, w, hl, G = Geo) {
     let s = '';
     for (const l of G.LINES) {
@@ -1742,7 +1763,7 @@ ${dim ? '' : `<path d="M${x - r * .32} ${y - r * .42} q${r * .12} -${r * .14} ${
 <g transform="translate(0 1.8)" fill="${SK[2]}" stroke="${SK[2]}" stroke-width="1.6" stroke-linejoin="round">${geo}</g>
 <g fill="${SK[3]}" stroke="${SK[3]}" stroke-width="1.4" stroke-linejoin="round" opacity=".7">${geo}</g><g fill="url(#bdSkin)">${geo}</g>
 <g clip-path="url(#shpC)"><rect x="0" y="0" width="100" height="100" fill="url(#bdShine)" opacity=".8"/></g>
-<g stroke-dasharray="1.4 1.4">${Art.boardLines('rgba(240,255,240,.28)', .6, false, G)}</g>${pads}</svg>`;
+<g clip-path="url(#shpC)">${Art.boardMark(theme, G.shape === 'cruzP' ? 'cruz' : 'caveira', G, s)}</g><g stroke-dasharray="1.4 1.4">${Art.boardLines('rgba(240,255,240,.28)', .6, false, G)}</g>${pads}</svg>`;
     }
     if (SK) return `<svg class="bsvg" viewBox="0 0 100 100" aria-hidden="true"><defs><linearGradient id="bdSkin" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${SK[0]}"/><stop offset="1" stop-color="${SK[1]}"/></linearGradient></defs>
 <rect x=".8" y="2.6" width="98.4" height="96.8" rx="11" fill="${SK[2]}"/>
@@ -3443,7 +3464,7 @@ const UI = (() => {
     const auto = onPath && hintOn && hintOn.k === k, target = !onPath ? 0 : auto ? k + 1 : k;     // auto: a dica já estava na tela e ninguém pulou
     if (target >= sol.length) return;
     if (target >= revealed && revealed >= budget) {      // acabaram as dicas desta rodada
-      Sound.click(); toast('Sem mais dicas nesta rodada');
+      Sound.click();
       animate($('btnHint'), [0, -4, 4, -3, 3, 0].map(v => ({ transform: `translateX(${v}px)` })), { duration: 300 }); return;
     }
     Sound.click();
@@ -3926,14 +3947,14 @@ const Career = (() => {
       { n: 'cruz', s: '.GGG.GGG..GGGG..GG..R..G.....', sol: [20,4,23,8,5,15,7,22,15,0,0,7,2,17,13,20,22,17,1,16,17,15,15,7,4,11] }
     ],
     amor: [
-      { n: 'coracao', s: '.GR..G......GG..G...G.', sol: [12,19,1,14,14,12,20,18,18,3,2,4] },
-      { n: 'coracao', s: '......GGG.G.G...GGR...', sol: [18,13,6,14,13,3,14,19,3,11,11,13,13,21] },
-      { n: 'coracao', s: '..G.....GG..G..RGGGG..', sol: [18,20,20,13,13,3,12,19,2,4,4,14,15,13,13,21] },
-      { n: 'coracao', s: '..GG...G.GGR....GGGG..', sol: [18,20,20,13,2,4,10,8,16,9,11,3,3,5,8,10,5,15] },
-      { n: 'coracao', s: '..G.GGGGGGG..G.....GR.', sol: [20,18,4,14,2,12,18,3,6,4,3,5,8,17,5,15,15,13,13,20] },
-      { n: 'coracao', s: '..G.GRGGGGGGG...GG....', sol: [11,13,4,14,2,12,14,19,12,4,5,3,6,14,14,12,3,18,18,13,13,21] },
-      { n: 'coracao', s: '.GGG...GGGG.R.G.G.G.GG', sol: [20,5,18,13,2,4,12,2,1,14,10,17,9,7,4,19,21,13,2,12,12,14,14,19] },
-      { n: 'coracao', s: 'G..R.GGGG.G.G.G.GGG.GG', sol: [14,19,21,13,12,14,18,13,10,17,3,11,13,3,6,4,20,13,0,12,4,19,11,13,13,21] }
+      { n: 'coracao', s: '....GGGGR................GG...', sol: [26,24,5,3,3,11,6,16,24,7,8,6] },
+      { n: 'coracao', s: '....GG..GG..R.....G.....GG....', sol: [5,3,8,10,24,26,26,9,10,8,3,13,12,14] },
+      { n: 'coracao', s: '.G.G.G.G.G.....G..GG.R........', sol: [19,17,21,13,3,11,15,7,1,10,10,8,13,3,3,11] },
+      { n: 'coracao', s: '......G.GGGG.GG....R.G.G......', sol: [8,18,6,16,19,17,10,8,17,24,24,7,7,9,9,19,19,26] },
+      { n: 'coracao', s: '...G...G.GG.GG.....R.G.G...G.G', sol: [29,24,24,17,10,8,17,9,12,2,2,4,8,1,1,18,19,26,26,9] },
+      { n: 'coracao', s: '...G..GG...GG..RGG..GGG..G....', sol: [20,2,21,13,13,28,28,21,15,17,17,24,6,0,0,16,3,21,24,17,17,15] },
+      { n: 'coracao', s: '....GG.GG.G.RGG......GGG.GG...', sol: [7,9,10,1,1,8,25,16,12,4,26,17,4,22,23,5,16,18,5,13,22,14,14,12] },
+      { n: 'coracao', s: '...G..G.R..GGG..G.G..G.GGGGG..', sol: [26,19,27,22,24,17,17,15,3,21,13,23,6,16,15,17,19,26,21,13,26,17,8,18,18,16] }
     ]
   };
   const MAIN = REGIONS.filter(r => !r.bonus && !r.extra);
