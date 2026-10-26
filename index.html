@@ -534,6 +534,9 @@ canvas.confetti{position:absolute;inset:0;width:100%;height:100%;pointer-events:
 .systeps li::before{content:counter(sy);flex:none;width:1.6rem;height:1.6rem;border-radius:50%;display:grid;place-items:center;background:#0b6fc9;color:#fff;font-weight:900;font-size:.85rem}
 .insmove{width:100%;display:flex;flex-direction:column;gap:.45rem;padding:.7rem .8rem;border-radius:1rem;background:#fff6d6;border:2px solid #ffd23f;text-align:center}
 .insmove p{font-size:.85rem;font-weight:700;color:#5a4300;margin:0;opacity:1}
+/* colando o código (teclado aberto): o painel sobe para o alto e só fica o campo e o botão de colar, para o teclado não cobrir */
+.overlay.typing{align-items:flex-start}
+.overlay.typing #bkBack,.overlay.typing .systeps,.overlay.typing .sywhere,.overlay.typing #btnSyncCopy,.overlay.typing #btnSyInstall{display:none!important}
 #sySrc{width:100%;border-radius:.8rem;border:2px solid #c9d8e4;padding:.5rem .6rem;font:600 .8rem/1.25 ui-monospace,monospace;color:#0b2545;background:#fff;resize:none;user-select:text;-webkit-user-select:text}
 .bkregs{display:flex;flex-wrap:wrap;gap:.35rem;justify-content:center;margin:.7rem 0 .5rem}
 .bkregs button{padding:.35rem .65rem;border-radius:999px;background:#e8f1f8;color:#0b2545;font:800 .82rem/1.2 Nunito,system-ui,sans-serif}
@@ -932,7 +935,7 @@ canvas.bigbang{position:absolute;inset:0;width:100%;height:100%;z-index:400;poin
 
 <script>
 'use strict';
-const BUILD = '2026-10-25.1211';      // versão publicada: trocada pela data e hora a cada publicação (ver Update, no fim); 'dev' não confere
+const BUILD = '2026-10-26.1749';      // versão publicada: trocada pela data e hora a cada publicação (ver Update, no fim); 'dev' não confere
 /* =====================================================================
    FROGGO — jogo de sapos saltadores (peg-solitaire), arquivo único e offline.
    Módulos (todos neste arquivo): Store · Geo · Rules · Solver · Gen ·
@@ -5269,9 +5272,13 @@ const Sync = (() => {
     $('syBox').classList.toggle('solo', m !== 'secret'); show('syTitle', m === 'secret'); show('sySteps', m === 'move');
     show('btnSyInstall', m === 'move'); ['syHere', 'btnSyncCopy', 'syHint', 'sySrc', 'btnSyncUse'].forEach(id => show(id, true));
     $('syHint').textContent = m === 'bring' ? 'Cole aqui o código que você copiou no navegador' : m === 'move' ? 'Já tem um código? Cole aqui:' : 'No outro lugar (navegador ou app), toque 10 vezes no sapo e cole o código abaixo';
+    $('ovBack').classList.remove('typing');
     $('syHere').textContent = `Aqui: ${place(here())}`; $('sySrc').value = ''; $('btnSyncCopy').textContent = 'Copiar progresso';
     pack().then(c => { code = c; }).catch(() => {});     // pronto antes do toque (o iPhone só copia dentro do toque)
   }
+  // ao tocar no campo, o teclado sobe: o painel vai para o alto só com o campo; volta ao normal se sair do campo sem colar nada
+  $('sySrc').addEventListener('focus', () => { $('ovBack').classList.add('typing'); setTimeout(() => $('sySrc').scrollIntoView({ block: 'center' }), 350); });
+  $('sySrc').addEventListener('blur', () => { if (!$('sySrc').value.trim()) $('ovBack').classList.remove('typing'); });
   $('btnSyncCopy').addEventListener('click', async () => {
     const c = code || await pack();
     try { await navigator.clipboard.writeText(c); $('btnSyncCopy').textContent = 'Copiado ✓'; }
