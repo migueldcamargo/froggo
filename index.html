@@ -535,15 +535,16 @@ canvas.confetti{position:absolute;inset:0;width:100%;height:100%;pointer-events:
 .sybox h4{font-size:1.1rem;font-weight:900;color:#0b2545}
 .sywhere{font-weight:900!important;opacity:1!important;color:#0b2545}
 .syhint{font-size:.8rem!important}
-.sybox.solo{margin-top:.4rem;padding-top:0;border-top:0}      /* sem a parte de voltar fase (instalar / trazer progresso) */
-.systeps{list-style:none;counter-reset:sy;display:flex;flex-direction:column;gap:.4rem;text-align:left;margin:0 0 .2rem;padding:0}
-.systeps li{counter-increment:sy;display:flex;gap:.55rem;align-items:center;font-weight:700;font-size:.9rem;color:#0b2545;line-height:1.25}
-.systeps li::before{content:counter(sy);flex:none;width:1.6rem;height:1.6rem;border-radius:50%;display:grid;place-items:center;background:#0b6fc9;color:#fff;font-weight:900;font-size:.85rem}
+.sybox{margin-top:.2rem;padding-top:0;border-top:0}
+.sysec{display:flex;flex-direction:column;gap:.4rem;padding:.7rem 0 .2rem;border-top:2px dashed #d6e2ec}
+.sysec h4{font-size:1rem}
+#ovBack .panel{overflow-y:auto;-webkit-overflow-scrolling:touch}
 .insmove{width:100%;display:flex;flex-direction:column;gap:.45rem;padding:.7rem .8rem;border-radius:1rem;background:#fff6d6;border:2px solid #ffd23f;text-align:center}
 .insmove p{font-size:.85rem;font-weight:700;color:#5a4300;margin:0;opacity:1}
 /* colando o código (teclado aberto): o painel sobe para o alto e só fica o campo e o botão de colar, para o teclado não cobrir */
 .overlay.typing{align-items:flex-start}
-.overlay.typing #bkBack,.overlay.typing .systeps,.overlay.typing .sywhere,.overlay.typing #btnSyncCopy,.overlay.typing #btnSyInstall{display:none!important}
+.overlay.typing #bkBack,.overlay.typing .sywhere,.overlay.typing .sysec:not(.paste){display:none!important}
+.overlay.typing .sysec.paste{border-top:0;padding-top:0}
 #sySrc{width:100%;border-radius:.8rem;border:2px solid #c9d8e4;padding:.5rem .6rem;font:600 .8rem/1.25 ui-monospace,monospace;color:#0b2545;background:#fff;resize:none;user-select:text;-webkit-user-select:text}
 .sygoback{margin-top:.3rem;padding:.55rem .8rem;border-radius:999px;background:#e8f1f8;color:#0b4f8f;font:800 .92rem/1.2 Nunito,system-ui,sans-serif}
 .sygoback:active{background:#d6e6f3}
@@ -697,10 +698,10 @@ canvas.bigbang{position:absolute;inset:0;width:100%;height:100%;z-index:400;poin
   <!-- ================= INÍCIO ================= -->
   <section class="screen" id="home" aria-label="Início">
     <div class="home-bar">
-      <button class="pill-btn" id="btnInstall" aria-label="Como instalar na tela de início">
+      <button class="pill-btn" id="btnInstall" hidden aria-label="Como instalar na tela de início">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2" width="12" height="20" rx="3"/><path d="M12 8v6M9 11h6"/></svg><span>Instalar</span>
       </button>
-      <button class="pill-btn only-icon" id="btnBring" hidden aria-label="Trazer progresso">
+      <button class="pill-btn only-icon" id="btnBring" aria-label="Seu progresso: instalar, levar, trazer ou voltar fase">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 10l5 5 5-5"/><path d="M5 19h14"/></svg>
       </button>
       <div class="home-right">
@@ -859,18 +860,23 @@ canvas.bigbang{position:absolute;inset:0;width:100%;height:100%;z-index:400;poin
         <button class="btn red" id="btnBkGo" type="button" disabled>Escolha a fase</button>
       </div>
       <div class="sybox" id="syBox">
-        <h4 id="syTitle">Transferir progresso</h4>
-        <ol class="systeps" id="sySteps" hidden>
-          <li><span>Toque em <b>Copiar progresso</b> aqui embaixo.</span></li>
-          <li><span>Instale o Jumppo e abra pelo ícone da tela inicial.</span></li>
-          <li><span>No app, toque na setinha <b>↓</b> no alto da tela e cole o código.</span></li>
-        </ol>
         <p class="sywhere" id="syHere"></p>
-        <button class="btn blue" id="btnSyncCopy" type="button">Copiar progresso</button>
-        <button class="btn green" id="btnSyInstall" type="button" hidden>Ver como instalar</button>
-        <p class="syhint" id="syHint">No outro lugar (navegador ou app), toque 10 vezes no sapo e cole o código abaixo</p>
-        <textarea id="sySrc" rows="2" placeholder="Cole aqui o código" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
-        <button class="btn green" id="btnSyncUse" type="button">Colar progresso</button>
+        <div class="sysec" id="syApp">
+          <h4>Jogue como app</h4>
+          <p class="syhint">Instale o Jumppo na tela inicial do celular. O app começa do zero: antes, copie seu progresso aqui embaixo para colar lá.</p>
+          <button class="btn" id="btnSyInstall" type="button">Ver como instalar</button>
+        </div>
+        <div class="sysec">
+          <h4>Levar seu progresso</h4>
+          <p class="syhint">Copie o código e cole em outro celular, outro navegador ou no app instalado.</p>
+          <button class="btn blue" id="btnSyncCopy" type="button">Copiar progresso</button>
+        </div>
+        <div class="sysec paste">
+          <h4>Trazer um progresso</h4>
+          <p class="syhint" id="syHint">Cole aqui o código que você copiou:</p>
+          <textarea id="sySrc" rows="2" placeholder="Cole aqui o código" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
+          <button class="btn green" id="btnSyncUse" type="button">Colar progresso</button>
+        </div>
         <button class="sygoback" id="btnGoBack" type="button" hidden>↩ Voltar para uma fase anterior</button>
       </div>
     </div>
@@ -945,7 +951,7 @@ canvas.bigbang{position:absolute;inset:0;width:100%;height:100%;z-index:400;poin
 
 <script>
 'use strict';
-const BUILD = '2026-10-27.2300';
+const BUILD = '2026-10-27.2309';
 const LINK = 'jumppo.com.br';     // endereço do jogo nas mensagens do zap (sem https:// e sem barra final: o WhatsApp ainda reconhece o link)      // versão publicada: trocada pela data e hora a cada publicação (ver Update, no fim); 'dev' não confere
 /* =====================================================================
    JUMPPO (antes Froggo) — jogo de sapos saltadores (peg-solitaire), arquivo único e offline.
@@ -4613,7 +4619,7 @@ ${portalPos ? `<path d="M${finalPos.x} ${finalPos.y} L${portalPos.x} ${portalPos
         return;
       }
       ov.remove(); Base.dim(false);
-      if (k === 'v') ProgressPanel.open('secret');
+      if (k === 'v') ProgressPanel.open();
       if (k === 'z') UI.confirm('Recomeçar do zero?', 'As fases e as estrelas voltam para o começo.\nOs itens e amigos que você ganhou continuam seus.', 'Recomeçar', restartAll);
     });
   }
@@ -5277,13 +5283,11 @@ const Sync = (() => {
     return n > 0 ? `Isso faz você avançar ${f(n)}.` : n < 0 ? `Isso faz você voltar ${f(-n)}.` : 'Você continua na mesma fase.'; };
   /* modos do painel (todos com copiar e colar): 'secret' (10 toques no sapo), 'move' (da tela de instalar, com o passo a passo)
      e 'bring' (botão "Trazer progresso" do app instalado, mesmo já com fases feitas nele) */
-  let code = null, mode = 'secret';
-  function reset(m = 'secret') {
+  let code = null, mode = 'main';
+  function reset(m = 'main') {
     mode = m; code = null;
-    const show = (id, on) => { $(id).hidden = !on; };
-    $('syBox').classList.toggle('solo', m !== 'secret'); show('syTitle', m === 'secret'); show('sySteps', m === 'move');
-    show('btnSyInstall', m === 'move'); ['syHere', 'btnSyncCopy', 'syHint', 'sySrc', 'btnSyncUse'].forEach(id => show(id, true));
-    $('syHint').textContent = m === 'bring' ? 'Cole aqui o código que você copiou no navegador' : m === 'move' ? 'Já tem um código? Cole aqui:' : 'No outro lugar (navegador ou app), toque 10 vezes no sapo e cole o código abaixo';
+    const app = (window.matchMedia && matchMedia('(display-mode: standalone)').matches) || navigator.standalone === true;
+    $('syApp').hidden = app;          // no navegador: como instalar; no app instalado já não precisa
     $('ovBack').classList.remove('typing');
     $('syHere').textContent = `Aqui: ${place(here())}`; $('sySrc').value = ''; $('btnSyncCopy').textContent = 'Copiar progresso';
     pack().then(c => { code = c; }).catch(() => {});     // pronto antes do toque (o iPhone só copia dentro do toque)
@@ -5346,14 +5350,14 @@ const ProgressPanel = (() => {
     $('bkSel').innerHTML = '<option value="" disabled selected>Escolha a fase</option>' + ops.map(i => `<option value="${i}">${i + 1}</option>`).join('');
     $('btnBkGo').disabled = true; $('btnBkGo').textContent = 'Escolha a fase';
   }
-  /* modos: 'secret' (10 toques no sapo: voltar fase + transferência), 'move' / 'bring' (só a transferência, com um botão
-     "Voltar para uma fase anterior" que reabre a janela no modo 'back', só com a escolha da fase) */
-  function open(mode = 'secret') {
-    const can = regs().length > 0, back = can && (mode === 'secret' || mode === 'back');
-    $('bkTitle').textContent = mode === 'move' ? 'Leve seu progresso' : mode === 'bring' ? 'Trazer progresso' : mode === 'back' ? 'Voltar fase' : 'Seu progresso';
-    $('bkBack').hidden = !back;                   // ainda sem fase para voltar: só a transferência
-    $('syBox').hidden = mode === 'back';
-    $('btnGoBack').hidden = !(mode === 'move' || mode === 'bring') || !can;
+  /* setinha da tela inicial (navegador e app) e 10 toques no sapo: 'main' (instalar no navegador, levar e trazer o progresso e
+     o botão "Voltar para uma fase anterior"); 'back' reabre a janela só com a escolha da fase */
+  function open(mode = 'main') {
+    const can = regs().length > 0, back = mode === 'back' && can;
+    $('bkTitle').textContent = back ? 'Voltar fase' : 'Seu progresso';
+    $('bkBack').hidden = !back;
+    $('syBox').hidden = back;
+    $('btnGoBack').hidden = back || !can;
     if (back) fill();
     Sync.reset(mode); heroZoom.reset();
     $('ovBack').classList.add('show'); Base.dim(true);
@@ -5496,7 +5500,6 @@ ${stageFrog(false, 0)}${stageFrog(true, 104, .5)}</svg></div>`;
    --------------------------------------------------------------------- */
 const Install = (() => {
   const ua = navigator.userAgent || '';
-  const isStandalone = () => (window.matchMedia && matchMedia('(display-mode: standalone)').matches) || navigator.standalone === true;
   let deferred = null;
   window.addEventListener('beforeinstallprompt', e => { e.preventDefault(); deferred = e; $('btnInstallNow').classList.remove('hidden'); });
   function tab(ios) {
@@ -5515,11 +5518,12 @@ const Install = (() => {
   });
   $('btnInstall').addEventListener('click', () => { Sound.click(); open(); });
   // "Leve seu progresso": copia o código antes de instalar (o app instalado no iPhone não enxerga o que ficou no Safari)
-  $('btnInstallMove').addEventListener('click', () => { Sound.click(); close(); ProgressPanel.open('move'); });
-  $('btnBring').addEventListener('click', () => { Sound.click(); ProgressPanel.open('bring'); });
+  $('btnInstallMove').addEventListener('click', () => { Sound.click(); close(); ProgressPanel.open(); });
+  $('btnBring').addEventListener('click', () => { Sound.click(); ProgressPanel.open(); });
   function boot() {
     // no app instalado: botão para trazer o código do navegador (sempre, mesmo já com fases feitas no app)
-    if (isStandalone()) { $('btnInstall').classList.add('hidden'); $('btnBring').hidden = false; return; }
+    // a setinha abre "Seu progresso" no navegador e no app (instalar, levar, trazer e voltar fase); o antigo "Instalar" saiu da tela inicial
+    $('btnInstall').hidden = true; $('btnBring').hidden = false;
   }
   return { boot, open };
 })();
