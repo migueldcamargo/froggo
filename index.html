@@ -103,8 +103,12 @@ svg{display:block}
 .levels{display:flex;flex-wrap:wrap;justify-content:center;gap:.35rem;min-width:0}
 
 /* ---------- Início ---------- */
-#home{grid-template-rows:auto minmax(0,1fr) auto;grid-template-columns:minmax(0,1fr);gap:.55rem;
-  grid-template-areas:"bar" "hero" "cta"}
+#home{grid-template-rows:auto minmax(0,1fr) auto auto;grid-template-columns:minmax(0,1fr);gap:.55rem;
+  grid-template-areas:"bar" "hero" "cta" "foot"}
+/* links discretos para as páginas de texto (como jogar, sobre, privacidade) */
+.home-foot{grid-area:foot;display:flex;justify-content:center;flex-wrap:wrap;gap:.2rem .9rem;font-size:.72rem;font-weight:800;line-height:1.2}
+.home-foot a{color:rgba(255,255,255,.82);text-decoration:none;padding:.15rem 0}
+.home-foot a:active{color:#fff}
 .home-bar{grid-area:bar;display:flex;align-items:center;justify-content:space-between;gap:.5rem}
 .home-bar{position:relative;z-index:30}
 .topbar .levels{position:relative;display:flex;justify-content:center;min-width:0}
@@ -185,8 +189,8 @@ svg.fly .fshadow{transform-box:fill-box;transform-origin:50% 50%;transform:scale
 .witem.new::after{content:'';position:absolute;top:.35rem;right:.35rem;width:.7rem;height:.7rem;border-radius:50%;background:#ff2d2d;box-shadow:0 0 0 2px #fff}
 .cta .round svg{width:1.8rem;height:1.8rem}
 .cta #btnCareer{font-size:clamp(1rem, calc((var(--W) - 9.5rem) * .075), 1.35rem);padding-left:.9em;padding-right:.9em}
-.app.land #home{grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);grid-template-rows:auto minmax(0,1fr) auto;
-  grid-template-areas:"hero bar" "hero ." "hero cta";column-gap:1.2rem}
+.app.land #home{grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);grid-template-rows:auto minmax(0,1fr) auto auto;
+  grid-template-areas:"hero bar" "hero ." "hero cta" "hero foot";column-gap:1.2rem}
 .app.land #btnInstall span{display:none}
 .app.land #btnInstall{padding:0;width:2.6rem;justify-content:center}
 .app.land .title{font-size:clamp(2.4rem, calc(var(--H) * .18), 5.4rem)}
@@ -709,6 +713,7 @@ canvas.bigbang{position:absolute;inset:0;width:100%;height:100%;z-index:400;poin
     </div>
     <div class="cta"><button class="btn big round cards" id="btnPick" aria-label="Pegar uma carta"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"><rect x="3" y="5" width="11" height="15" rx="2" transform="rotate(-10 8 12)"/><rect x="9" y="3" width="11" height="15" rx="2" fill="#fff" fill-opacity=".6"/></svg></button><button class="btn big" id="btnCareer">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4h10v5a5 5 0 0 1-10 0z" fill="currentColor" fill-opacity=".25"/><path d="M17 5h3v2a4 4 0 0 1-3.6 4M7 5H4v2a4 4 0 0 0 3.6 4"/><path d="M12 14v3M8.5 20h7M9.5 17h5v3h-5z"/></svg>Modo carreira</button><button class="btn big round wardrobe" id="btnWardrobe" aria-label="Guarda-roupa"><span class="newdot" id="wardNew" hidden>!</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 5.5a2 2 0 1 1 2.6 1.9c-.4.1-.6.5-.6.9V9"/><path d="M12 9L2.8 15.6A1.4 1.4 0 0 0 3.6 18h16.8a1.4 1.4 0 0 0 .8-2.4z" fill="currentColor" fill-opacity=".2"/></svg></button></div>
+    <nav class="home-foot" aria-label="Páginas"><a href="/como-jogar/">Como jogar</a><a href="/sobre/">Sobre e contato</a><a href="/privacidade/">Privacidade</a></nav>
   </section>
 
   <!-- ================= SORTEIO ================= -->
@@ -938,7 +943,7 @@ canvas.bigbang{position:absolute;inset:0;width:100%;height:100%;z-index:400;poin
 
 <script>
 'use strict';
-const BUILD = '2026-10-27.2104';
+const BUILD = '2026-10-27.2235';
 const LINK = 'jumppo.com.br';     // endereço do jogo nas mensagens do zap (sem https:// e sem barra final: o WhatsApp ainda reconhece o link)      // versão publicada: trocada pela data e hora a cada publicação (ver Update, no fim); 'dev' não confere
 /* =====================================================================
    JUMPPO (antes Froggo) — jogo de sapos saltadores (peg-solitaire), arquivo único e offline.
@@ -4919,13 +4924,13 @@ const Daily = (() => {
   function message(r) {
     const [, m, d] = r.date.split('-').map(Number);
     // tempo compacto (ex.: 1min29s, 45s); resultado de antes da volta do cronômetro não tem tempo
-    const sec = r.time ? Math.max(1, Math.round(r.time / 1000)) : 0, mi = Math.floor(sec / 60), se = sec % 60, tempo = !sec ? '' : (mi ? mi + 'min' + (se ? pad(se) + 's' : '') : se + 's') + '\n';
+    const sec = r.time ? Math.max(1, Math.round(r.time / 1000)) : 0, mi = Math.floor(sec / 60), se = sec % 60, tempo = !sec ? '' : '\n' + (mi ? mi + 'min' + (se ? pad(se) + 's' : '') : se + 's');
     const mes = ['janeiro', 'fevereiro', 'março', 'abril', 'maio', 'junho', 'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro'][m - 1];
-    const nota = n => '⭐'.repeat(n) + '⚪'.repeat(3 - n);    // ⚪ = estrela que faltou
-    // só "Jumppo" em negrito (*…*); o resto sem
-    if (!multi(r)) return `🐸 *Jumppo* · ${d} de ${mes}\n${r.moves} ${r.moves === 1 ? 'movimento' : 'movimentos'}${r.min ? ' ' + nota(starsFor(r.moves, r.min)) : ''}\n${LINK}`;
+    const nota = n => '⭐'.repeat(n) + '⚫️'.repeat(3 - n);    // ⚫️ = estrela que faltou
+    // o link abre a mensagem (o WhatsApp reconhece jumppo.com.br) e o tempo fecha
+    if (!multi(r)) return `${LINK} ${d} de ${mes}\n${r.moves} ${r.moves === 1 ? 'movimento' : 'movimentos'}${r.min ? ' ' + nota(starsFor(r.moves, r.min)) : ''}`;
     const em = moods(r.date, r.moves, r.mins);
-    return `🐸 *Jumppo* · ${d} de ${mes}\n${r.moves.map((mv, i) => mv + em[i]).join(' ')}\nTotal: ${sum(r.moves)} pulos ${nota(grade(r))}\n${tempo}${LINK}`;
+    return `${LINK} ${d} de ${mes}\n${r.moves.map((mv, i) => mv + em[i]).join(' ')}\nTotal: ${sum(r.moves)} pulos ${nota(grade(r))}${tempo}`;
   }
   // dias seguidos jogando o desafio (vale enquanto o último foi hoje ou ontem)
   const prevDay = iso => { const [y, m, d] = iso.split('-').map(Number), t = new Date(Date.UTC(y, m - 1, d - 1)); return t.toISOString().slice(0, 10); };
@@ -5626,9 +5631,9 @@ const Tests = {
     const cA = await Daily.card('2026-11-03', 2), cB = await Daily.card('2026-11-03', 2);
     t('desafio do dia: fase com solução conferida e igual para a mesma data', Rules.toStr(cA.start) === Rules.toStr(cB.start) && !cA.start.n && cA.solution && cA.solution.length === Rules.greens(cA.start));
     const msg = Daily.message({ date: '2026-10-21', time: 192000, moves: [5, 7, 12, 6, 14], mins: [5, 6, 6, 6, 7] }).split('\n');
-    t('desafio do dia: mensagem do Zap com os 5 mapas (emojis variando), total, nota e tempo', msg.length === 5 && msg[3] === '3min12s' && msg[1].split(' ').length === 5 && msg[1].split(' ')[0].replace(/^\d+/, '') !== msg[1].split(' ')[3].replace(/^\d+/, '') && msg[2] === 'Total: 44 pulos ⭐⭐⚪', msg.join(' | '));
+    t('desafio do dia: mensagem do Zap com os 5 mapas (emojis variando), total, nota e tempo', msg.length === 4 && msg[0] === 'jumppo.com.br 21 de outubro' && msg[3] === '3min12s' && msg[1].split(' ').length === 5 && msg[1].split(' ')[0].replace(/^\d+/, '') !== msg[1].split(' ')[3].replace(/^\d+/, '') && msg[2] === 'Total: 44 pulos ⭐⭐⚫️', msg.join(' | '));
     const far = Daily.message({ date: '2026-10-21', moves: [5, 4, 69, 7, 4], mins: [5, 4, 7, 7, 4] }).split('\n')[2];
-    t('desafio do dia: nota pela soma dos pulos (um mapa ruim derruba o total)', far === 'Total: 89 pulos ⭐⚪⚪', far);
+    t('desafio do dia: nota pela soma dos pulos (um mapa ruim derruba o total)', far === 'Total: 89 pulos ⭐⚫️⚫️', far);
     t('personagens: sapo + 6 amigos, cada um chega com um pântano e desenha com qualquer apetrecho',
       Outfit.CHARS.length === 17 && Outfit.CHARS.slice(1).every(c => (c.gift || c.fase != null || Career.REGIONS.some(R => R.id === c.at)) && Art.creature(c.id, { outfit: { head: 'bolovo', eyes: 'oculos', torso: 'traje' } }).startsWith('<svg')));
     // 11. áudio

@@ -1,0 +1,40 @@
+/* Páginas de texto do Jumppo (como jogar, sobre, privacidade): céu do jogo no topo, coluna de leitura */
+:root {
+  --sky: #4fd2ff; --deep: #0b7bd6; --bg: #f2fbff; --paper: #ffffff; --ink: #0b2545; --muted: #4a6582; --line: #cfe6f3;
+  --green: #2fbf3a; --red: #e0251c; --yellow: #ffc21a; --orange: #ff8a1f;
+  --display: "Fredoka", "Trebuchet MS", system-ui, sans-serif; --body: "Nunito", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+@media (prefers-color-scheme: dark) { :root { --bg: #071a2b; --paper: #0d2438; --ink: #e6f4ff; --muted: #9fbdd6; --line: #1d3a54; color-scheme: dark } }
+* { box-sizing: border-box }
+html { -webkit-text-size-adjust: 100% }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 400 1.05rem/1.65 var(--body) }
+.top { background: linear-gradient(180deg, var(--sky), var(--deep)); color: #fff;
+  padding: calc(env(safe-area-inset-top, 0px) + 1rem) max(16px, env(safe-area-inset-right, 0px)) 1.6rem max(16px, env(safe-area-inset-left, 0px)) }
+.top-in { max-width: 44rem; margin: 0 auto; display: grid; gap: .8rem }
+.logo { font: 700 2rem/1 var(--display); text-decoration: none; letter-spacing: .01em; width: max-content; text-shadow: 0 .12rem 0 rgba(0,40,80,.35) }
+.logo span:nth-child(6n+1) { color: #9dff6a } .logo span:nth-child(6n+2) { color: #ffd23f } .logo span:nth-child(6n+3) { color: #ff6b5e }
+.logo span:nth-child(6n+4) { color: #9dff6a } .logo span:nth-child(6n+5) { color: #ffd23f } .logo span:nth-child(6n+6) { color: #ff6b5e }
+nav.links { display: flex; flex-wrap: wrap; gap: .4rem }
+nav.links a { color: #fff; text-decoration: none; font: 600 .92rem/1 var(--display); padding: .5rem .8rem; border-radius: 999px; background: rgba(255,255,255,.16) }
+nav.links a[aria-current="page"] { background: #fff; color: var(--deep) }
+.top h1 { font: 700 clamp(1.8rem, 6vw, 2.5rem)/1.1 var(--display); margin: .4rem 0 0; text-wrap: balance }
+.top p { margin: 0; opacity: .92; max-width: 36rem }
+main { max-width: 44rem; margin: 0 auto; padding: 1.6rem max(16px, env(safe-area-inset-right, 0px)) 2rem max(16px, env(safe-area-inset-left, 0px)); display: grid; gap: 1.6rem }
+section { display: grid; gap: .6rem }
+h2 { font: 600 1.4rem/1.2 var(--display); margin: 0; text-wrap: balance }
+h3 { font: 600 1.1rem/1.25 var(--display); margin: .3rem 0 0 }
+p, ul, ol { margin: 0 }
+ul, ol { padding-left: 1.3rem; display: grid; gap: .3rem }
+a { color: var(--deep); font-weight: 700 }
+@media (prefers-color-scheme: dark) { a { color: var(--sky) } }
+.box { background: var(--paper); border: 1px solid var(--line); border-radius: 1rem; padding: 1rem 1.1rem; display: grid; gap: .5rem }
+.play { display: inline-block; justify-self: start; background: linear-gradient(180deg, #ffb347, var(--orange)); color: #fff; text-decoration: none; font: 700 1.1rem/1 var(--display);
+  padding: .9rem 1.4rem; border-radius: 999px; box-shadow: 0 .25rem 0 #c75f00; text-shadow: 0 1px 0 rgba(120,40,0,.4) }
+.tag { display: inline-block; font: 600 .8rem/1 var(--display); padding: .3rem .55rem; border-radius: .5rem; background: var(--line); color: var(--ink) }
+table { border-collapse: collapse; width: 100% } td, th { text-align: left; padding: .45rem .5rem; border-bottom: 1px solid var(--line); vertical-align: top }
+th { font: 600 .85rem/1.2 var(--display); color: var(--muted) }
+.wrap { overflow-x: auto }
+footer { max-width: 44rem; margin: 0 auto; padding: 1.2rem max(16px, env(safe-area-inset-right, 0px)) calc(env(safe-area-inset-bottom, 0px) + 2rem) max(16px, env(safe-area-inset-left, 0px));
+  border-top: 1px solid var(--line); color: var(--muted); font-size: .9rem; display: flex; flex-wrap: wrap; gap: .4rem 1rem }
+footer a { color: var(--muted) }
+a:focus-visible { outline: 3px solid var(--yellow); outline-offset: 2px; border-radius: .3rem }
