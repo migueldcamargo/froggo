@@ -6,26 +6,26 @@
 <meta name="theme-color" content="#4fd2ff">
 <meta name="description" content="sapo embaralha, sapo pula">
 <meta property="og:type" content="website">
-<meta property="og:title" content="Froggo">
+<meta property="og:title" content="Jumppo">
 <meta property="og:description" content="sapo embaralha, sapo pula">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Froggo">
+<meta name="twitter:title" content="Jumppo">
 <meta name="twitter:description" content="sapo embaralha, sapo pula">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="apple-mobile-web-app-title" content="Froggo">
-<meta name="application-name" content="Froggo">
+<meta name="apple-mobile-web-app-title" content="Jumppo">
+<meta name="application-name" content="Jumppo">
 <meta name="format-detection" content="telephone=no">
 <link id="favIcon" rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%230b7bd6'/%3E%3Cellipse cx='50' cy='62' rx='34' ry='24' fill='%233fbf34'/%3E%3Ccircle cx='32' cy='38' r='14' fill='%233fbf34'/%3E%3Ccircle cx='68' cy='38' r='14' fill='%233fbf34'/%3E%3Ccircle cx='32' cy='37' r='9' fill='%23fff'/%3E%3Ccircle cx='68' cy='37' r='9' fill='%23fff'/%3E%3Ccircle cx='34' cy='38' r='4.5' fill='%23102030'/%3E%3Ccircle cx='66' cy='38' r='4.5' fill='%23102030'/%3E%3Cpath d='M36 64 Q50 74 64 64' stroke='%23103d12' stroke-width='4' fill='none' stroke-linecap='round'/%3E%3C/svg%3E">
 <link id="touchIcon" rel="apple-touch-icon" href="">
-<title>Froggo</title>
+<title>Jumppo</title>
 <!-- Contador de aberturas e de progresso (GoatCounter: sem cookies, sem dados pessoais); painel em froggo.goatcounter.com -->
 <script>window.goatcounter = { path: function () { return location.pathname; } };      /* sem o ?v= da atualização */</script>
 <script data-goatcounter="https://froggo.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
 <style>
 /* =====================================================================
-   FROGGO — arquivo único, offline. Estilos.
+   JUMPPO (antes Froggo) — arquivo único, offline. Estilos.
    ===================================================================== */
 :root{
   --sky1:#3fd0ff; --sky2:#0b7bd6; --deep:#0759a8; --navy:#08325e; --ink:#0b2545;
@@ -701,7 +701,7 @@ canvas.bigbang{position:absolute;inset:0;width:100%;height:100%;z-index:400;poin
       </div>
     </div>
     <div class="hero">
-      <h1 class="title" aria-label="Froggo"><span>F</span><span>r</span><span>o</span><span>g</span><span>g</span><span>o</span></h1>
+      <h1 class="title" aria-label="Jumppo"><span>J</span><span>u</span><span>m</span><span>p</span><span>p</span><span>o</span></h1>
       <div class="hero-art" id="heroArt"></div>
     </div>
     <div class="cta"><button class="btn big round cards" id="btnPick" aria-label="Pegar uma carta"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"><rect x="3" y="5" width="11" height="15" rx="2" transform="rotate(-10 8 12)"/><rect x="9" y="3" width="11" height="15" rx="2" fill="#fff" fill-opacity=".6"/></svg></button><button class="btn big" id="btnCareer">
@@ -853,7 +853,7 @@ canvas.bigbang{position:absolute;inset:0;width:100%;height:100%;z-index:400;poin
         <h4 id="syTitle">Transferir progresso</h4>
         <ol class="systeps" id="sySteps" hidden>
           <li><span>Toque em <b>Copiar progresso</b> aqui embaixo.</span></li>
-          <li><span>Instale o Froggo e abra pelo ícone da tela inicial.</span></li>
+          <li><span>Instale o Jumppo e abra pelo ícone da tela inicial.</span></li>
           <li><span>No app, toque na setinha <b>↓</b> no alto da tela e cole o código.</span></li>
         </ol>
         <p class="sywhere" id="syHere"></p>
@@ -935,9 +935,10 @@ canvas.bigbang{position:absolute;inset:0;width:100%;height:100%;z-index:400;poin
 
 <script>
 'use strict';
-const BUILD = '2026-10-27.1609';      // versão publicada: trocada pela data e hora a cada publicação (ver Update, no fim); 'dev' não confere
+const BUILD = '2026-10-27.2100';
+const LINK = 'jumppo.com.br';     // endereço do jogo nas mensagens do zap (sem https:// e sem barra final: o WhatsApp ainda reconhece o link)      // versão publicada: trocada pela data e hora a cada publicação (ver Update, no fim); 'dev' não confere
 /* =====================================================================
-   FROGGO — jogo de sapos saltadores (peg-solitaire), arquivo único e offline.
+   JUMPPO (antes Froggo) — jogo de sapos saltadores (peg-solitaire), arquivo único e offline.
    Módulos (todos neste arquivo): Store · Geo · Rules · Solver · Gen ·
    Art · Sound · Board (render + input) · Deck · Screens/App · Tests.
    ===================================================================== */
@@ -1898,7 +1899,7 @@ const Outfit = (() => {
 <path d="M33 22 Q33 3 50 3 Q67 3 67 22 Z" fill="none" stroke="#1d2a44" stroke-width="1.1" stroke-linejoin="round"/><path d="M38 12 Q41 7 46 5.6" stroke="#fff" stroke-width="1.6" opacity=".5" fill="none" stroke-linecap="round"/>
 <path d="M36 21.5 Q50 28.5 64 21.5 L62.4 20 Q50 25.4 37.6 20 Z" fill="#ffd23f" stroke="#a87a00" stroke-width=".8"/>
 <rect x="49.2" y="-2.6" width="1.6" height="6" fill="#555"/><ellipse cx="43.2" cy="-3.4" rx="6.6" ry="1.9" fill="#e53935" stroke="#8a1414" stroke-width=".6" transform="rotate(-8 43.2 -3.4)"/><ellipse cx="56.8" cy="-2.4" rx="6.6" ry="1.9" fill="#2b7de9" stroke="#164a96" stroke-width=".6" transform="rotate(-8 56.8 -2.4)"/><circle cx="50" cy="-2.8" r="1.7" fill="#ffd23f" stroke="#a87a00" stroke-width=".6"/></g>` },
-    { id: 'oculos', name: 'Bay-Ran Wayfrog', slot: 'eyes', box: '11 13 78 24',
+    { id: 'oculos', name: 'Bay-Ran', slot: 'eyes', box: '11 13 78 24',
       // armação preta trapezoidal (mais larga em cima), lentes verde-escuras, rebites prateados
       svg: () => {
         const lens = `<path d="M15 16.6 L45 16.2 Q47 16.2 46.5 18.8 L43.8 31 Q43 34.4 39.4 34.4 L22.2 34.4 Q18.4 34.4 17.4 31 L13.6 19 Q13.2 16.6 15 16.6 Z" fill="#101010"/>
@@ -2124,7 +2125,7 @@ ${vest}<g transform="translate(100 0) scale(-1 1)">${vest}</g>
         const one = strap(80.6) + strap(84.6);
         return `${one}<g transform="translate(100 0) scale(-1 1)">${one}</g>`;
       } },
-    { id: 'oldskool', name: 'Kombis', slot: 'feet', box: '6 70 88 28',
+    { id: 'oldskool', name: 'Sk8board', slot: 'feet', box: '6 70 88 28',
       // Old Skool de perfil, bicos para fora: lona preta, biqueira e calcanhar em camurça, faixa lateral branca
       // contornada, costuras brancas, gola acolchoada, cadarço e solado branco alto com a linha preta
       svg: () => {
@@ -2957,7 +2958,7 @@ const Board = (() => {
    --------------------------------------------------------------------- */
 const Deck = (() => {
   const deck = $('deck'), flip = $('flip'), face = $('cardFace');
-  const backHTML = `<div class="emblem">${Art.frog('green')}</div><div class="bk-title">Froggo</div>`;
+  const backHTML = `<div class="emblem">${Art.frog('green')}</div><div class="bk-title">Jumppo</div>`;
   $('flipBack').innerHTML = backHTML;
   const N = 6, cards = [];
   for (let i = 0; i < N; i++) { const c = document.createElement('div'); c.className = 'cback'; c.innerHTML = backHTML; deck.appendChild(c); cards.push(c); }
@@ -4586,7 +4587,7 @@ ${portalPos ? `<path d="M${finalPos.x} ${finalPos.y} L${portalPos.x} ${portalPos
   function finalPop() {
     const ov = document.createElement('div'); ov.className = 'overlay show'; ov.setAttribute('role', 'dialog'); ov.setAttribute('aria-modal', 'true');
     ov.innerHTML = `<div class="panel result win"><div class="res-art fimart">${Deco.bigHeart()}</div><div class="res-text"><h3>Você completou tudo!</h3>
-<p class="wmin">Todos os mapas do Froggo. Parabéns! 🎉</p><p class="wmin">Chama alguém que vai gostar de jogar:</p>
+<p class="wmin">Todos os mapas do Jumppo. Parabéns! 🎉</p><p class="wmin">Chama alguém que vai gostar de jogar:</p>
 <div class="row win-row"><button type="button" class="btn wa grow" data-k="s">Compartilhar</button></div>
 <div class="row win-row"><button type="button" class="btn blue grow" data-k="v">Voltar fase</button><button type="button" class="btn green grow" data-k="z">Recomeçar</button></div>
 <div class="row win-row"><button type="button" class="btn" data-k="x">Fechar</button></div></div></div>`;
@@ -4596,8 +4597,8 @@ ${portalPos ? `<path d="M${finalPos.x} ${finalPos.y} L${portalPos.x} ${portalPos
       Sound.click();
       const k = b.dataset.k;
       if (k === 's') {
-        const text = '🐸 Terminei todos os mapas do Froggo! Duvido você conseguir:', url = 'https://migueldcamargo.github.io/froggo';
-        try { if (navigator.share) { await navigator.share({ title: 'Froggo', text: text + '\n' + url }); return; } } catch (err) { return; }
+        const text = '🐸 Terminei todos os mapas do Jumppo! Duvido você conseguir:', url = 'https://' + LINK;
+        try { if (navigator.share) { await navigator.share({ title: 'Jumppo', text: text + '\n' + url }); return; } } catch (err) { return; }
         window.open((/android/i.test(navigator.userAgent || '') ? 'whatsapp://send?text=' : 'https://wa.me/?text=') + encodeURIComponent(text + '\n' + url), '_blank');
         return;
       }
@@ -4876,7 +4877,6 @@ ${kit.length ? `<p class="wmin">Vem com: <b>${kit.map(id => Outfit.BY[id].name).
    aparelho; compartilhamento pronto para o WhatsApp.
    --------------------------------------------------------------------- */
 const Daily = (() => {
-  const LINK = 'migueldcamargo.github.io/froggo';   // sem https:// e sem barra final: o WhatsApp ainda reconhece o link
   const N = 5;                                      // fases do desafio: 3 do Iniciante + 2 do Médio (em posições sorteadas pela data)
   const pad = n => String(n).padStart(2, '0');
   // o dia vira à meia-noite de Brasília, em qualquer aparelho (fallback: UTC−3, sem horário de verão)
@@ -4919,10 +4919,10 @@ const Daily = (() => {
     const sec = r.time ? Math.max(1, Math.round(r.time / 1000)) : 0, mi = Math.floor(sec / 60), se = sec % 60, tempo = !sec ? '' : (mi ? mi + 'min' + (se ? pad(se) + 's' : '') : se + 's') + '\n';
     const mes = ['janeiro', 'fevereiro', 'março', 'abril', 'maio', 'junho', 'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro'][m - 1];
     const nota = n => '⭐'.repeat(n) + '⚪'.repeat(3 - n);    // ⚪ = estrela que faltou
-    // só "Froggo" em negrito (*…*); o resto sem
-    if (!multi(r)) return `🐸 *Froggo* · ${d} de ${mes}\n${r.moves} ${r.moves === 1 ? 'movimento' : 'movimentos'}${r.min ? ' ' + nota(starsFor(r.moves, r.min)) : ''}\n${LINK}`;
+    // só "Jumppo" em negrito (*…*); o resto sem
+    if (!multi(r)) return `🐸 *Jumppo* · ${d} de ${mes}\n${r.moves} ${r.moves === 1 ? 'movimento' : 'movimentos'}${r.min ? ' ' + nota(starsFor(r.moves, r.min)) : ''}\n${LINK}`;
     const em = moods(r.date, r.moves, r.mins);
-    return `🐸 *Froggo* · ${d} de ${mes}\n${r.moves.map((mv, i) => mv + em[i]).join(' ')}\nTotal: ${sum(r.moves)} pulos ${nota(grade(r))}\n${tempo}${LINK}`;
+    return `🐸 *Jumppo* · ${d} de ${mes}\n${r.moves.map((mv, i) => mv + em[i]).join(' ')}\nTotal: ${sum(r.moves)} pulos ${nota(grade(r))}\n${tempo}${LINK}`;
   }
   // dias seguidos jogando o desafio (vale enquanto o último foi hoje ou ontem)
   const prevDay = iso => { const [y, m, d] = iso.split('-').map(Number), t = new Date(Date.UTC(y, m - 1, d - 1)); return t.toISOString().slice(0, 10); };
@@ -5020,6 +5020,7 @@ const Daily = (() => {
   };
   async function card(iso = today(), k = 0) {
     await Solver.precompute();
+    // as sementes 'froggo-…' ficam com o nome antigo: trocar mudaria os mapas do desafio de todo mundo
     const h = hash(`froggo-daily-${iso}-${k}`), [lvl, size, idx] = kindOf(iso, k);
     const pick = Career.dailyPick(h, lvl, idx), start = { g: pick.start.g, r: pick.start.r }, solution = Solver.solve(start);
     return { daily: iso, phase: k, level: { name: `Mapa ${k + 1}/${N}`, color: '#f08a00' }, levelId: lvl, skin: 'daily', size, label: `Mapa ${k + 1}/${N}`, start,
@@ -5217,8 +5218,8 @@ window.heroZoom = zoomable($('heroArt'), '.hero-stage', '.hero-zoom', false);   
 const Sync = (() => {
   /* Código de transferência: o progresso (JSON) vai comprimido, embaralhado com uma chave e um sal aleatório e com uma
      conferência no fim. Fica com cara de letras soltas (muda a cada cópia) e qualquer letra trocada invalida o código,
-     então não dá para "escrever" um progresso à mão. Formato: FROGGO-<base64url de [2][flags][sal×4][dados][conferência×4]> */
-  const TAG = 'FROGGO-', SKIP = ['frog.updTry'], KEY = new TextEncoder().encode('lagoa-do-froggo/sapo-pula-sapo');
+     então não dá para "escrever" um progresso à mão. Formato: JUMPPO-<base64url de [2][flags][sal×4][dados][conferência×4]> */
+  const TAG = 'JUMPPO-', TAGS = [TAG, 'FROGGO-'], SKIP = ['frog.updTry'], KEY = new TextEncoder().encode('lagoa-do-froggo/sapo-pula-sapo');
   const keys = () => Object.keys(localStorage).filter(k => k.startsWith('frog.') && !SKIP.includes(k));
   const here = () => Object.fromEntries(keys().map(k => [k, localStorage.getItem(k)]));
   const fnv = (bytes, seed) => { let h = (2166136261 ^ seed) >>> 0; for (let i = 0; i < bytes.length; i++) { h ^= bytes[i]; h = Math.imul(h, 16777619) >>> 0; } return h; };
@@ -5241,9 +5242,10 @@ const Sync = (() => {
     return TAG + b64(out);
   }
   async function unpack(txt) {
-    const i = (txt || '').indexOf(TAG); if (i < 0) return null;
+    const tag = TAGS.find(t => (txt || '').toUpperCase().includes(t)); if (!tag) return null;       // FROGGO-: códigos de antes do nome novo
+    const i = txt.toUpperCase().indexOf(tag);
     try {
-      const raw = unb64(txt.slice(i + TAG.length).replace(/[^A-Za-z0-9_-]/g, ''));
+      const raw = unb64(txt.slice(i + tag.length).replace(/[^A-Za-z0-9_-]/g, ''));
       if (raw.length < 11 || raw[0] !== 2) return null;
       const dv = new DataView(raw.buffer), salt = dv.getUint32(2), n = raw.length - 10;
       let data = mask(raw.subarray(6, 6 + n), salt);
@@ -5295,7 +5297,32 @@ const Sync = (() => {
       location.reload();
     });
   });
-  return { reset, pack, unpack, get mode() { return mode; } };
+  /* Mudança de endereço (migueldcamargo.github.io → jumppo.com.br): o progresso fica preso ao endereço, então na 1ª visita
+     ao jumppo.com.br sem progresso o jogo passa uma vez pela PONTE (página no endereço antigo, que lê o progresso de lá) e
+     ela devolve tudo no link (#p=código). Quem já tem progresso aqui confirma antes de trocar. PONTE vazia: desligado. */
+  const PONTE = '';
+  const fresh = h => !(+num(h, 'career', 0)) && !(num(h, 'stars', []) || []).some(v => v);
+  function bounce() {
+    if (!PONTE || location.hostname !== 'jumppo.com.br' || Store.get('ponte', false) || /^#p=/.test(location.hash)) return false;
+    Store.set('ponte', true);
+    if (!fresh(here())) return false;
+    location.replace(PONTE); return true;
+  }
+  async function fromLink() {
+    const m = /^#p=(.+)$/.exec(location.hash); if (!m) return;
+    try { history.replaceState(null, '', location.pathname + location.search); } catch (e) { /* segue */ }
+    Store.set('ponte', true);
+    const d = await unpack(decodeURIComponent(m[1])); if (!d) return;
+    const h = here();
+    const apply = () => {
+      try { keys().forEach(k => localStorage.removeItem(k)); Object.entries(d).forEach(([k, v]) => { if (k.startsWith('frog.') && typeof v === 'string') localStorage.setItem(k, v); }); Store.set('ponte', true); }
+      catch (e) { toast('Não deu para salvar aqui'); return; }
+      location.reload();
+    };
+    if (fresh(h)) apply();
+    else UI.confirm('Trazer o progresso do endereço antigo?', `Do endereço antigo: ${place(d)}\nAqui agora: ${place(h)}\n\n${diff(d, h)}`, 'Trazer', apply);
+  }
+  return { reset, pack, unpack, bounce, fromLink, get mode() { return mode; } };
 })();
 /* 10 toques seguidos no personagem da tela inicial: janela para voltar a uma fase anterior da carreira (nunca avançar)
    e para transferir o progresso. A mesma janela abre só com a transferência pela tela de instalar e pelo "Trazer progresso" */
@@ -5612,7 +5639,7 @@ const Tests = {
       out.map(([ok, n]) => `<div class="${ok ? 'ok' : 'bad'}">${ok ? '✔' : '✘'} ${n}</div>`).join('');
     p.querySelector('button').onclick = () => p.remove();
     app.appendChild(p);
-    console.log('[Froggo tests]', out.map(([ok, n]) => (ok ? 'OK  ' : 'FAIL') + ' ' + n).join('\n'));
+    console.log('[Jumppo tests]', out.map(([ok, n]) => (ok ? 'OK  ' : 'FAIL') + ' ' + n).join('\n'));
     window.__frogTests = { out, fails };
   }
 };
@@ -5676,6 +5703,7 @@ const Tests = {
   $('cmap').addEventListener('scroll', poke, { passive: true }); $('wGrid').addEventListener('scroll', poke, { passive: true });
   poke();
   Install.boot();
+  if (!Sync.bounce()) Sync.fromLink();         // mudança para jumppo.com.br: traz o progresso do endereço antigo
   const standalone = navigator.standalone || (window.matchMedia && matchMedia('(display-mode: standalone)').matches);
   Track(standalone ? 'abriu-app' : 'abriu-navegador', standalone ? 'Abriu pelo app da tela inicial' : 'Abriu pelo navegador');
   $('btnDailyShare').addEventListener('click', () => Track('zap', 'Mandou o desafio no Zap'));
