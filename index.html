@@ -545,12 +545,13 @@ canvas.confetti{position:absolute;inset:0;width:100%;height:100%;pointer-events:
 .overlay.typing{align-items:flex-start}
 .overlay.typing #bkBack,.overlay.typing .systeps,.overlay.typing .sywhere,.overlay.typing #btnSyncCopy,.overlay.typing #btnSyInstall{display:none!important}
 #sySrc{width:100%;border-radius:.8rem;border:2px solid #c9d8e4;padding:.5rem .6rem;font:600 .8rem/1.25 ui-monospace,monospace;color:#0b2545;background:#fff;resize:none;user-select:text;-webkit-user-select:text}
-.bkregs{display:flex;flex-wrap:wrap;gap:.35rem;justify-content:center;margin:.7rem 0 .5rem}
-.bkregs button{padding:.35rem .65rem;border-radius:999px;background:#e8f1f8;color:#0b2545;font:800 .82rem/1.2 Nunito,system-ui,sans-serif}
-.bkregs button.on{background:#0b6fc9;color:#fff}
-.bkfases{width:100%;display:grid;grid-template-columns:repeat(5,1fr);gap:.4rem;max-height:calc(var(--H) * .28);overflow-y:auto}
-.bkfases button{height:2.6rem;border-radius:.7rem;background:#fff;color:#0b2545;font:900 1rem Nunito,system-ui,sans-serif;box-shadow:0 .18rem 0 #b7c7d6,inset 0 0 0 2px #d6e2ec}
-.bkfases button:active{transform:translateY(.12rem);box-shadow:0 .05rem 0 #b7c7d6,inset 0 0 0 2px #d6e2ec}
+.sygoback{margin-top:.3rem;padding:.55rem .8rem;border-radius:999px;background:#e8f1f8;color:#0b4f8f;font:800 .92rem/1.2 Nunito,system-ui,sans-serif}
+.sygoback:active{background:#d6e6f3}
+.overlay.typing .sygoback{display:none!important}
+.bksel{width:100%;margin:.7rem 0 .6rem;padding:.7rem 2.4rem .7rem .9rem;border-radius:.9rem;border:2px solid #c9d8e4;background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%230b2545' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E") no-repeat right .8rem center/1.1rem;
+  color:#0b2545;font:900 1.15rem/1.2 Nunito,system-ui,sans-serif;-webkit-appearance:none;appearance:none}
+#btnBkGo{width:100%}
+#btnBkGo:disabled{opacity:.5}
 .dclose:active{transform:translateY(.12rem);box-shadow:0 .03rem 0 #a10a14}
 
 /* ---------- Carreira ---------- */
@@ -854,8 +855,8 @@ canvas.bigbang{position:absolute;inset:0;width:100%;height:100%;z-index:400;poin
       <h3 id="bkTitle">Seu progresso</h3>
       <div id="bkBack">
         <p>Voltar para uma fase anterior</p>
-        <div class="bkregs" id="bkRegs"></div>
-        <div class="bkfases" id="bkFases"></div>
+        <select class="bksel" id="bkSel" aria-label="Fase para onde voltar"></select>
+        <button class="btn red" id="btnBkGo" type="button" disabled>Escolha a fase</button>
       </div>
       <div class="sybox" id="syBox">
         <h4 id="syTitle">Transferir progresso</h4>
@@ -870,6 +871,7 @@ canvas.bigbang{position:absolute;inset:0;width:100%;height:100%;z-index:400;poin
         <p class="syhint" id="syHint">No outro lugar (navegador ou app), toque 10 vezes no sapo e cole o código abaixo</p>
         <textarea id="sySrc" rows="2" placeholder="Cole aqui o código" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
         <button class="btn green" id="btnSyncUse" type="button">Colar progresso</button>
+        <button class="sygoback" id="btnGoBack" type="button" hidden>↩ Voltar para uma fase anterior</button>
       </div>
     </div>
   </div>
@@ -943,7 +945,7 @@ canvas.bigbang{position:absolute;inset:0;width:100%;height:100%;z-index:400;poin
 
 <script>
 'use strict';
-const BUILD = '2026-10-27.2235';
+const BUILD = '2026-10-27.2300';
 const LINK = 'jumppo.com.br';     // endereço do jogo nas mensagens do zap (sem https:// e sem barra final: o WhatsApp ainda reconhece o link)      // versão publicada: trocada pela data e hora a cada publicação (ver Update, no fim); 'dev' não confere
 /* =====================================================================
    JUMPPO (antes Froggo) — jogo de sapos saltadores (peg-solitaire), arquivo único e offline.
@@ -5287,7 +5289,7 @@ const Sync = (() => {
     pack().then(c => { code = c; }).catch(() => {});     // pronto antes do toque (o iPhone só copia dentro do toque)
   }
   // ao tocar no campo, o teclado sobe: o painel vai para o alto só com o campo; volta ao normal se sair do campo sem colar nada
-  $('sySrc').addEventListener('focus', () => { $('ovBack').classList.add('typing'); setTimeout(() => $('sySrc').scrollIntoView({ block: 'center' }), 350); });
+  $('sySrc').addEventListener('focus', () => { $('ovBack').classList.add('typing'); setTimeout(() => { window.scrollTo(0, 0); $('sySrc').scrollIntoView({ block: 'center' }); }, 350); });
   $('sySrc').addEventListener('blur', () => { if (!$('sySrc').value.trim()) $('ovBack').classList.remove('typing'); });
   $('btnSyncCopy').addEventListener('click', async () => {
     const c = code || await pack();
@@ -5335,23 +5337,24 @@ const Sync = (() => {
 /* 10 toques seguidos no personagem da tela inicial: janela para voltar a uma fase anterior da carreira (nunca avançar)
    e para transferir o progresso. A mesma janela abre só com a transferência pela tela de instalar e pelo "Trazer progresso" */
 const ProgressPanel = (() => {
-  let n = 0, t = 0, reg = 0;
+  let n = 0, t = 0;
   const regs = () => Career.REGIONS.map((R, r, A) => ({ R, r, a: A.slice(0, r).reduce((s, x) => s + x.count, 0) })).filter(x => x.a < Career.done && (!x.R.bonus || Career.bonusOpen));
-  function fases() {
-    const x = regs().find(g => g.r === reg) || regs().pop();
-    $('bkRegs').querySelectorAll('button').forEach(b => b.classList.toggle('on', +b.dataset.r === x.r));
-    const top = Math.min(Career.done, x.a + x.R.count);
-    $('bkFases').innerHTML = Array.from({ length: top - x.a }, (_, k) => `<button type="button" data-i="${x.a + k}">${x.a + k + 1}</button>`).join('');
+  const regOf = i => (regs().filter(x => x.a <= i).pop() || {}).R;
+  // lista suspensa só com o número das fases já alcançadas (1 até a atual); o pântano aparece no botão e na confirmação
+  function fill() {
+    const ops = regs().flatMap(x => Array.from({ length: Math.min(Career.done, x.a + x.R.count) - x.a }, (_, k) => x.a + k));
+    $('bkSel').innerHTML = '<option value="" disabled selected>Escolha a fase</option>' + ops.map(i => `<option value="${i}">${i + 1}</option>`).join('');
+    $('btnBkGo').disabled = true; $('btnBkGo').textContent = 'Escolha a fase';
   }
+  /* modos: 'secret' (10 toques no sapo: voltar fase + transferência), 'move' / 'bring' (só a transferência, com um botão
+     "Voltar para uma fase anterior" que reabre a janela no modo 'back', só com a escolha da fase) */
   function open(mode = 'secret') {
-    const list = mode === 'secret' ? regs() : [];
-    $('bkTitle').textContent = mode === 'move' ? 'Leve seu progresso' : mode === 'bring' ? 'Trazer progresso' : 'Seu progresso';
-    $('bkBack').hidden = !list.length;            // ainda sem fase para voltar: só a transferência
-    if (list.length) {
-      reg = list[list.length - 1].r;
-      $('bkRegs').innerHTML = list.map(x => `<button type="button" data-r="${x.r}">${x.R.name}</button>`).join('');
-      fases();
-    }
+    const can = regs().length > 0, back = can && (mode === 'secret' || mode === 'back');
+    $('bkTitle').textContent = mode === 'move' ? 'Leve seu progresso' : mode === 'bring' ? 'Trazer progresso' : mode === 'back' ? 'Voltar fase' : 'Seu progresso';
+    $('bkBack').hidden = !back;                   // ainda sem fase para voltar: só a transferência
+    $('syBox').hidden = mode === 'back';
+    $('btnGoBack').hidden = !(mode === 'move' || mode === 'bring') || !can;
+    if (back) fill();
     Sync.reset(mode); heroZoom.reset();
     $('ovBack').classList.add('show'); Base.dim(true);
   }
@@ -5360,16 +5363,20 @@ const ProgressPanel = (() => {
     const now = Date.now(); n = now - t < 700 ? n + 1 : 1; t = now;
     if (n >= 10) { n = 0; open(); }
   });
-  $('bkRegs').addEventListener('click', e => { const b = e.target.closest('button'); if (b) { reg = +b.dataset.r; fases(); Sound.click(); } });
-  $('bkFases').addEventListener('click', e => {
-    const b = e.target.closest('button'); if (!b) return;
-    const i = +b.dataset.i;
+  $('bkSel').addEventListener('change', () => {
+    const i = +$('bkSel').value, R = regOf(i);
+    $('btnBkGo').disabled = false; $('btnBkGo').textContent = `Voltar para a fase ${i + 1}${R ? ' · ' + (R.short || R.name) : ''}`;
+  });
+  $('btnBkGo').addEventListener('click', () => {
+    if ($('bkSel').value === '') return;
+    const i = +$('bkSel').value, R = regOf(i), onde = R ? ` ${R.na} ${R.name}` : '';
     $('ovBack').classList.remove('show');
-    UI.confirm(`Voltar para a fase ${i + 1}?`, 'Tudo o que foi ganho na carreira a partir dela volta a ser ganho jogando.', 'Voltar', () => {
+    UI.confirm(`Voltar para a fase ${i + 1}?`, `Você vai recomeçar na fase ${i + 1}${onde}.\nTodo o progresso a partir dela será perdido: fases, estrelas, itens e amigos ganhos depois dela voltam a ser ganhos jogando.`, 'Confirmar', () => {
       Career.rewind(i); Outfit.prune(Career.owned()); Outfit.pruneChars(Career.chars());
       $('heroArt').innerHTML = Art.heroScene(); heroZoom.reset(); toast(`Você está na fase ${i + 1}`);
     });
   });
+  $('btnGoBack').addEventListener('click', () => { Sound.click(); open('back'); });
   $('btnBackClose').addEventListener('click', () => { $('ovBack').classList.remove('show'); Base.dim(false); });
   $('btnSyInstall').addEventListener('click', () => { Sound.click(); $('ovBack').classList.remove('show'); Install.open(); });
   return { open };
