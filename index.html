@@ -951,7 +951,7 @@ canvas.bigbang{position:absolute;inset:0;width:100%;height:100%;z-index:400;poin
 
 <script>
 'use strict';
-const BUILD = '2026-10-27.2324';
+const BUILD = '2026-10-28.1906';
 const LINK = 'jumppo.com.br';     // endereço do jogo nas mensagens do zap (sem https:// e sem barra final: o WhatsApp ainda reconhece o link)      // versão publicada: trocada pela data e hora a cada publicação (ver Update, no fim); 'dev' não confere
 /* =====================================================================
    JUMPPO (antes Froggo) — jogo de sapos saltadores (peg-solitaire), arquivo único e offline.
@@ -2060,7 +2060,7 @@ ${vest}<g transform="translate(100 0) scale(-1 1)">${vest}</g>
       svg: () => [33, 67].map(x => `<path d="M${x - 9} 87.4 Q${x - 4} 81.6 ${x} 88.6 Q${x + 4} 81.6 ${x + 9} 87.4" stroke="#1f9a4a" stroke-width="2.6" fill="none" stroke-linecap="round"/>
 <path d="M${x - 9} 87.4 Q${x - 4} 81.6 ${x} 88.6 Q${x + 4} 81.6 ${x + 9} 87.4" stroke="#ffd23f" stroke-width=".9" fill="none" stroke-linecap="round"/>
 <g transform="translate(${x - 6} 85)"><rect x="-2.6" y="-1.8" width="5.2" height="3.6" rx=".4" fill="#1f9a4a" stroke="#fff" stroke-width=".35"/><path d="M0 -1.4 L2.1 0 L0 1.4 L-2.1 0 Z" fill="#ffd23f"/><circle r=".75" fill="#1e3f9e"/></g>`).join('') },
-    { id: 'chineludinho', name: 'Chineludinho', slot: 'feet', open: true, rare: true, box: '16 76 68 24',
+    { id: 'chineludinho', name: 'Quadradinho', slot: 'feet', open: true, rare: true, box: '16 76 68 24',
       // presente do desafio do dia: chinelo de solado quadrado azul-acinzentado claro, tiras brancas com textura de espinha de peixe
       sole: () => [33, 67].map(x => `<rect x="${x - 12.4}" y="86.6" width="24.8" height="9" rx="1.8" fill="#cfdae6" stroke="#93a4b8" stroke-width=".8"/><rect x="${x - 11.6}" y="86.8" width="23.2" height="6.6" rx="1.4" fill="#eef3f8"/>
 <path d="M${x - 10} 88.6 h20 M${x - 10} 90.6 h20" stroke="#dbe4ee" stroke-width=".5" stroke-dasharray=".6 .9"/>`).join(''),
@@ -4965,7 +4965,7 @@ const Daily = (() => {
     $('btnDaily').classList.toggle('done', !!result());
   }
   /* Presentes do desafio do dia, em rodízio pela data (um por dia, igual para todo mundo): 26/10 Kiwi (com a fruta),
-     27/10 Marcelina, 28/10 iFoodeiro, 29/10 Chineludinho, 30/10 Kiwi de novo… Quem já tem o presente do dia não ganha nada;
+     27/10 Marcelina, 28/10 iFoodeiro, 29/10 Quadradinho, 30/10 Kiwi de novo… Quem já tem o presente do dia não ganha nada;
      quem chega depois pega os que faltam quando o rodízio passar por eles. Item novo entra no fim da lista. */
   const GIFTS = [['char:kiwi', 'kiwifruta'], ['char:gata'], ['viseira'], ['chineludinho']], GIFT0 = Date.UTC(2026, 9, 26);
   const giftOf = iso => { const [y, m, d] = iso.split('-').map(Number), n = Math.round((Date.UTC(y, m - 1, d) - GIFT0) / 864e5); return GIFTS[((n % GIFTS.length) + GIFTS.length) % GIFTS.length]; };
@@ -5661,7 +5661,7 @@ const Tests = {
     t('desafio do dia: mensagem do Zap com os 5 mapas (emojis variando), total, nota e tempo', msg.length === 4 && msg[0] === 'jumppo.com.br 21 de outubro' && msg[3] === '3min12s' && msg[1].split(' ').length === 5 && msg[1].split(' ')[0].replace(/^\d+/, '') !== msg[1].split(' ')[3].replace(/^\d+/, '') && msg[2] === 'Total: 44 pulos ⭐⭐⚫️', msg.join(' | '));
     const far = Daily.message({ date: '2026-10-21', moves: [5, 4, 69, 7, 4], mins: [5, 4, 7, 7, 4] }).split('\n')[2];
     t('desafio do dia: nota pela soma dos pulos (um mapa ruim derruba o total)', far === 'Total: 89 pulos ⭐⚫️⚫️', far);
-    t('desafio do dia: presente em rodízio pela data (28/10 iFoodeiro, 29/10 Chineludinho, 30/10 Kiwi, 31/10 Marcelina, 1/11 iFoodeiro)',
+    t('desafio do dia: presente em rodízio pela data (28/10 iFoodeiro, 29/10 Quadradinho, 30/10 Kiwi, 31/10 Marcelina, 1/11 iFoodeiro)',
       ['2026-10-28', '2026-10-29', '2026-10-30', '2026-10-31', '2026-11-01', '2026-10-26'].map(d => Daily.giftOf(d)[0]).join() === 'viseira,chineludinho,char:kiwi,char:gata,viseira,char:kiwi');
     t('personagens: sapo + 6 amigos, cada um chega com um pântano e desenha com qualquer apetrecho',
       Outfit.CHARS.length === 17 && Outfit.CHARS.slice(1).every(c => (c.gift || c.fase != null || Career.REGIONS.some(R => R.id === c.at)) && Art.creature(c.id, { outfit: { head: 'bolovo', eyes: 'oculos', torso: 'traje' } }).startsWith('<svg')));
