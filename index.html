@@ -951,7 +951,7 @@ canvas.bigbang{position:absolute;inset:0;width:100%;height:100%;z-index:400;poin
 
 <script>
 'use strict';
-const BUILD = '2026-10-27.2309';
+const BUILD = '2026-10-27.2324';
 const LINK = 'jumppo.com.br';     // endereço do jogo nas mensagens do zap (sem https:// e sem barra final: o WhatsApp ainda reconhece o link)      // versão publicada: trocada pela data e hora a cada publicação (ver Update, no fim); 'dev' não confere
 /* =====================================================================
    JUMPPO (antes Froggo) — jogo de sapos saltadores (peg-solitaire), arquivo único e offline.
@@ -2060,6 +2060,22 @@ ${vest}<g transform="translate(100 0) scale(-1 1)">${vest}</g>
       svg: () => [33, 67].map(x => `<path d="M${x - 9} 87.4 Q${x - 4} 81.6 ${x} 88.6 Q${x + 4} 81.6 ${x + 9} 87.4" stroke="#1f9a4a" stroke-width="2.6" fill="none" stroke-linecap="round"/>
 <path d="M${x - 9} 87.4 Q${x - 4} 81.6 ${x} 88.6 Q${x + 4} 81.6 ${x + 9} 87.4" stroke="#ffd23f" stroke-width=".9" fill="none" stroke-linecap="round"/>
 <g transform="translate(${x - 6} 85)"><rect x="-2.6" y="-1.8" width="5.2" height="3.6" rx=".4" fill="#1f9a4a" stroke="#fff" stroke-width=".35"/><path d="M0 -1.4 L2.1 0 L0 1.4 L-2.1 0 Z" fill="#ffd23f"/><circle r=".75" fill="#1e3f9e"/></g>`).join('') },
+    { id: 'chineludinho', name: 'Chineludinho', slot: 'feet', open: true, rare: true, box: '16 76 68 24',
+      // presente do desafio do dia: chinelo de solado quadrado azul-acinzentado claro, tiras brancas com textura de espinha de peixe
+      sole: () => [33, 67].map(x => `<rect x="${x - 12.4}" y="86.6" width="24.8" height="9" rx="1.8" fill="#cfdae6" stroke="#93a4b8" stroke-width=".8"/><rect x="${x - 11.6}" y="86.8" width="23.2" height="6.6" rx="1.4" fill="#eef3f8"/>
+<path d="M${x - 10} 88.6 h20 M${x - 10} 90.6 h20" stroke="#dbe4ee" stroke-width=".5" stroke-dasharray=".6 .9"/>`).join(''),
+      svg: () => [33, 67].map(x => { let hb = ''; for (const [a, b] of [[-7.4, 86.2], [-5.4, 85], [-3.2, 85.4], [3.2, 85.4], [5.4, 85], [7.4, 86.2]]) hb += `<path d="M${x + a - .7} ${b - .5} l.7 .6 l.7 -.6" stroke="#c9d2dc" stroke-width=".35" fill="none"/>`;
+        return `<path d="M${x - 9} 88.4 Q${x - 4} 82 ${x} 89 Q${x + 4} 82 ${x + 9} 88.4" stroke="#b8c3cf" stroke-width="3.2" fill="none" stroke-linecap="round"/>
+<path d="M${x - 9} 88.4 Q${x - 4} 82 ${x} 89 Q${x + 4} 82 ${x + 9} 88.4" stroke="#fdfeff" stroke-width="2.4" fill="none" stroke-linecap="round"/>${hb}<circle cx="${x}" cy="89" r="1" fill="#fdfeff" stroke="#b8c3cf" stroke-width=".4"/>`; }).join('') },
+    { id: 'viseira', name: 'iFoodeiro', slot: 'head', layer: 'top', rare: true, box: '20 -2 60 26',
+      // presente do desafio do dia: viseira vermelha de entregador; faixa que abraça a cabeça e aba curva para baixo (∩, como boné
+      // de aba curva visto de frente), com a cabeça de rapina branca pequena no meio da faixa
+      svg: () => `<g transform="translate(0 -6)">
+<path d="M26.6 18.4 Q50 7.6 73.4 18.4 L73.2 23.2 Q50 12.8 26.8 23.2 Z" fill="#e31b23" stroke="#8f0a10" stroke-width=".8" stroke-linejoin="round"/>
+<path d="M28.4 19 Q50 9.6 71.6 19" stroke="#ff7a7a" stroke-width=".6" fill="none" opacity=".55"/>
+<path d="M26.8 23.2 Q50 12.8 73.2 23.2 Q76.4 25 77 27.6 Q50 21.4 23 27.6 Q23.6 25 26.8 23.2 Z" fill="#d3141c" stroke="#8f0a10" stroke-width=".8" stroke-linejoin="round"/>
+<path d="M24.4 26.8 Q50 21 75.6 26.8" stroke="#9e0c12" stroke-width="1" fill="none" opacity=".7"/><path d="M36 20.8 Q50 16.6 64 20.8" stroke="#ff6a6a" stroke-width=".8" fill="none" opacity=".5" stroke-linecap="round"/>
+<g transform="translate(46.1 14.2) scale(.37)"><path d="M1 0 H13 Q19 1 20.5 8.4 Q19.4 5.4 15 5.8 L1 7.8 L2.6 6 L.3 4.6 L2.4 3 L.3 1.6 Z" fill="#fff"/><path d="M9.4 2 L14.6 2.3 L13.9 4.2 Z" fill="#e31b23"/></g></g>` },
     { id: 'prancha', name: 'Prancha de surfe', slot: 'hand', rare: true, box: '70 6 44 108',
       // prancha em pé ao lado do sapo: branca com faixas coloridas, quilha e cordinha
       svg: () => `<g transform="rotate(-8 90 60) translate(90 60) scale(1.3) translate(-90 -60)"><path d="M90 20 Q99 36 99 60 Q99 86 90 98 Q81 86 81 60 Q81 36 90 20 Z" fill="#fffdf4" stroke="#7b8aa6" stroke-width="1.2"/>
@@ -2435,7 +2451,7 @@ ${zig}<path d="${band}" fill="${W}" stroke="${WD}" stroke-width="1"/>
     { id: 'jare', name: 'Jaré', at: 'expert' }, { id: 'baurets', name: 'Baurets', at: 'espaco', kit: ['capacete'] },
     { id: 'kiwi', name: 'Kiwi', gift: true, kit: ['kiwifruta'] },
     { id: 'conde', name: 'Conde', at: 'cemiterio' }, { id: 'cataras', name: 'Cataras', at: 'amor' }, { id: 'tcharina', name: 'Tcharina', fase: 120 }, { id: 'djanho', name: 'Djanho', fase: 125 },
-    { id: 'gata', name: 'Marcelina', gift: true }];   // Marcelina, a gata preta: 2º desafio do dia (o 1º traz o Kiwi); Tcharina: 1ª fase do Amor (dupla do Cataras); Djanho: 6º mapa do Amor      // gift: presente do desafio do dia (ver Daily, KIWI); fase: chega ao passar essa fase (índice), não ao abrir o pântano
+    { id: 'gata', name: 'Marcelina', gift: true }];   // Kiwi e Marcelina (gata preta): presentes do desafio do dia, em rodízio (ver Daily, GIFTS); Tcharina: 1ª fase do Amor (dupla do Cataras); Djanho: 6º mapa do Amor      // gift: presente do desafio do dia (ver Daily, GIFTS); fase: chega ao passar essa fase (índice), não ao abrir o pântano
   let char = Store.get('char', 'sapo'), charRed = Store.get('charRed', 'sapo');
   if (char === charRed && char !== 'sapo') { charRed = 'sapo'; Store.set('charRed', charRed); }     // verde e vermelho não podem ser o mesmo personagem (só o sapo)
   const big = o => flies(o) || !!(o && o.ride);       // ocupa mais espaço em volta do sapo (chama, caixa)
@@ -4183,7 +4199,7 @@ const Career = (() => {
   // ordem em que os apetrechos saem (trilha, 3★ de cada pântano, coleção do desafio): organiza o guarda-roupa
   const ORDER = REGIONS.flatMap((R, r) => Object.keys(PRIZE).filter(i => +i >= START[r] && +i < START[r] + R.count).sort((a, b) => a - b).flatMap(i => PRIZE[i].concat(...Outfit.CHARS.filter(c => c.fase === +i).map(c => c.kit || [])))   // kit de amigo que chega na fase vem logo depois
     .concat(RARE[R.id] || [], (Outfit.CHARS.find(c => c.at === R.id) || {}).kit || []))
-    .concat(DAILY.map(([, id]) => id), 'kiwifruta');
+    .concat(DAILY.map(([, id]) => id), 'kiwifruta', 'viseira', 'chineludinho');
   let list = null, built = null, nodes = [], finalPos = null, portalPos = null, starPos = null, endPos = null, gates = [], lastW = 0, avatar = null;
   const map = $('cmap'), inner = $('cmapInner');
   let baseRects = [], mapKey = '';
@@ -4948,7 +4964,11 @@ const Daily = (() => {
     $('dailyNum').textContent = dayNum();
     $('btnDaily').classList.toggle('done', !!result());
   }
-  const KIWI = '2026-10-23';
+  /* Presentes do desafio do dia, em rodízio pela data (um por dia, igual para todo mundo): 26/10 Kiwi (com a fruta),
+     27/10 Marcelina, 28/10 iFoodeiro, 29/10 Chineludinho, 30/10 Kiwi de novo… Quem já tem o presente do dia não ganha nada;
+     quem chega depois pega os que faltam quando o rodízio passar por eles. Item novo entra no fim da lista. */
+  const GIFTS = [['char:kiwi', 'kiwifruta'], ['char:gata'], ['viseira'], ['chineludinho']], GIFT0 = Date.UTC(2026, 9, 26);
+  const giftOf = iso => { const [y, m, d] = iso.split('-').map(Number), n = Math.round((Date.UTC(y, m - 1, d) - GIFT0) / 864e5); return GIFTS[((n % GIFTS.length) + GIFTS.length) % GIFTS.length]; };
   const prizeArt = id => id.startsWith('char:') ? Art.creature(id.slice(5)) : Outfit.preview(id);
   const prizeName = id => id.startsWith('char:') ? Outfit.CHARS.find(c => c.id === id.slice(5)).name : Outfit.BY[id].name;
   function openPanel(justWon, just, prize) {
@@ -5136,12 +5156,8 @@ const Daily = (() => {
     }
     // nota 3★ na tentativa que vale (a 1ª do dia): mais um na coleção do desafio
     let prize = first && grade(r) === 3 ? Career.dailyWin() : null;
-    // a partir de 23/10/2026, o 1º desafio concluído (qualquer nota) traz o amigo Kiwi e a fruta kiwi
-    // e o 2º desafio concluído (depois do Kiwi) traz a Marcelina, a gata preta
-    if (first && r.date >= KIWI) {
-      const hadKiwi = Career.owned().includes('kiwifruta') || Career.chars().includes('kiwi');
-      const got = (hadKiwi ? ['char:gata'] : ['char:kiwi', 'kiwifruta']).filter(id => Career.grant(id)); if (got.length) prize = got.concat(prize || []);
-    }
+    // presente do dia: concluir o desafio (qualquer nota) dá o presente da data, se a pessoa ainda não tiver
+    if (first) { const got = giftOf(r.date).filter(id => Career.grant(id)); if (got.length) prize = got.concat(prize || []); }
     if (first) { Track('desafio-feito', 'Desafio do dia concluído'); if (grade(r) === 3) Track('desafio-3-estrelas', 'Desafio do dia com ⭐⭐⭐'); }
     stop(); paintButton(); openPanel(true, r, prize);   // mostra o resultado mesmo se o desafio virou a meia-noite
   }
@@ -5168,7 +5184,7 @@ const Daily = (() => {
   });
   paintButton();
   setInterval(paintButton, 60000);     // vira o dia sozinho se o app ficar aberto à meia-noite
-  return { N, card, kindOf, begin, move, save, pause, phaseWon, invite, practiced, play, replayWon, reopen, redo, elapsed, clock, fmtTime, message, today, hash, closePanel, moods, get running() { return !!run; }, get moves() { return run ? run.moves[run.phase] : 0; } };
+  return { N, card, kindOf, begin, move, save, pause, phaseWon, invite, practiced, play, replayWon, reopen, redo, elapsed, clock, fmtTime, message, today, hash, closePanel, moods, giftOf, get running() { return !!run; }, get moves() { return run ? run.moves[run.phase] : 0; } };
 })();
 
 /* ---------------------------------------------------------------------
@@ -5448,7 +5464,7 @@ ${stageFrog(false, 0)}${stageFrog(true, 104, .5)}</svg></div>`;
     const hide = r => r.bonus ? !Career.bonusOpen : !!r.extra && !Career.isOpen(R.indexOf(r)), nm = r => hide(r) ? '???' : r.name;
     const regOf = c => c.fase != null ? at(c.fase) : R.find(x => x.id === c.at);
     const c = Outfit.CHARS.find(x => x.id === id);
-    if (c && c.gift) return c.id === 'gata' ? 'Chega com o 2º Desafio do dia' : 'Chega com o 1º Desafio do dia';
+    if (c && c.gift) return 'Presente do Desafio do dia (um por dia, em rodízio)';
     if (c && c.fase != null) { const r = regOf(c); return hide(r) ? 'Chega no ???' : `Chega na fase ${c.fase + 1} ${r.na} ${r.name}`; }
     if (c) { const r = regOf(c); return `Chega ao abrir ${hide(r) ? 'o' : r.na === 'na' ? 'a' : 'o'} ${nm(r)}`; }
     const i = Object.keys(Career.PRIZE).find(k => Career.PRIZE[k].includes(id));
@@ -5457,7 +5473,7 @@ ${stageFrog(false, 0)}${stageFrog(true, 104, .5)}</svg></div>`;
     if (r) return `Encontre com ⭐⭐⭐ ${hide(r) ? 'no' : r.na} ${nm(r)}`;
     const k = Outfit.CHARS.find(x => (x.kit || []).includes(id));
     if (k && !k.gift) return `Vem com ${hide(regOf(k)) ? '???' : k.name}`;     // kit de amigo
-    return 'Encontre no Desafio do dia';
+    return ['viseira', 'chineludinho', 'kiwifruta'].includes(id) ? 'Presente do Desafio do dia (um por dia, em rodízio)' : 'Encontre no Desafio do dia';
   }
   grid.addEventListener('click', e => {
     const sec = e.target.closest('.wsec');
@@ -5606,7 +5622,7 @@ const Tests = {
       at(0, 1)[0] === 'cardigan' && at(1, 3)[0] === 'oldskool' && Career.REGIONS.slice(1).filter(R => !R.extra).every((R, r) => !last(r + 1).length || Outfit.BY[last(r + 1)[0]].slot === 'head') && last(10).join() === 'coroa,trofeu'
       && at(2, 7)[0] === 'woody' && at(8, 7).join() === 'skate,regata' && new Set(Object.values(P).flat()).size === 38 && Object.values(P).flat().every(id => Outfit.BY[id] && !Outfit.BY[id].rare));
     t('prêmios fora da trilha (marcados rare): 8 de pântano com 3★ + 5 da coleção do desafio + kiwi + kits dos amigos; ninguém fica sem jeito de ganhar',
-      Outfit.ITEMS.filter(i => i.rare).length === 24 && Object.values(Career.RARE).concat(Career.DAILY.map(d => d[1])).every(id => Outfit.BY[id] && Outfit.BY[id].rare)
+      Outfit.ITEMS.filter(i => i.rare).length === 26 && Object.values(Career.RARE).concat(Career.DAILY.map(d => d[1])).every(id => Outfit.BY[id] && Outfit.BY[id].rare)
       && Outfit.ITEMS.every(it => Career.ORDER.includes(it.id)) && Career.ORDER.length === Outfit.ITEMS.length);
     t('estrelas: 3 no mínimo, 2 com +1, 1 acima', starsFor(5, 5) === 3 && starsFor(6, 5) === 2 && starsFor(7, 5) === 1 && starsFor(10, 5) === 1);
     t('tutorial com 1, 2 e 3 sapos verdes', [0, 1, 2].every(i => Rules.greens(CL[i].start) === i + 1));
@@ -5645,6 +5661,8 @@ const Tests = {
     t('desafio do dia: mensagem do Zap com os 5 mapas (emojis variando), total, nota e tempo', msg.length === 4 && msg[0] === 'jumppo.com.br 21 de outubro' && msg[3] === '3min12s' && msg[1].split(' ').length === 5 && msg[1].split(' ')[0].replace(/^\d+/, '') !== msg[1].split(' ')[3].replace(/^\d+/, '') && msg[2] === 'Total: 44 pulos ⭐⭐⚫️', msg.join(' | '));
     const far = Daily.message({ date: '2026-10-21', moves: [5, 4, 69, 7, 4], mins: [5, 4, 7, 7, 4] }).split('\n')[2];
     t('desafio do dia: nota pela soma dos pulos (um mapa ruim derruba o total)', far === 'Total: 89 pulos ⭐⚫️⚫️', far);
+    t('desafio do dia: presente em rodízio pela data (28/10 iFoodeiro, 29/10 Chineludinho, 30/10 Kiwi, 31/10 Marcelina, 1/11 iFoodeiro)',
+      ['2026-10-28', '2026-10-29', '2026-10-30', '2026-10-31', '2026-11-01', '2026-10-26'].map(d => Daily.giftOf(d)[0]).join() === 'viseira,chineludinho,char:kiwi,char:gata,viseira,char:kiwi');
     t('personagens: sapo + 6 amigos, cada um chega com um pântano e desenha com qualquer apetrecho',
       Outfit.CHARS.length === 17 && Outfit.CHARS.slice(1).every(c => (c.gift || c.fase != null || Career.REGIONS.some(R => R.id === c.at)) && Art.creature(c.id, { outfit: { head: 'bolovo', eyes: 'oculos', torso: 'traje' } }).startsWith('<svg')));
     // 11. áudio
