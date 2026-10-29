@@ -954,7 +954,7 @@ canvas.bigbang{position:absolute;inset:0;width:100%;height:100%;z-index:400;poin
 
 <script>
 'use strict';
-const BUILD = '2026-10-29.1218';
+const BUILD = '2026-10-29.1229';
 const LINK = 'jumppo.com.br';     // endereço do jogo nas mensagens do zap (sem https:// e sem barra final: o WhatsApp ainda reconhece o link)      // versão publicada: trocada pela data e hora a cada publicação (ver Update, no fim); 'dev' não confere
 /* =====================================================================
    JUMPPO (antes Froggo) — jogo de sapos saltadores (peg-solitaire), arquivo único e offline.
@@ -1534,38 +1534,33 @@ const Art = {
   <ellipse cx="24" cy="48" rx="5" ry="3" fill="#ff7aa8" opacity=".35"/><ellipse cx="76" cy="48" rx="5" ry="3" fill="#ff7aa8" opacity=".35"/>${shine}`;
         feet = '<g fill="#1e1830"><ellipse cx="35" cy="88" rx="7.6" ry="4.2"/><ellipse cx="65" cy="88" rx="7.6" ry="4.2"/></g>';
       },
-      cataras() {      // Cataras, a morsa gente boa do Amor: cabelo liso com franjinha, olhinhos fechados de rir, narigão e o focinho é só o bigodão
-      defs = g('mrB', '#d9b49a', '#a8806a', '#6e5244');
-      back = '';
-      body = `<path d="M8 74 Q2 86 12 90 Q22 88 26 80 Z M92 74 Q98 86 88 90 Q78 88 74 80 Z" fill="#8a6a58"/>
-  <ellipse cx="50" cy="66" rx="33" ry="25" fill="url(#mrB)"/><ellipse cx="50" cy="75" rx="18" ry="12" fill="#e3c4ae" opacity=".6"/>
-  <ellipse cx="50" cy="40" rx="34" ry="25" fill="url(#mrB)"/><path d="M30 64 Q36 70 44 70 M56 70 Q64 70 70 64" stroke="#8a6a58" stroke-width="1" fill="none" opacity=".5"/>`;
-      body += `<path d="M16.4 36 Q15.4 13.6 50 12.4 Q84.6 13.6 83.6 36 Q81.4 27.6 77 24 L73.4 26 L71 20.8 L66 24.4 L62.4 19.4 L57.2 23.6 L53 18.6 L48.4 23.4 L44 19 L39.4 24 L35.4 20.2 L31 25 L26.6 22.8 Q20 27 16.4 36 Z" fill="#2e1c12"/>
-  <path d="M27 18 Q40 14 54 14.6 M58 15.4 Q70 16.4 77 22 M34 19.6 Q42 17 50 17.2" stroke="#5a3a26" stroke-width="1.3" fill="none" stroke-linecap="round"/>`;
-      face = `${lowEyes('m', '#2a1608')}${brows('#2e1c12')}
-  <ellipse cx="41" cy="46" rx="10.6" ry="8.4" fill="#ecd2bc"/><ellipse cx="59" cy="46" rx="10.6" ry="8.4" fill="#ecd2bc"/>
-  <g fill="#a8806a"><circle cx="37" cy="48" r=".8"/><circle cx="41" cy="50" r=".8"/><circle cx="35" cy="44" r=".8"/><circle cx="63" cy="48" r=".8"/><circle cx="59" cy="50" r=".8"/><circle cx="65" cy="44" r=".8"/></g>
-  <path d="M44 35 Q50 31.6 56 35 Q58.6 40 50 42.6 Q41.4 40 44 35 Z" fill="#4a2a1c"/><ellipse cx="48" cy="35.6" rx="2.4" ry="1.1" fill="#fff" opacity=".4"/>
-  ${stache('#2e1c12')}
-  <ellipse cx="22" cy="46" rx="4.6" ry="2.8" fill="#ff7aa8" opacity=".35"/><ellipse cx="78" cy="46" rx="4.6" ry="2.8" fill="#ff7aa8" opacity=".35"/>${shine}`;
-      feet = '<g fill="#8a6a58"><path d="M24 88 Q24 82 34 82 Q44 82 44 88 Q38 92 24 88 Z"/><path d="M76 88 Q76 82 66 82 Q56 82 56 88 Q62 92 76 88 Z"/></g>';
+      cataras() {      // Charles, o vira-lata preto (chega com o Amor, com churros): orelhas caídas, manchinhas brancas no rosto (testa, focinho e bochecha), peitinho branco e língua de fora
+        defs = g('chB', '#55555e', '#2a2a31', '#141418');
+        back = '<path d="M78 76 Q94 70 90 56" stroke="#1e1e24" stroke-width="6" fill="none" stroke-linecap="round"/>';
+        body = `<ellipse cx="20" cy="77" rx="15" ry="11" fill="url(#chB)"/><ellipse cx="80" cy="77" rx="15" ry="11" fill="url(#chB)"/>
+  <ellipse cx="50" cy="66" rx="31" ry="24" fill="url(#chB)"/><path d="M44 62 Q50 59 56 62 Q55 72 50 75 Q45 72 44 62 Z" fill="#f4f4f6"/>
+  <ellipse cx="50" cy="40" rx="34" ry="26" fill="url(#chB)"/>`;
+        face = `<path d="M18 22 Q4 30 10 52 Q18 56 22 44 Q22 30 26 24 Z M82 22 Q96 30 90 52 Q82 56 78 44 Q78 30 74 24 Z" fill="#0e0e12"/>${eyes('#2a1608')}
+  <path d="M48.4 14 Q50 12.6 51.6 14 L51 30 Q50 31 49 30 Z" fill="#f4f4f6"/><ellipse cx="50" cy="47" rx="14" ry="10" fill="#3c3c44"/>
+  <circle cx="24" cy="44" r="2.2" fill="#f4f4f6"/><circle cx="27.4" cy="47.8" r="1.3" fill="#f4f4f6"/><circle cx="76.6" cy="45.4" r="1.6" fill="#f4f4f6"/><circle cx="50" cy="58.6" r="1.4" fill="#f4f4f6"/>
+  <ellipse cx="50" cy="41.6" rx="5" ry="3.6" fill="#0a0a0c"/><circle cx="48.4" cy="40.8" r="1.1" fill="#fff" opacity=".7"/>
+  <path d="M42 49 Q50 55 58 49" stroke="#0a0a0c" stroke-width="2" fill="none" stroke-linecap="round"/><path d="M47 52 Q47 60 51 60 Q55 60 54 52 Z" fill="#ff7a8a" stroke="#c94a5a" stroke-width=".8"/>${shine}`;
+        feet = '<g fill="#2a2a31" stroke="#0e0e12" stroke-width=".8"><ellipse cx="33" cy="87" rx="9" ry="5.4"/><ellipse cx="67" cy="87" rx="9" ry="5.4"/></g><path d="M30 88 v3 M33 89 v3 M36 88 v3 M64 88 v3 M67 89 v3 M70 88 v3" stroke="#6a6a74" stroke-width="1" stroke-linecap="round"/>';
       },
-      tcharina() {      // Tcharina, a morsa dupla do Cataras: cabelo liso escuro repartido de lado (colado na cabeça), sardinhas, argola no nariz, sorriso fechado e correntinha dourada
-      defs = g('tmB', '#ecc6ae', '#c49a82', '#8a6a5a');
-      back = `<path d="M19 28 Q8 48 12 70 Q16 78 26 74 Q22 56 28 42 Z M81 28 Q92 48 88 70 Q84 78 74 74 Q78 56 72 42 Z" fill="#1e1612"/><path d="M14 50 Q12 62 16 72 M86 50 Q88 62 84 72" stroke="#3a2c24" stroke-width="1.2" fill="none"/>`;
-      body = `<path d="M8 74 Q2 86 12 90 Q22 88 26 80 Z M92 74 Q98 86 88 90 Q78 88 74 80 Z" fill="#a8806e"/>
-  <ellipse cx="50" cy="66" rx="31" ry="25" fill="url(#tmB)"/><ellipse cx="50" cy="75" rx="17" ry="12" fill="#f4dccb" opacity=".6"/>
-  <path d="M30 63 Q50 74 70 63" stroke="#d9a73a" stroke-width="1.4" fill="none" stroke-dasharray="1.6 1"/><circle cx="50" cy="68.6" r="1.3" fill="#e8b84a"/>
-  <ellipse cx="50" cy="40" rx="33" ry="24.6" fill="url(#tmB)"/>
-  <path d="M16.6 38 Q14.6 12.4 46 10.6 Q84.6 9.6 83.4 36 Q80.4 26 72.4 21.4 Q62 18.4 50 20 Q41 21.4 35.6 18.4 Q38.4 25.4 30 27.4 Q21 29.4 16.6 38 Z" fill="#1e1612"/><path d="M36.6 11.8 Q35.8 15 35.6 18.4 M44 12.6 Q58 12.2 70 16.6 M50 15.4 Q63 15.6 75 22.4" stroke="#4a3a30" stroke-width="1.4" fill="none" stroke-linecap="round"/>`;
-      face = `${softEyes('#d9b29a', '#1e1612')}<path d="M20 18.6 Q29 15.4 39 18.4 M61 18.4 Q71 15.4 80 18.6" stroke="#1e1612" stroke-width="2" fill="none" stroke-linecap="round"/>
-  <ellipse cx="42" cy="46" rx="10" ry="7.8" fill="#f6e0d0"/><ellipse cx="58" cy="46" rx="10" ry="7.8" fill="#f6e0d0"/>
-  <g fill="#b07a5a" opacity=".7"><circle cx="24" cy="40" r=".7"/><circle cx="27" cy="43" r=".6"/><circle cx="22" cy="44" r=".6"/><circle cx="76" cy="40" r=".7"/><circle cx="73" cy="43" r=".6"/><circle cx="78" cy="44" r=".6"/><circle cx="46" cy="39" r=".5"/><circle cx="54" cy="39" r=".5"/></g>
-  <path d="M44.6 35.6 Q50 32.4 55.4 35.6 Q57.6 40 50 42 Q42.4 40 44.6 35.6 Z" fill="#6a3a2c"/><ellipse cx="48.4" cy="36" rx="2.2" ry="1" fill="#fff" opacity=".4"/>
-  <circle cx="56.4" cy="40.2" r="2" fill="none" stroke="#d9dde2" stroke-width=".9"/>
-  <path d="M42 51 Q50 57 58 51" stroke="#7a3a34" stroke-width="2" fill="none" stroke-linecap="round"/><path d="M43.6 52.6 Q50 56.4 56.4 52.6" stroke="#d98a8a" stroke-width="1.6" fill="none" stroke-linecap="round" opacity=".7"/>
-  <ellipse cx="24" cy="47" rx="5" ry="3" fill="#ff7aa8" opacity=".4"/><ellipse cx="76" cy="47" rx="5" ry="3" fill="#ff7aa8" opacity=".4"/>${shine}`;
-      feet = '<g fill="#a8806e"><path d="M24 88 Q24 82 34 82 Q44 82 44 88 Q38 92 24 88 Z"/><path d="M76 88 Q76 82 66 82 Q56 82 56 88 Q62 92 76 88 Z"/></g>';
+      tcharina() {      // Cat, o gato siamês (chega na 1ª fase do Amor, com um livro): pelo creme, pontas marrom-escuras (orelhas, máscara, patas e rabo) e olhos azuis
+        defs = g('ctB', '#fff8ec', '#efdfc4', '#cdb38e') + g('ctP', '#7a5640', '#4e3426', '#2e1e14') + `<radialGradient id="ctE" cx="45%" cy="40%" r="60%"><stop offset="0" stop-color="#bfe6ff"/><stop offset=".55" stop-color="#4aa6ec"/><stop offset="1" stop-color="#1c5ea8"/></radialGradient>`;
+        back = `<path d="M74 84 Q94 86 95 70 Q96 56 86 52 Q84 58 88 62 Q90 74 76 76 Z" fill="url(#ctP)"/>`;
+        body = `<path d="M18 30 L14 3 L38 16 Z M82 30 L86 3 L62 16 Z" fill="url(#ctP)" stroke="#2e1e14" stroke-width=".8" stroke-linejoin="round"/><path d="M21 24 L19 10 L32 17 Z M79 24 L81 10 L68 17 Z" fill="#d9a0a8"/>
+  <ellipse cx="22" cy="80" rx="11" ry="8.4" fill="url(#ctB)"/><ellipse cx="78" cy="80" rx="11" ry="8.4" fill="url(#ctB)"/>
+  <ellipse cx="50" cy="67" rx="27" ry="23" fill="url(#ctB)"/><ellipse cx="50" cy="74" rx="14" ry="12" fill="#fffaf2" opacity=".7"/>
+  <ellipse cx="50" cy="40" rx="33" ry="24" fill="url(#ctB)"/>
+  <path d="M32 30 Q34 22 50 22 Q66 22 68 30 Q70 46 50 54 Q30 46 32 30 Z" fill="url(#ctP)" opacity=".92"/>`;
+        face = [31, 69].map(x => `<ellipse cx="${x}" cy="27" rx="10" ry="9.6" fill="url(#eyeW)"/><circle cx="${x + (x < 50 ? 1.4 : -1.4)}" cy="27.8" r="6.4" fill="url(#ctE)"/><circle cx="${x + (x < 50 ? 1.4 : -1.4)}" cy="27.8" r="3.2" fill="#0d1b26"/><circle cx="${x + 3}" cy="24.4" r="2.1" fill="#fff"/><circle cx="${x - 1.6}" cy="31" r=".9" fill="#fff" opacity=".7"/>
+  <path d="M${x - 10.6} 25 Q${x} 16 ${x + 10.6} 25" stroke="#2e1e14" stroke-width="1.6" fill="none" stroke-linecap="round"/>`).join('')
+          + `<path d="M46.4 39.6 Q50 37.8 53.6 39.6 Q52.6 42.6 50 43.4 Q47.4 42.6 46.4 39.6 Z" fill="#c98a8e"/><path d="M50 43.4 V45.4 M50 45.4 Q47 48.6 44 46.6 M50 45.4 Q53 48.6 56 46.6" stroke="#1a100a" stroke-width="1.3" fill="none" stroke-linecap="round"/>
+  <path d="M40 43 L22 40.6 M40 45.4 L23 46.4 M60 43 L78 40.6 M60 45.4 L77 46.4" stroke="#fff8ee" stroke-width=".8" opacity=".9" stroke-linecap="round"/>
+  <ellipse cx="22" cy="40" rx="4.6" ry="2.6" fill="#ff9ab0" opacity=".3"/><ellipse cx="78" cy="40" rx="4.6" ry="2.6" fill="#ff9ab0" opacity=".3"/>${shine}`;
+        feet = '<g fill="url(#ctP)"><ellipse cx="35" cy="88" rx="8" ry="4.4"/><ellipse cx="65" cy="88" rx="8" ry="4.4"/></g><g fill="#c98a8e"><circle cx="32" cy="88.6" r="1.1"/><circle cx="35" cy="89.4" r="1.1"/><circle cx="38" cy="88.6" r="1.1"/><circle cx="62" cy="88.6" r="1.1"/><circle cx="65" cy="89.4" r="1.1"/><circle cx="68" cy="88.6" r="1.1"/></g>';
       },
       djanho() {      // Djanho, o suricato: cabelo de cachinhos com as laterais curtinhas, máscara escura nos olhos, bigodinho e sorriso singelo
       const FUR = '#e2a868', HI = '#f4c88c', DK = '#b77a3e', CREAM = '#f7deb0', MASK = '#8a5428', HAIR = '#3e2416', HD = '#1e1008', HL = '#7a4a2e';
@@ -1838,8 +1833,8 @@ ${theme === 'esgoto' ? Art.goo() : ''}<g stroke-dasharray="1.4 1.4">${Art.boardL
 <g fill="#4a5568">${[[10, 8, 16], [30, 6, 18], [52, 4, 16], [72, 8, 14]].map(([x, y, w]) => `<ellipse cx="${x}" cy="${y}" rx="${w}" ry="8"/>`).join('')}</g><g fill="#2d3748">${[[18, 12, 14], [42, 11, 15], [66, 12, 13]].map(([x, y, w]) => `<ellipse cx="${x}" cy="${y}" rx="${w}" ry="6"/>`).join('')}</g>`;
       // sobrancelhas tristes e lágrimas até o chão
       const drop = (x, y, k) => `<path d="M${x} ${y - 3 * k} Q${x - 2 * k} ${y} ${x} ${y + 1.8 * k} Q${x + 2 * k} ${y} ${x} ${y - 3 * k} Z"/>`;
-      // quem já tem sobrancelha no desenho (Nelson, Cataras, Tcharina, Djanho) fica só com a dele
-      over = `${['nelson', 'cataras', 'tcharina', 'djanho'].includes(char) ? '' : '<path d="M18 16 Q28 13 41 7" stroke="#1a1a1a" stroke-width="2.6" fill="none" stroke-linecap="round"/><path d="M82 16 Q72 13 59 7" stroke="#1a1a1a" stroke-width="2.6" fill="none" stroke-linecap="round"/>'}
+      // quem já tem sobrancelha no desenho (Nelson, Djanho) fica só com a dele
+      over = `${['nelson', 'djanho'].includes(char) ? '' : '<path d="M18 16 Q28 13 41 7" stroke="#1a1a1a" stroke-width="2.6" fill="none" stroke-linecap="round"/><path d="M82 16 Q72 13 59 7" stroke="#1a1a1a" stroke-width="2.6" fill="none" stroke-linecap="round"/>'}
 <g fill="none" stroke-linecap="round"><path d="M22 34 Q24 37 31 37.6 Q38 37 40 34 M60 34 Q62 37 69 37.6 Q76 37 78 34" stroke="#bfeaff" stroke-width="2.2" opacity=".9"/>
 <path d="M24 36 Q20 48 23 60 Q25 68 22 78 M76 36 Q80 48 77 60 Q75 68 78 78" stroke="#8fd8ff" stroke-width="3.4" opacity=".6"/><path d="M24 38 Q21 48 23.6 58 M76 38 Q79 48 76.4 58" stroke="#fff" stroke-width=".9" opacity=".7"/>
 <path d="M21 34 Q8 34 2 50 M79 34 Q92 34 98 50" stroke="#8fd8ff" stroke-width="2.2" stroke-dasharray="2.6 2.4" opacity=".75"/></g>
@@ -1848,7 +1843,7 @@ ${theme === 'esgoto' ? Art.goo() : ''}<g stroke-dasharray="1.4 1.4">${Art.boardL
     }
     const lift = 0;
     const chip = (mv, i) => { const k = starsFor(mv, r.mins[i] || mv), c = k === 3 ? '#2fbf3a' : k === 2 ? '#ffb020' : '#ff4b3a';
-      return `<g transform="translate(${88 + i * 11.4} 60)"><rect x="-5" y="-4.6" width="10" height="9.2" rx="2.6" fill="${c}"/><text y="1.9" text-anchor="middle" font-size="5.2" font-weight="900" fill="#fff">${mv}</text></g>`; };
+      return `<g transform="translate(${112.5 + (i - 2) * 11.4} 60)"><rect x="-5" y="-4.6" width="10" height="9.2" rx="2.6" fill="${c}"/><text y="1.9" text-anchor="middle" font-size="5.2" font-weight="900" fill="#fff">${mv}</text></g>`; };
     const logo = `<text x="112.5" y="18.4" text-anchor="middle" stroke="#0b2545" stroke-width="1.3" paint-order="stroke" letter-spacing=".3">${[...'Jumppo'].map((c, i) => `<tspan fill="${['#2fbf3a', '#ffb020', '#ff4b3a'][i % 3]}">${c}</tspan>`).join('')}</text>`;
     return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 150 100" width="1200" height="800">${defs}${bg}${fx}
 <ellipse cx="42" cy="93" rx="34" ry="6.6" fill="#0b3a20" opacity=".35"/>${under}
@@ -1866,7 +1861,7 @@ ${tempo ? `<text x="112.5" y="82" text-anchor="middle" font-family="Arial, Helve
   },
   /* Rosto da imagem do desafio: 'joy' (3★) troca a boca por uma boca aberta de alegria; 'cry' (1★) por uma boca de choro.
      Para cada personagem: trechos da boca original a tirar e onde desenhar a nova [x, y, largura, cor do traço]. Coruja,
-     galo, kiwi e Cataras (bico ou bigodão) não têm boca: ficam só com as sobrancelhas e as lágrimas. keep: a boca dele já é
+     galo e kiwi (bico) não têm boca: ficam só com as sobrancelhas e as lágrimas. keep: a boca dele já é
      um sorrisão, então na alegria fica como está. */
   moodFace(svg, char, mood) {
     const F = {
@@ -1879,10 +1874,11 @@ ${tempo ? `<text x="112.5" y="82" text-anchor="middle" font-family="Arial, Helve
       origa: { keep: true, rm: ['<path d="M38 47.6 Q50 50 62 47.6', '<path d="M39.6 48.6 Q50 50.6 60.4 48.6', '<ellipse cx="50" cy="56.4" rx="5"'], m: [50, 51, 18, '#1a2030'] },
       nelson: { keep: true, rm: ['<path d="M38.2 49.6 Q50 57.6', '<path d="M38.7 48.2 Q50 54.8', '<path d="M40.3 53.2 Q50 56.6', '<path d="M40 48.7 Q50 54.5'], m: [50, 52, 20, '#2a1e1b'] },
       conde: { rm: ['<path d="M36 50 Q50 58 64 50"', '<path d="M60 49.6 l3.4 -1.6"'], m: [50, 51, 22, '#1e1830'] },
-      tcharina: { rm: ['<path d="M42 51 Q50 57 58 51"', '<path d="M43.6 52.6 Q50 56.4 56.4 52.6"'], m: [50, 53, 16, '#7a3a34'] },
+      tcharina: { sub: [['M50 43.4 V45.4 M50 45.4 Q47 48.6 44 46.6 M50 45.4 Q53 48.6 56 46.6', 'M50 43.4 V45.4']], m: [50, 49, 12, '#a8502a'] },
       djanho: { keep: true, rm: ['<path d="M41.4 51.6 Q50 56.6', '<path d="M42.2 51.9 Q50 55.8', '<path d="M40.4 51.2 Q50 57.6', '<path d="M39.8 50.4 l1 1.2'], m: [50, 53, 18, '#5a2a18'] },
       gata: { sub: [['M50 43.4 V45.4 M50 45.4 Q47 48.6 44 46.6 M50 45.4 Q53 48.6 56 46.6', 'M50 43.4 V45.4']], m: [50, 49, 12, '#c9507a'] },
-      caramelo: { rm: ['<path d="M42 49 Q50 55 58 49"', '<path d="M47 52 Q47 60 51 60'], m: [50, 51, 18, '#5a3418'] }
+      caramelo: { rm: ['<path d="M42 49 Q50 55 58 49"', '<path d="M47 52 Q47 60 51 60'], m: [50, 51, 18, '#5a3418'] },
+      cataras: { rm: ['<path d="M42 49 Q50 55 58 49"', '<path d="M47 52 Q47 60 51 60'], m: [50, 51, 18, '#0a0a0c'] }
     }[char];
     if (!F || !mood || (mood === 'joy' && F.keep)) return svg;
     for (const [a, b] of F.sub || []) svg = svg.split(a).join(b);
@@ -2402,6 +2398,18 @@ ${vest}<g transform="translate(100 0) scale(-1 1)">${vest}</g>
         return `<g transform="rotate(-12 90 69)"><rect x="75" y="57" width="30" height="24" rx="4" fill="#e9a640" stroke="#9a5a14" stroke-width="1.1"/><rect x="77.6" y="61" width="24.8" height="16" rx="3" fill="#f4c25e"/>${crimp}
 <g fill="#fde4a0" stroke="#d89a3a" stroke-width=".5"><ellipse cx="83" cy="66" rx="2.2" ry="1.5"/><ellipse cx="92" cy="64" rx="1.6" ry="1.1"/><ellipse cx="97" cy="71" rx="2" ry="1.4"/><ellipse cx="87" cy="72.6" rx="1.4" ry="1"/></g>
 <path d="M79 63 Q81 61.4 85 61.2" stroke="#fff" stroke-width="1.2" opacity=".45" fill="none" stroke-linecap="round"/></g>`; } },
+    { id: 'livro', name: 'Livro', slot: 'hand', rare: true, box: '72 46 34 40',
+      // amigos (Cat): livro de capa azul em pé na mão, com fitinha vermelha, título dourado e as folhas aparecendo
+      svg: () => `<g transform="rotate(-10 89 66)"><rect x="79" y="52" width="21" height="28" rx="1.6" fill="#f4efe2" stroke="#a89a7a" stroke-width=".7"/><path d="M80 53.4 h19 M80 55 h19 M80 56.6 h19" stroke="#d6cdb4" stroke-width=".35"/>
+<rect x="77" y="51" width="20" height="28" rx="1.6" fill="#2b6fd6" stroke="#163f86" stroke-width="1"/><rect x="77" y="51" width="3.4" height="28" fill="#1d55ab"/>
+<rect x="83" y="56" width="10" height="1.6" rx=".6" fill="#ffd23f"/><rect x="84.4" y="59" width="7.2" height="1.1" rx=".5" fill="#ffd23f" opacity=".8"/><path d="M86 72 l2.4 -2.6 2.4 2.6 -2.4 2.6 Z" fill="#ffd23f" opacity=".85"/>
+<path d="M93 79 v6 l1.4 -1.4 1.4 1.4 v-6" fill="#e53935"/><path d="M80.4 53 Q81 64 80.4 77" stroke="#fff" stroke-width=".9" opacity=".35" fill="none"/></g>` },
+    { id: 'churros', name: 'Churros', slot: 'hand', rare: true, box: '70 36 38 50',
+      // amigos (Charles): dois churros com açúcar e canela num cone de papel listrado
+      svg: () => { const churro = (r, x) => { let rd = ''; for (let k = 0; k < 7; k++) rd += `<path d="M${-1.8} ${-18 + k * 3.4} h3.6" stroke="#9a5418" stroke-width=".6"/>`;
+          let sg = ''; for (let k = 0; k < 9; k++) sg += `<circle cx="${((k * 37) % 30) / 10 - 1.5}" cy="${-19 + k * 2.6}" r=".35" fill="#fff"/>`;
+          return `<g transform="translate(${x} 70) rotate(${r})"><rect x="-2.4" y="-22" width="4.8" height="26" rx="2.4" fill="#d48a3a" stroke="#9a5418" stroke-width=".7"/>${rd}${sg}<path d="M-1 -20 v20" stroke="#f2b46a" stroke-width=".8" opacity=".7"/></g>`; };
+        return `${churro(-10, 86)}${churro(12, 92)}<path d="M80 66 L98 66 L91 84 L87 84 Z" fill="#fff" stroke="#c9c9c9" stroke-width=".6"/><path d="M82.4 66 L88 84 M86.6 66 L89 84 M90.8 66 L90 84 M95 66 L90.6 84" stroke="#e53935" stroke-width="1.2"/><path d="M80 66 H98" stroke="#b71c1c" stroke-width="1"/>`; } },
     { id: 'garapa', name: 'Garapa', slot: 'hand', box: '72 40 34 46',
       // Pira: copo de caldo de cana com espuma, gelo, canudo e uma rodela de limão na borda
       svg: () => `<path d="M93.6 74 L98.6 42" stroke="#2fbf3a" stroke-width="2" stroke-linecap="round"/><path d="M80 52 H100 L97.4 82 H82.6 Z" fill="#fff" fill-opacity=".28" stroke="#8fa3a3" stroke-width="1"/>
@@ -2552,8 +2560,8 @@ ${zig}<path d="${band}" fill="${W}" stroke="${WD}" stroke-width="1"/>
     { id: 'origa', name: 'Origa', at: 'skatepark' }, { id: 'topogigio', name: 'Topogígio', at: 'esgoto', kit: ['queijo'] },
     { id: 'jare', name: 'Jaré', at: 'expert' }, { id: 'baurets', name: 'Baurets', at: 'espaco', kit: ['capacete'] },
     { id: 'kiwi', name: 'Kiwi', gift: true, kit: ['kiwifruta'] },
-    { id: 'conde', name: 'Conde', at: 'cemiterio' }, { id: 'cataras', name: 'Cataras', at: 'amor' }, { id: 'tcharina', name: 'Tcharina', fase: 120 }, { id: 'djanho', name: 'Djanho', fase: 125 },
-    { id: 'gata', name: 'Marcelina', gift: true }];   // Kiwi e Marcelina (gata preta): presentes do desafio do dia, em rodízio (ver Daily, GIFTS); Tcharina: 1ª fase do Amor (dupla do Cataras); Djanho: 6º mapa do Amor      // gift: presente do desafio do dia (ver Daily, GIFTS); fase: chega ao passar essa fase (índice), não ao abrir o pântano
+    { id: 'conde', name: 'Conde', at: 'cemiterio' }, { id: 'cataras', name: 'Charles', at: 'amor', kit: ['churros'] }, { id: 'tcharina', name: 'Cat', fase: 120, kit: ['livro'] }, { id: 'djanho', name: 'Djanho', fase: 125 },
+    { id: 'gata', name: 'Marcelina', gift: true }];   // Kiwi e Marcelina (gata preta): presentes do desafio do dia, em rodízio (ver Daily, GIFTS); Cat (id tcharina, era a morsa Tcharina): 1ª fase do Amor; Charles (id cataras) chega com o Amor; Djanho: 6º mapa do Amor      // gift: presente do desafio do dia (ver Daily, GIFTS); fase: chega ao passar essa fase (índice), não ao abrir o pântano
   let char = Store.get('char', 'sapo'), charRed = Store.get('charRed', 'sapo');
   if (char === charRed && char !== 'sapo') { charRed = 'sapo'; Store.set('charRed', charRed); }     // verde e vermelho não podem ser o mesmo personagem (só o sapo)
   const big = o => flies(o) || !!(o && o.ride);       // ocupa mais espaço em volta do sapo (chama, caixa)
@@ -4302,7 +4310,7 @@ const Career = (() => {
   }
   // ordem em que os apetrechos saem (trilha, 3★ de cada pântano, coleção do desafio): organiza o guarda-roupa
   const ORDER = REGIONS.flatMap((R, r) => Object.keys(PRIZE).filter(i => +i >= START[r] && +i < START[r] + R.count).sort((a, b) => a - b).flatMap(i => PRIZE[i].concat(...Outfit.CHARS.filter(c => c.fase === +i).map(c => c.kit || [])))   // kit de amigo que chega na fase vem logo depois
-    .concat(RARE[R.id] || [], (Outfit.CHARS.find(c => c.at === R.id) || {}).kit || []))
+    .concat(RARE[R.id] || [], (Outfit.CHARS.find(c => c.at === R.id) || {}).kit || [], ...Outfit.CHARS.filter(c => c.fase != null && c.fase >= START[r] && c.fase < START[r] + R.count && !PRIZE[c.fase]).map(c => c.kit || [])))
     .concat(DAILY.map(([, id]) => id), 'kiwifruta', 'viseira', 'chineludinho');
   let list = null, built = null, nodes = [], finalPos = null, portalPos = null, starPos = null, endPos = null, gates = [], lastW = 0, avatar = null;
   const map = $('cmap'), inner = $('cmapInner');
@@ -4938,7 +4946,7 @@ ${kit.length ? `<p class="wmin">Vem com: <b>${kit.map(id => Outfit.BY[id].name).
     Sound.land();
     opening = false;
     Track(`pantano-${R.id}`, `Abriu ${R.name}`);
-    const c = Outfit.CHARS.find(x => x.at === R.id); if (c) friendPop(c);     // Conde chega com o Cemitério, Cataras com o Amor
+    const c = Outfit.CHARS.find(x => x.at === R.id); if (c) friendPop(c);     // Conde chega com o Cemitério, Charles com o Amor
   }
   function placeAvatarAt(p) { const s = avatar.getBoundingClientRect().width || 56; avatar.style.left = (p.x - s / 2) + 'px'; avatar.style.top = (p.y - s * .82) + 'px'; }
   function scrollToY(y, smooth) {
@@ -5160,7 +5168,7 @@ const Daily = (() => {
     e.preventDefault();
     if (!skinFile) { toast('Preparando a imagem… toque de novo'); prepSkin(); return; }
     Track('zap-skin', 'Mandou o desafio com a skin');
-    navigator.share({ files: [skinFile], text: 'https://' + LINK }).catch(() => {});
+    navigator.share({ files: [skinFile], text: `${LINK} ${'⭐'.repeat(grade(skinR))}${'⚫️'.repeat(3 - grade(skinR))}` }).catch(() => {});
   });
   function shareLink(text) {
     const a = $('btnDailyShare'), android = /android/i.test(navigator.userAgent || '');
@@ -5178,12 +5186,19 @@ const Daily = (() => {
     if (iso < '2026-10-23') { const a = h % N; return [a, (a + 1 + Math.floor(h / N) % (N - 1)) % N].sort((x, y) => x - y); }   // não muda o desafio já em andamento
     const skip = 2 + h % 3; return [2, 3, 4].filter(x => x !== skip);
   };
-  /* A partir de 29/10/2026 a dificuldade do desafio é pelo número de sapos verdes: 2 mapas com 3, 1 com 4, 1 com 5 e 1 com 6,
-     nessa ordem (o de 6 fecha o dia). Cada tamanho tem a sua fila de desenhos, sem repetir até dar a volta. Antes disso: 3 do
-     Iniciante + 2 do Médio (hardAt). Devolve [nível, tamanho do tabuleiro, posição na fila, verdes]. */
-  const VERDES = [3, 3, 4, 5, 6], VDIA = '2026-10-29';
+  /* A partir de 29/10/2026 a dificuldade do desafio é pelo número de sapos verdes, do mais fácil ao mais difícil: em 29/10
+     3, 3, 4, 5, 6; desde 30/10 3, 4, 4, 5, 6 (RECEITAS). Cada tamanho tem a sua fila de desenhos, sem repetir até dar a
+     volta. Antes de 29/10: 3 do Iniciante + 2 do Médio (hardAt). Devolve [nível, tamanho do tabuleiro, posição na fila, verdes]. */
+  // cada troca de receita vale a partir da data; a fila de cada tamanho continua de onde parou (não repete desenho)
+  const RECEITAS = [['2026-10-29', [3, 3, 4, 5, 6]], ['2026-10-30', [3, 4, 4, 5, 6]]], VDIA = RECEITAS[0][0];
   const kindOf = (iso, k) => {
-    if (iso >= VDIA) { const g = VERDES[k], d = dayIndex(iso) - dayIndex(VDIA); return [g <= 4 ? 'iniciante' : 'medio', 3, VERDES.filter(x => x === g).length * d + VERDES.slice(0, k).filter(x => x === g).length, g]; }
+    if (iso >= VDIA) {
+      let ri = 0; while (ri < RECEITAS.length - 1 && iso >= RECEITAS[ri + 1][0]) ri++;
+      const V = RECEITAS[ri][1], g = V[k], cnt = (A, x) => A.filter(y => y === x).length;
+      let idx = 0; for (let q = 0; q < ri; q++) idx += cnt(RECEITAS[q][1], g) * (dayIndex(RECEITAS[q + 1][0]) - dayIndex(RECEITAS[q][0]));
+      idx += cnt(V, g) * (dayIndex(iso) - dayIndex(RECEITAS[ri][0])) + cnt(V.slice(0, k), g);
+      return [g <= 4 ? 'iniciante' : 'medio', 3, idx, g];
+    }
     const d = dayIndex(iso), m = hardAt(iso), i = m.indexOf(k);
     return i >= 0 ? ['medio', 3, 2 * d + i] : ['iniciante', 3, 3 * d + k - m.filter(x => x < k).length];
   };
@@ -5755,7 +5770,7 @@ const Tests = {
       at(0, 1)[0] === 'cardigan' && at(1, 3)[0] === 'oldskool' && Career.REGIONS.slice(1).filter(R => !R.extra).every((R, r) => !last(r + 1).length || Outfit.BY[last(r + 1)[0]].slot === 'head') && last(10).join() === 'coroa,trofeu'
       && at(2, 7)[0] === 'woody' && at(8, 7).join() === 'skate,regata' && new Set(Object.values(P).flat()).size === 38 && Object.values(P).flat().every(id => Outfit.BY[id] && !Outfit.BY[id].rare));
     t('prêmios fora da trilha (marcados rare): 8 de pântano com 3★ + 5 da coleção do desafio + kiwi + kits dos amigos; ninguém fica sem jeito de ganhar',
-      Outfit.ITEMS.filter(i => i.rare).length === 26 && Object.values(Career.RARE).concat(Career.DAILY.map(d => d[1])).every(id => Outfit.BY[id] && Outfit.BY[id].rare)
+      Outfit.ITEMS.filter(i => i.rare).length === 28 && Object.values(Career.RARE).concat(Career.DAILY.map(d => d[1])).every(id => Outfit.BY[id] && Outfit.BY[id].rare)
       && Outfit.ITEMS.every(it => Career.ORDER.includes(it.id)) && Career.ORDER.length === Outfit.ITEMS.length);
     t('estrelas: 3 no mínimo, 2 com +1, 1 acima', starsFor(5, 5) === 3 && starsFor(6, 5) === 2 && starsFor(7, 5) === 1 && starsFor(10, 5) === 1);
     t('tutorial com 1, 2 e 3 sapos verdes', [0, 1, 2].every(i => Rules.greens(CL[i].start) === i + 1));
@@ -5784,7 +5799,7 @@ const Tests = {
     t('desafio do dia até 28/10: 5 fases 3×3, 3 do Iniciante e 2 do Médio, os 2 primeiros sempre do Iniciante', mix);
     const gv = [];
     for (const iso of ['2026-10-29', '2026-10-30', '2026-11-15', '2026-12-31']) for (let f = 0; f < 5; f++) gv.push((await Daily.card(iso, f)).greens);
-    t('desafio do dia desde 29/10: 2 mapas com 3 verdes, 1 com 4, 1 com 5 e 1 com 6', gv.join('') === '33456'.repeat(4), gv.join(''));
+    t('desafio do dia: 29/10 com 3, 3, 4, 5, 6 verdes; desde 30/10 com 3, 4, 4, 5, 6', gv.join('') === '33456' + '34456'.repeat(3), gv.join(''));
     const seen = { iniciante: new Set(), medio: new Set() }, span = 20; let norep = true;   // a fila mais curta (3 verdes: ~48 desenhos, 2 por dia) dá a volta em ~24 dias
     for (let i = 0; i < span; i++) {
       const dt = new Date(2026, 9, 21 + i), iso = `${dt.getFullYear()}-${String(dt.getMonth() + 1).padStart(2, '0')}-${String(dt.getDate()).padStart(2, '0')}`;
