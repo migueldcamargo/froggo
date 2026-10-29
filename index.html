@@ -966,7 +966,7 @@ canvas.bigbang{position:absolute;inset:0;width:100%;height:100%;z-index:400;poin
 
 <script>
 'use strict';
-const BUILD = '2026-10-29.1517';
+const BUILD = '2026-10-29.1548';
 const LINK = 'jumppo.com.br';     // endereço do jogo nas mensagens do zap (sem https:// e sem barra final: o WhatsApp ainda reconhece o link)      // versão publicada: trocada pela data e hora a cada publicação (ver Update, no fim); 'dev' não confere
 /* =====================================================================
    JUMPPO (antes Froggo) — jogo de sapos saltadores (peg-solitaire), arquivo único e offline.
@@ -4820,7 +4820,7 @@ ${portalPos ? `<path d="M${finalPos.x} ${finalPos.y} L${portalPos.x} ${portalPos
       }
       ov.remove(); Base.dim(false);
       if (k === 'v') ProgressPanel.open();
-      if (k === 'z') UI.confirm('Recomeçar do zero?', 'As fases e as estrelas voltam para o começo.\nOs itens e amigos que você ganhou continuam seus.', 'Recomeçar', restartAll);
+      if (k === 'z') UI.confirm('Recomeçar do zero?', 'As fases e as estrelas voltam para o começo.\nOs itens e skins que você ganhou continuam seus.', 'Recomeçar', restartAll);
     });
   }
   function skipTutorial() { for (let i = 0; i < REGIONS[0].count; i++) if (i === done) complete(i, 3); }
@@ -4838,7 +4838,7 @@ ${portalPos ? `<path d="M${finalPos.x} ${finalPos.y} L${portalPos.x} ${portalPos
   function friendPop(c, keepDim) {     // keepDim: aberto por cima da vitória, que continua escurecendo o fundo
     const ov = document.createElement('div'); ov.className = 'overlay show'; ov.setAttribute('role', 'dialog'); ov.setAttribute('aria-modal', 'true');
     const kit = c.kit || [];
-    ov.innerHTML = `<div class="panel result win"><div class="res-art">${Art.creature(c.id, { cls: 'rfrog', outfit: Object.fromEntries(kit.map(id => [Outfit.BY[id].slot, id])) })}</div><div class="res-text"><h3>${c.name}</h3><p class="wmin">Novo amigo desbloqueado!</p>
+    ov.innerHTML = `<div class="panel result win"><div class="res-art">${Art.creature(c.id, { cls: 'rfrog', outfit: Object.fromEntries(kit.map(id => [Outfit.BY[id].slot, id])) })}</div><div class="res-text"><h3>${c.name}</h3><p class="wmin">Nova skin desbloqueada!</p>
 ${kit.length ? `<p class="wmin">Vem com: <b>${kit.map(id => Outfit.BY[id].name).join(' e ')}</b></p>` : ''}
 <div class="row win-row"><button type="button" class="btn blue" data-k="0">Depois</button><button type="button" class="btn green grow" data-k="1">Usar agora</button></div></div></div>`;
     $('ovWin').parentNode.appendChild(ov); Base.dim(true); Sound.sparkle();
@@ -5222,7 +5222,7 @@ const Daily = (() => {
   /* "Novo item!" / "Novos itens!": janela menor, por cima do resultado do dia, só para o que foi ganho. Mostra o personagem (muda na hora
      em "Usar agora"), os itens e o guarda-roupa; fechando, a pessoa vê o resultado do dia, com "Mais itens" pulsando. */
   function giftPop(prize) {
-    const title = prize.length > 1 ? 'Novos itens!' : 'Novo item!';
+    const nc = prize.filter(id => id.startsWith('char:')).length, title = nc ? (nc > 1 ? 'Novas skins!' : 'Nova skin!') : prize.length > 1 ? 'Novos itens!' : 'Novo item!';
     const ov = document.createElement('div'); ov.className = 'overlay show gift-ov'; ov.setAttribute('role', 'dialog'); ov.setAttribute('aria-modal', 'true'); ov.setAttribute('aria-label', title);
     const who = () => Art.frog('green', { outfit: Outfit.worn, char: Outfit.char });
     ov.innerHTML = `<div class="panel gift"><button class="dclose" type="button" data-k="x" aria-label="Fechar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
@@ -5635,7 +5635,7 @@ const ProgressPanel = (() => {
     if ($('bkSel').value === '') return;
     const i = +$('bkSel').value, R = regOf(i), onde = R ? ` ${R.na} ${R.name}` : '';
     $('ovBack').classList.remove('show');
-    UI.confirm(`Voltar para a fase ${i + 1}?`, `Você vai recomeçar na fase ${i + 1}${onde}.\nTodo o progresso a partir dela será perdido: fases, estrelas, itens e amigos ganhos depois dela voltam a ser ganhos jogando.`, 'Confirmar', () => {
+    UI.confirm(`Voltar para a fase ${i + 1}?`, `Você vai recomeçar na fase ${i + 1}${onde}.\nTodo o progresso a partir dela será perdido: fases, estrelas, itens e skins ganhos depois dela voltam a ser ganhos jogando.`, 'Confirmar', () => {
       Career.rewind(i); Outfit.prune(Career.owned()); Outfit.pruneChars(Career.chars());
       $('heroArt').innerHTML = Art.heroScene(); heroZoom.reset(); toast(`Você está na fase ${i + 1}`);
     });
@@ -5684,7 +5684,7 @@ ${stageFrog(false, 0)}${stageFrog(true, 104, .5)}</svg></div>`;
     zoom.apply();
     const cur = red ? Outfit.charRed : Outfit.char, allShut = ALLSEC().every(k => closed.includes(k));
     $('wAll').textContent = allShut ? 'Abrir tudo' : 'Fechar tudo'; $('wAll').dataset.all = allShut ? 'open' : 'close';
-    grid.innerHTML = head('amigos', 'Amigos', have.length, Outfit.CHARS.length, fresh.some(id => id.startsWith('char:'))) + (closed.includes('amigos') ? '' : Outfit.CHARS.map(c => {
+    grid.innerHTML = head('amigos', 'Skins', have.length, Outfit.CHARS.length, fresh.some(id => id.startsWith('char:'))) + (closed.includes('amigos') ? '' : Outfit.CHARS.map(c => {
       const pv = `<span class="pv">${c.id === 'sapo' ? Art.frog(red ? 'red' : 'green', { still: true }) : Art.creature(c.id)}</span>`;
       if (!have.includes(c.id)) return `<button type="button" class="witem wchar locked" data-char="${c.id}" aria-label="Personagem ainda não liberado">${pv}<b>???</b></button>`;
       return `<button type="button" class="witem wchar${c.id === cur ? ' worn' : ''}${fresh.includes('char:' + c.id) ? ' new' : ''}" data-char="${c.id}" aria-pressed="${c.id === cur}">${pv}<b>${c.id === 'sapo' && red ? 'Sapo vermelho' : c.name}</b></button>`;
