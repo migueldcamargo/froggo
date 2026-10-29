@@ -531,6 +531,17 @@ canvas.confetti{position:absolute;inset:0;width:100%;height:100%;pointer-events:
 .dclose{position:absolute;top:.75rem;right:.75rem;width:2.2rem;height:2.2rem;border-radius:.55rem;display:grid;place-items:center;color:#fff;
   background:linear-gradient(180deg,#ff5a4e,#e81123);box-shadow:0 .15rem 0 #a10a14,0 .25rem .5rem rgba(0,20,60,.25);z-index:2}
 .dclose svg{width:1.05rem;height:1.05rem}
+/* avaliação da dificuldade do desafio (ícone no canto do resultado → enquete → WhatsApp) */
+.dfeed{position:absolute;top:.75rem;left:.75rem;width:2.2rem;height:2.2rem;border-radius:50%;display:grid;place-items:center;color:#0b6fc9;background:#e8f1f8;box-shadow:0 .15rem 0 #b7c7d6;z-index:2}
+.dfeed svg{width:1.3rem;height:1.3rem}
+.panel.feed{width:min(100%,22rem);display:flex;flex-direction:column;align-items:center;gap:.7rem;text-align:center;padding:1.3rem .8rem 1.1rem}
+.feed h3{margin:0 2.4rem;font-size:1.1rem;line-height:1.2;color:#0b2545}
+.feed .fdate{margin:-.4rem 0 0;font-weight:800;font-size:.85rem;color:#4a6582}
+.feed .opts{display:flex;gap:.3rem;width:100%}
+.feed .opts a{flex:1 1 0;min-width:0;min-height:4.6rem;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.3rem;padding:.5rem .1rem;border-radius:.75rem;background:var(--c);
+  box-shadow:0 .18rem 0 rgba(0,0,0,.22);text-decoration:none;color:#fff;font-weight:900;font-size:.66rem;line-height:1.1;text-shadow:0 1px 1px rgba(0,0,0,.25)}
+.feed .opts a span{font-size:1.5rem;line-height:1;text-shadow:none}
+.feed .opts a:active{transform:translateY(.12rem);box-shadow:0 .05rem 0 rgba(0,0,0,.22)}
 #bkBack{width:100%}
 #ovBack .panel{max-height:calc(var(--H) - 1.5rem);overflow-y:auto}
 .sybox{width:100%;display:flex;flex-direction:column;align-items:stretch;gap:.5rem;margin-top:.9rem;padding-top:.8rem;border-top:2px dashed #d6e2ec;text-align:center}
@@ -828,6 +839,7 @@ canvas.bigbang{position:absolute;inset:0;width:100%;height:100%;z-index:400;poin
   <div class="overlay" id="ovDaily" role="dialog" aria-modal="true" aria-labelledby="dTitle">
     <div class="panel daily-panel">
       <button class="dclose" id="btnDailyClose" type="button" aria-label="Fechar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+      <button class="dfeed" id="btnDailyFeed" type="button" aria-label="Avaliar a dificuldade do desafio" hidden><svg viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="14" width="4.4" height="6.5" rx="1.2"/><rect x="9.8" y="9.5" width="4.4" height="11" rx="1.2" opacity=".7"/><rect x="16.6" y="4" width="4.4" height="16.5" rx="1.2" opacity=".4"/></svg></button>
       <div class="dcal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="15.5" rx="3" fill="currentColor" fill-opacity=".18"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg><b id="dCalDay">21</b></div>
       <h3 id="dTitle">Desafio do dia</h3>
       <p class="ddate" id="dDate"></p>
@@ -954,7 +966,7 @@ canvas.bigbang{position:absolute;inset:0;width:100%;height:100%;z-index:400;poin
 
 <script>
 'use strict';
-const BUILD = '2026-10-29.1457';
+const BUILD = '2026-10-29.1517';
 const LINK = 'jumppo.com.br';     // endereço do jogo nas mensagens do zap (sem https:// e sem barra final: o WhatsApp ainda reconhece o link)      // versão publicada: trocada pela data e hora a cada publicação (ver Update, no fim); 'dev' não confere
 /* =====================================================================
    JUMPPO (antes Froggo) — jogo de sapos saltadores (peg-solitaire), arquivo único e offline.
@@ -5146,6 +5158,28 @@ const Daily = (() => {
      quem chega depois pega os que faltam quando o rodízio passar por eles. Item novo entra no fim da lista. */
   const GIFTS = [['char:kiwi', 'kiwifruta'], ['char:gata'], ['viseira'], ['chineludinho'], ['char:chanel'], ['char:bud'], ['char:perigoso']], GIFT0 = Date.UTC(2026, 9, 26);
   const giftOf = iso => { const [y, m, d] = iso.split('-').map(Number), n = Math.round((Date.UTC(y, m - 1, d) - GIFT0) / 864e5); return GIFTS[((n % GIFTS.length) + GIFTS.length) % GIFTS.length]; };
+  /* avaliação da dificuldade: o ícone de barrinhas no canto do resultado abre uma janelinha por cima, com as notas numa linha só,
+     da mais fácil (esquerda) à mais difícil (direita); cada uma abre o WhatsApp do Miguel com o dia e a nota */
+  const FEEDBACK = [['😴', 'Muito fácil', '#2fbf3a'], ['🙂', 'Fácil', '#8cc63f'], ['👌', 'Adequado', '#f2b51d'], ['😅', 'Difícil', '#ff8a1f'], ['🤯', 'Quase impossível', '#e8352b']], FEED_TO = '5519974160536';
+  let feedR = null;
+  function feedPop(r) {
+    const ov = document.createElement('div'); ov.className = 'overlay show gift-ov'; ov.setAttribute('role', 'dialog'); ov.setAttribute('aria-modal', 'true'); ov.setAttribute('aria-label', 'Avaliar a dificuldade');
+    ov.innerHTML = `<div class="panel feed"><button class="dclose" type="button" data-k="x" aria-label="Fechar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+<h3>O que achou da dificuldade de hoje?</h3><p class="fdate">Desafio do dia ${dateBR(r.date)}</p>
+<div class="opts">${FEEDBACK.map(([e, t, c]) => `<a href="${feedLink(r, t)}" target="_blank" rel="noopener" data-v="${t}" style="--c:${c}"><span>${e}</span>${t.replace(' ', '<br>')}</a>`).join('')}</div>
+</div>`;
+    $('ovWin').parentNode.appendChild(ov);
+    if (!reduceMotion()) animate(ov.querySelector('.feed'), [{ transform: 'scale(.85)', opacity: 0 }, { transform: 'scale(1)', opacity: 1 }], { duration: 220, easing: 'ease-out' });
+    ov.addEventListener('click', e => {
+      const a = e.target.closest('a[data-v]');
+      if (a) { Sound.click(); Track('avaliacao-dificuldade', 'Dificuldade do desafio: ' + a.dataset.v); setTimeout(() => ov.remove(), 300); return; }
+      if (e.target.closest('[data-k]') || e.target === ov) { Sound.click(); ov.remove(); }
+    });
+  }
+  const feedLink = (r, t) => {
+    const pulos = multi(r) ? `\nMeus pulos: ${r.moves.join(' ')} (total ${sum(r.moves)}, ${'⭐'.repeat(grade(r))}${'⚫️'.repeat(3 - grade(r))})` : '';
+    return `https://wa.me/${FEED_TO}?text=${encodeURIComponent(`Avaliação de dificuldade do Desafio do dia ${dateBR(r.date)}: ${t}${pulos}`)}`;
+  };
   const prizeArt = id => id.startsWith('char:') ? Art.creature(id.slice(5)) : Outfit.preview(id);
   const prizeName = id => id.startsWith('char:') ? Outfit.CHARS.find(c => c.id === id.slice(5)).name : Outfit.BY[id].name;
   function openPanel(justWon, just, prize) {
@@ -5163,6 +5197,7 @@ const Daily = (() => {
     $('dBig').setAttribute('aria-label', `${nota} de 3 estrelas`); $('dBig').setAttribute('role', 'img');
     $('dBig').innerHTML = [0, 1, 2].map(k => `<span>${Art.star(k < nota ? '#ffd23f' : '#d9dfe8')}</span>`).join('');
     if (r && justWon && !reduceMotion()) $('dBig').querySelectorAll('span').forEach((e, k) => animate(e, [{ transform: 'scale(0) rotate(-40deg)', opacity: 0 }, { transform: 'scale(1.25)', opacity: 1, offset: .7 }, { transform: 'scale(1)' }], { duration: 420, delay: 250 + k * 180, easing: 'ease-out', fill: 'backwards' }));
+    $('btnDailyFeed').hidden = !r; feedR = r;
     $('dStats').hidden = !r; $('btnDailyPlay').hidden = !!r; $('btnDailyShare').hidden = !r; $('btnDailyReview').hidden = !r; $('btnDailyCareer').hidden = !r; shown = d;
     const sv = !r && saved();
     $('btnDailyPlay').textContent = sv ? `Continuar (mapa ${sv.phase + 1} de ${N})` : 'Jogar';
@@ -5381,6 +5416,7 @@ const Daily = (() => {
   $('btnTutGo').addEventListener('click', () => { Sound.click(); UI.hideOverlays(); practiceNext(); });
   $('btnTutClose').addEventListener('click', () => { Sound.click(); UI.hideOverlays(); UI.show('home'); });
   $('btnDailyClose').addEventListener('click', () => { Sound.click(); closePanel(); });
+  $('btnDailyFeed').addEventListener('click', () => { Sound.click(); if (feedR) feedPop(feedR); });
   // terminou o desafio: convida a seguir jogando na trilha
   $('btnDailyCareer').addEventListener('click', () => { Sound.click(); afterWin = false; $('ovDaily').classList.remove('show'); Base.dim(false); Career.open(); });
   $('dPrize').addEventListener('click', e => {
