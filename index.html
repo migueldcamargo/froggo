@@ -526,6 +526,8 @@ canvas.confetti{position:absolute;inset:0;width:100%;height:100%;pointer-events:
 .panel .row .btn.dreview svg,.panel .row .btn.career svg{width:1.2em;height:1.2em}
 .btn.wa{color:#fff;text-decoration:none;text-shadow:0 1px 0 rgba(0,60,20,.4);background:linear-gradient(180deg,#5ef08f,#25d366 50%,#18a74c);box-shadow:0 .28rem 0 #0f7a36,0 .5rem 1rem rgba(0,30,70,.3),inset 0 2px 0 rgba(255,255,255,.5);flex:1 1 100%}
 .btn.wa svg{width:1.4em;height:1.4em}
+.dskin{flex:1 1 100%;display:flex;align-items:center;justify-content:center;gap:.45rem;font-weight:800;font-size:.95rem;color:#0b2545;cursor:pointer}
+.dskin input{width:1.25rem;height:1.25rem;accent-color:#25d366}
 .dclose{position:absolute;top:.75rem;right:.75rem;width:2.2rem;height:2.2rem;border-radius:.55rem;display:grid;place-items:center;color:#fff;
   background:linear-gradient(180deg,#ff5a4e,#e81123);box-shadow:0 .15rem 0 #a10a14,0 .25rem .5rem rgba(0,20,60,.25);z-index:2}
 .dclose svg{width:1.05rem;height:1.05rem}
@@ -845,6 +847,7 @@ canvas.bigbang{position:absolute;inset:0;width:100%;height:100%;z-index:400;poin
         <button class="btn career" id="btnDailyCareer" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4h10v5a5 5 0 0 1-10 0z" fill="currentColor" fill-opacity=".25"/><path d="M17 5h3v2a4 4 0 0 1-3.6 4M7 5H4v2a4 4 0 0 0 3.6 4"/><path d="M12 14v3M8.5 20h7M9.5 17h5v3h-5z"/></svg><span id="dCareerTxt">Carreira</span></button>
 
         <a class="btn wa" id="btnDailyShare" target="_blank" rel="noopener" hidden><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.5a9.5 9.5 0 0 0-8.2 14.3L2.5 21.5l4.9-1.3A9.5 9.5 0 1 0 12 2.5zm0 2a7.5 7.5 0 1 1-3.8 14l-.3-.2-2.9.8.8-2.8-.2-.3A7.5 7.5 0 0 1 12 4.5zm-3.1 3.6c-.2 0-.5.1-.7.3-.3.3-.9.9-.9 2.1s.9 2.4 1 2.6c.1.2 1.8 2.8 4.4 3.9 2.2.9 2.6.7 3.1.7s1.5-.6 1.7-1.2c.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.6-.3l-1.6-.8c-.2-.1-.4-.1-.6.1l-.7.9c-.1.2-.3.2-.5.1-.3-.1-1-.4-1.9-1.2-.7-.6-1.2-1.4-1.3-1.6-.1-.3 0-.4.1-.5l.4-.5.3-.4c.1-.2 0-.3 0-.5l-.7-1.8c-.2-.4-.4-.4-.6-.4h-.5z"/></svg>Mandar no Zap</a>
+        <label class="dskin" id="dSkinBox" hidden><input type="checkbox" id="dSkin"> Incluir minha skin</label>
       </div>
     </div>
   </div>
@@ -951,7 +954,7 @@ canvas.bigbang{position:absolute;inset:0;width:100%;height:100%;z-index:400;poin
 
 <script>
 'use strict';
-const BUILD = '2026-10-29.1005';
+const BUILD = '2026-10-29.1216';
 const LINK = 'jumppo.com.br';     // endereço do jogo nas mensagens do zap (sem https:// e sem barra final: o WhatsApp ainda reconhece o link)      // versão publicada: trocada pela data e hora a cada publicação (ver Update, no fim); 'dev' não confere
 /* =====================================================================
    JUMPPO (antes Froggo) — jogo de sapos saltadores (peg-solitaire), arquivo único e offline.
@@ -1798,6 +1801,104 @@ ${theme === 'esgoto' ? Art.goo() : ''}<g stroke-dasharray="1.4 1.4">${Art.boardL
   },
   star(fill = '#ffd23f') {
     return `<svg viewBox="0 0 24 24"><path d="M12 1.8l3.1 6.4 7 1-5.1 4.9 1.2 7L12 17.8l-6.2 3.3 1.2-7L1.9 9.2l7-1z" fill="${fill}" stroke="#c98a00" stroke-width="1.2" stroke-linejoin="round"/><path d="M9 7.5l1.5-3" stroke="#fff" stroke-width="1.4" stroke-linecap="round" opacity=".8"/></svg>`;
+  },
+  /* Imagem do desafio do dia para mandar no zap (1200×800): à esquerda o personagem da pessoa, com a roupa dela, num cenário
+     que muda com a nota: 3★ festa (arco-íris, sol, confete, olhos de estrela e pulinho), 2★ a lagoa azul da tela inicial,
+     1★ tempestade (nuvens, raio, chuva e o personagem chorando rios); à direita um cartão com data, estrelas, pulos de cada
+     mapa, total e tempo. r = resultado do desafio ({ date, moves[], mins[], time }), n = estrelas. */
+  shareCard(r, n) {
+    const defs = document.querySelector('svg defs').outerHTML, char = Outfit.char || 'sapo', outfit = Outfit.worn || {};
+    const raw = char === 'sapo' ? Art.frog('green', { outfit, sad: n === 1, still: true }) : Art.creature(char, { outfit, still: true });
+    const who = Art.moodFace(raw.replace(/^<svg[^>]*>/, '').replace(/<\/svg>\s*$/, ''), char, n === 3 ? 'joy' : n === 1 ? 'cry' : '');
+    const [, m, d] = r.date.split('-').map(Number), mes = ['janeiro', 'fevereiro', 'março', 'abril', 'maio', 'junho', 'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro'][m - 1];
+    const sec = r.time ? Math.max(1, Math.round(r.time / 1000)) : 0, tempo = !sec ? '' : Math.floor(sec / 60) ? `${Math.floor(sec / 60)}min${sec % 60 ? String(sec % 60).padStart(2, '0') + 's' : ''}` : sec + 's';
+    const total = r.moves.reduce((a, b) => a + b, 0);
+    const starP = 'M' + [...Array(10)].map((_, i) => { const a = (-90 + i * 36) * Math.PI / 180, rr = i % 2 ? 2.7 : 6.6; return `${(Math.cos(a) * rr).toFixed(2)} ${(Math.sin(a) * rr).toFixed(2)}`; }).join(' L') + ' Z';
+    let bg = '', fx = '', over = '', under = '';
+    if (n === 3) {
+      bg = `<defs><linearGradient id="scSky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5fd0ff"/><stop offset=".7" stop-color="#bff1ff"/><stop offset="1" stop-color="#fff3c4"/></linearGradient></defs><rect width="150" height="100" fill="url(#scSky)"/>
+<g transform="translate(14 14)"><circle r="8" fill="#ffe14d"/><circle r="11" fill="#ffe14d" opacity=".3"/>${[...Array(12)].map((_, i) => `<path d="M0 -13 V-17" stroke="#ffd23f" stroke-width="1.4" stroke-linecap="round" transform="rotate(${i * 30})"/>`).join('')}</g>
+<g fill="none" stroke-width="3">${['#ff4b4b', '#ff9a1f', '#ffd23f', '#2fbf3a', '#2b9bff', '#8a5cff'].map((c, i) => `<path d="M${-2 + i * 3} 74 A${44 - i * 3} ${44 - i * 3} 0 0 1 ${86 - i * 3} 74" stroke="${c}" opacity=".9"/>`).join('')}</g>
+<g fill="#fff"><ellipse cx="70" cy="20" rx="9" ry="3.6"/><ellipse cx="66" cy="18" rx="5" ry="3.4"/><ellipse cx="73" cy="17.6" rx="4.6" ry="3"/></g>`;
+      const cs = ['#ff4b4b', '#ffd23f', '#2fbf3a', '#2b9bff', '#ff6ad5', '#8a5cff'];
+      for (let i = 0; i < 46; i++) { const x = (i * 37 + 11) % 78 + 2, y = (i * 53 + 7) % 84 + 4; fx += `<rect x="${x}" y="${y}" width="2.6" height="1.3" rx=".4" fill="${cs[i % 6]}" transform="rotate(${i * 47} ${x} ${y})"/>`; }
+      fx += `<g fill="#fff">${[[10, 40, 1.2], [74, 44, 1], [20, 66, .8], [66, 70, .9], [40, 10, .8]].map(([x, y, k]) => `<path d="M${x} ${y - 4 * k}l${1.2 * k} ${2.8 * k} ${2.8 * k} ${1.2 * k}-${2.8 * k} ${1.2 * k}-${1.2 * k} ${2.8 * k}-${1.2 * k}-${2.8 * k}-${2.8 * k}-${1.2 * k} ${2.8 * k}-${1.2 * k}z"/>`).join('')}</g>`;
+      // olhos de estrela, bochechas de coração e risquinhos do pulo
+      over = [32, 68].map(x => `<g transform="translate(${x} 27) scale(1.18)"><path d="${starP}" fill="#ffd23f" stroke="#c98a00" stroke-width=".7" stroke-linejoin="round"/><circle cx="-1.4" cy="-2" r=".9" fill="#fff"/></g>`).join('')
+        + [[18, 44], [82, 44]].map(([x, y]) => `<path d="M${x} ${y + 3} C${x - 5} ${y - 1} ${x - 2} ${y - 5} ${x} ${y - 2} C${x + 2} ${y - 5} ${x + 5} ${y - 1} ${x} ${y + 3} Z" fill="#ff5c93"/>`).join('');
+      under = '';
+    } else if (n === 2) {
+      bg = `<defs><linearGradient id="scSky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4fd2ff"/><stop offset=".6" stop-color="#2aa6e6"/><stop offset="1" stop-color="#0b6fc9"/></linearGradient></defs><rect width="150" height="100" fill="url(#scSky)"/>
+<g fill="none" stroke="#fff" stroke-opacity=".16" stroke-width=".6">${[14, 24, 34, 44, 54].map(rr => `<circle cx="42" cy="60" r="${rr}"/>`).join('')}</g>
+<g fill="#fff" opacity=".8"><path d="M12 22l1.4 3.4 3.4 1.4-3.4 1.4-1.4 3.4-1.4-3.4-3.4-1.4 3.4-1.4z"/><path d="M72 30l1 2.4 2.4 1-2.4 1-1 2.4-1-2.4-2.4-1 2.4-1z"/></g>`;
+    } else {
+      bg = `<defs><linearGradient id="scSky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1c2533"/><stop offset=".6" stop-color="#34445c"/><stop offset="1" stop-color="#1e3a52"/></linearGradient></defs><rect width="150" height="100" fill="url(#scSky)"/>
+<g stroke="#9fc4e6" stroke-width=".7" stroke-linecap="round" opacity=".55">${[...Array(60)].map((_, i) => { const x = (i * 29) % 82, y = (i * 47) % 96; return `<path d="M${x} ${y} l-2 5"/>`; }).join('')}</g>
+<path d="M14 10 L7 24 H12 L5 38 L20 20 H14 L20 10 Z" fill="#ffe14d" stroke="#fff6b0" stroke-width=".6"/>
+<g fill="#4a5568">${[[10, 8, 16], [30, 6, 18], [52, 4, 16], [72, 8, 14]].map(([x, y, w]) => `<ellipse cx="${x}" cy="${y}" rx="${w}" ry="8"/>`).join('')}</g><g fill="#2d3748">${[[18, 12, 14], [42, 11, 15], [66, 12, 13]].map(([x, y, w]) => `<ellipse cx="${x}" cy="${y}" rx="${w}" ry="6"/>`).join('')}</g>`;
+      // sobrancelhas tristes e rios de lágrimas até o chão
+      const drop = (x, y, k) => `<path d="M${x} ${y - 3 * k} Q${x - 2 * k} ${y} ${x} ${y + 1.8 * k} Q${x + 2 * k} ${y} ${x} ${y - 3 * k} Z"/>`;
+      over = `<path d="M18 16 Q28 13 41 7" stroke="#1a1a1a" stroke-width="2.6" fill="none" stroke-linecap="round"/><path d="M82 16 Q72 13 59 7" stroke="#1a1a1a" stroke-width="2.6" fill="none" stroke-linecap="round"/>
+<g fill="none" stroke-linecap="round"><path d="M22 34 Q24 37 31 37.6 Q38 37 40 34 M60 34 Q62 37 69 37.6 Q76 37 78 34" stroke="#bfeaff" stroke-width="2.2" opacity=".9"/>
+<path d="M24 36 Q20 48 23 60 Q25 68 22 78 M76 36 Q80 48 77 60 Q75 68 78 78" stroke="#8fd8ff" stroke-width="3.4" opacity=".6"/><path d="M24 38 Q21 48 23.6 58 M76 38 Q79 48 76.4 58" stroke="#fff" stroke-width=".9" opacity=".7"/>
+<path d="M21 34 Q8 34 2 50 M79 34 Q92 34 98 50" stroke="#8fd8ff" stroke-width="2.2" stroke-dasharray="2.6 2.4" opacity=".75"/></g>
+<g fill="#9fdcff" stroke="#4ab0e6" stroke-width=".5" opacity=".9">${[[22, 84, 1.2], [23, 92, .9], [78, 84, 1.2], [77, 92, .9], [0, 58, 1], [-2, 66, .8], [100, 58, 1], [102, 66, .8]].map(([x, y, k]) => drop(x, y, k)).join('')}</g>`;
+      under = `<ellipse cx="42" cy="95" rx="36" ry="4" fill="#7fd4ff" opacity=".7"/>`;
+    }
+    const lift = 0;
+    const chip = (mv, i) => { const k = starsFor(mv, r.mins[i] || mv), c = k === 3 ? '#2fbf3a' : k === 2 ? '#ffb020' : '#ff4b3a';
+      return `<g transform="translate(${88 + i * 11.4} 60)"><rect x="-5" y="-4.6" width="10" height="9.2" rx="2.6" fill="${c}"/><text y="1.9" text-anchor="middle" font-size="5.2" font-weight="900" fill="#fff">${mv}</text></g>`; };
+    const logo = `<text x="112.5" y="18.4" text-anchor="middle" stroke="#0b2545" stroke-width="1.3" paint-order="stroke" letter-spacing=".3">${[...'Jumppo'].map((c, i) => `<tspan fill="${['#2fbf3a', '#ffb020', '#ff4b3a'][i % 3]}">${c}</tspan>`).join('')}</text>`;
+    return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 150 100" width="1200" height="800">${defs}${bg}${fx}
+<ellipse cx="42" cy="93" rx="34" ry="6.6" fill="#0b3a20" opacity=".35"/>${under}
+<path d="M8 90 A34 7.6 0 1 0 76 90 A34 7.6 0 0 0 46 83.2 L42 90 L38 83.2 A34 7.6 0 0 0 8 90Z" fill="url(#lily)" stroke="#155f1a" stroke-width=".8"/>
+<g transform="translate(13 ${34 + lift}) scale(.58)">${who}${over}</g>
+<g font-family="Arial Black, Arial, Helvetica, sans-serif"><rect x="80" y="5" width="65" height="90" rx="7" fill="#fff" opacity=".94"/>
+<g font-weight="900" font-size="11">${logo}</g>
+<text x="112.5" y="26.4" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="4.2" fill="#4a6582">Desafio do dia</text>
+<text x="112.5" y="32.6" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-weight="800" font-size="5" fill="#0b2545">${d} de ${mes}</text>
+${[0, 1, 2].map(k => `<g transform="translate(${97.5 + k * 15} 44.6) scale(1.02)"><path d="${starP}" fill="${k < n ? '#ffd23f' : '#3a4656'}" stroke="${k < n ? '#c98a00' : '#1e2733'}" stroke-width=".8" stroke-linejoin="round"/></g>`).join('')}
+<g font-family="Arial Black, Arial, Helvetica, sans-serif">${r.moves.map(chip).join('')}</g>
+<text x="112.5" y="74.6" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-weight="900" font-size="6" fill="#0b2545">Total: ${total} pulos</text>
+${tempo ? `<text x="112.5" y="82" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-weight="800" font-size="4.8" fill="#4a6582">⏱ ${tempo}</text>` : ''}
+<text x="112.5" y="91" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-weight="900" font-size="4.6" fill="#0b7bd6">jumppo.com.br</text></g></svg>`;
+  },
+  /* Rosto da imagem do desafio: 'joy' (3★) troca a boca por uma boca aberta de alegria; 'cry' (1★) por uma boca de choro.
+     Para cada personagem: trechos da boca original a tirar e onde desenhar a nova [x, y, largura, cor do traço]. Coruja,
+     galo, kiwi e Cataras (bico ou bigodão) não têm boca: ficam só com as sobrancelhas e as lágrimas. keep: a boca dele já é
+     um sorrisão, então na alegria fica como está. */
+  moodFace(svg, char, mood) {
+    const F = {
+      sapo: { rm: ['<path d="M33 49 Q50 62 67 49"', '<path d="M37 57 Q50 47.5 63 57"'], m: [50, 51, 26, '#0f3d12'] },
+      lollipop: { rm: ['<path d="M38 52 Q50 60 62 52"'], m: [50, 53, 22, '#3a5a1a'] },
+      topogigio: { sub: [['M50 45.8 V49 M44 50 Q50 54 56 50', 'M50 45.8 V49']], rm: ['<path d="M47.6 51.6 h4.8'], m: [50, 52, 14, '#4a2a20'] },
+      baurets: { rm: ['<path d="M42 50 Q50 55 58 50"'], m: [50, 51, 16, '#2f6a1a'] },
+      roger: { sub: [['M50 52 V55 M44 56 Q50 59 56 56', 'M50 52 V55']], m: [50, 57, 14, '#3a2412'] },
+      jare: { rm: ['<path d="M29 52 Q50 58 71 52"'], m: [50, 52, 28, '#2a3a0a'] },
+      origa: { keep: true, rm: ['<path d="M38 47.6 Q50 50 62 47.6', '<path d="M39.6 48.6 Q50 50.6 60.4 48.6', '<ellipse cx="50" cy="56.4" rx="5"'], m: [50, 51, 18, '#1a2030'] },
+      nelson: { keep: true, rm: ['<path d="M38.2 49.6 Q50 57.6', '<path d="M38.7 48.2 Q50 54.8', '<path d="M40.3 53.2 Q50 56.6', '<path d="M40 48.7 Q50 54.5'], m: [50, 52, 20, '#2a1e1b'] },
+      conde: { rm: ['<path d="M36 50 Q50 58 64 50"', '<path d="M60 49.6 l3.4 -1.6"'], m: [50, 51, 22, '#1e1830'] },
+      tcharina: { rm: ['<path d="M42 51 Q50 57 58 51"', '<path d="M43.6 52.6 Q50 56.4 56.4 52.6"'], m: [50, 53, 16, '#7a3a34'] },
+      djanho: { keep: true, rm: ['<path d="M41.4 51.6 Q50 56.6', '<path d="M42.2 51.9 Q50 55.8', '<path d="M40.4 51.2 Q50 57.6', '<path d="M39.8 50.4 l1 1.2'], m: [50, 53, 18, '#5a2a18'] },
+      gata: { sub: [['M50 43.4 V45.4 M50 45.4 Q47 48.6 44 46.6 M50 45.4 Q53 48.6 56 46.6', 'M50 43.4 V45.4']], m: [50, 49, 12, '#c9507a'] },
+      caramelo: { rm: ['<path d="M42 49 Q50 55 58 49"', '<path d="M47 52 Q47 60 51 60'], m: [50, 51, 18, '#5a3418'] }
+    }[char];
+    if (!F || !mood || (mood === 'joy' && F.keep)) return svg;
+    for (const [a, b] of F.sub || []) svg = svg.split(a).join(b);
+    for (const a of F.rm || []) { const i = svg.indexOf(a); if (i >= 0) svg = svg.slice(0, i) + svg.slice(svg.indexOf('/>', i) + 2); }
+    const [x, y, w, c] = F.m, h = w / 2;
+    const mouth = mood === 'joy'
+      ? `<path d="M${x - h} ${y - 2} Q${x} ${y + 1.4} ${x + h} ${y - 2} Q${x + h - 1.6} ${y + w * .42} ${x} ${y + w * .46} Q${x - h + 1.6} ${y + w * .42} ${x - h} ${y - 2} Z" fill="#7a1f1a" stroke="${c}" stroke-width="1.6" stroke-linejoin="round"/><ellipse cx="${x}" cy="${y + w * .3}" rx="${w * .2}" ry="${w * .1}" fill="#ff7a8a"/><path d="M${x - h + 1.4} ${y - .8} Q${x} ${y + 2} ${x + h - 1.4} ${y - .8}" stroke="#fff" stroke-width="1.6" fill="none"/>`
+      : `<path d="M${x - h} ${y + 4} Q${x} ${y - 5} ${x + h} ${y + 4} Q${x} ${y + 1.4} ${x - h} ${y + 4} Z" fill="#5a1a1a" stroke="${c}" stroke-width="1.6" stroke-linejoin="round"/><path d="M${x - h * .5} ${y + 2.2} Q${x} ${y + .6} ${x + h * .5} ${y + 2.2}" stroke="#ff8a9a" stroke-width="1.2" fill="none" opacity=".8"/>`;
+    return svg + mouth;
+  },
+  shareCardPNG(r, n) {
+    return new Promise(resolve => {
+      const img = new Image();
+      img.onload = () => { try { const c = document.createElement('canvas'); c.width = 1200; c.height = 800; c.getContext('2d').drawImage(img, 0, 0, 1200, 800); c.toBlob(b => resolve(b), 'image/png'); } catch (e) { resolve(null); } };
+      img.onerror = () => resolve(null);
+      img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(Art.shareCard(r, n));
+    });
   },
   // Ícone do app: o sapinho inteiro sentado numa vitória-régia, sobre a água azul.
   // SVG autocontido (copia os gradientes) → desenhado num canvas → PNG para a tela de início do iPhone.
@@ -4999,6 +5100,7 @@ const Daily = (() => {
     $('dMin').hidden = true; $('dPhases').hidden = true;
     if (r) {
       shareLink(message(r));
+      skinR = multi(r) ? r : null; $('dSkinBox').hidden = !skinR || !canFiles(); $('dSkin').checked = false;
       $('dTimeBox').hidden = !r.time; $('dStats').classList.toggle('notime', !r.time); if (r.time) $('dTime').textContent = fmtTime(r.time);
       if (multi(r)) {
         $('dMoves').textContent = String(sum(r.moves));
@@ -5041,6 +5143,24 @@ const Daily = (() => {
   }
   /* No Android, o desvio wa.me → api.whatsapp.com estraga emojis (o 🐸 vira "?"); lá o link abre o app
      direto pelo esquema whatsapp://, que entrega o texto intacto. No iPhone o wa.me funciona bem. */
+  /* "Incluir minha skin": com a caixinha marcada, o botão do zap manda a imagem do personagem (Art.shareCard) só com o link;
+     desmarcada (o padrão), vai o texto de sempre. A imagem fica pronta ao marcar, porque o celular só compartilha dentro do toque. */
+  let skinR = null, skinFile = null, skinKey = '';
+  const canFiles = () => { try { return !!navigator.canShare && navigator.canShare({ files: [new File([new Blob(['x'])], 'x.png', { type: 'image/png' })] }); } catch (e) { return false; } };
+  async function prepSkin() {
+    const r = skinR; if (!r) return;
+    const key = JSON.stringify([r.date, r.moves, Outfit.char, Outfit.worn]); if (key === skinKey && skinFile) return;
+    skinKey = key; skinFile = null;
+    const b = await Art.shareCardPNG(r, grade(r)); if (b && key === skinKey) skinFile = new File([b], 'jumppo.png', { type: 'image/png' });
+  }
+  $('dSkin').addEventListener('change', () => { if ($('dSkin').checked) prepSkin(); });
+  $('btnDailyShare').addEventListener('click', e => {
+    if (!$('dSkin').checked || $('dSkinBox').hidden) return;          // sem a caixinha: segue o link do zap com o texto
+    e.preventDefault();
+    if (!skinFile) { toast('Preparando a imagem… toque de novo'); prepSkin(); return; }
+    Track('zap-skin', 'Mandou o desafio com a skin');
+    navigator.share({ files: [skinFile], text: 'https://' + LINK }).catch(() => {});
+  });
   function shareLink(text) {
     const a = $('btnDailyShare'), android = /android/i.test(navigator.userAgent || '');
     a.href = (android ? 'whatsapp://send?text=' : 'https://wa.me/?text=') + encodeURIComponent(text);
@@ -5476,7 +5596,7 @@ ${stageFrog(false, 0)}${stageFrog(true, 104, .5)}</svg></div>`;
     const hide = r => r.bonus ? !Career.bonusOpen : !!r.extra && !Career.isOpen(R.indexOf(r)), nm = r => hide(r) ? '???' : r.name;
     const regOf = c => c.fase != null ? at(c.fase) : R.find(x => x.id === c.at);
     const c = Outfit.CHARS.find(x => x.id === id);
-    if (c && c.gift) return 'Presente do Desafio do dia (um por dia, em rodízio)';
+    if (c && c.gift) return 'Libera no Desafio do dia';
     if (c && c.fase != null) { const r = regOf(c); return hide(r) ? 'Chega no ???' : `Chega na fase ${c.fase + 1} ${r.na} ${r.name}`; }
     if (c) { const r = regOf(c); return `Chega ao abrir ${hide(r) ? 'o' : r.na === 'na' ? 'a' : 'o'} ${nm(r)}`; }
     const i = Object.keys(Career.PRIZE).find(k => Career.PRIZE[k].includes(id));
@@ -5485,7 +5605,7 @@ ${stageFrog(false, 0)}${stageFrog(true, 104, .5)}</svg></div>`;
     if (r) return `Encontre com ⭐⭐⭐ ${hide(r) ? 'no' : r.na} ${nm(r)}`;
     const k = Outfit.CHARS.find(x => (x.kit || []).includes(id));
     if (k && !k.gift) return `Vem com ${hide(regOf(k)) ? '???' : k.name}`;     // kit de amigo
-    return ['viseira', 'chineludinho', 'kiwifruta'].includes(id) ? 'Presente do Desafio do dia (um por dia, em rodízio)' : 'Encontre no Desafio do dia';
+    return ['viseira', 'chineludinho', 'kiwifruta'].includes(id) ? 'Libera no Desafio do dia' : 'Encontre no Desafio do dia';
   }
   grid.addEventListener('click', e => {
     const sec = e.target.closest('.wsec');
