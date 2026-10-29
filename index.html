@@ -954,7 +954,7 @@ canvas.bigbang{position:absolute;inset:0;width:100%;height:100%;z-index:400;poin
 
 <script>
 'use strict';
-const BUILD = '2026-10-29.1241';
+const BUILD = '2026-10-29.1256';
 const LINK = 'jumppo.com.br';     // endereço do jogo nas mensagens do zap (sem https:// e sem barra final: o WhatsApp ainda reconhece o link)      // versão publicada: trocada pela data e hora a cada publicação (ver Update, no fim); 'dev' não confere
 /* =====================================================================
    JUMPPO (antes Froggo) — jogo de sapos saltadores (peg-solitaire), arquivo único e offline.
@@ -1615,6 +1615,58 @@ const Art = {
   <path d="M42 49 Q50 55 58 49" stroke="#5a3418" stroke-width="2" fill="none" stroke-linecap="round"/><path d="M47 52 Q47 60 51 60 Q55 60 54 52 Z" fill="#ff7a8a" stroke="#c94a5a" stroke-width=".8"/>${shine}`;
         feet = '<g fill="#fff4e0" stroke="#c9842f" stroke-width=".8"><ellipse cx="33" cy="87" rx="9" ry="5.4"/><ellipse cx="67" cy="87" rx="9" ry="5.4"/></g><path d="M30 88 v3 M33 89 v3 M36 88 v3 M64 88 v3 M67 89 v3 M70 88 v3" stroke="#c9842f" stroke-width="1" stroke-linecap="round"/>';
       },
+      chanel() {      // Chanel, a gata cinza (desafio do dia): cinza-azulada lisa da cabeça ao rabo, olhões amarelo-dourados com pupila fina, cílios, focinho cinza-escuro e bigodes brancos compridos
+        defs = g('cnB', '#7f8590', '#575c68', '#363a44') + `<radialGradient id="cnE" cx="45%" cy="40%" r="60%"><stop offset="0" stop-color="#fbf0a0"/><stop offset=".6" stop-color="#e2be3a"/><stop offset="1" stop-color="#9a7a18"/></radialGradient>`;
+        back = `<path d="M74 84 Q94 86 95 70 Q96 56 86 52 Q84 58 88 62 Q90 74 76 76 Z" fill="#474c57"/>`;
+        body = `<path d="M17 31 L12 4 L38 16 Z M83 31 L88 4 L62 16 Z" fill="#535864" stroke="#30333b" stroke-width=".8" stroke-linejoin="round"/><path d="M20 25 L17.6 11 L32 17 Z M80 25 L82.4 11 L68 17 Z" fill="#a88892"/>
+  <ellipse cx="22" cy="80" rx="11" ry="8.4" fill="url(#cnB)"/><ellipse cx="78" cy="80" rx="11" ry="8.4" fill="url(#cnB)"/>
+  <ellipse cx="50" cy="67" rx="27" ry="23" fill="url(#cnB)"/><ellipse cx="50" cy="73" rx="13" ry="11" fill="#6e7480" opacity=".5"/>
+  <ellipse cx="50" cy="40" rx="34" ry="24" fill="url(#cnB)"/><ellipse cx="50" cy="45" rx="10" ry="6.4" fill="#757a86" opacity=".7"/>`;
+        face = [31, 69].map(x => { const d = x < 50 ? -1 : 1;
+          return `<ellipse cx="${x}" cy="27" rx="10.4" ry="10" fill="url(#cnE)"/><ellipse cx="${x}" cy="27.6" rx="2.6" ry="7.4" fill="#141210"/><circle cx="${x + 2.6}" cy="23.4" r="2.3" fill="#fff"/><circle cx="${x - 3}" cy="31" r=".9" fill="#fff" opacity=".7"/>
+  <path d="M${x - 11} 25 Q${x} 15.4 ${x + 11} 25" stroke="#24272e" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+  <path d="M${x + d * 10.6} 24 l${d * 4.4} -2.8 M${x + d * 8.6} 20.6 l${d * 3.4} -3.6" stroke="#24272e" stroke-width="1.4" stroke-linecap="round"/>`; }).join('')
+          + `<path d="M46.4 39.6 Q50 37.8 53.6 39.6 Q52.6 42.6 50 43.4 Q47.4 42.6 46.4 39.6 Z" fill="#1e2026"/><path d="M50 43.4 V45.4 M50 45.4 Q47 48.6 44 46.6 M50 45.4 Q53 48.6 56 46.6" stroke="#24272e" stroke-width="1.3" fill="none" stroke-linecap="round"/>
+  <path d="M40 43 L16 39.4 M40 45.4 L17 47 M60 43 L84 39.4 M60 45.4 L83 47" stroke="#fff" stroke-width=".8" opacity=".95" stroke-linecap="round"/>
+  <ellipse cx="24" cy="39" rx="5" ry="2.8" fill="#ff8ab0" opacity=".3"/><ellipse cx="76" cy="39" rx="5" ry="2.8" fill="#ff8ab0" opacity=".3"/>${shine}`;
+        feet = '<g fill="#575c68"><ellipse cx="35" cy="88" rx="8" ry="4.4"/><ellipse cx="65" cy="88" rx="8" ry="4.4"/></g><g fill="#a88892"><circle cx="32" cy="88.6" r="1.1"/><circle cx="35" cy="89.4" r="1.1"/><circle cx="38" cy="88.6" r="1.1"/><circle cx="62" cy="88.6" r="1.1"/><circle cx="65" cy="89.4" r="1.1"/><circle cx="68" cy="88.6" r="1.1"/></g>';
+      },
+      bud() {      // Bud, o pastor de Shetland tricolor (desafio do dia): cabeça em cunha com focinho comprido, orelhinhas em pé com a ponta dobrada, pelo preto fofo dos lados, bochechas caramelo, listra e focinho brancos, peito branco estreito, patas da frente brancas e rabo peludo
+        defs = g('bdB', '#4a4a56', '#24242c', '#101016');
+        const TAN = '#c98238', W = '#f6f4ee', WL = '#d6d0c4', BK = '#18181f';
+        back = `<path d="M66 86 Q82 90 96 86 Q99 84 96 81 Q86 78 74 78 Z" fill="${BK}"/><path d="M90 81 Q97 81 99 84 Q97 87 91 87 Q93 84 90 81 Z" fill="${W}"/>
+  <path d="M76 81 l3 -1.4 M82 82 l3 -1.4 M80 86 l3 1" stroke="#3a3a46" stroke-width=".9" stroke-linecap="round"/>`;
+        const fluff = `<path d="M22 26 Q12 30 15 38 Q10 42 15 46 Q11 52 18 54 Q17 60 25 59 Q28 64 34 60 L50 58 L66 60 Q72 64 75 59 Q83 60 82 54 Q89 52 85 46 Q90 42 85 38 Q88 30 78 26 Z" fill="${BK}"/>`;
+        const ear = d => `<path d="M${50 - d * 30} 22 Q${50 - d * 31} 8 ${50 - d * 26} 1.6 Q${50 - d * 18} 6 ${50 - d * 14} 15 Z" fill="${BK}" stroke="#0a0a0e" stroke-width=".7" stroke-linejoin="round"/>
+  <path d="M${50 - d * 27.4} 18 Q${50 - d * 27.6} 10 ${50 - d * 25} 6.6 Q${50 - d * 20} 9.4 ${50 - d * 17} 15 Z" fill="${TAN}"/>
+  <path d="M${50 - d * 26} 1.6 Q${50 - d * 33} 2 ${50 - d * 35} 8.4 Q${50 - d * 31} 9 ${50 - d * 27.6} 6.4 Z" fill="#2a2a34" stroke="#0a0a0e" stroke-width=".6" stroke-linejoin="round"/>`;
+        const ruff = `<path d="M35 54 Q29 59 32 63 L28 66 Q31 69 31 71 L27 75 Q32 77 32 80 L30 84 Q36 85 39 86 L40 90 Q45 88 50 89 Q55 88 60 90 L61 86 Q64 85 70 84 L68 80 Q68 77 73 75 L69 71 Q69 69 72 66 L68 63 Q71 59 65 54 Q57 59 50 59 Q43 59 35 54 Z" fill="${W}"/>
+  <path d="M36 66 q1 5 0 9 M42 70 q1 6 -1 11 M50 66 q.6 6 0 12 M58 70 q-1 6 1 11 M64 66 q-1 5 0 9" stroke="${WL}" stroke-width="1" fill="none" stroke-linecap="round"/>`;
+        body = `${ear(1)}${ear(-1)}<ellipse cx="27" cy="81" rx="9" ry="7" fill="url(#bdB)"/><ellipse cx="73" cy="81" rx="9" ry="7" fill="url(#bdB)"/>
+  <ellipse cx="50" cy="70" rx="23" ry="20" fill="url(#bdB)"/>${ruff}
+  <path d="M40 76 V86 M60 76 V86" stroke="${W}" stroke-width="7.4" stroke-linecap="round"/>
+  ${fluff}<path d="M19 33 Q18 13 50 11 Q82 13 81 33 Q80 44 67 50 Q60 53 58 58 Q56 64 50 64 Q44 64 42 58 Q40 53 33 50 Q20 44 19 33 Z" fill="url(#bdB)"/>
+  <path d="M27 41 Q36 40 44 45 L43 57 Q36 54 30 49 Q26 45 27 41 Z M73 41 Q64 40 56 45 L57 57 Q64 54 70 49 Q74 45 73 41 Z" fill="${TAN}"/>
+  <path d="M48.6 13 Q50 11.8 51.4 13 L52 34 Q55 37 56 44 L57.6 56 Q56.6 63.4 50 63.6 Q43.4 63.4 42.4 56 L44 44 Q45 37 48 34 Z" fill="${W}"/>`;
+        face = `${eyes('#3a1e0c')}<ellipse cx="50" cy="54.6" rx="4.6" ry="3.4" fill="#141014"/><circle cx="48.6" cy="53.6" r="1" fill="#fff" opacity=".7"/>
+  <path d="M50 58 V59.4 M45.6 59.4 Q50 62.4 54.4 59.4" stroke="#2a2024" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+${shine}`;
+        feet = `<g fill="${W}" stroke="#c8c0b2" stroke-width=".8"><ellipse cx="38" cy="88" rx="6.6" ry="4.2"/><ellipse cx="62" cy="88" rx="6.6" ry="4.2"/></g><path d="M35.8 89 v2.2 M38 89.6 v2.2 M40.2 89 v2.2 M59.8 89 v2.2 M62 89.6 v2.2 M64.2 89 v2.2" stroke="#c8c0b2" stroke-width="1" stroke-linecap="round"/>`;
+      },
+      perigoso() {      // Perigoso, o salsicha de pelo longo dourado (desafio do dia): magrinho, peito clarinho, orelhonas compridas e franjadas, focinho comprido com narigão marrom e rabo de pluma
+        defs = g('pgB', '#f6c47a', '#e09a44', '#b06a24');
+        back = '<path d="M70 84 Q92 84 94 66 Q95 58 90 58 Q90 66 86 72 Q80 78 70 78 Z" fill="#d48a3a"/><path d="M93 64 q2 4 0 8 M90 72 q2 3 -1 6" stroke="#f6d29a" stroke-width="1.3" fill="none" stroke-linecap="round"/>';
+        const ear = d => `<path d="M${50 - d * 26} 24 Q${50 - d * 40} 28 ${50 - d * 39} 44 Q${50 - d * 42} 52 ${50 - d * 38} 58 Q${50 - d * 40} 64 ${50 - d * 34} 66 Q${50 - d * 31} 70 ${50 - d * 28} 64 Q${50 - d * 24} 64 ${50 - d * 24} 56 Q${50 - d * 20} 48 ${50 - d * 22} 38 Q${50 - d * 20} 30 ${50 - d * 20} 26 Z" fill="#d48a3a" stroke="#a8641e" stroke-width=".8"/>
+  <path d="M${50 - d * 32} 36 q${-d * 3} 6 0 11 q${-d * 3} 6 0 11 M${50 - d * 27} 40 q${-d * 2} 5 0 9 q${-d * 2} 5 0 9" stroke="#f6d29a" stroke-width="1.2" fill="none" stroke-linecap="round"/>`;
+        body = `<ellipse cx="30" cy="83" rx="9" ry="6" fill="url(#pgB)"/><ellipse cx="70" cy="83" rx="9" ry="6" fill="url(#pgB)"/>
+  <ellipse cx="50" cy="70" rx="19" ry="21" fill="url(#pgB)"/><ellipse cx="50" cy="70" rx="10" ry="15" fill="#f8d49a"/>
+  <path d="M38 74 V86 M62 74 V86" stroke="#e09a44" stroke-width="7" stroke-linecap="round"/>
+  <ellipse cx="50" cy="38" rx="29" ry="22" fill="url(#pgB)"/>`;
+        face = `${ear(1)}${ear(-1)}${eyes('#3a1e0c')}
+  <ellipse cx="50" cy="47.6" rx="10.6" ry="11" fill="#f6c888"/><ellipse cx="50" cy="41.4" rx="5.6" ry="4" fill="#3a2018"/><circle cx="48.2" cy="40.4" r="1.2" fill="#fff" opacity=".6"/>
+  <path d="M42 50 Q50 56 58 50" stroke="#6a4420" stroke-width="2" fill="none" stroke-linecap="round"/><path d="M47.4 53 Q47.4 60 51 60 Q54.6 60 54 53 Z" fill="#ff7a8a" stroke="#c94a5a" stroke-width=".8"/>${shine}`;
+        feet = '<g fill="#e09a44" stroke="#b06a24" stroke-width=".8"><ellipse cx="36" cy="88" rx="7" ry="4.2"/><ellipse cx="64" cy="88" rx="7" ry="4.2"/></g><path d="M33.6 89 v2.2 M36 89.6 v2.2 M38.4 89 v2.2 M61.6 89 v2.2 M64 89.6 v2.2 M66.4 89 v2.2" stroke="#b06a24" stroke-width="1" stroke-linecap="round"/>';
+      },
     };
     K[kind]();
     const cls = [opts.cls, opts.outfit && Outfit.flies(opts.outfit) ? 'fly' : ''].filter(Boolean).join(' ');
@@ -1878,7 +1930,10 @@ ${tempo ? `<text x="112.5" y="82" text-anchor="middle" font-family="Arial, Helve
       djanho: { keep: true, rm: ['<path d="M41.4 51.6 Q50 56.6', '<path d="M42.2 51.9 Q50 55.8', '<path d="M40.4 51.2 Q50 57.6', '<path d="M39.8 50.4 l1 1.2'], m: [50, 53, 18, '#5a2a18'] },
       gata: { sub: [['M50 43.4 V45.4 M50 45.4 Q47 48.6 44 46.6 M50 45.4 Q53 48.6 56 46.6', 'M50 43.4 V45.4']], m: [50, 49, 12, '#c9507a'] },
       caramelo: { rm: ['<path d="M42 49 Q50 55 58 49"', '<path d="M47 52 Q47 60 51 60'], m: [50, 51, 18, '#5a3418'] },
-      cataras: { rm: ['<path d="M42 49 Q50 55 58 49"', '<path d="M47 52 Q47 60 51 60'], m: [50, 51, 18, '#0a0a0c'] }
+      cataras: { rm: ['<path d="M42 49 Q50 55 58 49"', '<path d="M47 52 Q47 60 51 60'], m: [50, 51, 18, '#0a0a0c'] },
+      chanel: { sub: [['M50 43.4 V45.4 M50 45.4 Q47 48.6 44 46.6 M50 45.4 Q53 48.6 56 46.6', 'M50 43.4 V45.4']], m: [50, 49, 12, '#24272e'] },
+      bud: { sub: [['M50 58 V59.4 M45.6 59.4 Q50 62.4 54.4 59.4', 'M50 58 V59.4']], m: [50, 60, 11, '#2a2024'] },
+      perigoso: { rm: ['<path d="M42 50 Q50 56 58 50"', '<path d="M47.4 53 Q47.4 60 51 60'], m: [50, 52, 18, '#6a4420'] }
     }[char];
     if (!F || !mood || (mood === 'joy' && F.keep)) return svg;
     for (const [a, b] of F.sub || []) svg = svg.split(a).join(b);
@@ -2561,7 +2616,7 @@ ${zig}<path d="${band}" fill="${W}" stroke="${WD}" stroke-width="1"/>
     { id: 'jare', name: 'Jaré', at: 'expert' }, { id: 'baurets', name: 'Baurets', at: 'espaco', kit: ['capacete'] },
     { id: 'kiwi', name: 'Kiwi', gift: true, kit: ['kiwifruta'] },
     { id: 'conde', name: 'Conde', at: 'cemiterio' }, { id: 'cataras', name: 'Charles', at: 'amor', kit: ['churros'] }, { id: 'tcharina', name: 'Cat', fase: 120, kit: ['livro'] }, { id: 'djanho', name: 'Djanho', fase: 125 },
-    { id: 'gata', name: 'Marcelina', gift: true }];   // Kiwi e Marcelina (gata preta): presentes do desafio do dia, em rodízio (ver Daily, GIFTS); Cat (id tcharina, era a morsa Tcharina): 1ª fase do Amor; Charles (id cataras) chega com o Amor; Djanho: 6º mapa do Amor      // gift: presente do desafio do dia (ver Daily, GIFTS); fase: chega ao passar essa fase (índice), não ao abrir o pântano
+    { id: 'gata', name: 'Marcelina', gift: true }, { id: 'chanel', name: 'Chanel', gift: true }, { id: 'bud', name: 'Bud', gift: true }, { id: 'perigoso', name: 'Perigoso', gift: true }];   // Kiwi, Marcelina (gata preta), Chanel (gata cinza), Bud (pastor de Shetland tricolor) e Perigoso (salsicha de pelo longo dourado): presentes do desafio do dia, em rodízio (ver Daily, GIFTS); Cat (id tcharina, era a morsa Tcharina): 1ª fase do Amor; Charles (id cataras) chega com o Amor; Djanho: 6º mapa do Amor      // gift: presente do desafio do dia (ver Daily, GIFTS); fase: chega ao passar essa fase (índice), não ao abrir o pântano
   let char = Store.get('char', 'sapo'), charRed = Store.get('charRed', 'sapo');
   if (char === charRed && char !== 'sapo') { charRed = 'sapo'; Store.set('charRed', charRed); }     // verde e vermelho não podem ser o mesmo personagem (só o sapo)
   const big = o => flies(o) || !!(o && o.ride);       // ocupa mais espaço em volta do sapo (chama, caixa)
@@ -5082,9 +5137,9 @@ const Daily = (() => {
     $('btnDaily').classList.toggle('done', !!result());
   }
   /* Presentes do desafio do dia, em rodízio pela data (um por dia, igual para todo mundo): 26/10 Kiwi (com a fruta),
-     27/10 Marcelina, 28/10 iFoodeiro, 29/10 Quadradinho, 30/10 Kiwi de novo… Quem já tem o presente do dia não ganha nada;
+     27/10 Marcelina, 28/10 iFoodeiro, 29/10 Quadradinho; a partir de 30/10 Chanel, Bud e Perigoso, e aí 02/11 Kiwi de novo… Quem já tem o presente do dia não ganha nada;
      quem chega depois pega os que faltam quando o rodízio passar por eles. Item novo entra no fim da lista. */
-  const GIFTS = [['char:kiwi', 'kiwifruta'], ['char:gata'], ['viseira'], ['chineludinho']], GIFT0 = Date.UTC(2026, 9, 26);
+  const GIFTS = [['char:kiwi', 'kiwifruta'], ['char:gata'], ['viseira'], ['chineludinho'], ['char:chanel'], ['char:bud'], ['char:perigoso']], GIFT0 = Date.UTC(2026, 9, 26);
   const giftOf = iso => { const [y, m, d] = iso.split('-').map(Number), n = Math.round((Date.UTC(y, m - 1, d) - GIFT0) / 864e5); return GIFTS[((n % GIFTS.length) + GIFTS.length) % GIFTS.length]; };
   const prizeArt = id => id.startsWith('char:') ? Art.creature(id.slice(5)) : Outfit.preview(id);
   const prizeName = id => id.startsWith('char:') ? Outfit.CHARS.find(c => c.id === id.slice(5)).name : Outfit.BY[id].name;
@@ -5812,10 +5867,10 @@ const Tests = {
     t('desafio do dia: mensagem do Zap com os 5 mapas (emojis variando), total, nota e tempo', msg.length === 4 && msg[0] === 'jumppo.com.br 21 de outubro' && msg[3] === '3min12s' && msg[1].split(' ').length === 5 && msg[1].split(' ')[0].replace(/^\d+/, '') !== msg[1].split(' ')[3].replace(/^\d+/, '') && msg[2] === 'Total: 44 pulos ⭐⭐⚫️', msg.join(' | '));
     const far = Daily.message({ date: '2026-10-21', moves: [5, 4, 69, 7, 4], mins: [5, 4, 7, 7, 4] }).split('\n')[2];
     t('desafio do dia: nota pela soma dos pulos (um mapa ruim derruba o total)', far === 'Total: 89 pulos ⭐⚫️⚫️', far);
-    t('desafio do dia: presente em rodízio pela data (28/10 iFoodeiro, 29/10 Quadradinho, 30/10 Kiwi, 31/10 Marcelina, 1/11 iFoodeiro)',
-      ['2026-10-28', '2026-10-29', '2026-10-30', '2026-10-31', '2026-11-01', '2026-10-26'].map(d => Daily.giftOf(d)[0]).join() === 'viseira,chineludinho,char:kiwi,char:gata,viseira,char:kiwi');
+    t('desafio do dia: presente em rodízio pela data (28/10 iFoodeiro, 29/10 Quadradinho, 30/10 Chanel, 31/10 Bud, 1/11 Perigoso, 2/11 Kiwi)',
+      ['2026-10-28', '2026-10-29', '2026-10-30', '2026-10-31', '2026-11-01', '2026-11-02', '2026-10-26'].map(d => Daily.giftOf(d)[0]).join() === 'viseira,chineludinho,char:chanel,char:bud,char:perigoso,char:kiwi,char:kiwi');
     t('personagens: sapo + 6 amigos, cada um chega com um pântano e desenha com qualquer apetrecho',
-      Outfit.CHARS.length === 17 && Outfit.CHARS.slice(1).every(c => (c.gift || c.fase != null || Career.REGIONS.some(R => R.id === c.at)) && Art.creature(c.id, { outfit: { head: 'bolovo', eyes: 'oculos', torso: 'traje' } }).startsWith('<svg')));
+      Outfit.CHARS.length === 20 && Outfit.CHARS.slice(1).every(c => (c.gift || c.fase != null || Career.REGIONS.some(R => R.id === c.at)) && Art.creature(c.id, { outfit: { head: 'bolovo', eyes: 'oculos', torso: 'traje' } }).startsWith('<svg')));
     // 11. áudio
     t('áudio não é criado antes de um gesto', window.__frogGesture ? true : Sound.ctx === null, window.__frogGesture ? 'houve gesto antes do teste' : 'sem gesto: sem AudioContext');
     return { out, fails };
@@ -5922,7 +5977,7 @@ const Tests = {
     setTimeout(check, 3000);
     setInterval(go, 2000);      // achou versão nova durante uma fase: atualiza quando voltar à tela inicial
   })();
-  window.__frog = { Geo, Rules, Solver, Gen, Game, Board, UI, Tests, Sound, Career, Outfit, Wardrobe, Daily, Sync };
+  window.__frog = { Geo, Rules, Solver, Gen, Game, Board, UI, Tests, Sound, Career, Outfit, Wardrobe, Daily, Sync, Art };
 })();
 </script>
 </body>
