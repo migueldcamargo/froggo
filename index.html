@@ -954,7 +954,7 @@ canvas.bigbang{position:absolute;inset:0;width:100%;height:100%;z-index:400;poin
 
 <script>
 'use strict';
-const BUILD = '2026-10-29.1256';
+const BUILD = '2026-10-29.1457';
 const LINK = 'jumppo.com.br';     // endereço do jogo nas mensagens do zap (sem https:// e sem barra final: o WhatsApp ainda reconhece o link)      // versão publicada: trocada pela data e hora a cada publicação (ver Update, no fim); 'dev' não confere
 /* =====================================================================
    JUMPPO (antes Froggo) — jogo de sapos saltadores (peg-solitaire), arquivo único e offline.
@@ -1856,12 +1856,15 @@ ${theme === 'esgoto' ? Art.goo() : ''}<g stroke-dasharray="1.4 1.4">${Art.boardL
   shareCard(r, n) {
     const defs = document.querySelector('svg defs').outerHTML, char = Outfit.char || 'sapo', outfit = Outfit.worn || {};
     const raw = char === 'sapo' ? Art.frog('green', { outfit, sad: n === 1, still: true }) : Art.creature(char, { outfit, still: true });
-    const who = Art.moodFace(raw.replace(/^<svg[^>]*>/, '').replace(/<\/svg>\s*$/, ''), char, n === 3 ? 'joy' : n === 1 ? 'cry' : '');
+    const mood = n === 3 ? 'joy' : n === 1 ? 'cry' : '', inner = svg => svg.replace(/^<svg[^>]*>/, '').replace(/<\/svg>\s*$/, '');
+    const who = Art.moodFace(inner(raw), char, mood);
+    // o sapo secundário (o do lugar do vermelho) vem menor, numa vitória-régia pequena ao lado, como na tela inicial
+    const charRed = Outfit.charRed || 'sapo', mini = Art.moodFace(inner(Art.frog('red', { outfit: Outfit.wornRed || {}, char: charRed, sad: n === 1, still: true })), charRed, mood).split('#0f3d12').join(charRed === 'sapo' ? '#6a1010' : '#0f3d12');   // boca nova do sapo vermelho em vinho, não em verde
     const [, m, d] = r.date.split('-').map(Number), mes = ['janeiro', 'fevereiro', 'março', 'abril', 'maio', 'junho', 'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro'][m - 1];
     const sec = r.time ? Math.max(1, Math.round(r.time / 1000)) : 0, tempo = !sec ? '' : Math.floor(sec / 60) ? `${Math.floor(sec / 60)}min${sec % 60 ? String(sec % 60).padStart(2, '0') + 's' : ''}` : sec + 's';
     const total = r.moves.reduce((a, b) => a + b, 0);
     const starP = 'M' + [...Array(10)].map((_, i) => { const a = (-90 + i * 36) * Math.PI / 180, rr = i % 2 ? 2.7 : 6.6; return `${(Math.cos(a) * rr).toFixed(2)} ${(Math.sin(a) * rr).toFixed(2)}`; }).join(' L') + ' Z';
-    let bg = '', fx = '', over = '', under = '';
+    let bg = '', fx = '', over = '', overRed = null, under = '';
     if (n === 3) {
       bg = `<defs><linearGradient id="scSky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5fd0ff"/><stop offset=".7" stop-color="#bff1ff"/><stop offset="1" stop-color="#fff3c4"/></linearGradient></defs><rect width="150" height="100" fill="url(#scSky)"/>
 <g transform="translate(14 14)"><circle r="8" fill="#ffe14d"/><circle r="11" fill="#ffe14d" opacity=".3"/>${[...Array(12)].map((_, i) => `<path d="M0 -13 V-17" stroke="#ffd23f" stroke-width="1.4" stroke-linecap="round" transform="rotate(${i * 30})"/>`).join('')}</g>
@@ -1870,8 +1873,6 @@ ${theme === 'esgoto' ? Art.goo() : ''}<g stroke-dasharray="1.4 1.4">${Art.boardL
       const cs = ['#ff4b4b', '#ffd23f', '#2fbf3a', '#2b9bff', '#ff6ad5', '#8a5cff'];
       for (let i = 0; i < 46; i++) { const x = (i * 37 + 11) % 78 + 2, y = (i * 53 + 7) % 84 + 4; fx += `<rect x="${x}" y="${y}" width="2.6" height="1.3" rx=".4" fill="${cs[i % 6]}" transform="rotate(${i * 47} ${x} ${y})"/>`; }
       fx += `<g fill="#fff">${[[10, 40, 1.2], [74, 44, 1], [20, 66, .8], [66, 70, .9], [40, 10, .8]].map(([x, y, k]) => `<path d="M${x} ${y - 4 * k}l${1.2 * k} ${2.8 * k} ${2.8 * k} ${1.2 * k}-${2.8 * k} ${1.2 * k}-${1.2 * k} ${2.8 * k}-${1.2 * k}-${2.8 * k}-${2.8 * k}-${1.2 * k} ${2.8 * k}-${1.2 * k}z"/>`).join('')}</g>`;
-      // bochechas de coração
-      over = [[18, 44], [82, 44]].map(([x, y]) => `<path d="M${x} ${y + 3} C${x - 5} ${y - 1} ${x - 2} ${y - 5} ${x} ${y - 2} C${x + 2} ${y - 5} ${x + 5} ${y - 1} ${x} ${y + 3} Z" fill="#ff5c93"/>`).join('');
       under = '';
     } else if (n === 2) {
       bg = `<defs><linearGradient id="scSky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4fd2ff"/><stop offset=".6" stop-color="#2aa6e6"/><stop offset="1" stop-color="#0b6fc9"/></linearGradient></defs><rect width="150" height="100" fill="url(#scSky)"/>
@@ -1885,22 +1886,26 @@ ${theme === 'esgoto' ? Art.goo() : ''}<g stroke-dasharray="1.4 1.4">${Art.boardL
       // sobrancelhas tristes e lágrimas até o chão
       const drop = (x, y, k) => `<path d="M${x} ${y - 3 * k} Q${x - 2 * k} ${y} ${x} ${y + 1.8 * k} Q${x + 2 * k} ${y} ${x} ${y - 3 * k} Z"/>`;
       // quem já tem sobrancelha no desenho (Nelson, Djanho) fica só com a dele
-      over = `${['nelson', 'djanho'].includes(char) ? '' : '<path d="M18 16 Q28 13 41 7" stroke="#1a1a1a" stroke-width="2.6" fill="none" stroke-linecap="round"/><path d="M82 16 Q72 13 59 7" stroke="#1a1a1a" stroke-width="2.6" fill="none" stroke-linecap="round"/>'}
-<g fill="none" stroke-linecap="round"><path d="M22 34 Q24 37 31 37.6 Q38 37 40 34 M60 34 Q62 37 69 37.6 Q76 37 78 34" stroke="#bfeaff" stroke-width="2.2" opacity=".9"/>
+      const brows = c => ['nelson', 'djanho'].includes(c) ? '' : '<path d="M18 16 Q28 13 41 7" stroke="#1a1a1a" stroke-width="2.6" fill="none" stroke-linecap="round"/><path d="M82 16 Q72 13 59 7" stroke="#1a1a1a" stroke-width="2.6" fill="none" stroke-linecap="round"/>';
+      over = `<g fill="none" stroke-linecap="round"><path d="M22 34 Q24 37 31 37.6 Q38 37 40 34 M60 34 Q62 37 69 37.6 Q76 37 78 34" stroke="#bfeaff" stroke-width="2.2" opacity=".9"/>
 <path d="M24 36 Q20 48 23 60 Q25 68 22 78 M76 36 Q80 48 77 60 Q75 68 78 78" stroke="#8fd8ff" stroke-width="3.4" opacity=".6"/><path d="M24 38 Q21 48 23.6 58 M76 38 Q79 48 76.4 58" stroke="#fff" stroke-width=".9" opacity=".7"/>
 <path d="M21 34 Q8 34 2 50 M79 34 Q92 34 98 50" stroke="#8fd8ff" stroke-width="2.2" stroke-dasharray="2.6 2.4" opacity=".75"/></g>
 <g fill="#9fdcff" stroke="#4ab0e6" stroke-width=".5" opacity=".9">${[[22, 84, 1.2], [23, 92, .9], [78, 84, 1.2], [77, 92, .9], [0, 58, 1], [-2, 66, .8], [100, 58, 1], [102, 66, .8]].map(([x, y, k]) => drop(x, y, k)).join('')}</g>`;
-      under = `<ellipse cx="42" cy="95" rx="36" ry="4" fill="#7fd4ff" opacity=".7"/>`;
+      under = `<ellipse cx="40" cy="95" rx="38" ry="4" fill="#7fd4ff" opacity=".7"/>`;
+      overRed = brows(charRed) + '<path d="M71 33 Q66.4 41 71 45 Q75.6 41 71 33 Z" fill="#9fdcff" stroke="#4ab0e6" stroke-width="1.2"/>';   // o secundário só tristinho: uma lágrima, sem rio de choro (dois choros iguais ficava robótico)
+      over = brows(char) + over;
     }
+    if (overRed == null) overRed = over;
     const lift = 0;
     const chip = (mv, i) => { const k = starsFor(mv, r.mins[i] || mv), c = k === 3 ? '#2fbf3a' : k === 2 ? '#ffb020' : '#ff4b3a';
       return `<g transform="translate(${112.5 + (i - 2) * 11.4} 60)"><rect x="-5" y="-4.6" width="10" height="9.2" rx="2.6" fill="${c}"/><text y="1.9" text-anchor="middle" font-size="5.2" font-weight="900" fill="#fff">${mv}</text></g>`; };
     const logo = `<text x="112.5" y="18.4" text-anchor="middle" stroke="#0b2545" stroke-width="1.3" paint-order="stroke" letter-spacing=".3">${[...'Jumppo'].map((c, i) => `<tspan fill="${['#2fbf3a', '#ffb020', '#ff4b3a'][i % 3]}">${c}</tspan>`).join('')}</text>`;
     return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 150 100" width="1200" height="800">${defs}${bg}${fx}
-<ellipse cx="42" cy="93" rx="34" ry="6.6" fill="#0b3a20" opacity=".35"/>${under}
-<path d="M8 90 A34 7.6 0 1 0 76 90 A34 7.6 0 0 0 46 83.2 L42 90 L38 83.2 A34 7.6 0 0 0 8 90Z" fill="url(#lily)" stroke="#155f1a" stroke-width=".8"/>
-<g transform="translate(13 ${34 + lift}) scale(.58)">${who}${over}</g>
-<text x="42" y="95.2" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="3.5" fill="#fff" opacity=".85" stroke="#000" stroke-opacity=".25" stroke-width=".5" paint-order="stroke">${(Outfit.CHARS.find(c => c.id === char) || { name: 'Sapo' }).name}</text>
+<ellipse cx="35" cy="93" rx="34" ry="6.6" fill="#0b3a20" opacity=".35"/><ellipse cx="63" cy="94.4" rx="11.4" ry="3.4" fill="#0b3a20" opacity=".35"/>${under}
+<path d="M1 90 A34 7.6 0 1 0 69 90 A34 7.6 0 0 0 39 83.2 L35 90 L31 83.2 A34 7.6 0 0 0 1 90Z" fill="url(#lily)" stroke="#155f1a" stroke-width=".8"/>
+<g transform="translate(6 ${34 + lift}) scale(.58)">${who}${over}</g>
+<path d="M52 92.4 A11 3.2 0 1 0 74 92.4 A11 3.2 0 0 0 64.4 89.4 L63 92.4 L61.6 89.4 A11 3.2 0 0 0 52 92.4Z" fill="url(#lily)" stroke="#155f1a" stroke-width=".6"/>
+<g transform="translate(50 67.4) scale(.26)">${mini}${overRed}</g>
 <g font-family="Arial Black, Arial, Helvetica, sans-serif"><rect x="80" y="5" width="65" height="90" rx="7" fill="#fff" opacity=".94"/>
 <g font-weight="900" font-size="11">${logo}</g>
 <text x="112.5" y="26.4" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="4.2" fill="#4a6582">Desafio do dia</text>
