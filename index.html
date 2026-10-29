@@ -954,7 +954,7 @@ canvas.bigbang{position:absolute;inset:0;width:100%;height:100%;z-index:400;poin
 
 <script>
 'use strict';
-const BUILD = '2026-10-29.1229';
+const BUILD = '2026-10-29.1231';
 const LINK = 'jumppo.com.br';     // endereço do jogo nas mensagens do zap (sem https:// e sem barra final: o WhatsApp ainda reconhece o link)      // versão publicada: trocada pela data e hora a cada publicação (ver Update, no fim); 'dev' não confere
 /* =====================================================================
    JUMPPO (antes Froggo) — jogo de sapos saltadores (peg-solitaire), arquivo único e offline.
@@ -1798,7 +1798,7 @@ ${theme === 'esgoto' ? Art.goo() : ''}<g stroke-dasharray="1.4 1.4">${Art.boardL
     return `<svg viewBox="0 0 24 24"><path d="M12 1.8l3.1 6.4 7 1-5.1 4.9 1.2 7L12 17.8l-6.2 3.3 1.2-7L1.9 9.2l7-1z" fill="${fill}" stroke="#c98a00" stroke-width="1.2" stroke-linejoin="round"/><path d="M9 7.5l1.5-3" stroke="#fff" stroke-width="1.4" stroke-linecap="round" opacity=".8"/></svg>`;
   },
   /* Imagem do desafio do dia para mandar no zap (1200×800): à esquerda o personagem da pessoa, com a roupa dela, num cenário
-     que muda com a nota: 3★ festa (arco-íris, sol, confete, olhos de estrela e pulinho), 2★ a lagoa azul da tela inicial,
+     que muda com a nota: 3★ festa (arco-íris, sol, confete, boca aberta de alegria), 2★ a lagoa azul da tela inicial,
      1★ tempestade (nuvens, raio, chuva e o personagem chorando rios); à direita um cartão com data, estrelas, pulos de cada
      mapa, total e tempo. r = resultado do desafio ({ date, moves[], mins[], time }), n = estrelas. */
   shareCard(r, n) {
@@ -1818,9 +1818,8 @@ ${theme === 'esgoto' ? Art.goo() : ''}<g stroke-dasharray="1.4 1.4">${Art.boardL
       const cs = ['#ff4b4b', '#ffd23f', '#2fbf3a', '#2b9bff', '#ff6ad5', '#8a5cff'];
       for (let i = 0; i < 46; i++) { const x = (i * 37 + 11) % 78 + 2, y = (i * 53 + 7) % 84 + 4; fx += `<rect x="${x}" y="${y}" width="2.6" height="1.3" rx=".4" fill="${cs[i % 6]}" transform="rotate(${i * 47} ${x} ${y})"/>`; }
       fx += `<g fill="#fff">${[[10, 40, 1.2], [74, 44, 1], [20, 66, .8], [66, 70, .9], [40, 10, .8]].map(([x, y, k]) => `<path d="M${x} ${y - 4 * k}l${1.2 * k} ${2.8 * k} ${2.8 * k} ${1.2 * k}-${2.8 * k} ${1.2 * k}-${1.2 * k} ${2.8 * k}-${1.2 * k}-${2.8 * k}-${2.8 * k}-${1.2 * k} ${2.8 * k}-${1.2 * k}z"/>`).join('')}</g>`;
-      // olhos de estrela, bochechas de coração e risquinhos do pulo
-      over = [32, 68].map(x => `<g transform="translate(${x} 27) scale(1.18)"><path d="${starP}" fill="#ffd23f" stroke="#c98a00" stroke-width=".7" stroke-linejoin="round"/><circle cx="-1.4" cy="-2" r=".9" fill="#fff"/></g>`).join('')
-        + [[18, 44], [82, 44]].map(([x, y]) => `<path d="M${x} ${y + 3} C${x - 5} ${y - 1} ${x - 2} ${y - 5} ${x} ${y - 2} C${x + 2} ${y - 5} ${x + 5} ${y - 1} ${x} ${y + 3} Z" fill="#ff5c93"/>`).join('');
+      // bochechas de coração
+      over = [[18, 44], [82, 44]].map(([x, y]) => `<path d="M${x} ${y + 3} C${x - 5} ${y - 1} ${x - 2} ${y - 5} ${x} ${y - 2} C${x + 2} ${y - 5} ${x + 5} ${y - 1} ${x} ${y + 3} Z" fill="#ff5c93"/>`).join('');
       under = '';
     } else if (n === 2) {
       bg = `<defs><linearGradient id="scSky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4fd2ff"/><stop offset=".6" stop-color="#2aa6e6"/><stop offset="1" stop-color="#0b6fc9"/></linearGradient></defs><rect width="150" height="100" fill="url(#scSky)"/>
